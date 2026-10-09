@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Commander Deck Analyzer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0f0f12;
+    --panel:#1a1a20;
+    --panel-2:#22222b;
+    --border:#2c2c36;
+    --text:#e8e8ec;
+    --muted:#9a9aa8;
+    --gold:#c9a227;
+    --gold-hi:#e8c547;
+    --green:#4caf6d;
+    --amber:#e0a93c;
+    --red:#e05656;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--bg);color:var(--text);
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    line-height:1.5;min-height:100vh;
+  }
+  .wrap{max-width:1100px;margin:0 auto;padding:24px 16px 64px}
+
+  /* ---------- header ---------- */
+  header{text-align:center;padding:28px 0 22px}
+  header h1{font-size:clamp(1.6rem,5vw,2.4rem);font-weight:800;letter-spacing:-.02em}
+  header h1 .gold{color:var(--gold)}
+  header p{color:var(--muted);margin-top:6px;font-size:.95rem}
+
+  /* ---------- input panel ---------- */
+  .panel{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:20px;box-shadow:0 8px 30px rgba(0,0,0,.35)}
+  textarea{
+    width:100%;min-height:180px;resize:vertical;
+    background:#101014;color:var(--text);
+    border:1px solid var(--border);border-radius:10px;
+    padding:12px 14px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:.88rem;line-height:1.7;
+    outline:none;transition:border-color .2s, box-shadow .2s;
+  }
+  textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,162,39,.15)}
+  .btn-row{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;align-items:center}
+  button{
+    cursor:pointer;border:none;border-radius:10px;font-weight:700;font-size:.95rem;
+    padding:12px 22px;transition:transform .12s, box-shadow .2s, opacity .2s, background .2s;
+  }
+  button:active{transform:scale(.97)}
+  .btn-primary{
+    background:linear-gradient(135deg,var(--gold-hi),var(--gold));
+    color:#171204;box-shadow:0 4px 18px rgba(201,162,39,.35);
+  }
+  .btn-primary:hover:not(:disabled){box-shadow:0 6px 24px rgba(201,162,39,.5)}
+  .btn-primary:disabled{opacity:.55;cursor:wait}
+  .btn-ghost{background:var(--panel-2);color:var(--text);border:1px solid var(--border)}
+  .btn-ghost:hover{background:#2a2a35}
+  .status{margin-left:auto;color:var(--muted);font-size:.85rem}
+  .progress{height:6px;background:#101014;border-radius:99px;margin-top:12px;overflow:hidden;display:none}
+  .progress.on{display:block}
+  .progress i{display:block;height:100%;width:0;border-radius:99px;
+    background:linear-gradient(90deg,var(--gold),var(--gold-hi));transition:width .25s ease}
+  .load-label{margin-top:8px;font-size:.85rem;color:var(--muted);display:none}
+  .load-label.on{display:block}
+
+  /* ---------- results ---------- */
+  #results{display:none;margin-top:26px;animation:fadeUp .35s ease}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .results-title{display:flex;align-items:baseline;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+  .results-title h2{font-size:1.3rem;font-weight:800}
+  .results-title span{color:var(--muted);font-size:.85rem}
+
+  .grid{display:grid;gap:16px}
+  .grid-2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+
+  /* stat cards */
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:16px}
+  .stat{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px 14px;text-align:center;transition:transform .15s, border-color .2s}
+  .stat:hover{transform:translateY(-2px);border-color:#3a3a48}
+  .stat .num{font-size:1.9rem;font-weight:800;color:var(--gold-hi);line-height:1.1}
+  .stat .lbl{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:6px}
+
+  /* section cards */
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:20px}
+  .card h3{font-size:1rem;font-weight:700;margin-bottom:16px;letter-spacing:.01em}
+  .card h3::before{content:'';display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--gold);margin-right:9px;vertical-align:2px}
+
+  /* mana curve bars */
+  .curve{display:flex;flex-direction:column;gap:10px}
+  .curve-row{display:grid;grid-template-columns:52px 1fr 40px;align-items:center;gap:10px;font-size:.85rem}
+  .curve-row .cmc{color:var(--muted);font-weight:600;text-align:right;font-variant-numeric:tabular-nums}
+  .curve-track{background:#101014;border-radius:8px;height:26px;position:relative;overflow:hidden}
+  .curve-fill{
+    height:100%;width:0;border-radius:8px;
+    background:linear-gradient(90deg,#8a6d14,var(--gold),var(--gold-hi));
+    transition:width .8s cubic-bezier(.2,.8,.2,1);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.25);
+  }
+  .curve-row.peak .curve-fill{background:linear-gradient(90deg,var(--gold),#ffe27a);box-shadow:0 0 12px rgba(232,197,71,.5), inset 0 1px 0 rgba(255,255,255,.3)}
+  .curve-row.peak .cmc{color:var(--gold-hi)}
+  .curve-row .cnt{font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+
+  /* color pips */
+  .pips{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;padding:6px 0}
+  .pip-wrap{text-align:center}
+  .pip{
+    width:58px;height:58px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:1.25rem;color:#151515;
+    box-shadow:inset -4px -6px 12px rgba(0,0,0,.35), inset 3px 4px 8px rgba(255,255,255,.35), 0 4px 14px rgba(0,0,0,.4);
+    transition:transform .15s;
+  }
+  .pip-wrap:hover .pip{transform:scale(1.08)}
+  .pip.W{background:radial-gradient(circle at 35% 30%,#fffbe8,#e8dfb8)}
+  .pip.U{background:radial-gradient(circle at 35% 30%,#cdeeff,#8fc3ea)}
+  .pip.B{background:radial-gradient(circle at 35% 30%,#8f8a93,#4c4752);color:#eee}
+  .pip.R{background:radial-gradient(circle at 35% 30%,#ffd3b8,#ef9a7a)}
+  .pip.G{background:radial-gradient(circle at 35% 30%,#c4eccb,#8cc79a)}
+  .pip.C{background:radial-gradient(circle at 35% 30%,#d8d8e0,#9c9ca8)}
+  .pip-wrap .cnt{font-weight:800;margin-top:7px;font-size:1.05rem}
+  .pip-wrap .lbl{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+
+  /* type bars */
+  .types{display:flex;flex-direction:column;gap:11px}
+  .type-row{display:grid;grid-template-columns:110px 1fr 44px;align-items:center;gap:10px;font-size:.85rem}
+  .type-row .tlbl{color:var(--muted);font-weight:600}
+  .type-track{background:#101014;border-radius:8px;height:22px;overflow:hidden}
+  .type-fill{height:100%;width:0;border-radius:8px;background:linear-gradient(90deg,#3f3f4d,#5a5a6c);transition:width .8s cubic-bezier(.2,.8,.2,1)}
+  .type-row .tcnt{font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+
+  /* verdicts */
+  .verdicts{display:flex;flex-direction:column;gap:10px}
+  .verdict{
+    display:flex;gap:12px;align-items:flex-start;
+    padding:13px 15px;border-radius:10px;font-size:.9rem;line-height:1.55;
+    border:1px solid;animation:fadeUp .4s ease backwards;
+  }
+  .verdict .icon{font-weight:800;flex-shrink:0;width:22px;text-align:center;font-size:1.05rem}
+  .verdict.green{background:rgba(76,175,109,.09);border-color:rgba(76,175,109,.35)}
+  .verdict.green .icon{color:var(--green)}
+  .verdict.amber{background:rgba(224,169,60,.09);border-color:rgba(224,169,60,.35)}
+  .verdict.amber .icon{color:var(--amber)}
+  .verdict.red{background:rgba(224,86,86,.09);border-color:rgba(224,86,86,.35)}
+  .verdict.red .icon{color:var(--red)}
+  .verdict strong{font-weight:700}
+
+  /* card list */
+  .list-tools{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center}
+  .list-tools input{
+    flex:1;min-width:160px;background:#101014;border:1px solid var(--border);border-radius:9px;
+    padding:9px 13px;color:var(--text);font-size:.88rem;outline:none;transition:border-color .2s;
+  }
+  .list-tools input:focus{border-color:var(--gold)}
+  .filter-btns{display:flex;gap:6px;flex-wrap:wrap}
+  .filter-btn{background:var(--panel-2);color:var(--muted);padding:9px 14px;font-size:.83rem;border-radius:9px;font-weight:600;border:1px solid var(--border)}
+  .filter-btn:hover{color:var(--text)}
+  .filter-btn.active{background:var(--gold);color:#171204;border-color:var(--gold)}
+  .card-list{display:flex;flex-direction:column;gap:6px;max-height:520px;overflow-y:auto;padding-right:4px}
+  .card-list::-webkit-scrollbar{width:8px}
+  .card-list::-webkit-scrollbar-thumb{background:#33333f;border-radius:99px}
+  .card-row{
+    display:flex;align-items:center;gap:12px;padding:8px 10px;border-radius:10px;
+    background:var(--panel-2);border:1px solid transparent;transition:border-color .15s, background .15s;
+  }
+  .card-row:hover{border-color:var(--gold);background:#262630}
+  .card-row img{width:40px;border-radius:5px;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.5)}
+  .card-row .info{min-width:0;flex:1}
+  .card-row .nm{font-weight:600;font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .card-row .tl{font-size:.76rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .card-row .qty{color:var(--gold);font-weight:700;font-size:.85rem;margin-left:4px}
+  .mana{display:flex;gap:2px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end;max-width:130px}
+  .ms{
+    width:21px;height:21px;border-radius:50%;font-size:.62rem;font-weight:800;
+    display:inline-flex;align-items:center;justify-content:center;color:#151515;flex-shrink:0;
+    box-shadow:inset -1px -2px 3px rgba(0,0,0,.35), inset 1px 1px 2px rgba(255,255,255,.4);
+  }
+  .ms.W{background:#f4ecd0}.ms.U{background:#aad4f0}.ms.B{background:#6b6570;color:#f2f2f2}
+  .ms.R{background:#f0a080}.ms.G{background:#93cf9f}.ms.C{background:#b9b9c6}
+  .ms.X{background:#d7d7df}
+  .ms.N{background:#3a3a46;color:#e8e8ec}
+  .empty{color:var(--muted);text-align:center;padding:26px;font-size:.9rem}
+
+  .notfound{margin-top:16px}
+  .notfound summary{cursor:pointer;color:var(--amber);font-size:.88rem;font-weight:600}
+  .notfound ul{margin:8px 0 0 18px;color:var(--muted);font-size:.85rem}
+
+  @media(max-width:560px){
+    .curve-row{grid-template-columns:44px 1fr 34px}
+    .type-row{grid-template-columns:92px 1fr 36px}
+    .status{margin-left:0;width:100%}
+    .card h3{font-size:.95rem}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1><span class="gold">Commander</span> Deck Analyzer</h1>
+    <p>Paste a decklist — get curve, colors, and plain-English verdicts. Data live from Scryfall.</p>
+  </header>
+
+  <div class="panel">
+    <textarea id="deckInput" spellcheck="false" placeholder="1 Sol Ring&#10;1 Command Tower&#10;1 Arcane Signet&#10;…"></textarea>
+    <div class="btn-row">
+      <button id="analyzeBtn" class="btn-primary">Analyze Deck</button>
+      <button id="sampleBtn" class="btn-ghost">Load Sample</button>
+      <span class="status" id="parseStatus"></span>
+    </div>
+    <div class="progress" id="progress"><i id="progressFill"></i></div>
+    <div class="load-label" id="loadLabel"></div>
+  </div>
+
+  <div id="results">
+    <div class="results-title">
+      <h2>Deck Analysis</h2>
+      <span id="parseSummary"></span>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="num" id="stTotal">–</div><div class="lbl">Total Cards</div></div>
+      <div class="stat"><div class="num" id="stAvg">–</div><div class="lbl">Avg CMC (nonland)</div></div>
+      <div class="stat"><div class="num" id="stLands">–</div><div class="lbl">Lands</div></div>
+      <div class="stat"><div class="num" id="stNonland">–</div><div class="lbl">Nonland Cards</div></div>
+    </div>
+
+    <div class="grid grid-2" style="margin-bottom:16px">
+      <div class="card">
+        <h3>Mana Curve (nonlands)</h3>
+        <div class="curve" id="curve"></div>
+      </div>
+      <div class="card">
+        <h3>Color Identity</h3>
+        <div class="pips" id="pips"></div>
+      </div>
+    </div>
+
+    <div class="grid grid-2" style="margin-bottom:16px">
+      <div class="card">
+        <h3>Type Breakdown</h3>
+        <div class="types" id="types"></div>
+      </div>
+      <div class="card">
+        <h3>Verdicts</h3>
+        <div class="verdicts" id="verdicts"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Card List</h3>
+      <div class="list-tools">
+        <input id="searchBox" type="text" placeholder="Search cards…" autocomplete="off">
+        <div class="filter-btns">
+          <button class="filter-btn active" data-f="all">All</button>
+          <button class="filter-btn" data-f="creature">Creatures</button>
+          <button class="filter-btn" data-f="spell">Spells</button>
+          <button class="filter-btn" data-f="land">Lands</button>
+        </div>
+      </div>
+      <div class="card-list" id="cardList"></div>
+      <div class="notfound" id="notFoundBox" style="display:none">
+        <details>
+          <summary id="notFoundSummary"></summary>
+          <ul id="notFoundList"></ul>
+        </details>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+"use strict";
+
+var SAMPLE = [
+  "1 Sol Ring",
+  "1 Command Tower",
+  "1 Arcane Signet",
+  "1 Lightning Greaves",
+  "1 Swords to Plowshares",
+  "1 Cultivate",
+  "1 Beast Within",
+  "1 Chaos Warp",
+  "1 Blasphemous Act",
+  "1 Rhystic Study",
+  "1 Smothering Tithe",
+  "1 Exotic Orchard"
+].join("\n");
+
+var deckInput   = document.getElementById("deckInput"),
+    analyzeBtn  = document.getElementById("analyzeBtn"),
+    sampleBtn   = document.getElementById("sampleBtn"),
+    parseStatus = document.getElementById("parseStatus"),
+    progress    = document.getElementById("progress"),
+    progressFill= document.getElementById("progressFill"),
+    loadLabel   = document.getElementById("loadLabel"),
+    results     = document.getElementById("results"),
+    cardListEl  = document.getElementById("cardList"),
+    searchBox   = document.getElementById("searchBox");
+
+var allCards = [];       // resolved card entries {name, qty, data, face}
+var currentFilter = "all";
+
+sampleBtn.addEventListener("click", function(){ deckInput.value = SAMPLE; });
+document.querySelectorAll(".filter-btn").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    document.querySelectorAll(".filter-btn").forEach(function(b){ b.classList.remove("active"); });
+    btn.classList.add("active");
+    currentFilter = btn.getAttribute("data-f");
+    renderList();
+  });
+});
+searchBox.addEventListener("input", renderList);
+
+/* ---------------- parsing ---------------- */
+function parseDecklist(text){
+  var names = {}, order = [];
+  var lines = text.split(/\r?\n/);
+  lines.forEach(function(raw){
+    var line = raw.trim();
+    if(!line) return;
+    if(line.charAt(0) === "#" || line.substring(0,2) === "//") return;
+    // skip section headers like "Commander", "Creatures (10)" — single word w/o quantity and common headers
+    var low = line.toLowerCase();
+    if(/^(commander|creatures?|instants?|sorcer(ies|y)|artifacts?|enchantments?|planeswalkers?|lands?|sideboard|maybeboard|deck|mainboard)\s*(\(\d+\))?\s*$/.test(low)) return;
+    var m = line.match(/^\s*(\d+)\s*[xX]?\s+(.+?)\s*$/);
+    var qty = 1, name;
+    if(m){ qty = parseInt(m[1],10); name = m[2].trim(); }
+    else { name = line; }
+    if(!name) return;
+    if(!names[name]){ names[name] = 0; order.push(name); }
+    names[name] += qty;
+  });
+  return order.map(function(n){ return { name:n, qty:names[n] }; });
+}
+
+/* ---------------- scryfall ---------------- */
+function sleep(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+
+function fetchOne(name){
+  var url = "https://api.scryfall.com/cards/named?exact=" + encodeURIComponent(name);
+  return fetch(url).then(function(res){
+    if(res.status === 404){
+      return fetch("https://api.scryfall.com/cards/named?fuzzy=" + encodeURIComponent(name))
+        .then(function(r2){
+          if(!r2.ok) throw new Error("not found");
+          return r2.json();
+        });
+    }
+    if(!res.ok) throw new Error("HTTP " + res.status);
+    return res.json();
+  });
+}
+
+// normalize: for double-faced / adventure / split-ish layouts, use face 0
+function faceOf(data){
+  if(data.card_faces && data.card_faces.length) return data.card_faces[0];
+  return data;
+}
+
+analyzeBtn.addEventListener("click", function(){
+  var entries = parseDecklist(deckInput.value);
+  if(!entries.length){
+    parseStatus.textContent = "No cards found — paste a decklist first.";
+    return;
+  }
+  analyzeBtn.disabled = true;
+  progress.classList.add("on"); loadLabel.classList.add("on");
+  results.style.display = "none";
+  allCards = [];
+  var notFound = [];
+  var i = 0;
+
+  function step(){
+    if(i >= entries.length){
+      finish(notFound);
+      return;
+    }
+    var e = entries[i];
+    loadLabel.textContent = "Fetching card data… (" + (i+1) + "/" + entries.length + ")";
+    progressFill.style.width = ((i) / entries.length * 100) + "%";
+    fetchOne(e.name)
+      .then(function(data){
+        allCards.push({ name:e.name, qty:e.qty, data:data, face:faceOf(data) });
+      })
+      .catch(function(){ notFound.push(e.name); })
+      .then(function(){ i++; return sleep(60); })
+      .then(step);
+  }
+  step();
+});
+
+function finish(notFound){
+  progressFill.style.width = "100%";
+  loadLabel.textContent = "Done.";
+  analyzeBtn.disabled = false;
+  setTimeout(function(){
+    progress.classList.remove("on"); loadLabel.classList.remove("on");
+  }, 600);
+
+  var totalQty = allCards.reduce(function(a,c){ return a + c.qty; }, 0);
+  document.getElementById("parseSummary").textContent =
+    allCards.length + " unique cards recognized (" + totalQty + " total), " +
+    notFound.length + " not found";
+  parseStatus.textContent = totalQty + " cards analyzed.";
+
+  computeAndRender(notFound);
+  results.style.display = "block";
+  results.scrollIntoView({behavior:"smooth", block:"start"});
+  // animate bars after paint
+  requestAnimationFrame(function(){
+    setTimeout(function(){
+      document.querySelectorAll(".curve-fill,.type-fill").forEach(function(el){
+        el.style.width = el.getAttribute("data-w") + "%";
+      });
+    }, 60);
+  });
+}
+
+/* ---------------- helpers ---------------- */
+function isLand(entry){
+  return (entry.face.type_line || "").indexOf("Land") !== -1;
+}
+function isBasic(entry){
+  return (entry.face.type_line || "").indexOf("Basic") !== -1;
+}
+function cmcOf(entry){
+  var c = entry.face.cmc;
+  if(typeof c === "number") return c;
+  return entry.data.cmc || 0;
+}
+function typeOf(entry){
+  var t = entry.face.type_line || "";
+  if(t.indexOf("Creature") !== -1) return "creature";
+  if(t.indexOf("Land") !== -1) return "land";
+  return "spell"; // instant, sorcery, artifact, enchantment, planeswalker…
+}
+function oracleOf(entry){
+  return (entry.face.oracle_text || "").toLowerCase();
+}
+
+/* ---------------- computation + render ---------------- */
+function computeAndRender(notFound){
+  var lands = 0, nonlands = 0, totalQty = 0;
+  var cmcSum = 0;
+  var buckets = [0,0,0,0,0,0,0,0]; // 0..6, 7+
+  var colors = {W:0,U:0,B:0,R:0,G:0,C:0};
+  var types = {Creature:0,Instant:0,Sorcery:0,Artifact:0,Enchantment:0,Planeswalker:0,Land:0};
+  var rampHits = 0, drawHits = 0, removalHits = 0;
+  var cheapCount = 0, heavyCount = 0;
+  var dupOffenders = [];
+  var seen = {};
+
+  allCards.forEach(function(entry){
+    var q = entry.qty, t = entry.face.type_line || "", oracle = oracleOf(entry);
+    totalQty += q;
+    if(!seen[entry.name]) seen[entry.name] = 0;
+    seen[entry.name] += q;
+
+    var land = isLand(entry);
+    if(land){ lands += q; } else { nonlands += q; }
+
+    // type breakdown
+    if(t.indexOf("Land") !== -1) types.Land += q;
+    if(t.indexOf("Creature") !== -1) types.Creature += q;
+    if(t.indexOf("Instant") !== -1) types.Instant += q;
+    if(t.indexOf("Sorcery") !== -1) types.Sorcery += q;
+    if(t.indexOf("Artifact") !== -1) types.Artifact += q;
+    if(t.indexOf("Enchantment") !== -1) types.Enchantment += q;
+    if(t.indexOf("Planeswalker") !== -1) types.Planeswalker += q;
+
+    // curve (nonlands only)
+    var c = cmcOf(entry);
+    if(!land){
+      cmcSum += c * q;
+      if(c >= 7) buckets[7] += q; else buckets[Math.floor(c)] += q;
+      if(c <= 2) cheapCount += q;
+      if(c >= 4) heavyCount += q;
+    }
+
+    // color identity (count lands too — identity of the deck)
+    var ci = entry.data.color_identity || [];
+    if(!ci.length) colors.C += q;
+    else ci.forEach(function(col){ if(colors[col] !== undefined) colors[col] += q; });
+
+    // role heuristics (unique-card basis)
+    if(/add\s*\{/.test(oracle)) rampHits++;
+    if(oracle.indexOf("draw") !== -1 && oracle.indexOf("card") !== -1) drawHits++;
+    if(/destroy/.test(oracle) || /exile/.test(oracle)){
+      if(oracle.indexOf("target") !== -1) removalHits++;
+    }
+  });
+
+  Object.keys(seen).forEach(function(n){
+    var e = allCards.filter(function(x){ return x.name === n; })[0];
+    if(seen[n] > 1 && !isBasic(e)) dupOffenders.push({name:n, qty:seen[n]});
+  });
+
+  // ---- stats row ----
+  document.getElementById("stTotal").textContent = totalQty;
+  document.getElementById("stAvg").textContent = nonlands ? (cmcSum / nonlands).toFixed(2) : "–";
+  document.getElementById("stLands").textContent = lands;
+  document.getElementById("stNonland").textContent = nonlands;
+
+  // ---- curve ----
+  var maxB = Math.max.apply(null, buckets.concat([1]));
+  var labels = ["0","1","2","3","4","5","6","7+"];
+  var curveHTML = labels.map(function(lbl, i){
+    var n = buckets[i];
+    return '<div class="curve-row' + (n === maxB && n > 0 ? " peak" : "") + '">' +
+      '<div class="cmc">CMC ' + lbl + '</div>' +
+      '<div class="curve-track"><div class="curve-fill" data-w="' + (n/maxB*100).toFixed(1) + '" style="width:0"></div></div>' +
+      '<div class="cnt">' + n + '</div></div>';
+  }).join("");
+  document.getElementById("curve").innerHTML = curveHTML;
+
+  // ---- color pips ----
+  var pipDefs = [["W","White"],["U","Blue"],["B","Black"],["R","Red"],["G","Green"],["C","Colorless"]];
+  document.getElementById("pips").innerHTML = pipDefs.map(function(p){
+    return '<div class="pip-wrap"><div class="pip ' + p[0] + '">' + p[0] + '</div>' +
+      '<div class="cnt">' + colors[p[0]] + '</div><div class="lbl">' + p[1] + '</div></div>';
+  }).join("");
+
+  // ---- types ----
+  var maxT = Math.max.apply(null, Object.keys(types).map(function(k){ return types[k]; }).concat([1]));
+  document.getElementById("types").innerHTML = Object.keys(types).map(function(k){
+    return '<div class="type-row"><div class="tlbl">' + k + 's</div>' +
+      '<div class="type-track"><div class="type-fill" data-w="' + (types[k]/maxT*100).toFixed(1) + '" style="width:0"></div></div>' +
+      '<div class="tcnt">' + types[k] + '</div></div>';
+  }).join("");
+
+  // ---- verdicts ----
+  var V = [];
+  function add(kind, icon, html){ V.push({kind:kind, icon:icon, html:html}); }
+
+  if(totalQty !== 100)
+    add("amber", "!", "<strong>Deck size:</strong> " + totalQty + " cards — Commander is a 100-card format (99 + commander).");
+
+  if(lands < 34)
+    add("red", "✕", "<strong>Only " + lands + " lands</strong> — most Commander decks want 36–38. You'll miss land drops.");
+  else if(lands <= 35)
+    add("amber", "!", "<strong>" + lands + " lands</strong> — on the low side; 36–38 is the usual pocket.");
+  else if(lands <= 40)
+    add("green", "✓", "<strong>" + lands + " lands</strong> — solid, right in the 36–40 range.");
+  else if(lands <= 42)
+    add("amber", "!", "<strong>" + lands + " lands</strong> — a touch high; you may be light on action spells.");
+  else
+    add("amber", "!", "<strong>" + lands + " lands</strong> — that's a lot; consider trimming toward 36–38 for more gas.");
+
+  var avg = nonlands ? cmcSum / nonlands : 0;
+  var heavyPct = nonlands ? heavyCount / nonlands : 0;
+  if(heavyPct >= 0.4)
+    add("amber", "!", "<strong>Top-heavy curve:</strong> " + Math.round(heavyPct*100) + "% of nonlands cost 4+ — you may stall on expensive hands.");
+  if(avg > 3.5)
+    add("amber", "!", "<strong>High average CMC</strong> (" + avg.toFixed(2) + ") — most smooth decks sit under 3.5.");
+  if(cheapCount >= 10)
+    add("green", "✓", "<strong>" + cheapCount + " cards at 1–2 CMC</strong> — good early-game presence.");
+
+  if(rampHits < 8)
+    add("amber", "!", "<strong>Ramp looks thin</strong> (~" + rampHits + " mana sources found) — aim for 8–12 so you hit your big plays on time.");
+  else
+    add("green", "✓", "<strong>~" + rampHits + " ramp pieces</strong> — in the 8–12 pocket.");
+
+  if(drawHits < 8)
+    add("amber", "!", "<strong>Card draw looks thin</strong> (~" + drawHits + " draw effects found) — aim for ~10 so you don't run out of gas.");
+  else
+    add("green", "✓", "<strong>~" + drawHits + " draw effects</strong> — healthy card flow.");
+
+  if(removalHits < 8)
+    add("amber", "!", "<strong>Removal looks thin</strong> (~" + removalHits + " answers found) — you want ~8 ways to deal with opponents' threats.");
+
+  if(dupOffenders.length)
+    add("red", "✕", "<strong>Singleton broken:</strong> " + dupOffenders.map(function(d){ return d.name + " ×" + d.qty; }).join(", ") + ".");
+
+  document.getElementById("verdicts").innerHTML = V.map(function(v, i){
+    return '<div class="verdict ' + v.kind + '" style="animation-delay:' + (i*0.06) + 's"><div class="icon">' + v.icon + '</div><div>' + v.html + "</div></div>";
+  }).join("");
+
+  // ---- card list ----
+  renderList();
+
+  // ---- not found ----
+  var nfBox = document.getElementById("notFoundBox");
+  if(notFound.length){
+    nfBox.style.display = "block";
+    document.getElementById("notFoundSummary").textContent = notFound.length + " card(s) not found on Scryfall";
+    document.getElementById("notFoundList").innerHTML = notFound.map(function(n){ return "<li>" + escapeHtml(n) + "</li>"; }).join("");
+  } else {
+    nfBox.style.display = "none";
+  }
+}
+
+/* ---------------- card list ---------------- */
+function manaHtml(cost){
+  if(!cost) return '<span style="color:var(--muted);font-size:.75rem">—</span>';
+  return cost.replace(/\{([^}]+)\}/g, function(_, sym){
+    var s = sym.toUpperCase();
+    var cls = "X";
+    if("WUBRGC".indexOf(s) !== -1) cls = s;
+    else if(/^\d+$/.test(s) || s === "X" || s === "Y" || s === "Z") cls = "N";
+    else if(s.indexOf("/") !== -1) cls = "X"; // hybrid / phyrexian → generic pip
+    return '<span class="ms ' + cls + '">' + escapeHtml(sym) + "</span>";
+  });
+}
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+  });
+}
+
+function renderList(){
+  var q = searchBox.value.trim().toLowerCase();
+  var html = "";
+  allCards.forEach(function(entry){
+    if(q && entry.name.toLowerCase().indexOf(q) === -1) return;
+    if(currentFilter !== "all" && typeOf(entry) !== currentFilter) return;
+    var img = (entry.face.image_uris && entry.face.image_uris.small) ||
+              (entry.data.image_uris && entry.data.image_uris.small) || "";
+    html += '<div class="card-row">' +
+      (img ? '<img src="' + img + '" alt="" loading="lazy">' : "") +
+      '<div class="info"><div class="nm">' + escapeHtml(entry.name) +
+        (entry.qty > 1 ? '<span class="qty">×' + entry.qty + "</span>" : "") + "</div>" +
+      '<div class="tl">' + escapeHtml(entry.face.type_line || "") + "</div></div>" +
+      '<div class="mana">' + manaHtml(entry.face.mana_cost) + "</div></div>";
+  });
+  cardListEl.innerHTML = html || '<div class="empty">No cards match.</div>';
+}
+
+})();
+</script>
+</body>
+</html>
