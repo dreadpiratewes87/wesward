@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wes Ward — Coming Soon</title>
+<meta name="description" content="MTG strategy guides and more, coming soon from Wes Ward.">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #0d1117;
+    color: #e6edf3;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .card {
+    max-width: 560px;
+    width: 100%;
+    text-align: center;
+  }
+  .badge {
+    display: inline-block;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #7ee787;
+    border: 1px solid #238636;
+    border-radius: 999px;
+    padding: 6px 16px;
+    margin-bottom: 28px;
+  }
+  h1 {
+    font-size: clamp(2rem, 6vw, 3.25rem);
+    line-height: 1.15;
+    margin-bottom: 18px;
+  }
+  h1 .accent { color: #7ee787; }
+  p.lead {
+    font-size: clamp(1rem, 3.5vw, 1.2rem);
+    color: #8b949e;
+    line-height: 1.6;
+    margin-bottom: 36px;
+  }
+  form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  input[type="email"] {
+    flex: 1;
+    padding: 14px 16px;
+    font-size: 1rem;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    background: #161b22;
+    color: #e6edf3;
+    outline: none;
+  }
+  input[type="email"]:focus { border-color: #7ee787; }
+  button {
+    padding: 14px 24px;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    background: #238636;
+    color: #fff;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  button:hover { background: #2ea043; }
+  .fine { font-size: 0.85rem; color: #6e7681; }
+  #done {
+    display: none;
+    background: #161b22;
+    border: 1px solid #238636;
+    border-radius: 8px;
+    padding: 18px;
+    margin-bottom: 14px;
+    color: #7ee787;
+    font-weight: 600;
+  }
+  .footer {
+    margin-top: 48px;
+    font-size: 0.85rem;
+    color: #6e7681;
+  }
+  @media (max-width: 480px) {
+    form { flex-direction: column; }
+    button { width: 100%; }
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="badge">Coming Soon</div>
+    <h1>Something's <span class="accent">brewing.</span></h1>
+    <p class="lead">
+      I'm putting together real, no-BS strategy guides for Magic: The Gathering —
+      starting with Commander. Frameworks you can actually use, not decklists
+      you copy. More coming after that. Stick around.
+    </p>
+    <div id="done">You're in. I'll let you know when it drops. 🤙</div>
+    <form id="signup" onsubmit="return subscribe(event)">
+      <input type="email" id="email" placeholder="you@email.com" required aria-label="Email address">
+      <button type="submit">Notify me</button>
+    </form>
+    <p class="fine">One email when it launches. No spam, no list-selling, none of that.</p>
+    <div class="footer">— Wes Ward</div>
+  </div>
+<script>
+  function subscribe(e) {
+    e.preventDefault();
+    var input = document.getElementById('email');
+    if (!input.value || input.value.indexOf('@') < 0) return false;
+    document.getElementById('signup').style.display = 'none';
+    document.getElementById('done').style.display = 'block';
+    return false;
+  }
+</script>
+</body>
+</html>
