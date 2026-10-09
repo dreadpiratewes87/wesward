@@ -74,6 +74,28 @@
   }
   button:hover { background: #2ea043; }
   .fine { font-size: 0.85rem; color: #6e7681; }
+  .tools { margin-top: 44px; text-align: left; }
+  .tools h2 {
+    font-size: 1.15rem;
+    margin-bottom: 16px;
+    text-align: center;
+    color: #e6edf3;
+  }
+  .tool-link {
+    display: block;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+    text-decoration: none;
+    color: #e6edf3;
+    transition: border-color .15s, transform .15s;
+  }
+  .tool-link:hover { border-color: #7ee787; transform: translateY(-2px); }
+  .tool-link strong { display: block; font-size: 1.05rem; margin-bottom: 6px; }
+  .tool-link span { font-size: 0.92rem; color: #8b949e; line-height: 1.5; }
+  .tool-link .go { color: #7ee787; font-weight: 600; }
   #done {
     display: none;
     background: #161b22;
@@ -110,6 +132,17 @@
       <button type="submit">Notify me</button>
     </form>
     <p class="fine">One email when it launches. No spam, no list-selling, none of that.</p>
+    <div class="tools">
+      <h2>🛠️ Free MTG Tools</h2>
+      <a class="tool-link" href="tools/deck-analyzer/">
+        <strong>Commander Deck Analyzer</strong>
+        <span>Paste your decklist — get a mana curve, color breakdown, type stats, and plain-English verdicts on your lands, ramp, draw, and removal. <span class="go">Try it →</span></span>
+      </a>
+      <a class="tool-link" href="tools/hand-simulator/">
+        <strong>Opening Hand Simulator</strong>
+        <span>Draw test hands with real card images, practice London mulligans, and run 100-hand simulations to check your mana base. <span class="go">Try it →</span></span>
+      </a>
+    </div>
     <div class="footer">— Wes Ward</div>
   </div>
 <script>
