@@ -164,24 +164,51 @@
   .card-row{
     display:flex;align-items:center;gap:12px;padding:8px 10px;border-radius:10px;
     background:var(--panel-2);border:1px solid transparent;transition:border-color .15s, background .15s;
+    cursor:pointer;
   }
   .card-row:hover{border-color:var(--gold);background:#262630}
+  .card-row:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
   .card-row img{width:40px;border-radius:5px;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.5)}
   .card-row .info{min-width:0;flex:1}
   .card-row .nm{font-weight:600;font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .card-row .tl{font-size:.76rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .card-row .qty{color:var(--gold);font-weight:700;font-size:.85rem;margin-left:4px}
-  .mana{display:flex;gap:2px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end;max-width:130px}
-  .ms{
-    width:21px;height:21px;border-radius:50%;font-size:.62rem;font-weight:800;
-    display:inline-flex;align-items:center;justify-content:center;color:#151515;flex-shrink:0;
-    box-shadow:inset -1px -2px 3px rgba(0,0,0,.35), inset 1px 1px 2px rgba(255,255,255,.4);
+  .mana{display:flex;gap:2px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end;max-width:150px;align-items:center}
+  .ms-img{
+    width:22px;height:22px;flex-shrink:0;vertical-align:middle;
+    filter:drop-shadow(0 1px 2px rgba(0,0,0,.55));
   }
-  .ms.W{background:#f4ecd0}.ms.U{background:#aad4f0}.ms.B{background:#6b6570;color:#f2f2f2}
-  .ms.R{background:#f0a080}.ms.G{background:#93cf9f}.ms.C{background:#b9b9c6}
-  .ms.X{background:#d7d7df}
-  .ms.N{background:#3a3a46;color:#e8e8ec}
   .empty{color:var(--muted);text-align:center;padding:26px;font-size:.9rem}
+
+  /* ---------- card preview modal ---------- */
+  .card-modal{
+    position:fixed;inset:0;z-index:1000;display:none;
+    align-items:center;justify-content:center;padding:20px;
+  }
+  .card-modal.open{display:flex;animation:modalIn .22s ease}
+  @keyframes modalIn{from{opacity:0}to{opacity:1}}
+  .card-modal-backdrop{position:absolute;inset:0;background:rgba(5,5,8,.88);backdrop-filter:blur(4px)}
+  .card-modal-content{
+    position:relative;max-width:min(92vw,400px);width:100%;
+    animation:modalPop .25s cubic-bezier(.2,.9,.3,1.2);
+  }
+  @keyframes modalPop{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+  .card-modal-content img{
+    width:100%;border-radius:14px;display:block;
+    box-shadow:0 24px 70px rgba(0,0,0,.65), 0 0 0 1px rgba(255,255,255,.08);
+  }
+  .card-modal-close{
+    position:absolute;top:-14px;right:-10px;width:38px;height:38px;border-radius:50%;
+    background:var(--gold);color:#171204;font-size:1.35rem;font-weight:800;
+    padding:0;line-height:1;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 4px 14px rgba(0,0,0,.5);
+  }
+  .card-modal-close:hover{background:var(--gold-hi)}
+  .card-modal-name{
+    text-align:center;margin-top:12px;font-weight:700;font-size:1rem;color:var(--text);
+    text-shadow:0 2px 8px rgba(0,0,0,.8);
+  }
+  .list-hint{font-size:.78rem;color:var(--muted);margin-left:8px;font-weight:500}
 
   .notfound{margin-top:16px}
   .notfound summary{cursor:pointer;color:var(--amber);font-size:.88rem;font-weight:600}
@@ -250,7 +277,7 @@
     </div>
 
     <div class="card">
-      <h3>Card List</h3>
+      <h3>Card List <span class="list-hint">— click a card to preview</span></h3>
       <div class="list-tools">
         <input id="searchBox" type="text" placeholder="Search cards…" autocomplete="off">
         <div class="filter-btns">
@@ -270,6 +297,16 @@
     </div>
   </div>
 
+</div>
+
+<!-- card preview modal -->
+<div class="card-modal" id="cardModal" aria-hidden="true" role="dialog" aria-label="Card preview">
+  <div class="card-modal-backdrop" id="cardModalBackdrop"></div>
+  <div class="card-modal-content">
+    <button class="card-modal-close" id="cardModalClose" aria-label="Close preview">&times;</button>
+    <img id="cardModalImg" src="" alt="">
+    <div class="card-modal-name" id="cardModalName"></div>
+  </div>
 </div>
 
 <script>
@@ -595,15 +632,22 @@ function computeAndRender(notFound){
 }
 
 /* ---------------- card list ---------------- */
+/* Mana symbols use Scryfall's official symbol SVGs:
+   https://svgs.scryfall.io/card-symbols/{SYMBOL}.svg
+   Hybrid {W/U} -> "WU", phyrexian {W/P} -> "WP", two-brid {2/W} -> "2W". */
+function manaSymbolImg(sym){
+  var key = sym.replace(/\//g, "").toUpperCase();
+  if(key === "\u00BD") key = "HALF"; // {½} edge case
+  var url = "https://svgs.scryfall.io/card-symbols/" + encodeURIComponent(key) + ".svg";
+  var label = "{" + sym + "}";
+  return '<img class="ms-img" src="' + url + '" alt="' + escapeHtml(label) +
+    '" title="' + escapeHtml(label) + '" loading="lazy">';
+}
+
 function manaHtml(cost){
-  if(!cost) return '<span style="color:var(--muted);font-size:.75rem">—</span>';
+  if(!cost) return '<span style="color:var(--muted);font-size:.75rem">\u2014</span>';
   return cost.replace(/\{([^}]+)\}/g, function(_, sym){
-    var s = sym.toUpperCase();
-    var cls = "X";
-    if("WUBRGC".indexOf(s) !== -1) cls = s;
-    else if(/^\d+$/.test(s) || s === "X" || s === "Y" || s === "Z") cls = "N";
-    else if(s.indexOf("/") !== -1) cls = "X"; // hybrid / phyrexian → generic pip
-    return '<span class="ms ' + cls + '">' + escapeHtml(sym) + "</span>";
+    return manaSymbolImg(sym);
   });
 }
 
@@ -613,15 +657,20 @@ function escapeHtml(s){
   });
 }
 
+var renderedEntries = []; // entries currently shown in the list (after filter/search)
+
 function renderList(){
   var q = searchBox.value.trim().toLowerCase();
   var html = "";
+  renderedEntries = [];
   allCards.forEach(function(entry){
     if(q && entry.name.toLowerCase().indexOf(q) === -1) return;
     if(currentFilter !== "all" && typeOf(entry) !== currentFilter) return;
+    var ri = renderedEntries.length;
+    renderedEntries.push(entry);
     var img = (entry.face.image_uris && entry.face.image_uris.small) ||
               (entry.data.image_uris && entry.data.image_uris.small) || "";
-    html += '<div class="card-row">' +
+    html += '<div class="card-row" data-ri="' + ri + '" role="button" tabindex="0" title="Click to preview">' +
       (img ? '<img src="' + img + '" alt="" loading="lazy">' : "") +
       '<div class="info"><div class="nm">' + escapeHtml(entry.name) +
         (entry.qty > 1 ? '<span class="qty">×' + entry.qty + "</span>" : "") + "</div>" +
@@ -630,6 +679,51 @@ function renderList(){
   });
   cardListEl.innerHTML = html || '<div class="empty">No cards match.</div>';
 }
+
+/* ---------------- card preview modal ---------------- */
+var cardModal     = document.getElementById("cardModal"),
+    cardModalImg  = document.getElementById("cardModalImg"),
+    cardModalName = document.getElementById("cardModalName");
+
+function openCardModal(entry){
+  var img = (entry.face.image_uris && (entry.face.image_uris.large || entry.face.image_uris.normal)) ||
+            (entry.data.image_uris && (entry.data.image_uris.large || entry.data.image_uris.normal)) || "";
+  if(!img) return;
+  cardModalImg.src = img;
+  cardModalImg.alt = entry.name;
+  cardModalName.textContent = entry.name;
+  cardModal.classList.add("open");
+  cardModal.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+}
+function closeCardModal(){
+  cardModal.classList.remove("open");
+  cardModal.setAttribute("aria-hidden", "true");
+  cardModalImg.src = "";
+  cardModalImg.alt = "";
+  document.body.style.overflow = "";
+}
+function entryFromRow(row){
+  if(!row) return null;
+  var ri = parseInt(row.getAttribute("data-ri"), 10);
+  return renderedEntries[ri] || null;
+}
+cardListEl.addEventListener("click", function(e){
+  var row = e.target.closest ? e.target.closest(".card-row") : null;
+  var entry = entryFromRow(row);
+  if(entry) openCardModal(entry);
+});
+cardListEl.addEventListener("keydown", function(e){
+  if(e.key !== "Enter" && e.key !== " ") return;
+  var row = e.target.closest ? e.target.closest(".card-row") : null;
+  var entry = entryFromRow(row);
+  if(entry){ e.preventDefault(); openCardModal(entry); }
+});
+document.getElementById("cardModalClose").addEventListener("click", closeCardModal);
+document.getElementById("cardModalBackdrop").addEventListener("click", closeCardModal);
+document.addEventListener("keydown", function(e){
+  if(e.key === "Escape" && cardModal.classList.contains("open")) closeCardModal();
+});
 
 })();
 </script>
