@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Opening Hand Simulator — Commander</title>
+<style>
+  :root{
+    --bg:#0f0f12; --panel:#1a1a20; --panel2:#222229; --border:#2c2c36;
+    --gold:#c9a227; --gold-dim:#8a6f1a;
+    --text:#e8e6e1; --muted:#9a97a3;
+    --green:#3fae5a; --amber:#d9a024; --neutral:#5a5f73;
+    --card-w:150px; --card-h:210px;
+    --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;background:var(--bg);color:var(--text);font-family:var(--font);
+    min-height:100vh;line-height:1.45;
+  }
+  header{
+    padding:22px 20px 14px;max-width:1200px;margin:0 auto;
+  }
+  header h1{margin:0;font-size:1.7rem;letter-spacing:.5px}
+  header h1 .gold{color:var(--gold)}
+  header p{margin:6px 0 0;color:var(--muted);font-size:.92rem}
+  main{max-width:1200px;margin:0 auto;padding:0 20px 60px}
+
+  /* ---- deck input ---- */
+  .panel{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:18px}
+  .panel h2{margin:0 0 12px;font-size:1.05rem;color:var(--gold);letter-spacing:.4px;text-transform:uppercase;font-size:.85rem}
+  #decklist{
+    width:100%;min-height:170px;resize:vertical;background:#101014;color:var(--text);
+    border:1px solid var(--border);border-radius:8px;padding:12px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:.85rem;line-height:1.5;
+  }
+  #decklist:focus{outline:none;border-color:var(--gold-dim);box-shadow:0 0 0 2px rgba(201,162,39,.18)}
+  .btnrow{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;align-items:center}
+  button{
+    font-family:var(--font);border:none;border-radius:8px;padding:10px 20px;font-size:.92rem;font-weight:600;
+    cursor:pointer;transition:transform .08s ease,filter .15s ease,background .15s ease;color:#0f0f12;
+  }
+  button:active{transform:scale(.97)}
+  button:disabled{opacity:.4;cursor:not-allowed;transform:none}
+  .btn-gold{background:var(--gold)}
+  .btn-gold:hover:not(:disabled){filter:brightness(1.1)}
+  .btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border)}
+  .btn-ghost:hover:not(:disabled){border-color:var(--gold);color:var(--gold)}
+  .btn-green{background:var(--green);color:#fff}
+  .btn-green:hover:not(:disabled){filter:brightness(1.12)}
+  .btn-amber{background:var(--amber)}
+  .btn-amber:hover:not(:disabled){filter:brightness(1.12)}
+  .btn-neutral{background:var(--neutral);color:#fff}
+  .btn-neutral:hover:not(:disabled){filter:brightness(1.15)}
+  .kbd{
+    font-size:.75rem;color:var(--muted);border:1px solid var(--border);border-bottom-width:2px;
+    border-radius:5px;padding:1px 7px;margin-left:6px;font-family:ui-monospace,monospace;background:#101014;
+  }
+  #deck-status{color:var(--muted);font-size:.85rem}
+
+  /* ---- layout ---- */
+  .table-area{display:grid;grid-template-columns:1fr 300px;gap:18px;align-items:start}
+  @media (max-width:900px){.table-area{grid-template-columns:1fr}}
+
+  /* ---- hand info + actions ---- */
+  #infobar{
+    display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px;
+    color:var(--muted);font-size:.9rem;min-height:28px;
+  }
+  #infobar strong{color:var(--text)}
+  #color-dots{display:flex;gap:5px}
+  .dot{width:14px;height:14px;border-radius:50%;border:1px solid rgba(255,255,255,.25);display:inline-block}
+  .dot.W{background:#f8f6d8}.dot.U{background:#0e68ab}.dot.B{background:#150b00}
+  .dot.R{background:#d3202a}.dot.G{background:#00733e}.dot.C{background:#6b6f7a}
+
+  #hand-zone{
+    background:radial-gradient(ellipse at 50% 30%,#17171d 0%,var(--panel) 70%);
+    border:1px solid var(--border);border-radius:12px;min-height:300px;padding:34px 16px 26px;
+    display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;
+  }
+  #hand-zone .empty{color:var(--muted);text-align:center;max-width:420px}
+  #hand-zone .empty .big{font-size:2.2rem;margin-bottom:8px;display:block}
+  #hand{
+    display:flex;align-items:center;justify-content:center;flex-wrap:nowrap;
+    perspective:900px;width:100%;
+  }
+  .mtg-card{
+    width:var(--card-w);height:var(--card-h);border-radius:11px;flex:0 0 auto;
+    margin-left:calc(var(--card-w) * -0.42);
+    background:#0a0a0d;border:1px solid var(--gold-dim);
+    background-size:cover;background-position:center;background-repeat:no-repeat;
+    box-shadow:0 10px 24px rgba(0,0,0,.55),inset 0 0 0 1px rgba(201,162,39,.25);
+    position:relative;cursor:default;
+    opacity:0;transform:translateY(60px) rotate(0deg);
+    transition:opacity .45s ease,transform .45s cubic-bezier(.2,.9,.3,1.2),filter .2s ease,box-shadow .2s ease;
+  }
+  .mtg-card:first-child{margin-left:0}
+  .mtg-card.dealt{opacity:1;transform:translateY(0) rotate(var(--tilt,0deg))}
+  .mtg-card.loading::after{
+    content:"";position:absolute;inset:0;border-radius:11px;
+    background:
+      linear-gradient(135deg,transparent 40%,rgba(201,162,39,.12) 50%,transparent 60%),
+      repeating-linear-gradient(115deg,#101014 0 14px,#141419 14px 28px);
+    animation:shimmer 1.4s linear infinite;background-size:200% 100%,auto;
+  }
+  @keyframes shimmer{to{background-position:-200% 0,0 0}}
+  .mtg-card img{width:100%;height:100%;object-fit:cover;border-radius:11px;display:block;opacity:0;transition:opacity .4s ease}
+  .mtg-card img.loaded{opacity:1}
+  .mtg-card .cardname{
+    position:absolute;left:0;right:0;bottom:0;padding:18px 8px 8px;font-size:.72rem;text-align:center;
+    background:linear-gradient(transparent,rgba(0,0,0,.85));border-radius:0 0 11px 11px;
+  }
+  /* selection mode */
+  #hand-zone.selecting .mtg-card{cursor:pointer}
+  #hand-zone.selecting .mtg-card:hover{transform:translateY(-10px) rotate(var(--tilt,0deg));box-shadow:0 16px 30px rgba(0,0,0,.7),0 0 0 2px var(--gold)}
+  #hand-zone.selecting .mtg-card.selected{
+    filter:brightness(.45) saturate(.6);
+  }
+  .mtg-card .checkmark{
+    position:absolute;inset:0;display:none;align-items:center;justify-content:center;
+    font-size:2.6rem;color:var(--gold);text-shadow:0 2px 10px #000;pointer-events:none;
+  }
+  .mtg-card.selected .checkmark{display:flex}
+  #select-banner{
+    position:absolute;top:12px;left:50%;transform:translateX(-50%);
+    background:rgba(15,15,18,.92);border:1px solid var(--gold);color:var(--gold);
+    padding:8px 18px;border-radius:20px;font-size:.85rem;font-weight:600;z-index:5;white-space:nowrap;
+  }
+
+  #actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+
+  /* ---- bottomed tray ---- */
+  #bottom-tray{display:none;margin-top:14px;align-items:center;gap:10px;flex-wrap:wrap}
+  #bottom-tray.show{display:flex}
+  #bottom-tray .label{color:var(--muted);font-size:.85rem}
+  .mini-card{
+    width:44px;height:62px;border-radius:6px;background-size:cover;background-position:center;
+    border:1px solid var(--gold-dim);box-shadow:0 4px 10px rgba(0,0,0,.5);
+    position:relative;overflow:hidden;background-color:#0a0a0d;
+  }
+  .mini-card span{
+    position:absolute;left:0;right:0;bottom:0;font-size:.5rem;text-align:center;
+    background:rgba(0,0,0,.8);padding:2px 1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+
+  /* ---- side stats ---- */
+  aside .panel{margin-bottom:18px}
+  .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .stat{background:#101014;border:1px solid var(--border);border-radius:8px;padding:10px 12px}
+  .stat .num{font-size:1.35rem;font-weight:700;color:var(--gold)}
+  .stat .lbl{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+  .hist{margin-top:6px}
+  .hist-row{display:flex;align-items:center;gap:8px;margin:5px 0;font-size:.8rem}
+  .hist-row .n{width:14px;color:var(--muted);text-align:right;font-family:ui-monospace,monospace}
+  .hist-row .bar{flex:1;height:12px;background:#101014;border-radius:6px;overflow:hidden;border:1px solid var(--border)}
+  .hist-row .fill{height:100%;background:linear-gradient(90deg,var(--gold-dim),var(--gold));border-radius:6px;transition:width .5s ease;min-width:0}
+  .hist-row .c{width:26px;text-align:right;color:var(--text);font-family:ui-monospace,monospace}
+  #history-list{display:flex;flex-direction:column;gap:6px;margin-top:4px}
+  .hist-item{
+    display:flex;align-items:center;gap:10px;background:#101014;border:1px solid var(--border);
+    border-radius:8px;padding:8px 12px;font-size:.82rem;
+  }
+  .hist-item .tag{
+    font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;
+    padding:2px 8px;border-radius:10px;flex:0 0 auto;
+  }
+  .hist-item .tag.kept{background:rgba(63,174,90,.18);color:var(--green);border:1px solid rgba(63,174,90,.4)}
+  .hist-item .tag.mulliganed{background:rgba(217,160,36,.15);color:var(--amber);border:1px solid rgba(217,160,36,.4)}
+  .hist-item .dots{display:flex;gap:3px;margin-left:auto}
+  .hist-item .dots .dot{width:10px;height:10px}
+  .muted-note{color:var(--muted);font-size:.82rem}
+
+  /* ---- batch ---- */
+  #batch-result{margin-top:14px;display:none}
+  #batch-result.show{display:block}
+  #batch-verdict{
+    background:#101014;border:1px solid var(--border);border-left:3px solid var(--gold);
+    border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0;font-size:.95rem;
+  }
+  #batch-verdict strong{color:var(--gold)}
+
+  footer{max-width:1200px;margin:0 auto;padding:0 20px 40px;color:var(--muted);font-size:.78rem}
+  footer a{color:var(--gold-dim)}
+</style>
+</head>
+<body>
+
+<header>
+  <h1><span class="gold">◆</span> Opening Hand Simulator <span class="muted-note">· Commander</span></h1>
+  <p>London mulligan practice. Paste a decklist, draw opening hands, mulligan, and check your land math — card images via Scryfall.</p>
+</header>
+
+<main>
+  <!-- ===== deck input ===== -->
+  <section class="panel">
+    <h2>Decklist</h2>
+    <textarea id="decklist" placeholder="1 Sol Ring&#10;1x Command Tower&#10;Arcane Signet&#10;...one card per line. Blank lines and // comments are ignored."></textarea>
+    <div class="btnrow">
+      <button class="btn-gold" id="btn-load">Load Deck</button>
+      <button class="btn-ghost" id="btn-sample">Load Sample</button>
+      <span id="deck-status"></span>
+    </div>
+  </section>
+
+  <div class="table-area">
+    <div>
+      <!-- ===== hand ===== -->
+      <div id="infobar"><span class="muted-note">No hand yet — load a deck and draw.</span></div>
+      <div id="hand-zone">
+        <div class="empty" id="hand-empty">
+          <span class="big">🂠</span>
+          <div><strong>Your opening hand appears here.</strong></div>
+          <div class="muted-note">Load a deck above, then press <strong>Draw Opening Hand</strong> (or hit <span class="kbd">Space</span>).</div>
+        </div>
+        <div id="hand"></div>
+      </div>
+      <div id="actions">
+        <button class="btn-gold" id="btn-draw">Draw Opening Hand<span class="kbd">Space</span></button>
+        <button class="btn-green" id="btn-keep" disabled>Keep Hand<span class="kbd">K</span></button>
+        <button class="btn-amber" id="btn-mulligan" disabled>Mulligan<span class="kbd">M</span></button>
+        <button class="btn-neutral" id="btn-new" disabled>New Hand</button>
+      </div>
+      <div id="bottom-tray"><span class="label">Bottomed:</span><span id="bottom-cards" style="display:flex;gap:8px;flex-wrap:wrap"></span></div>
+    </div>
+
+    <!-- ===== side stats ===== -->
+    <aside>
+      <div class="panel">
+        <h2>Session Stats</h2>
+        <div class="stat-grid">
+          <div class="stat"><div class="num" id="st-drawn">0</div><div class="lbl">Hands drawn</div></div>
+          <div class="stat"><div class="num" id="st-kept">0</div><div class="lbl">Hands kept</div></div>
+          <div class="stat"><div class="num" id="st-mull">0</div><div class="lbl">Mulligans</div></div>
+          <div class="stat"><div class="num" id="st-keepable">—</div><div class="lbl">2–4 land %</div></div>
+          <div class="stat"><div class="num" id="st-avg">—</div><div class="lbl">Avg lands</div></div>
+          <div class="stat"><div class="num" id="st-lands">—</div><div class="lbl">Lands in deck</div></div>
+        </div>
+        <h2 style="margin-top:16px">Land-count histogram</h2>
+        <div class="hist" id="hist"></div>
+      </div>
+      <div class="panel">
+        <h2>Recent Hands</h2>
+        <div id="history-list"><span class="muted-note">Nothing logged yet.</span></div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- ===== batch ===== -->
+  <section class="panel">
+    <h2>Batch Simulation</h2>
+    <p class="muted-note" style="margin-top:0">Deal 100 opening hands instantly (no images — pure probability) against your loaded decklist.</p>
+    <div class="btnrow" style="margin-top:0">
+      <button class="btn-gold" id="btn-batch" disabled>Simulate 100 Hands</button>
+      <button class="btn-ghost" id="btn-batch-clear" disabled>Clear</button>
+    </div>
+    <div id="batch-result">
+      <div class="stat-grid" style="max-width:560px">
+        <div class="stat"><div class="num" id="b-keepable">—</div><div class="lbl">Hands with 2–4 lands</div></div>
+        <div class="stat"><div class="num" id="b-avg">—</div><div class="lbl">Avg lands / hand</div></div>
+      </div>
+      <div id="batch-verdict"></div>
+      <h2 style="margin-top:14px">Batch histogram</h2>
+      <div class="hist" id="batch-hist" style="max-width:560px"></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  Card data &amp; images: <a href="https://scryfall.com" target="_blank" rel="noopener">Scryfall</a> (fetched live in your browser). Not affiliated with Wizards of the Coast.
+</footer>
+
+<script>
+"use strict";
+/* ================= state ================= */
+const S = {
+  deckNames: [],        // expanded card-name list
+  library: [],          // shuffled copy in play
+  hand: [],             // [{name}]
+  mulligans: 0,
+  mode: "idle",         // idle | review | selecting | kept
+  selecting: new Set(), // hand indices chosen to bottom
+  bottomed: [],         // names bottomed this session
+  dataCache: {},        // name -> Promise<{name,image,typeLine,colors,isLand}>
+  session: { drawn:0, kept:0, mulliganed:0, landCounts:[] , history:[] }
+};
+const $ = id => document.getElementById(id);
+const delay = ms => new Promise(r => setTimeout(r, ms));
+
+/* ================= decklist parsing ================= */
+function parseDecklist(text){
+  const out = [];
+  for (let raw of text.split("\n")){
+    let line = raw.trim();
+    if (!line) continue;
+    if (/^(\/\/|#|;)/.test(line)) continue;
+    if (/^(deck|mainboard|sideboard|maybeboard|commander)\b/i.test(line)) continue;
+    if (/^\d+\s*$/.test(line)) continue;
+    let qty = 1, name = line;
+    let m = line.match(/^(\d+)\s*[x×]\s+(.+)$/i) || line.match(/^(\d+)\s+(.+)$/);
+    if (m){ qty = parseInt(m[1],10); name = m[2].trim(); }
+    name = name.replace(/\s*\[[^\]]*\]\s*$/,"").replace(/\s*\(.*\)\s*$/,"").trim();
+    if (!name || qty < 1 || qty > 100) continue;
+    for (let i=0;i<qty;i++) out.push(name);
+  }
+  return out;
+}
+
+const SAMPLE = `1 Sol Ring
+1 Command Tower
+1 Arcane Signet
+1 Lightning Greaves
+1 Swords to Plowshares
+1 Cultivate
+1 Beast Within
+1 Chaos Warp
+1 Blasphemous Act
+1 Rhystic Study
+1 Smothering Tithe
+1 Exotic Orchard`;
+
+/* ================= Scryfall fetch (runtime, ~60ms spacing) ================= */
+let fetchQueue = Promise.resolve();
+function queued(fn){
+  const p = fetchQueue.then(fn);
+  fetchQueue = p.catch(()=>{}).then(()=>delay(60));
+  return p;
+}
+function cardData(name){
+  if (!S.dataCache[name]){
+    S.dataCache[name] = queued(async () => {
+      const enc = encodeURIComponent(name);
+      let res = await fetch(`https://api.scryfall.com/cards/named?exact=${enc}`);
+      if (res.status === 404)
+        res = await fetch(`https://api.scryfall.com/cards/named?fuzzy=${enc}`);
+      if (!res.ok) throw new Error("not found: " + name);
+      const j = await res.json();
+      const face = j.card_faces && j.card_faces[0] ? j.card_faces[0] : j;
+      const imgs = j.image_uris || face.image_uris || {};
+      const typeLine = j.type_line || face.type_line || "";
+      const colors = j.colors || face.colors || [];
+      return {
+        name: j.name || name,
+        image: imgs.normal || imgs.small || null,
+        isLand: /Land/i.test(typeLine),
+        colors: colors
+      };
+    }).catch(() => ({ name, image:null, isLand:false, colors:[] }));
+  }
+  return S.dataCache[name];
+}
+async function landFlags(names){
+  const flags = await Promise.all(names.map(async n => {
+    try { return (await cardData(n)).isLand; } catch(e){ return false; }
+  }));
+  return flags;
+}
+
+/* ================= game logic ================= */
+function shuffle(a){
+  for (let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+function landCountOf(handFlags){ return handFlags.filter(Boolean).length; }
+function handColors(handFlags){ return []; } // colors filled async below
+
+async function drawHand(){
+  if (!S.deckNames.length) return;
+  S.library = shuffle(S.deckNames.slice());
+  S.hand = S.library.splice(0,7).map(name => ({name}));
+  S.mulligans = 0;
+  S.mode = "review";
+  S.bottomed = [];
+  renderTray();
+  S.session.drawn++;
+  S.session.landCounts.push(null); // resolved when images/lands known
+  updateSessionStats();
+  await renderHand(true);
+  updateInfobar();
+  setButtons();
+}
+
+async function mulligan(){
+  if (!S.deckNames.length || S.mode !== "review") return;
+  S.mulligans++;
+  S.session.mulliganed++;
+  S.session.landCounts.push(null);
+  S.library = shuffle(S.deckNames.slice());
+  S.hand = S.library.splice(0,7).map(name => ({name}));
+  S.mode = "selecting";
+  S.selecting = new Set();
+  $("hand-zone").classList.add("selecting");
+  showBanner(`Click ${S.mulligans} card${S.mulligans>1?"s":""} to put on the bottom, then Confirm`);
+  ensureConfirmButton();
+  await renderHand(true);
+  updateInfobar();
+  setButtons();
+  updateSessionStats();
+}
+
+function confirmBottom(){
+  if (S.selecting.size !== S.mulligans) return;
+  const idxs = [...S.selecting].sort((a,b)=>b-a);
+  const bottomed = [];
+  for (const i of idxs){
+    const [c] = S.hand.splice(i,1);
+    bottomed.push(c);
+    S.bottomed.push(c.name);
+    S.library.push(c.name);
+  }
+  // draw replacements
+  for (let k=0;k<bottomed.length;k++){
+    const name = S.library.shift();
+    if (name) S.hand.push({name});
+  }
+  S.selecting = new Set();
+  S.mode = "review";
+  $("hand-zone").classList.remove("selecting");
+  hideBanner(); removeConfirmButton();
+  renderHand(true).then(()=>{ updateInfobar(); });
+  renderTray();
+  setButtons();
+}
+
+function keepHand(){
+  if (S.mode !== "review") return;
+  S.mode = "kept";
+  S.session.kept++;
+  logHistory("kept");
+  updateSessionStats();
+  setButtons();
+  $("infobar").innerHTML = `<strong>Hand kept.</strong> <span class="muted-note">Draw again to keep testing.</span>`;
+}
+
+function newHand(){
+  drawHand();
+}
+
+/* ================= rendering ================= */
+function setButtons(){
+  $("btn-keep").disabled = S.mode !== "review";
+  $("btn-mulligan").disabled = S.mode !== "review";
+  $("btn-new").disabled = !S.deckNames.length || S.mode === "idle" || S.mode === "selecting";
+  $("btn-draw").disabled = !S.deckNames.length || S.mode === "selecting";
+}
+
+async function renderHand(animate){
+  const zone = $("hand-zone");
+  $("hand-empty").style.display = "none";
+  const el = $("hand");
+  el.innerHTML = "";
+  const names = S.hand.map(c=>c.name);
+  const tilt = names.length > 1 ? 5 : 0;
+  names.forEach((name,i) => {
+    const d = document.createElement("div");
+    d.className = "mtg-card loading";
+    d.style.setProperty("--tilt", ((i-(names.length-1)/2)*tilt/Math.max(1,(names.length-1)/2)).toFixed(1)+"deg");
+    d.dataset.idx = i;
+    d.innerHTML = `<div class="cardname">${escapeHtml(name)}</div><div class="checkmark">✓</div>`;
+    if (S.mode === "selecting"){
+      d.addEventListener("click", () => toggleSelect(i, d));
+    }
+    el.appendChild(d);
+  });
+  const cards = [...el.children];
+  // stagger deal
+  cards.forEach((d,i) => {
+    setTimeout(() => d.classList.add("dealt"), animate ? 90*i : 0);
+  });
+  // load images async
+  const flags = await landFlags(names);
+  S.hand.forEach((c,i)=> c.isLand = flags[i]);
+  // patch the open land-count entry
+  for (let i=S.session.landCounts.length-1;i>=0;i--){
+    if (S.session.landCounts[i]===null){ S.session.landCounts[i]=landCountOf(flags); break; }
+  }
+  updateSessionStats();
+  // images
+  names.forEach(async (name,i) => {
+    try{
+      const data = await cardData(name);
+      const d = cards[i];
+      if (!d || !d.isConnected) return;
+      if (data.image){
+        const img = document.createElement("img");
+        img.alt = data.name;
+        img.onload = () => { img.classList.add("loaded"); d.classList.remove("loading"); };
+        img.onerror = () => d.classList.remove("loading");
+        img.src = data.image;
+        d.insertBefore(img, d.firstChild);
+      } else d.classList.remove("loading");
+    }catch(e){}
+  });
+  updateInfobar(flags);
+}
+
+function toggleSelect(i, el){
+  if (S.selecting.has(i)){ S.selecting.delete(i); el.classList.remove("selected"); }
+  else if (S.selecting.size < S.mulligans){ S.selecting.add(i); el.classList.add("selected"); }
+  const b = $("btn-confirm");
+  if (b){
+    b.disabled = S.selecting.size !== S.mulligans;
+    b.textContent = `Confirm — bottom ${S.selecting.size}/${S.mulligans}`;
+  }
+}
+
+function showBanner(text){
+  hideBanner();
+  const b = document.createElement("div");
+  b.id = "select-banner";
+  b.textContent = text;
+  $("hand-zone").appendChild(b);
+}
+function hideBanner(){ const b = $("select-banner"); if (b) b.remove(); }
+function ensureConfirmButton(){
+  removeConfirmButton();
+  const b = document.createElement("button");
+  b.id = "btn-confirm";
+  b.className = "btn-gold";
+  b.style.marginTop = "14px";
+  b.disabled = true;
+  b.textContent = `Confirm — bottom 0/${S.mulligans}`;
+  b.addEventListener("click", confirmBottom);
+  $("actions").before(b);
+}
+function removeConfirmButton(){ const b = $("btn-confirm"); if (b) b.remove(); }
+
+function renderTray(){
+  const tray = $("bottom-tray"), wrap = $("bottom-cards");
+  wrap.innerHTML = "";
+  if (!S.bottomed.length){ tray.classList.remove("show"); return; }
+  tray.classList.add("show");
+  S.bottomed.forEach(async name => {
+    const d = document.createElement("div");
+    d.className = "mini-card";
+    d.innerHTML = `<span>${escapeHtml(name)}</span>`;
+    wrap.appendChild(d);
+    try{
+      const data = await cardData(name);
+      if (data.image) d.style.backgroundImage = `url("${data.image}")`;
+    }catch(e){}
+  });
+}
+
+async function updateInfobar(flags){
+  const bar = $("infobar");
+  if (!S.hand.length){ bar.innerHTML = `<span class="muted-note">No hand yet — load a deck and draw.</span>`; return; }
+  flags = flags || S.hand.map(c=>!!c.isLand);
+  const lands = landCountOf(flags);
+  // color identity of hand
+  const names = S.hand.map(c=>c.name);
+  const datas = await Promise.all(names.map(n=>cardData(n).catch(()=>({colors:[]}))));
+  const set = new Set();
+  datas.forEach(d => (d.colors||[]).forEach(c=>set.add(c)));
+  const order = ["W","U","B","R","G"];
+  const dots = order.filter(c=>set.has(c)).map(c=>`<span class="dot ${c}" title="${c}"></span>`).join("")
+             || `<span class="dot C"></span>`;
+  bar.innerHTML = `<strong>${S.hand.length} cards</strong> · <strong>${lands} land${lands===1?"":"s"}</strong>` +
+    (S.mulligans ? ` · Mulligan #${S.mulligans}` : "") +
+    `<span id="color-dots">${dots}</span>`;
+}
+
+function escapeHtml(s){ return s.replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+
+/* ================= session stats ================= */
+function updateSessionStats(){
+  const s = S.session;
+  $("st-drawn").textContent = s.drawn;
+  $("st-kept").textContent = s.kept;
+  $("st-mull").textContent = s.mulliganed;
+  const counts = s.landCounts.filter(v=>v!==null);
+  if (counts.length){
+    const k = counts.filter(v=>v>=2&&v<=4).length;
+    $("st-keepable").textContent = Math.round(k/counts.length*100)+"%";
+    $("st-avg").textContent = (counts.reduce((a,b)=>a+b,0)/counts.length).toFixed(1);
+  }
+  renderHist($("hist"), counts);
+}
+function renderHist(el, counts){
+  el.innerHTML = "";
+  const bins = Array(8).fill(0);
+  counts.forEach(v => { if (v>=0 && v<=7) bins[v]++; });
+  const max = Math.max(1, ...bins);
+  for (let i=0;i<=7;i++){
+    const c = bins[i];
+    const row = document.createElement("div");
+    row.className = "hist-row";
+    row.innerHTML = `<span class="n">${i}</span><div class="bar"><div class="fill" style="width:${(c/max*100).toFixed(1)}%"></div></div><span class="c">${c}</span>`;
+    el.appendChild(row);
+  }
+}
+async function logHistory(result){
+  const flags = S.hand.map(c=>!!c.isLand);
+  const lands = landCountOf(flags);
+  const names = S.hand.map(c=>c.name);
+  const datas = await Promise.all(names.map(n=>cardData(n).catch(()=>({colors:[]}))));
+  const set = new Set();
+  datas.forEach(d => (d.colors||[]).forEach(c=>set.add(c)));
+  const order = ["W","U","B","R","G"];
+  const dots = order.filter(c=>set.has(c)).map(c=>`<span class="dot ${c}"></span>`).join("");
+  const n = S.session.history.length + 1;
+  S.session.history.unshift({lands, result, dots});
+  S.session.history = S.session.history.slice(0,8);
+  const list = $("history-list");
+  list.innerHTML = "";
+  S.session.history.forEach((h,i) => {
+    const d = document.createElement("div");
+    d.className = "hist-item";
+    d.innerHTML = `<strong>H${n-i}</strong><span>${h.lands} land${h.lands===1?"":"s"}</span>` +
+      `<span class="tag ${h.result}">${h.result}</span><span class="dots">${h.dots}</span>`;
+    list.appendChild(d);
+  });
+}
+
+/* ================= batch simulation ================= */
+function verdictText(landTotal, pct){
+  if (pct >= 78) return `<strong>Excellent curve.</strong> With ${landTotal} lands you open 2–4 lands ~${pct}% of the time — that's top-tier consistency.`;
+  if (pct >= 68) return `<strong>Solid.</strong> With ${landTotal} lands you hit 2–4 lands in ~${pct}% of openers — right in the Commander sweet spot.`;
+  if (pct >= 55) return `<strong>Workable, but shaky.</strong> ~${pct}% of openers land in the 2–4 zone with ${landTotal} lands — expect regular mulligans. Consider +2–3 lands or more draw.`;
+  return `<strong>Rough.</strong> Only ~${pct}% of openers have 2–4 lands with ${landTotal} lands — you'll mulligan a lot. Add lands or card draw.`;
+}
+async function runBatch(){
+  if (!S.deckNames.length) return;
+  const btn = $("btn-batch");
+  btn.disabled = true; btn.textContent = "Simulating…";
+  await delay(30);
+  // land flags via Scryfall for unique names
+  const uniq = [...new Set(S.deckNames)];
+  const flags = await landFlags(uniq);
+  const isLandMap = {};
+  uniq.forEach((n,i)=> isLandMap[n]=flags[i]);
+  const landTotal = S.deckNames.filter(n=>isLandMap[n]).length;
+  const counts = [];
+  for (let t=0;t<100;t++){
+    const lib = shuffle(S.deckNames.slice());
+    counts.push(lib.slice(0,7).filter(n=>isLandMap[n]).length);
+  }
+  const keepable = counts.filter(v=>v>=2&&v<=4).length;
+  const avg = counts.reduce((a,b)=>a+b,0)/counts.length;
+  $("b-keepable").textContent = keepable + "%";
+  $("b-avg").textContent = avg.toFixed(2);
+  $("batch-verdict").innerHTML = verdictText(landTotal, keepable);
+  renderHist($("batch-hist"), counts);
+  $("batch-result").classList.add("show");
+  btn.disabled = false; btn.textContent = "Simulate 100 Hands";
+}
+
+/* ================= wiring ================= */
+function loadDeckFromTextarea(){
+  const names = parseDecklist($("decklist").value);
+  if (!names.length){
+    $("deck-status").textContent = "No cards found — check the format.";
+    return;
+  }
+  S.deckNames = names;
+  S.mode = "idle"; S.hand = []; S.mulligans = 0;
+  S.bottomed = []; renderTray();
+  hideBanner(); removeConfirmButton(); $("hand-zone").classList.remove("selecting");
+  $("hand").innerHTML = "";
+  $("hand-empty").style.display = "";
+  $("infobar").innerHTML = `<span class="muted-note">Deck loaded — press <strong>Draw Opening Hand</strong>.</span>`;
+  $("deck-status").textContent = `${names.length} cards loaded (${new Set(names).size} unique).`;
+  $("btn-batch").disabled = false; $("btn-batch-clear").disabled = false;
+  // lands in deck (async, updates stat when known)
+  $("st-lands").textContent = "…";
+  landFlags([...new Set(names)]).then(flags => {
+    const m = {}; [...new Set(names)].forEach((n,i)=> m[n]=flags[i]);
+    $("st-lands").textContent = names.filter(n=>m[n]).length;
+  });
+  setButtons();
+  $("btn-draw").disabled = false;
+}
+
+$("btn-load").addEventListener("click", loadDeckFromTextarea);
+$("btn-sample").addEventListener("click", () => { $("decklist").value = SAMPLE; loadDeckFromTextarea(); });
+$("btn-draw").addEventListener("click", drawHand);
+$("btn-keep").addEventListener("click", keepHand);
+$("btn-mulligan").addEventListener("click", mulligan);
+$("btn-new").addEventListener("click", newHand);
+$("btn-batch").addEventListener("click", runBatch);
+$("btn-batch-clear").addEventListener("click", () => {
+  $("batch-result").classList.remove("show");
+});
+
+/* keyboard shortcuts — ignored while typing */
+document.addEventListener("keydown", e => {
+  const t = document.activeElement;
+  if (t && (t.tagName === "TEXTAREA" || t.tagName === "INPUT")) return;
+  if (e.code === "Space"){ e.preventDefault(); if (!$("btn-draw").disabled) drawHand(); }
+  else if (e.key === "k" || e.key === "K"){ if (!$("btn-keep").disabled) keepHand(); }
+  else if (e.key === "m" || e.key === "M"){ if (!$("btn-mulligan").disabled) mulligan(); }
+});
+
+/* init */
+renderHist($("hist"), []);
+setButtons();
+</script>
+</body>
+</html>
