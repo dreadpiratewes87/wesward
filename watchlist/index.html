@@ -249,12 +249,21 @@ try{
     {id:'wl-seed-6',title:'The Deuce',type:'Show',service:'HBO',notes:'70s Times Square',watched:false,poster:'https://static.tvmaze.com/uploads/images/medium_portrait/210/526668.jpg'}
   ];
   try{
-    if(!SHARED&&localStorage.getItem('wl-seed-ver')!=='2'){
-      var have={}; items.forEach(function(x){have[x.id]=1;});
+    if(!SHARED&&localStorage.getItem('wl-seed-ver')!=='3'){
+      var byId={}; items.forEach(function(x){byId[x.id]=x;});
       WL_SEEDS.slice().reverse().forEach(function(s){
-        if(!have[s.id]){ s.added=new Date().toISOString(); items.unshift(s); }
+        var ex=byId[s.id];
+        if(ex){
+          ex.poster=s.poster||ex.poster;
+          ex.info=s.info||ex.info;
+          ex.releaseDate=s.releaseDate||ex.releaseDate;
+          ex.releaseKind=s.releaseKind||ex.releaseKind;
+          ex.year=s.year||ex.year;
+        }else{
+          s.added=new Date().toISOString(); items.unshift(JSON.parse(JSON.stringify(s)));
+        }
       });
-      save(items); localStorage.setItem('wl-seed-ver','2');
+      save(items); localStorage.setItem('wl-seed-ver','3');
     }
   }catch(e){}
 
