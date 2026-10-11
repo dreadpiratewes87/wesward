@@ -109,6 +109,7 @@
     .champ h2 { margin:8px 0 2px; font-size:30px; }
     .champ p { margin:0 0 14px; color:light-dark(#58685f,#acb8b1); }
     .linklike { border:0; background:none; color:#c92f27; font-size:15px; padding:12px 0; }
+    .sync-note { color:#8a8f98; font-size:12px; text-align:center; margin:6px 0 0; }
     .tablet-stats, .game-hud { display:none; }
 
     @media (min-width:768px) and (min-height:650px) {
@@ -357,6 +358,42 @@
       function storeGames(g){ try{ localStorage.setItem('lc-games', JSON.stringify(g)); }catch(e){} }
       function lastNames(){ try{ return JSON.parse(localStorage.getItem('lc-names')||'null'); }catch(e){ return null; } }
       function storeNames(n){ try{ localStorage.setItem('lc-names', JSON.stringify(n)); }catch(e){} }
+      /* ---- cloud sync: games POST to a Google Form, merged games.json pulled on launch ---- */
+      var SYNC_FORM='https://docs.google.com/forms/d/e/1FAIpQLSdey-wSaBfAL5v2eDi9zLfGs_sKiK19H-LJBO7aLzejV9CdVg/formResponse';
+      var SYNC_E={type:'entry.1976563659',game_id:'entry.1433116870',date:'entry.102324293',players:'entry.1675586423',winner:'entry.293529439',life:'entry.601203592'};
+      var SYNC_JSON='https://dreadpiratewes87.github.io/wesward/tools/life-counter/games.json';
+      function gameId(g){ return g.d+'|'+g.players.join(',')+'|'+g.winner; }
+      function loadPending(){ try{ return JSON.parse(localStorage.getItem('lc-pending')||'[]'); }catch(e){ return []; } }
+      function storePending(p){ try{ localStorage.setItem('lc-pending', JSON.stringify(p)); }catch(e){} }
+      function syncPost(rec){
+        try{
+          var b=new URLSearchParams();
+          b.append(SYNC_E.type,rec.type); b.append(SYNC_E.game_id,rec.game_id||'');
+          b.append(SYNC_E.date,rec.date||''); b.append(SYNC_E.players,rec.players||'');
+          b.append(SYNC_E.winner,rec.winner||''); b.append(SYNC_E.life,rec.life||'');
+          fetch(SYNC_FORM,{mode:'no-cors',method:'POST',body:b}).catch(function(){});
+        }catch(e){}
+      }
+      function queueSync(rec){ var p=loadPending(); p.push(rec); storePending(p); flushSync(); }
+      function flushSync(){ loadPending().forEach(syncPost); }
+      function pullSync(){
+        fetch(SYNC_JSON+'?t='+Date.now(),{cache:'no-store'}).then(function(r){
+          if(!r.ok) throw 0; return r.json();
+        }).then(function(data){
+          var remote=data.games||[], local=loadGames(), ids={}, merged=local.slice(), added=0;
+          local.forEach(function(g){ ids[gameId(g)]=1; });
+          var clearedAt=null; try{ clearedAt=localStorage.getItem('lc-cleared-at'); }catch(e){}
+          var remoteIds={};
+          remote.forEach(function(g){ remoteIds[gameId(g)]=1; });
+          remote.forEach(function(g){
+            if(clearedAt && g.d<clearedAt) return;
+            if(!ids[gameId(g)]){ merged.push(g); added++; ids[gameId(g)]=1; }
+          });
+          storePending(loadPending().filter(function(rec){ return rec.type!=='game'||!remoteIds[rec.game_id]; }));
+          if(added) storeGames(merged);
+          try{ localStorage.setItem('lc-synced-at',new Date().toISOString()); }catch(e){}
+        }).catch(function(){});
+      }
       function openSheet(html){
         active=null;
         sheet.innerHTML='<div class="grab"></div>'+html;
@@ -404,8 +441,10 @@
       function finishGame(i){
         var winner=players[i].name;
         var games=loadGames();
-        games.push({d:new Date().toISOString(), players:players.map(function(p){return p.name;}), winner:winner, life:START_LIFE});
+        var rec={d:new Date().toISOString(), players:players.map(function(p){return p.name;}), winner:winner, life:START_LIFE};
+        games.push(rec);
         storeGames(games);
+        queueSync({type:'game', game_id:gameId(rec), date:rec.d, players:rec.players.join(', '), winner:rec.winner, life:String(rec.life)});
         openSheet('<div class="champ"><div class="trophy">🏆</div><h2 id="sheetTitle">'+esc(winner)+' wins!</h2><p>'+esc(new Date().toLocaleDateString())+' · '+players.length+' players · recorded</p><div class="confirm-actions"><button data-close>Close</button><button class="reset-yes" data-setup-open style="background:#23617a;">New game</button></div></div>');
         buzz();
       }
@@ -435,14 +474,15 @@
           '<h2 class="section-title">Standings</h2><table class="stats-table"><thead><tr><th>Player</th><th class="num">Played</th><th class="num">Wins</th><th class="num">Win %</th></tr></thead><tbody>'+body+'</tbody></table>'+
           '<h2 class="section-title">Head-to-head</h2><table class="stats-table"><thead><tr><th>Matchup</th><th class="num">W–L</th><th class="num">Games</th></tr></thead><tbody>'+h2h+'</tbody></table>'+
           (recent?'<h2 class="section-title">Recent games</h2><table class="stats-table"><thead><tr><th>Date</th><th>Players</th><th>Winner</th></tr></thead><tbody>'+recent+'</tbody></table>':'')+
-          (games.length?'<button class="linklike" data-clear-history>Clear history</button>':''));
+          (games.length?'<button class="linklike" data-clear-history>Clear history</button>':'')+
+          '<p class="sync-note">'+(function(){try{var s=localStorage.getItem('lc-synced-at');return s?'Synced across devices · '+s.slice(5,10).replace('-','/'):'Sync pending…';}catch(e){return '';}})()+'</p>');
       }
       sheet.addEventListener('click',function(e){
         var t=e.target.closest('[data-setup],[data-winner],[data-setup-start],[data-setup-open],[data-clear-history]');
         if(!t) return;
         if(t.hasAttribute('data-setup-start')){ startGame(); return; }
         if(t.hasAttribute('data-setup-open')){ openSetup(); return; }
-        if(t.hasAttribute('data-clear-history')){ if(window.confirm('Clear all recorded games?')){ storeGames([]); openStats(); } return; }
+        if(t.hasAttribute('data-clear-history')){ if(window.confirm('Clear all recorded games? This clears history on all your devices.')){ var now=new Date().toISOString(); try{ localStorage.setItem('lc-cleared-at',now); }catch(e){} storeGames([]); queueSync({type:'clear_all',game_id:'',date:now,players:'',winner:'',life:''}); openStats(); } return; }
         if(t.hasAttribute('data-winner')){ finishGame(+t.getAttribute('data-winner')); return; }
         var kind=t.getAttribute('data-setup'), v=+t.getAttribute('data-v');
         if(kind==='n'){ setupState.n=v; while(setupState.names.length<v) setupState.names.push('Player '+(setupState.names.length+1)); setupState.names.length=v; setupState.starter=Math.min(setupState.starter,v-1); renderSetup(); return; }
@@ -458,6 +498,8 @@
 
       render();
       openSetup();
+      pullSync(); flushSync();
+      document.addEventListener('visibilitychange',function(){ if(!document.hidden) pullSync(); });
     })();
   </script>
 </body>
