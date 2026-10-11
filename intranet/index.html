@@ -550,7 +550,49 @@ renderCats();renderGrid();renderIssues();
       return d;
     }catch(e){ return 'd-unknown'; }
   })();
-  function touch(it){ it.updated_at=Date.now(); it.device_id=DEVICE_ID; }
+  function touch(it){ it.updated_at=Date.now(); it.device_id=DEVICE_ID; queueSync(it); }
+  /* ---- automatic cloud sync (shared form inbox + items.json) ---- */
+  var SYNC_FORM='https://docs.google.com/forms/d/e/1FAIpQLSdey-wSaBfAL5v2eDi9zLfGs_sKiK19H-LJBO7aLzejV9CdVg/formResponse';
+  var SYNC_E={type:'entry.1976563659',game_id:'entry.1433116870',players:'entry.1675586423'};
+  var SYNC_STATE_URL='https://dreadpiratewes87.github.io/wesward/watchlist/items.json';
+  var syncQueue=[], syncTimer=null;
+  function queueSync(it){
+    if(SHARED) return;
+    try{ syncQueue.push(JSON.parse(JSON.stringify(it))); }catch(e){}
+    clearTimeout(syncTimer);
+    syncTimer=setTimeout(flushSync,2500);
+  }
+  function syncPost(it){
+    try{
+      var fd=new FormData();
+      fd.append(SYNC_E.type,'watchlist');
+      fd.append(SYNC_E.game_id,it.id||'');
+      fd.append(SYNC_E.players,JSON.stringify(it));
+      fetch(SYNC_FORM,{method:'POST',mode:'no-cors',body:fd}).catch(function(){});
+    }catch(e){}
+  }
+  function flushSync(){ var q=syncQueue; syncQueue=[]; q.forEach(syncPost); }
+  function mergeCloud(cloud){
+    if(!cloud||!cloud.items) return;
+    var changed=false, byId={};
+    items.forEach(function(x){ byId[x.id]=x; });
+    cloud.items.forEach(function(c){
+      var l=byId[c.id];
+      if(c.deleted){
+        if(l){ items=items.filter(function(x){return x.id!==c.id;}); changed=true; }
+      }else if(!l||(c.updated_at||0)>(l.updated_at||0)){
+        if(l){ for(var k in c){ l[k]=c[k]; } }
+        else{ items.push(c); }
+        changed=true;
+      }
+    });
+    if(changed){ save(items); render(); }
+  }
+  function fetchCloud(){
+    if(SHARED) return;
+    fetch(SYNC_STATE_URL+'?t='+Date.now()).then(function(r){return r.json();})
+      .then(mergeCloud).catch(function(){});
+  }
   function buildSyncLink(){
     var data=items.map(function(x){
       return {title:x.title,type:x.type,year:x.year||'',service:x.service||'',notes:x.notes||'',
@@ -832,12 +874,10 @@ renderCats();renderGrid();renderIssues();
   });
 
   document.getElementById('wl-sync-btn').addEventListener('click',function(){
-    var btn=this;
-    var url=buildSyncLink();
-    function ok(){ btn.textContent='✓'; setTimeout(function(){btn.textContent='⟳';},2000); }
-    if(navigator.clipboard&&navigator.clipboard.writeText){
-      navigator.clipboard.writeText(url).then(ok,function(){ prompt('Copy your sync link — open it on your other device:',url); });
-    }else{ prompt('Copy your sync link — open it on your other device:',url); }
+    var btn=this; btn.textContent='…';
+    items.forEach(function(x){ touch(x); });
+    flushSync(); fetchCloud();
+    setTimeout(function(){ btn.textContent='⟳'; },3000);
   });
 
   if(SHARED){
@@ -861,6 +901,8 @@ renderCats();renderGrid();renderIssues();
     }
   }
   render();
+  fetchCloud();
+  document.addEventListener('visibilitychange',function(){ if(!document.hidden) fetchCloud(); });
 })();
 
 </script>
