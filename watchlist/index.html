@@ -318,7 +318,7 @@ body{max-width:860px;margin:0 auto;padding:18px 14px 60px}
 <body>
 <main>
 <section class="view" id="watchlist" aria-labelledby="watchlist-heading">
-    <header class="viewbar wl-standalone-bar"><h1 id="watchlist-heading">Watchlist</h1><span class="spacer"></span><button class="btn small secondary" id="wl-share">Share</button></header>
+    <header class="viewbar wl-standalone-bar"><h1 id="watchlist-heading">Watchlist</h1><span class="spacer"></span><button class="btn small secondary" id="wl-sync-btn" title="Sync now">⟳</button><button class="btn small secondary" id="wl-share">Share</button></header>
     <form class="wl-add" id="wl-form"><div class="wl-title-wrap"><label class="sr-only" for="wl-title">Title</label><input class="task-input" id="wl-title" type="text" placeholder="Add a show or movie…" required maxlength="120" autocomplete="off" /><div class="wl-suggest" id="wl-suggest" hidden></div></div><button class="btn accent" type="submit">Add</button></form>
     <div class="wl-tabs" role="tablist"><button class="wl-tab active" data-view="movie" role="tab">Movies</button><button class="wl-tab" data-view="show" role="tab">TV Shows</button></div>
     <div class="wl-grid" id="wl-grid"></div>
@@ -346,6 +346,27 @@ try{
   var SHARED=(typeof WL_SHARED_DATA!=='undefined'&&WL_SHARED_DATA)?WL_SHARED_DATA:null;
   function load(){ if(SHARED) return SHARED; try{ return JSON.parse(localStorage.getItem(KEY)||'[]'); }catch(e){ return []; } }
   function save(a){ if(SHARED) return; try{ localStorage.setItem(KEY, JSON.stringify(a)); }catch(e){} }
+
+  /* ---- cross-device sync (via link) ---- */
+  var DEVICE_ID=(function(){
+    try{
+      var d=localStorage.getItem('wl-device-id');
+      if(!d){ d='d'+Date.now().toString(36)+Math.floor(Math.random()*1e6).toString(36); localStorage.setItem('wl-device-id',d); }
+      return d;
+    }catch(e){ return 'd-unknown'; }
+  })();
+  function touch(it){ it.updated_at=Date.now(); it.device_id=DEVICE_ID; }
+  function buildSyncLink(){
+    var data=items.map(function(x){
+      return {title:x.title,type:x.type,year:x.year||'',service:x.service||'',notes:x.notes||'',
+        progress:x.progress||'',watched:!!x.watched,info:x.info||'',poster:x.poster||'',
+        releaseDate:x.releaseDate||'',releaseKind:x.releaseKind||'',
+        updated_at:x.updated_at||0};
+    });
+    var s=btoa(unescape(encodeURIComponent(JSON.stringify(data))))
+      .replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+    return 'https://dreadpiratewes87.github.io/wesward/watchlist/#list='+s;
+  }
   function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
   var items=load(), view='movie';
   var WL_SEEDS=[
@@ -551,6 +572,7 @@ try{
   document.getElementById('wl-m-done').addEventListener('click',function(){
     if(!modalItem) return;
     modalItem.watched=!modalItem.watched;
+    touch(modalItem);
     save(items); closeModal(); render();
   });
   document.getElementById('wl-m-prog').addEventListener('click',function(){
@@ -563,7 +585,7 @@ try{
     var done=false;
     function commit(ok){
       if(done) return; done=true;
-      if(ok) it.progress=inp.value.trim();
+      if(ok){ it.progress=inp.value.trim(); touch(it); }
       save(items); openModal(it);
     }
     inp.addEventListener('keydown',function(ev){
@@ -593,6 +615,7 @@ try{
       if(picked.status) it.notes=picked.status;
     }
     items.unshift(it);
+    touch(it);
     save(items); this.reset(); picked=null;
     view=type==='Show'?'show':'movie';
     render();
@@ -606,23 +629,41 @@ try{
   /* ---- share ---- */
   document.getElementById('wl-share').addEventListener('click',function(){
     var btn=this;
-    var data=items.map(function(x){
-      return {title:x.title,type:x.type,year:x.year||'',service:x.service||'',notes:x.notes||'',
-        progress:x.progress||'',watched:!!x.watched,info:x.info||'',poster:x.poster||'',
-        releaseDate:x.releaseDate||'',releaseKind:x.releaseKind||''};
-    });
-    var s=btoa(unescape(encodeURIComponent(JSON.stringify(data))))
-      .replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
-    var url='https://dreadpiratewes87.github.io/wesward/watchlist/#list='+s;
+    var url=buildSyncLink();
     function ok(){ btn.textContent='Copied!'; setTimeout(function(){btn.textContent='Share';},2000); }
     if(navigator.clipboard&&navigator.clipboard.writeText){
       navigator.clipboard.writeText(url).then(ok,function(){ prompt('Copy your share link:',url); });
     }else{ prompt('Copy your share link:',url); }
   });
 
+  document.getElementById('wl-sync-btn').addEventListener('click',function(){
+    var btn=this;
+    var url=buildSyncLink();
+    function ok(){ btn.textContent='✓'; setTimeout(function(){btn.textContent='⟳';},2000); }
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(url).then(ok,function(){ prompt('Copy your sync link — open it on your other device:',url); });
+    }else{ prompt('Copy your sync link — open it on your other device:',url); }
+  });
+
   if(SHARED){
     document.body.classList.add('wl-shared');
     var _f=document.getElementById('wl-form'); if(_f) _f.style.display='none';
+    var _s=document.getElementById('wl-sync-btn'); if(_s) _s.style.display='none';
+    var _sh=document.getElementById('wl-share'); if(_sh) _sh.style.display='none';
+    var bar=document.querySelector('#watchlist .viewbar');
+    if(bar){
+      var saveBtn=document.createElement('button');
+      saveBtn.className='btn small accent'; saveBtn.textContent='Save to this device';
+      saveBtn.style.marginLeft='8px';
+      saveBtn.addEventListener('click',function(){
+        try{
+          localStorage.setItem(KEY, JSON.stringify(SHARED));
+          localStorage.setItem('wl-seed-ver','3');
+        }catch(e){}
+        location.hash=''; location.reload();
+      });
+      bar.appendChild(saveBtn);
+    }
   }
   render();
 })();
