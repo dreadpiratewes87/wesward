@@ -33,6 +33,8 @@
     .player[data-i="1"] { --tone:#23617a; }
     .player[data-i="2"] { --tone:#4a6d32; }
     .player[data-i="3"] { --tone:#76522b; }
+    .player[data-i="4"] { --tone:#5b3a6e; }
+    .player[data-i="5"] { --tone:#2b6e5e; }
     .player-inner { width:100%; height:100%; padding:max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom)); display:grid; grid-template-rows:auto 1fr auto; }
     .tabletop .player:nth-child(-n+2) .player-inner { transform:rotate(180deg); }
     .player-head { min-width:0; display:flex; align-items:center; justify-content:space-between; gap:6px; }
@@ -91,6 +93,22 @@
     .confirm-actions .reset-yes { background:#b73830; color:#fff; }
     .dead { filter:saturate(.35) brightness(.62); }
     .dead .life { color:#ffddd9; }
+    .seg { display:flex; gap:6px; flex-wrap:wrap; }
+    .seg button { border:1px solid light-dark(#cbd2ce,#3b4741); background:light-dark(#fff,#202824); color:inherit; border-radius:10px; min-height:42px; padding:0 14px; font-weight:700; font-size:17px; }
+    .seg button[aria-pressed="true"] { background:#23617a; border-color:#23617a; color:#fff; }
+    .setup-names { display:grid; gap:7px; margin-top:10px; }
+    .winner-list { display:grid; gap:8px; margin-top:6px; }
+    .winner-btn { border:0; border-radius:12px; min-height:54px; background:light-dark(#e5eae7,#2a342f); color:inherit; font-size:20px; font-weight:700; }
+    .winner-btn:active { background:#23617a; color:#fff; }
+    .stats-table { width:100%; border-collapse:collapse; margin-top:6px; font-size:16px; }
+    .stats-table th, .stats-table td { padding:7px 6px; text-align:left; border-bottom:1px solid light-dark(#d8ddda,#303a35); font-variant-numeric:tabular-nums; }
+    .stats-table th { font-size:12px; text-transform:uppercase; letter-spacing:.07em; color:light-dark(#4c5d54,#aab7b0); }
+    .stats-table td.num, .stats-table th.num { text-align:right; }
+    .champ { text-align:center; padding:14px 0 4px; }
+    .champ .trophy { font-size:46px; }
+    .champ h2 { margin:8px 0 2px; font-size:30px; }
+    .champ p { margin:0 0 14px; color:light-dark(#58685f,#acb8b1); }
+    .linklike { border:0; background:none; color:#c92f27; font-size:15px; padding:12px 0; }
     .tablet-stats, .game-hud { display:none; }
 
     @media (min-width:768px) and (min-height:650px) {
@@ -160,6 +178,12 @@
     <button class="tool" id="sound" aria-label="Mute sounds" aria-pressed="false">
       <svg viewBox="0 0 24 24"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><g class="sound-waves"><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></g><path class="mute-slash" d="m15 9 6 6M21 9l-6 6"/></svg>
     </button>
+    <button class="tool" id="endgame" aria-label="End game and record winner">
+      <svg viewBox="0 0 24 24"><path d="M5 21V4"/><path d="M5 4c4-2.5 8 2.5 12 0v8c-4 2.5-8-2.5-12 0"/></svg>
+    </button>
+    <button class="tool" id="stats" aria-label="View player records and stats">
+      <svg viewBox="0 0 24 24"><path d="M8 21h8M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0V4Z"/><path d="M7 6H4.5A2.5 2.5 0 0 0 7 11M17 6h2.5A2.5 2.5 0 0 1 17 11"/></svg>
+    </button>
     <button class="tool" id="reset" aria-label="Start a new game">
       <svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>
     </button>
@@ -184,7 +208,9 @@
   <script>
     (function(){
       'use strict';
-      var players = [0,1,2,3].map(function(i){ return { name:'Player '+(i+1), life:40, poison:0, commander:[0,0,0] }; });
+      var START_LIFE = 40;
+      function makePlayers(n,names,life){ var arr=[]; for(var i=0;i<n;i++){ arr.push({ name:(names&&names[i])||('Player '+(i+1)), life:life, poison:0, commander:Array(Math.max(0,n-1)).fill(0) }); } return arr; }
+      var players = makePlayers(4,null,START_LIFE);
       var history = [], events = ['Game ready · 40 life'], turn = 0, round = 1, active = null, wakeLock = null;
       var audioContext = null, muted = false;
       var board = document.getElementById('board');
@@ -195,6 +221,10 @@
       var cmdIcon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 8 4v5c0 5.2-3.4 9.7-8 11-4.6-1.3-8-5.8-8-11V6l8-4Zm0 3.1L7 7.6V11c0 3.6 2.1 6.8 5 7.9 2.9-1.1 5-4.3 5-7.9V7.6l-5-2.5Z"/></svg>';
 
       function render(){
+        var cols = players.length<=2 ? players.length : (players.length<=4 ? 2 : 3);
+        board.style.gridTemplateColumns='repeat('+cols+', 1fr)';
+        board.style.gridTemplateRows='repeat('+Math.ceil(players.length/cols)+', 1fr)';
+        board.setAttribute('aria-label', players.length+' player Magic life counter');
         board.innerHTML = players.map(function(p,i){
           var totalCmd = Math.max.apply(null,p.commander);
           var others=otherPlayers(i);
@@ -216,7 +246,7 @@
       function renderHud(){
         var tp=document.getElementById('turnPlayer'), rl=document.getElementById('roundLabel'), list=document.getElementById('eventList');
         if(tp) tp.textContent=players[turn].name;
-        if(rl) rl.textContent='Round '+round+' · Turn '+(turn+1)+' of 4';
+        if(rl) rl.textContent='Round '+round+' · Turn '+(turn+1)+' of '+players.length;
         if(list) list.innerHTML=events.slice(0,9).map(function(item){return '<li>'+esc(item)+'</li>';}).join('');
       }
       function buzz(){ if(navigator.vibrate) navigator.vibrate(12); }
@@ -262,7 +292,7 @@
         if(b.dataset.action==='hurry') speakHurry(i,b);
       });
 
-      function otherPlayers(i){ return [0,1,2,3].filter(function(x){return x!==i;}); }
+      function otherPlayers(i){ var out=[]; for(var x=0;x<players.length;x++){ if(x!==i) out.push(x); } return out; }
       function openDetails(i){ active=i; var p=players[i], others=otherPlayers(i);
         sheet.innerHTML='<div class="grab"></div><div class="sheet-head"><label class="sr-only" for="pname">Player name</label><input id="pname" class="player-name-input" maxlength="18" value="'+esc(p.name)+'"><button class="close" data-close aria-label="Close">×</button></div>'+
           '<h2 class="section-title" id="sheetTitle">Poison counters</h2>'+counterRow('Poison',p.poison,'poison',0)+
@@ -302,13 +332,11 @@
         window.speechSynthesis.speak(utterance);
         buzz();
       }
-      document.getElementById('reset').addEventListener('click',function(){
-        active=null; sheet.innerHTML='<div class="grab"></div><div class="confirm"><h2 id="sheetTitle">Start a new game?</h2><p>Life totals return to 40; poison counters and commander damage return to zero. Player names stay.</p><div class="confirm-actions"><button data-close>Keep playing</button><button class="reset-yes" data-reset-yes>New game</button></div></div>';
-        shade.classList.add('open'); shade.setAttribute('aria-hidden','false');
-      });
-      sheet.addEventListener('click',function(e){ if(!e.target.closest('[data-reset-yes]'))return; remember(); players.forEach(function(p){p.life=40;p.poison=0;p.commander=[0,0,0];}); turn=0; round=1; events=['New game · 40 life']; shade.classList.remove('open'); shade.setAttribute('aria-hidden','true'); render(); buzz(); });
+      document.getElementById('reset').addEventListener('click',function(){ openSetup(); });
+      document.getElementById('endgame').addEventListener('click',function(){ openEndGame(); });
+      document.getElementById('stats').addEventListener('click',function(){ openStats(); });
       document.getElementById('nextTurn').addEventListener('click',function(){
-        remember(); turn=(turn+1)%4; if(turn===0) round++; addEvent('Turn → '+players[turn].name+' · round '+round); buzz(); render();
+        remember(); turn=(turn+1)%players.length; if(turn===0) round++; addEvent('Turn → '+players[turn].name+' · round '+round); buzz(); render();
       });
 
       document.getElementById('awake').addEventListener('click',async function(){
@@ -323,7 +351,113 @@
         var btn=document.getElementById('awake');
         if(document.visibilityState==='visible' && !wakeLock && btn.getAttribute('aria-pressed')==='true' && 'wakeLock' in navigator){ try{wakeLock=await navigator.wakeLock.request('screen');}catch(err){} }
       });
+      /* ---- game setup / end / records (localStorage-backed) ---- */
+      var setupState = { n:4, names:[], starter:0, life:40 };
+      function loadGames(){ try{ return JSON.parse(localStorage.getItem('lc-games')||'[]'); }catch(e){ return []; } }
+      function storeGames(g){ try{ localStorage.setItem('lc-games', JSON.stringify(g)); }catch(e){} }
+      function lastNames(){ try{ return JSON.parse(localStorage.getItem('lc-names')||'null'); }catch(e){ return null; } }
+      function storeNames(n){ try{ localStorage.setItem('lc-names', JSON.stringify(n)); }catch(e){} }
+      function openSheet(html){
+        active=null;
+        sheet.innerHTML='<div class="grab"></div>'+html;
+        shade.classList.add('open'); shade.setAttribute('aria-hidden','false');
+      }
+      function openSetup(){
+        var saved=lastNames();
+        setupState.n=players.length;
+        setupState.names=players.map(function(p){return p.name;});
+        if(saved && saved.length===setupState.n) setupState.names=saved.slice();
+        setupState.starter=Math.min(turn, setupState.n-1);
+        setupState.life=START_LIFE;
+        renderSetup();
+      }
+      function renderSetup(){
+        var s=setupState;
+        var countBtns=[2,3,4,5,6].map(function(n){return '<button data-setup="n" data-v="'+n+'" aria-pressed="'+(s.n===n)+'">'+n+'</button>';}).join('');
+        var nameInputs=s.names.map(function(nm,i){return '<input class="player-name-input" data-setup-name="'+i+'" maxlength="18" value="'+esc(nm)+'" placeholder="Player '+(i+1)+'" aria-label="Name for player '+(i+1)+'">';}).join('');
+        var starterBtns=s.names.map(function(nm,i){return '<button data-setup="starter" data-v="'+i+'" aria-pressed="'+(s.starter===i)+'">'+esc((nm||'').trim()||('Player '+(i+1)))+'</button>';}).join('');
+        var lifeBtns=[20,40].map(function(l){return '<button data-setup="life" data-v="'+l+'" aria-pressed="'+(s.life===l)+'">'+l+'</button>';}).join('');
+        openSheet('<div class="sheet-head"><h2 id="sheetTitle" style="margin:0;flex:1;font-size:24px;">New game</h2><button class="close" data-close aria-label="Close">×</button></div>'+
+          '<h2 class="section-title">Players</h2><div class="seg">'+countBtns+'</div>'+
+          '<div class="setup-names">'+nameInputs+'</div>'+
+          '<h2 class="section-title">Starting player</h2><div class="seg" id="setupStarter">'+starterBtns+'</div>'+
+          '<h2 class="section-title">Starting life</h2><div class="seg">'+lifeBtns+'</div>'+
+          '<div class="confirm"><div class="confirm-actions" style="grid-template-columns:1fr;"><button class="reset-yes" data-setup-start style="background:#23617a;">Start game</button></div></div>');
+      }
+      function startGame(){
+        var s=setupState, names=[];
+        for(var i=0;i<s.n;i++){ names.push((s.names[i]||'').trim()||('Player '+(i+1))); }
+        storeNames(names);
+        START_LIFE=s.life;
+        players=makePlayers(s.n,names,s.life);
+        history=[]; undoBtn.disabled=true; turn=Math.min(s.starter,s.n-1); round=1;
+        events=['New game · '+s.life+' life'];
+        addEvent('Game started · '+names.join(', '));
+        shade.classList.remove('open'); shade.setAttribute('aria-hidden','true');
+        buzz(); render();
+      }
+      function openEndGame(){
+        var btns=players.map(function(p,i){return '<button class="winner-btn" data-winner="'+i+'">'+esc(p.name)+'</button>';}).join('');
+        openSheet('<div class="sheet-head"><h2 id="sheetTitle" style="margin:0;flex:1;font-size:24px;">End game</h2><button class="close" data-close aria-label="Close">×</button></div>'+
+          '<h2 class="section-title">Who won?</h2><div class="winner-list">'+btns+'</div>');
+      }
+      function finishGame(i){
+        var winner=players[i].name;
+        var games=loadGames();
+        games.push({d:new Date().toISOString(), players:players.map(function(p){return p.name;}), winner:winner, life:START_LIFE});
+        storeGames(games);
+        openSheet('<div class="champ"><div class="trophy">🏆</div><h2 id="sheetTitle">'+esc(winner)+' wins!</h2><p>'+esc(new Date().toLocaleDateString())+' · '+players.length+' players · recorded</p><div class="confirm-actions"><button data-close>Close</button><button class="reset-yes" data-setup-open style="background:#23617a;">New game</button></div></div>');
+        buzz();
+      }
+      function openStats(){
+        var games=loadGames(), names=[];
+        games.forEach(function(g){ g.players.forEach(function(n){ if(names.indexOf(n)<0) names.push(n); }); });
+        var rows=names.map(function(n){
+          var played=games.filter(function(g){return g.players.indexOf(n)>=0;}).length;
+          var wins=games.filter(function(g){return g.winner===n;}).length;
+          return {n:n,played:played,wins:wins,rate:played?Math.round(wins/played*100):0};
+        }).sort(function(a,b){return b.wins-a.wins||b.rate-a.rate;});
+        var body=rows.length?rows.map(function(r){return '<tr><td>'+esc(r.n)+'</td><td class="num">'+r.played+'</td><td class="num">'+r.wins+'</td><td class="num">'+r.rate+'%</td></tr>';}).join(''):'<tr><td colspan="4">No games recorded yet.</td></tr>';
+        var pairs=[];
+        for(var a=0;a<names.length;a++) for(var b=a+1;b<names.length;b++){
+          var A=names[a],B=names[b];
+          var both=games.filter(function(g){return g.players.indexOf(A)>=0&&g.players.indexOf(B)>=0;});
+          if(!both.length) continue;
+          var aw=both.filter(function(g){return g.winner===A;}).length;
+          pairs.push({a:A,b:B,aw:aw,bw:both.filter(function(g){return g.winner===B;}).length,n:both.length});
+        }
+        var h2h=pairs.length?pairs.map(function(p){return '<tr><td>'+esc(p.a)+' vs '+esc(p.b)+'</td><td class="num">'+p.aw+'–'+p.bw+'</td><td class="num">'+p.n+'</td></tr>';}).join(''):'<tr><td colspan="3">No matchups yet.</td></tr>';
+        var recent=games.slice(-8).reverse().map(function(g){
+          var d=new Date(g.d), ds=(d.getMonth()+1)+'/'+d.getDate();
+          return '<tr><td>'+ds+'</td><td>'+esc(g.players.join(', '))+'</td><td><strong>'+esc(g.winner)+'</strong></td></tr>';
+        }).join('');
+        openSheet('<div class="sheet-head"><h2 id="sheetTitle" style="margin:0;flex:1;font-size:24px;">Records</h2><button class="close" data-close aria-label="Close">×</button></div>'+
+          '<h2 class="section-title">Standings</h2><table class="stats-table"><thead><tr><th>Player</th><th class="num">Played</th><th class="num">Wins</th><th class="num">Win %</th></tr></thead><tbody>'+body+'</tbody></table>'+
+          '<h2 class="section-title">Head-to-head</h2><table class="stats-table"><thead><tr><th>Matchup</th><th class="num">W–L</th><th class="num">Games</th></tr></thead><tbody>'+h2h+'</tbody></table>'+
+          (recent?'<h2 class="section-title">Recent games</h2><table class="stats-table"><thead><tr><th>Date</th><th>Players</th><th>Winner</th></tr></thead><tbody>'+recent+'</tbody></table>':'')+
+          (games.length?'<button class="linklike" data-clear-history>Clear history</button>':''));
+      }
+      sheet.addEventListener('click',function(e){
+        var t=e.target.closest('[data-setup],[data-winner],[data-setup-start],[data-setup-open],[data-clear-history]');
+        if(!t) return;
+        if(t.hasAttribute('data-setup-start')){ startGame(); return; }
+        if(t.hasAttribute('data-setup-open')){ openSetup(); return; }
+        if(t.hasAttribute('data-clear-history')){ if(window.confirm('Clear all recorded games?')){ storeGames([]); openStats(); } return; }
+        if(t.hasAttribute('data-winner')){ finishGame(+t.getAttribute('data-winner')); return; }
+        var kind=t.getAttribute('data-setup'), v=+t.getAttribute('data-v');
+        if(kind==='n'){ setupState.n=v; while(setupState.names.length<v) setupState.names.push('Player '+(setupState.names.length+1)); setupState.names.length=v; setupState.starter=Math.min(setupState.starter,v-1); renderSetup(); return; }
+        if(kind==='starter'){ setupState.starter=v; renderSetup(); return; }
+        if(kind==='life'){ setupState.life=v; renderSetup(); return; }
+      });
+      sheet.addEventListener('input',function(e){
+        var inp=e.target.closest('[data-setup-name]'); if(!inp) return;
+        var i=+inp.getAttribute('data-setup-name'); setupState.names[i]=inp.value;
+        var sb=sheet.querySelector('#setupStarter [data-v="'+i+'"]');
+        if(sb) sb.textContent=inp.value.trim()||('Player '+(i+1));
+      });
+
       render();
+      openSetup();
     })();
   </script>
 </body>
