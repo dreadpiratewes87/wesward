@@ -16,38 +16,27 @@ body{margin:0;background:var(--bg);color:var(--txt);font-family:-apple-system,Bl
 .topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:6px}
 .topbar h1{font-size:1.35rem;margin:0}
 .topbar h1 small{display:block;font-size:.8rem;color:var(--dim);font-weight:400}
-.stats{display:flex;gap:10px;align-items:center}
+.stats{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .pill{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:.9rem}
 .pill b{color:var(--gold)}
-.hint{color:var(--dim);font-size:.9rem;margin:8px 0 14px}
+.hint{color:var(--dim);font-size:.9rem;margin:8px 0 4px}
+.dir{color:var(--acc);font-size:.9rem;font-weight:600;margin:0 0 12px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:12px}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px;cursor:pointer;transition:transform .12s,border-color .12s;position:relative}
 .card:hover{transform:translateY(-2px);border-color:#4a5a75}
-.card.picked{border-color:var(--acc);box-shadow:0 0 0 2px var(--acc)}
 .card .cname{font-weight:600;font-size:.92rem;line-height:1.25;min-height:2.4em}
 .card .ccost{margin:6px 0;display:flex;flex-wrap:wrap;gap:2px;align-items:center;min-height:20px}
 .card .ccost img{width:19px;height:19px}
-.card .ctype{font-size:.78rem;color:var(--dim);margin-bottom:8px}
+.card .ctype{font-size:.78rem;color:var(--dim);margin-bottom:4px}
 .rar{position:absolute;top:8px;right:8px;font-size:.68rem;font-weight:700;padding:2px 7px;border-radius:6px;letter-spacing:.04em}
 .rar.M{background:#3d1f22;color:var(--r-m);border:1px solid var(--r-m)}
 .rar.R{background:#38300f;color:var(--r-r);border:1px solid var(--r-r)}
 .rar.U{background:#232c3b;color:var(--r-u);border:1px solid var(--r-u)}
 .rar.C{background:#22262c;color:var(--r-c);border:1px solid var(--r-c)}
-.grade{display:none;font-size:.72rem;font-weight:700;margin-top:6px;padding:3px 8px;border-radius:6px;background:var(--panel2);border:1px solid var(--line)}
-.revealed .grade{display:inline-block}
-.revealed .card.best{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold)}
-.revealed .card{cursor:default}
-.revealed .card:hover{transform:none}
-.verdict{margin:16px 0;padding:14px 16px;border-radius:10px;font-size:1.02rem;display:none}
-.verdict.show{display:block}
-.verdict.good{background:#12281a;border:1px solid #2f7a44}
-.verdict.bad{background:#2b1416;border:1px solid #8a3033}
-.verdict .why{color:var(--dim);font-size:.9rem;margin-top:6px}
-.controls{margin-top:14px;display:flex;gap:10px}
+.controls{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
 button{font:inherit;cursor:pointer;border-radius:10px;border:1px solid var(--line);background:var(--panel2);color:var(--txt);padding:11px 20px;font-size:1rem;font-weight:600}
 button.primary{background:#1f6feb;border-color:#1f6feb}
 button.primary:hover{background:#2b7fff}
-button:disabled{opacity:.5;cursor:default}
 /* modal */
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;z-index:50;padding:16px}
 .modal.open{display:flex}
@@ -57,29 +46,43 @@ button:disabled{opacity:.5;cursor:default}
 .sheet h3{margin:10px 0 4px;font-size:1.05rem}
 .sheet .row{display:flex;gap:8px;margin-top:12px}
 .sheet .row button{flex:1}
-/* results */
-.results{display:none;text-align:center;padding:40px 10px}
+/* pool + results */
+.poolview{display:none;margin-top:14px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.poolview.show{display:block}
+.poolview h3, .results h3{margin:14px 0 6px;font-size:1rem;color:var(--dim);text-transform:uppercase;letter-spacing:.05em;font-size:.82rem}
+.poolview h3:first-child, .results h3:first-child{margin-top:0}
+.prow{display:flex;justify-content:space-between;gap:8px;padding:5px 2px;border-bottom:1px solid var(--line);font-size:.92rem}
+.prow:last-child{border-bottom:0}
+.pname{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pgrade{font-weight:700;color:var(--gold);flex:none}
+.results{display:none;margin-top:18px}
 .results.show{display:block}
-.results .big{font-size:3rem;font-weight:800;color:var(--gold)}
-.results .tier{font-size:1.3rem;margin:10px 0;color:var(--acc)}
-.results p{color:var(--dim)}
+.results h2{margin:0 0 8px;font-size:1.25rem}
+.suggest{color:var(--dim);font-size:.95rem}
+.suggest b{color:var(--acc)}
+.stable{width:100%;border-collapse:collapse;margin:10px 0;font-size:.92rem}
+.stable th,.stable td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:left}
+.stable th{color:var(--dim);font-size:.78rem;text-transform:uppercase;letter-spacing:.05em}
 a.home{color:var(--dim);font-size:.85rem}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="topbar">
-    <h1>Reality Fracture Draft Simulator<small>Pick the best card in each pack — 50 packs</small></h1>
+    <h1>Reality Fracture Draft Simulator<small>8-seat pod — you vs 7 AI drafters · 3 packs</small></h1>
     <div class="stats">
-      <div class="pill">Pack <b id="packNum">1</b> / 50</div>
+      <div class="pill">Pack <b id="packNum">1</b> / 3</div>
       <div class="pill">Pick <b id="pickNum">1</b></div>
-      <div class="pill">Score <b id="score">0</b></div>
+      <div class="pill">Pool <b id="poolNum">0</b></div>
     </div>
   </div>
-  <div class="hint" id="hint">Tap a card to preview it, then pick. Grades are hidden until you lock in.</div>
+  <div class="hint" id="hint"></div>
+  <div class="dir" id="dir"></div>
   <div class="grid" id="grid"></div>
-  <div class="verdict" id="verdict"></div>
-  <div class="controls"><button class="primary" id="nextBtn" style="display:none">Next Pack →</button></div>
+  <div class="controls">
+    <button id="poolBtn">My pool (0)</button>
+  </div>
+  <div class="poolview" id="poolview"></div>
   <div class="results" id="results"></div>
   <p style="margin-top:30px"><a class="home" href="../../">← Back to wesward</a></p>
 </div>
@@ -90,7 +93,7 @@ a.home{color:var(--dim);font-size:.85rem}
     <h3 id="modalName"></h3>
     <div class="row">
       <button id="cancelBtn">Look more</button>
-      <button class="primary" id="pickBtn">Pick this card</button>
+      <button class="primary" id="pickBtn">Draft this card</button>
     </div>
   </div>
 </div>
@@ -102,20 +105,32 @@ const CARDS = [{"n":"Enlightened Confidant","c":"{1}{W}","t":"Creature 2/1","r":
 const GRADE_VAL = {'S':12,'A+':11,'A':10,'A-':9,'B+':8,'B':7,'B-':6,'C+':5,'C':4,'C-':3,'D+':2,'D':1,'F':0};
 const POOL = {M:[],R:[],U:[],C:[]};
 CARDS.forEach(c=>{ if(POOL[c.r]) POOL[c.r].push(c); });
+const COLOR_NAME = {W:'White',U:'Blue',B:'Black',R:'Red',G:'Green'};
+const GROUP_ORDER = ['White','Blue','Black','Red','Green','Multi','Colorless'];
+const SEATS=8, ROUNDS=3, PACK_SIZE=14;
 
-let packIdx=0, score=0, currentPack=[], locked=false, modalCard=null;
+let seats=[], round=0, dir=1, modalCard=null, poolOpen=false;
 
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
 function manaHTML(cost){
   if(!cost) return '<span style="color:var(--dim);font-size:.8rem">land</span>';
-  return cost.replace(/\{([^}]+)\}/g,(m,s)=>{
-    const sym = s.replace('/','');
+  return cost.replace(/\{([^}]+)\}/g,function(m,s){
+    const sym=s.replace('/','');
     return '<img src="https://svgs.scryfall.io/card-symbols/'+encodeURIComponent(sym)+'.svg" alt="'+s+'" loading="lazy">';
   });
 }
-function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;');}
-
+function cardColors(c){
+  if(!c.c) return [];
+  const m=c.c.match(/[WUBRG]/g);
+  return m?[...new Set(m)]:[];
+}
+function colorGroup(c){
+  const cols=cardColors(c);
+  if(cols.length===0) return 'Colorless';
+  if(cols.length>1) return 'Multi';
+  return COLOR_NAME[cols[0]];
+}
 function buildRealPack(){
-  // A realistic 14-card draft booster: 1 rare/mythic, 3 uncommons, 10 commons.
   const pack=[]; const used=new Set();
   function take(pool){
     let guard=0;
@@ -125,136 +140,166 @@ function buildRealPack(){
       used.add(c.n); pack.push(c); return;
     }
   }
-  take(Math.random()<1/7.5 && POOL.M.length ? POOL.M : POOL.R); // mythic ~1 in 7.5 packs
+  take(Math.random()<1/7.5 && POOL.M.length ? POOL.M : POOL.R);
   for(let i=0;i<3;i++) take(POOL.U.length?POOL.U:POOL.C);
   for(let i=0;i<10;i++) take(POOL.C.length?POOL.C:POOL.U);
   return pack;
 }
-
-function drawPack(){
-  // Simulate a real draft: build a full pack, then let the drafters ahead of
-  // you take the best cards first. You only ever see what's actually left —
-  // no pack-one-pick-one bombs sitting in a 4-card pack.
-  const full=buildRealPack();
-  const pickNum=1+Math.floor(Math.random()*12); // you are pick 1..12
-  const byGrade=full.slice().sort((a,b)=>{
-    const d=(GRADE_VAL[b.g]||0)-(GRADE_VAL[a.g]||0);
-    return d!==0?d:Math.random()-0.5;
+// How an AI drafter thinks: take the best card early, then commit to the two
+// colors its picks point at and favor on-color cards after that.
+function aiColors(pool){
+  if(pool.length<4) return [];
+  const sc={W:0,U:0,B:0,R:0,G:0};
+  pool.forEach(c=>{
+    const g=GRADE_VAL[c.g]||0;
+    cardColors(c).forEach(col=>{ sc[col]+=2+g*0.25; });
   });
-  const taken=new Set(byGrade.slice(0,pickNum-1).map(c=>c.n));
-  const remaining=full.filter(c=>!taken.has(c.n));
-  for(let i=remaining.length-1;i>0;i--){ // shuffle so position isn't a tell
-    const j=Math.floor(Math.random()*(i+1));
-    const t=remaining[i]; remaining[i]=remaining[j]; remaining[j]=t;
+  return Object.keys(sc).sort((a,b)=>sc[b]-sc[a]).slice(0,2);
+}
+function aiPick(seat){
+  const pack=seat.pack, pool=seat.pool;
+  const colors=aiColors(pool);
+  let best=null, bs=-1e9;
+  for(const c of pack){
+    const g=GRADE_VAL[c.g]||0;
+    let s=g;
+    const cols=cardColors(c);
+    if(colors.length===0){ s+=Math.random()*0.6; }
+    else if(cols.length===0){ s+=1.0; }
+    else{
+      const inC=cols.filter(x=>colors.indexOf(x)>=0).length;
+      if(inC===cols.length) s+=2.5;
+      else if(inC>0) s+=0.5;
+      else s-=2.0;
+    }
+    if(s>bs){ bs=s; best=c; }
   }
-  drawPack.pickNum=pickNum;
-  return remaining;
+  return best;
 }
 
-function renderPack(){
-  locked=false;
-  const grid=document.getElementById('grid');
-  grid.classList.remove('revealed');
-  grid.innerHTML='';
-  document.getElementById('verdict').className='verdict';
-  document.getElementById('nextBtn').style.display='none';
+function newDraft(){
+  seats=[]; for(let i=0;i<SEATS;i++) seats.push({pool:[],pack:null});
+  round=0; poolOpen=false;
+  document.getElementById('poolview').className='poolview';
   document.getElementById('results').className='results';
-  currentPack=drawPack();
-  currentPack.forEach((c,i)=>{
+  document.getElementById('results').innerHTML='';
+  startRound();
+}
+function startRound(){
+  dir = round%2===0 ? 1 : -1; // pack 1 left, pack 2 right, pack 3 left
+  seats.forEach(s=>{ s.pack=buildRealPack(); });
+  renderAll();
+}
+function renderAll(){
+  renderPack();
+  document.getElementById('packNum').textContent=round+1;
+  document.getElementById('poolNum').textContent=seats[0].pool.length;
+  document.getElementById('poolBtn').textContent='My pool ('+seats[0].pool.length+')';
+  document.getElementById('dir').textContent = dir===1 ? '\u2190 Passing left' : 'Passing right \u2192';
+  if(poolOpen) renderPoolView();
+}
+function renderPack(){
+  const grid=document.getElementById('grid');
+  grid.innerHTML='';
+  const pack=seats[0].pack||[];
+  const pickNo=PACK_SIZE-pack.length+1;
+  document.getElementById('pickNum').textContent=pickNo;
+  pack.forEach(c=>{
     const d=document.createElement('div');
-    d.className='card'; d.dataset.idx=i;
+    d.className='card';
     d.innerHTML='<span class="rar '+c.r+'">'+c.r+'</span>'
       +'<div class="cname">'+esc(c.n)+'</div>'
       +'<div class="ccost">'+manaHTML(c.c)+'</div>'
-      +'<div class="ctype">'+esc(c.t)+'</div>'
-      +'<span class="grade">Grade: '+esc(c.g)+'</span>';
-    d.addEventListener('click',()=>openModal(c,d));
+      +'<div class="ctype">'+esc(c.t)+'</div>';
+    d.addEventListener('click',()=>openModal(c));
     grid.appendChild(d);
   });
-  document.getElementById('packNum').textContent=packIdx+1;
-  var pn=drawPack.pickNum||1;
-  document.getElementById('pickNum').textContent=pn;
-  document.getElementById('hint').textContent = pn===1
-    ? 'Fresh pack — you have first pick. Take the best card. Grades are hidden until you lock in.'
-    : 'You are pick '+pn+' of this pack — the '+(pn-1)+' best card'+(pn>2?'s were':' was')+' already drafted. Pick the best of what\'s left. Grades are hidden until you lock in.';
+  document.getElementById('hint').textContent=
+    'Pack '+(round+1)+' of '+ROUNDS+' \u00B7 Pick '+pickNo+' \u2014 '+pack.length+' cards in the pack. Tap a card to preview, then draft it. You are Seat 1.';
 }
-
-function openModal(c,el){
-  if(locked) return;
-  modalCard={c:c,el:el};
+function openModal(c){
+  modalCard=c;
   document.getElementById('modalName').textContent=c.n;
-  const body=document.getElementById('modalBody');
-  body.innerHTML='<img src="'+c.img+'" alt="'+esc(c.n)+'" onerror="this.outerHTML=\'<div class=&quot;fallback&quot;>'+esc(c.n)+'</div>\'">';
+  document.getElementById('modalBody').innerHTML='<img src="'+c.img+'" alt="'+esc(c.n)+'" onerror="this.outerHTML=\'<div class=&quot;fallback&quot;>'+esc(c.n)+'</div>\'">';
   document.getElementById('modal').classList.add('open');
 }
 function closeModal(){ document.getElementById('modal').classList.remove('open'); }
-
 document.getElementById('cancelBtn').addEventListener('click',closeModal);
 document.getElementById('modal').addEventListener('click',e=>{ if(e.target.id==='modal') closeModal(); });
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
-
 document.getElementById('pickBtn').addEventListener('click',()=>{
-  if(!modalCard||locked) return;
-  closeModal();
-  locked=true;
-  const {c,el}=modalCard;
-  el.classList.add('picked');
-  // find best
-  let best=currentPack[0];
-  currentPack.forEach(x=>{ if((GRADE_VAL[x.g]||0)>(GRADE_VAL[best.g]||0)) best=x; });
-  const correct=(GRADE_VAL[c.g]||0)>=(GRADE_VAL[best.g]||0);
-  if(correct) score++;
-  document.getElementById('score').textContent=score;
-  document.getElementById('grid').classList.add('revealed');
-  document.querySelectorAll('.card').forEach(d=>{
-    if(currentPack[+d.dataset.idx]===best) d.classList.add('best');
-  });
-  const v=document.getElementById('verdict');
-  v.className='verdict show '+(correct?'good':'bad');
-  v.innerHTML=(correct
-    ? '✅ <b>Correct!</b> '+esc(c.n)+' ('+esc(c.g)+') was the best pick in this pack.'
-    : '❌ <b>Not quite.</b> The best pick was <b>'+esc(best.n)+'</b> ('+esc(best.g)+').')
-    +'<div class="why">'+esc(best.note||'')+'</div>';
-  document.getElementById('hint').textContent='Pack revealed. Grades shown — gold border marks the best pick.';
-  const nb=document.getElementById('nextBtn');
-  nb.style.display='inline-block';
-  nb.textContent = packIdx>=49 ? 'See Results →' : 'Next Pack →';
+  if(!modalCard) return;
+  const c=modalCard; modalCard=null; closeModal();
+  doWesPick(c);
 });
-
-document.getElementById('nextBtn').addEventListener('click',()=>{
-  packIdx++;
-  if(packIdx>=50){ showResults(); return; }
-  renderPack();
-  window.scrollTo({top:0,behavior:'smooth'});
-});
-
-function showResults(){
-  document.getElementById('grid').innerHTML='';
-  document.getElementById('verdict').className='verdict';
-  document.getElementById('nextBtn').style.display='none';
-  document.getElementById('hint').textContent='';
-  const pct=Math.round(score/50*100);
-  let tier='Learning the format';
-  if(score>=45) tier='Mythic Drafter 🏆';
-  else if(score>=38) tier='Diamond Drafter 💎';
-  else if(score>=30) tier='Platinum Drafter';
-  else if(score>=22) tier='Gold Drafter';
-  else if(score>=15) tier='Silver Drafter';
-  const r=document.getElementById('results');
-  r.className='results show';
-  r.innerHTML='<div class="big">'+score+' / 50</div>'
-    +'<div class="tier">'+tier+'</div>'
-    +'<p>'+pct+'% pick accuracy on Reality Fracture packs.</p>'
-    +'<button class="primary" id="againBtn">Run It Back</button>';
-  document.getElementById('againBtn').addEventListener('click',()=>{
-    packIdx=0; score=0;
-    document.getElementById('score').textContent='0';
-    renderPack();
-  });
-  window.scrollTo({top:0,behavior:'smooth'});
+function doWesPick(card){
+  const me=seats[0];
+  me.pool.push(card);
+  me.pack=me.pack.filter(x=>x!==card);
+  // the 7 AI seats draft from their packs
+  for(let i=1;i<SEATS;i++){
+    const s=seats[i];
+    if(s.pack && s.pack.length){
+      const c=aiPick(s);
+      s.pool.push(c);
+      s.pack=s.pack.filter(x=>x!==c);
+    }
+  }
+  // pass every pack simultaneously
+  const old=seats.map(s=>s.pack);
+  seats.forEach((s,i)=>{ s.pack=old[(i-dir+SEATS)%SEATS]; });
+  if(seats.every(s=>!s.pack || s.pack.length===0)){
+    round++;
+    if(round>=ROUNDS){ endDraft(); return; }
+    startRound(); return;
+  }
+  renderAll();
 }
-
-renderPack();
+function poolHTML(pool){
+  const groups={};
+  pool.forEach(c=>{ const g=colorGroup(c); (groups[g]=groups[g]||[]).push(c); });
+  let html='';
+  GROUP_ORDER.forEach(g=>{
+    const arr=(groups[g]||[]).sort((a,b)=>(GRADE_VAL[b.g]||0)-(GRADE_VAL[a.g]||0));
+    if(!arr.length) return;
+    html+='<h3>'+g+' ('+arr.length+')</h3>'+arr.map(c=>
+      '<div class="prow"><span class="pname">'+esc(c.n)+'</span><span class="pgrade">'+esc(c.g)+'</span></div>'
+    ).join('');
+  });
+  return html||'<p class="suggest">No cards yet.</p>';
+}
+function renderPoolView(){
+  document.getElementById('poolview').innerHTML='<h3 style="margin-top:0">My pool</h3>'+poolHTML(seats[0].pool);
+}
+document.getElementById('poolBtn').addEventListener('click',()=>{
+  poolOpen=!poolOpen;
+  document.getElementById('poolview').className='poolview'+(poolOpen?' show':'');
+  if(poolOpen) renderPoolView();
+});
+function endDraft(){
+  document.getElementById('grid').innerHTML='';
+  document.getElementById('hint').textContent='Draft complete! Here is your pool and how the AI seats ended up.';
+  document.getElementById('dir').textContent='';
+  const me=seats[0].pool;
+  const myColors=aiColors(me).map(x=>COLOR_NAME[x]);
+  const playables=me.filter(c=>(GRADE_VAL[c.g]||0)>=3).length;
+  let html='<h2>Your pool \u2014 '+me.length+' cards</h2>'
+    +'<p class="suggest">Suggested colors: <b>'+(myColors.join(' / ')||'—')+'</b> \u00B7 '+playables+' playables (C- or better)</p>'
+    +poolHTML(me)
+    +'<h2 style="margin-top:22px">AI seats</h2>'
+    +'<table class="stable"><tr><th>Seat</th><th>Colors</th><th>Playables</th></tr>';
+  for(let i=1;i<SEATS;i++){
+    const cols=aiColors(seats[i].pool).map(x=>COLOR_NAME[x]).join(' / ');
+    const pl=seats[i].pool.filter(c=>(GRADE_VAL[c.g]||0)>=3).length;
+    html+='<tr><td>'+(i+1)+'</td><td>'+cols+'</td><td>'+pl+'</td></tr>';
+  }
+  html+='</table><div class="controls"><button class="primary" id="againBtn">Draft again</button></div>';
+  const r=document.getElementById('results');
+  r.innerHTML=html; r.className='results show';
+  document.getElementById('againBtn').addEventListener('click',newDraft);
+  renderAll();
+}
+newDraft();
 </script>
 </body>
 </html>
