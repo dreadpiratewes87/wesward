@@ -116,18 +116,22 @@ function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;');}
 
 function buildRealPack(){
   // A realistic 14-card draft booster: 1 rare/mythic, 3 uncommons, 10 commons.
-  const pack=[]; const used=new Set();
-  function take(pool){
+  const pack=[]; const used=new Set(); let landTaken=false;
+  function isLand(c){ return /Land/.test(c.t||''); }
+  function take(pool,capLand){
     let guard=0;
     while(guard++<500){
       const c=pool[Math.floor(Math.random()*pool.length)];
       if(!c || used.has(c.n)) continue;
-      used.add(c.n); pack.push(c); return;
+      if(capLand && landTaken && isLand(c)) continue;
+      used.add(c.n); pack.push(c);
+      if(isLand(c)) landTaken=true;
+      return;
     }
   }
   take(Math.random()<1/7.5 && POOL.M.length ? POOL.M : POOL.R); // mythic ~1 in 7.5 packs
   for(let i=0;i<3;i++) take(POOL.U.length?POOL.U:POOL.C);
-  for(let i=0;i<10;i++) take(POOL.C.length?POOL.C:POOL.U);
+  for(let i=0;i<10;i++) take(POOL.C.length?POOL.C:POOL.U,true);
   return pack;
 }
 
