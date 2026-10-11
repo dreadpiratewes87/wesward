@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Watchlist" />
+<meta name="theme-color" content="#1c1a16" />
+<title>Watchlist</title>
+<style>
+
+    @font-face{font-family:"Barlow Condensed";src:url("assets/fonts/BarlowCondensed-700-latin.woff2") format("woff2");font-weight:700;font-display:swap}
+    @font-face{font-family:"Barlow Condensed";src:url("assets/fonts/BarlowCondensed-800-latin.woff2") format("woff2");font-weight:800;font-display:swap}
+    @font-face{font-family:"Source Sans 3";src:url("assets/fonts/SourceSans3-400-latin.woff2") format("woff2");font-weight:400;font-display:swap}
+    @font-face{font-family:"Source Sans 3";src:url("assets/fonts/SourceSans3-600-latin.woff2") format("woff2");font-weight:600;font-display:swap}
+    @font-face{font-family:"Source Sans 3";src:url("assets/fonts/SourceSans3-700-latin.woff2") format("woff2");font-weight:700;font-display:swap}
+
+    :root{color-scheme:light dark;--bg:#eef1f2;--paper:#fff;--paper-2:#e3e8e9;--ink:#152022;--muted:#536165;--line:#c8d0d2;--accent:#bb4a21;--accent-ink:#fff8f4;--teal:#0e756e;--teal-soft:#d7efea;--gold:#9b6a10;--red:#b42318;--green:#18764b;--shadow:0 12px 35px rgba(31,46,48,.09);--radius-sm:7px;--radius-md:14px;--radius-lg:26px}
+    @media(prefers-color-scheme:dark){:root{--bg:#0d1416;--paper:#162023;--paper-2:#202d30;--ink:#edf4f4;--muted:#aebcbe;--line:#354447;--accent:#e36a39;--accent-ink:#160a05;--teal:#54bcb1;--teal-soft:#173d39;--gold:#e0ad48;--red:#ff7468;--green:#57c58e;--shadow:0 16px 46px rgba(0,0,0,.26)}}
+    *{box-sizing:border-box}html{background:var(--bg);scroll-behavior:smooth}body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font:17px/1.45 "Source Sans 3",sans-serif}button,input,select{font:inherit}button{color:inherit}a{color:inherit}.app{width:min(1180px,100%);margin:0 auto;padding:clamp(16px,3vw,34px);padding-bottom:calc(48px + env(safe-area-inset-bottom))}.view{display:none}.view.active{display:block}
+    .home-lead{display:flex;align-items:end;justify-content:space-between;gap:20px;margin:clamp(20px,5vw,52px) 0 28px}.home-lead h1{font:800 clamp(42px,8vw,82px)/.88 "Barlow Condensed",sans-serif;letter-spacing:-.02em;margin:0;max-width:760px}.home-lead p{margin:0;color:var(--muted);font-weight:600;white-space:nowrap}.nav-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}.nav-card{border:0;text-align:left;background:var(--paper);box-shadow:var(--shadow);padding:24px;min-height:210px;cursor:pointer;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;transition:transform .15s ease,background .15s ease}.nav-card:hover{transform:translateY(-2px)}.nav-card:focus-visible,.btn:focus-visible,.back-btn:focus-visible{outline:3px solid var(--teal);outline-offset:3px}.nav-card.projects{grid-column:span 7;border-radius:var(--radius-sm);background:var(--ink);color:var(--bg)}.nav-card.todo{grid-column:span 4;border-radius:var(--radius-md)}.nav-card.recipes{grid-column:span 4;border-radius:var(--radius-sm)}.nav-card.sketch{grid-column:span 4;border-radius:var(--radius-lg);background:var(--teal-soft)}.nav-card.harvest{grid-column:span 5;min-height:175px;border-radius:var(--radius-lg) var(--radius-sm);background:var(--teal);color:#fff}.nav-card.letters{grid-column:span 12;min-height:150px;border-radius:var(--radius-lg) var(--radius-sm);background:#7a5c2e;color:#fbf3e2}.nav-card .icon{width:42px;height:42px}.nav-card strong{font:800 clamp(28px,4vw,42px)/1 "Barlow Condensed",sans-serif;display:block;margin-bottom:6px}.nav-card span{font-size:15px;opacity:.78;max-width:34ch}.nav-card .arrow{position:absolute;top:22px;right:22px;font-size:27px;font-weight:700}
+    .viewbar{position:sticky;z-index:20;top:0;margin:0 calc(-1 * clamp(16px,3vw,34px)) 26px;padding:12px clamp(16px,3vw,34px);display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;background:color-mix(in srgb,var(--bg) 93%,transparent);border-bottom:1px solid var(--line);backdrop-filter:blur(12px)}.viewbar h1{font:800 clamp(27px,5vw,42px)/1 "Barlow Condensed",sans-serif;margin:0;text-align:center}.back-btn,.btn{border:0;cursor:pointer;font-weight:700}.back-btn{display:flex;align-items:center;gap:7px;background:transparent;padding:10px 4px;color:var(--muted)}.btn{background:var(--ink);color:var(--bg);padding:11px 15px;border-radius:var(--radius-sm)}.btn.secondary{background:var(--paper-2);color:var(--ink)}.btn.accent{background:var(--accent);color:var(--accent-ink)}.btn.teal{background:var(--teal);color:#fff}.btn.danger{background:var(--red);color:#fff}.btn.small{padding:7px 10px;font-size:14px}.section-intro{display:flex;justify-content:space-between;align-items:end;gap:24px;margin-bottom:22px}.section-intro h2{font:800 clamp(34px,5vw,58px)/.98 "Barlow Condensed";margin:0;letter-spacing:-.01em}.section-intro p{margin:6px 0 0;color:var(--muted);max-width:62ch}.stamp{font-size:14px;color:var(--muted);white-space:nowrap}
+    .project-list{display:grid;gap:14px}.project{background:var(--paper);border-radius:var(--radius-md);box-shadow:var(--shadow);display:grid;grid-template-columns:135px 1fr auto;gap:22px;align-items:center;padding:22px}.project-num{font:800 54px/1 "Barlow Condensed";color:var(--accent)}.project h3{font:800 30px/1 "Barlow Condensed";margin:0 0 8px}.project p{margin:0;color:var(--muted)}.project-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.tag{font-size:13px;font-weight:700;padding:5px 8px;border-radius:99px;background:var(--paper-2)}.tag.live{background:var(--teal-soft);color:var(--teal)}.project-action{text-align:right;min-width:170px}.project-action p{font-size:14px;margin-bottom:10px}.external{display:inline-flex;align-items:center;gap:7px;color:var(--teal);font-weight:700;text-decoration-thickness:2px;text-underline-offset:3px}
+    .session-note{background:var(--teal-soft);padding:12px 14px;border-radius:var(--radius-sm);display:flex;justify-content:space-between;gap:14px;align-items:center;margin-bottom:14px}.session-note strong{color:var(--teal)}.todo-entry{display:grid;grid-template-columns:minmax(180px,1fr) 145px 135px 120px 135px auto;gap:9px;background:var(--paper);padding:14px;border-radius:var(--radius-md);box-shadow:var(--shadow);margin-bottom:14px}.todo-entry input,.todo-entry select{width:100%}.todo-tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:18px}.todo-tools .spacer{flex:1}.filter-btn.active{background:var(--ink);color:var(--bg)}.task-board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.task-group{min-width:0}.task-group-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:0 2px 8px;border-bottom:3px solid var(--line);margin-bottom:8px}.task-group-head h2{font:800 27px/1 "Barlow Condensed";margin:0}.task-group-head span{color:var(--muted);font-size:14px;font-weight:700}.task-list{display:grid;gap:8px}.task{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:start;background:var(--paper);border-radius:var(--radius-sm);padding:13px;border:1px solid transparent}.task.completed{opacity:.62}.task.completed .task-title{text-decoration:line-through}.task-check{width:24px;height:24px;accent-color:var(--teal);margin-top:2px}.task-title{font-weight:700;font-size:18px;overflow-wrap:anywhere}.task-meta{display:flex;gap:7px;flex-wrap:wrap;margin-top:6px;color:var(--muted);font-size:13px}.task-stage{width:100%;margin-top:9px;padding:8px 9px;font-size:14px;background:var(--bg)}.task-delete{border:0;background:transparent;color:var(--muted);font-size:22px;cursor:pointer}.empty{padding:30px 12px;text-align:center;border:1px dashed var(--line);border-radius:var(--radius-sm);color:var(--muted);font-size:15px}
+    .recipe-layout{display:grid;grid-template-columns:260px 1fr;gap:18px}.recipe-index{display:grid;gap:8px;align-content:start;position:sticky;top:88px}.recipe-tab{text-align:left;border:0;background:var(--paper);padding:14px;border-radius:var(--radius-sm);cursor:pointer;font-weight:700}.recipe-tab.active{background:var(--ink);color:var(--bg)}.recipe-page{display:none}.recipe-page.active{display:block}.recipe-hero{background:var(--accent);color:var(--accent-ink);padding:clamp(22px,4vw,40px);border-radius:var(--radius-lg) var(--radius-sm) var(--radius-lg) var(--radius-sm);margin-bottom:14px}.recipe-hero h2{font:800 clamp(42px,7vw,72px)/.9 "Barlow Condensed";margin:0}.recipe-hero p{max-width:56ch;margin:12px 0 0;opacity:.9}.recipe-controls{display:flex;align-items:end;gap:10px;flex-wrap:wrap;margin:14px 0}.ingredient-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.ingredient{display:flex;justify-content:space-between;gap:15px;background:var(--paper);padding:12px 14px;border-radius:var(--radius-sm)}.ingredient strong{font-variant-numeric:tabular-nums}.method{margin-top:16px;background:var(--paper);padding:20px;border-radius:var(--radius-md)}.method h3{font:800 27px/1 "Barlow Condensed";margin:0 0 10px}.method ol,.method ul{margin:0;padding-left:22px}.method li+li{margin-top:8px}.variation-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.variation{padding:13px;background:var(--paper-2);border-radius:var(--radius-sm)}.variation strong{display:block}.working-label{display:inline-block;background:var(--gold);color:#fff;padding:5px 9px;border-radius:99px;font-size:13px;font-weight:700;margin-bottom:12px}
+    .harvest-section+.harvest-section{margin-top:42px}.harvest-heading{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:16px}.harvest-heading h2{font:800 clamp(35px,6vw,58px)/.95 "Barlow Condensed";margin:0}.harvest-heading p{margin:5px 0 0;color:var(--muted);max-width:62ch}.phase-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.phase{background:var(--paper);border-radius:var(--radius-md);padding:clamp(18px,3vw,26px);box-shadow:var(--shadow)}.phase-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-bottom:11px;margin-bottom:12px;border-bottom:1px solid var(--line)}.phase h3{font:800 30px/1 "Barlow Condensed";margin:0}.phase-time{color:var(--teal);font-size:14px;font-weight:800;text-align:right}.phase ul,.harvest-notes ul{margin:0;padding-left:21px}.phase li+li,.harvest-notes li+li{margin-top:9px}.smell-plan{grid-column:1/-1;background:var(--ink);color:var(--bg);border-radius:var(--radius-sm);padding:18px 20px;display:grid;grid-template-columns:160px 1fr;gap:18px;align-items:start}.smell-plan strong{font:800 28px/1 "Barlow Condensed"}.smell-plan p{margin:0}.shop-list{display:grid;gap:9px}.shop-head,.shop-item{display:grid;grid-template-columns:minmax(250px,1fr) 82px 104px 112px minmax(120px,.55fr);gap:12px;align-items:center}.shop-head{padding:0 15px 7px;color:var(--muted);font-size:13px;font-weight:800}.shop-item{background:var(--paper);border-radius:var(--radius-sm);padding:14px 15px;border:1px solid var(--line)}.shop-name{font-weight:700}.shop-item a.shop-name{color:var(--teal);text-decoration-thickness:2px;text-underline-offset:3px}.shop-label{display:none;color:var(--muted);font-size:12px;font-weight:800}.money{font-variant-numeric:tabular-nums;font-weight:700}.shop-total{display:flex;justify-content:space-between;align-items:baseline;gap:18px;background:var(--accent);color:var(--accent-ink);padding:20px 22px;border-radius:var(--radius-md);margin-top:12px}.shop-total strong:first-child{font:800 28px/1 "Barlow Condensed"}.shop-total strong:last-child{font:800 42px/1 "Barlow Condensed"}.harvest-notes{background:var(--paper-2);border-radius:var(--radius-sm);padding:18px 20px;margin-top:12px}.harvest-notes h3{font:800 26px/1 "Barlow Condensed";margin:0 0 11px}
+    .sketch-tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--paper);padding:12px;border-radius:var(--radius-sm);margin-bottom:10px;box-shadow:var(--shadow)}.tool-group{display:flex;gap:6px;align-items:center;padding-right:10px;border-right:1px solid var(--line)}.tool-group:last-child{border:0;margin-left:auto}.color-input{width:42px;height:42px;border:0;padding:2px;background:transparent}.range{width:120px}.sketch-frame{background:#fff;border:1px solid var(--line);border-radius:var(--radius-sm);overflow:hidden;box-shadow:var(--shadow);height:min(68vh,720px);min-height:420px;position:relative}.sketch-frame.grid{background-image:linear-gradient(#d9e1e3 1px,transparent 1px),linear-gradient(90deg,#d9e1e3 1px,transparent 1px);background-size:24px 24px}.sketch-frame canvas{display:block;width:100%;height:100%;touch-action:none}.sketch-hint{font-size:14px;color:var(--muted);margin:8px 0 0}
+    dialog{border:0;border-radius:var(--radius-md);background:var(--paper);color:var(--ink);box-shadow:0 28px 90px rgba(0,0,0,.38);padding:0;max-width:min(92vw,560px);width:100%}dialog::backdrop{background:rgba(6,10,11,.68)}.dialog-body{padding:22px}.dialog-body h2{font:800 34px/1 "Barlow Condensed";margin:0 0 8px}.dialog-actions{padding:14px 22px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px}.cmd-list{display:grid;gap:8px;margin-top:14px}.cmd-row{display:grid;grid-template-columns:1fr auto auto auto;align-items:center;gap:9px;background:var(--paper-2);padding:10px;border-radius:var(--radius-sm)}.cmd-row strong{font-size:22px}.cmd-row button{border:0;background:var(--paper);width:34px;height:34px;border-radius:50%;font-weight:800;cursor:pointer}.warning{color:var(--red);font-weight:700}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    .home-meta{display:flex;align-items:center;gap:12px}.lock-control{border:0;background:transparent;color:var(--muted);font-size:13px;font-weight:700;padding:7px 4px;min-height:36px;cursor:pointer;text-decoration:underline;text-decoration-color:color-mix(in srgb,var(--muted) 45%,transparent);text-underline-offset:3px}.lock-control:hover{color:var(--ink)}.lock-control:focus-visible,.lock-submit:focus-visible,.lock-input:focus-visible{outline:3px solid var(--teal);outline-offset:3px}
+    .lock-overlay{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;padding:24px;background:#070d0f;color:#f0f5f5}.lock-overlay[hidden]{display:none}.lock-panel{width:min(100%,390px);padding:30px 28px;background:#121a1d;border:1px solid #2b3b3f;border-radius:var(--radius-md);box-shadow:0 24px 70px rgba(0,0,0,.52)}.lock-panel h1{font:800 clamp(39px,11vw,54px)/.92 "Barlow Condensed",sans-serif;letter-spacing:-.01em;margin:0 0 10px}.lock-panel p{margin:0 0 22px;color:#a4b2b5}.lock-form{display:grid;gap:11px}.lock-label{font-size:13px;font-weight:700;color:#a4b2b5}.lock-input{width:100%;min-height:50px;border:1px solid #3a4c50;border-radius:var(--radius-sm);background:#090f11;color:#f0f5f5;padding:11px 12px}.lock-submit{min-height:50px;border:0;border-radius:var(--radius-sm);background:#f06b37;color:#fff;font-weight:800;cursor:pointer}.lock-error{min-height:23px;margin:0!important;color:#ff7468!important;font-size:14px;font-weight:700}.locked{overflow:hidden}
+    .sandbox-mark{position:fixed;z-index:45;right:8px;bottom:calc(8px + env(safe-area-inset-bottom));width:32px;height:32px;min-height:32px;padding:0;border:1px solid color-mix(in srgb,var(--muted) 32%,transparent);border-radius:50%;background:color-mix(in srgb,var(--bg) 90%,transparent);color:var(--muted);display:grid;place-items:center;cursor:pointer;opacity:.66;backdrop-filter:blur(8px)}.sandbox-mark:hover{opacity:1;color:var(--ink)}.sandbox-mark:focus-visible,.sandbox-gate-input:focus-visible,.sandbox-gate-submit:focus-visible{outline:3px solid var(--teal);outline-offset:3px}.sandbox-mark svg{width:16px;height:16px}.sandbox-gate{max-width:min(88vw,330px);background:#0c1315;border-color:#2b3b3f}.sandbox-gate-form{display:grid;grid-template-columns:1fr 48px;gap:8px;padding:12px}.sandbox-gate-input{width:100%;min-height:48px;border:1px solid #34474b;border-radius:var(--radius-sm);background:#070d0f;color:#f0f5f5;padding:9px 11px}.sandbox-gate-submit{min-height:48px;border:0;border-radius:var(--radius-sm);background:#26383c;color:#f0f5f5;font-weight:800;cursor:pointer}.sandbox-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.sandbox-project{min-height:210px;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);padding:22px;box-shadow:var(--shadow);display:flex;flex-direction:column;justify-content:space-between}.sandbox-project .project-num{font-size:34px;color:var(--teal)}.sandbox-project h2{font:800 clamp(34px,5vw,50px)/.95 "Barlow Condensed";margin:12px 0 8px}.sandbox-project p{margin:0;color:var(--muted);max-width:38ch}.sandbox-project .tag{align-self:flex-start;margin-top:24px}
+    @media(max-width:780px){.home-lead{align-items:start;flex-direction:column}.home-lead p{white-space:normal}.nav-card.projects{grid-column:span 12}.nav-card.todo,.nav-card.recipes,.nav-card.sketch,.nav-card.harvest,.nav-card.letters,.nav-card.watchlist{grid-column:span 12;min-height:165px}.project{grid-template-columns:75px 1fr}.project-num{font-size:42px}.project-action{grid-column:2;text-align:left}.todo-entry{grid-template-columns:1fr 1fr}.todo-entry .task-input{grid-column:1/-1}.todo-entry .add-task{grid-column:1/-1}.task-board{grid-template-columns:1fr}.task-group+.task-group{margin-top:10px}.recipe-layout{grid-template-columns:1fr}.recipe-index{position:static;grid-template-columns:1fr 1fr}.ingredient-grid,.variation-grid,.phase-grid{grid-template-columns:1fr}.section-intro,.harvest-heading{align-items:start;flex-direction:column}.smell-plan{grid-column:auto;grid-template-columns:1fr;gap:8px}.shop-head{display:none}.shop-item{grid-template-columns:1fr 1fr;gap:11px 14px}.shop-item>.shop-name{grid-column:1/-1;font-size:18px}.shop-label{display:block;margin-bottom:2px}.sketch-frame{height:58vh;min-height:360px}.tool-group:last-child{margin-left:0}.viewbar{grid-template-columns:auto 1fr}.viewbar>.stamp{display:none}}
+    @media(max-width:430px){.todo-entry{grid-template-columns:1fr}.todo-entry .task-input,.todo-entry .add-task{grid-column:auto}.project{grid-template-columns:1fr}.project-action{grid-column:auto}.recipe-index{grid-template-columns:1fr}}
+    /* Polished compact restyle */
+    :root{--bg:#101719;--paper:#182124;--paper-2:#222d30;--ink:#f0f5f5;--muted:#a8b7ba;--line:#344347;--accent:#f0642f;--accent-ink:#fff;--teal:#38b6a7;--teal-soft:#173c38;--gold:#d7a541;--red:#ef665b;--green:#4cbd83;--shadow:0 10px 28px rgba(0,0,0,.22);--radius-sm:4px;--radius-md:7px;--radius-lg:11px}
+    @media(prefers-color-scheme:dark){:root{--bg:#090f11;--paper:#121a1d;--paper-2:#1b2629;--ink:#f0f5f5;--muted:#a4b2b5;--line:#2b3b3f;--accent:#f06b37;--accent-ink:#fff;--teal:#45c2b3;--teal-soft:#123531;--gold:#e2b24e;--red:#ff7468;--green:#59c991;--shadow:0 12px 34px rgba(0,0,0,.32)}}
+    body{font-size:16px;background:var(--bg)}
+    .app{padding-top:clamp(12px,2vw,24px)}
+    button{min-height:44px}
+    .home-lead{align-items:center;margin:clamp(14px,3vw,32px) 0 20px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+    .home-lead h1{font-size:clamp(38px,6.5vw,68px);line-height:.92;letter-spacing:-.018em}
+    .home-lead p{font-size:13px;letter-spacing:.03em;text-transform:uppercase}
+    .nav-grid{gap:10px}
+    .nav-card{min-height:142px;padding:16px 18px;border:1px solid var(--line);box-shadow:var(--shadow);border-radius:var(--radius-sm)!important}
+    .nav-card:hover{transform:translateY(-1px);border-color:color-mix(in srgb,var(--teal) 58%,var(--line))}
+    .nav-card.projects{background:#101b1e;color:var(--ink)}
+    
+    .nav-card.todo,.nav-card.recipes{background:var(--paper)}
+    .nav-card.sketch{background:#173b3a;color:#ecf9f7}
+    
+    .nav-card.harvest{min-height:124px;background:#116f68;color:#fff}
+    
+    .nav-card.letters{min-height:110px;background:#6e5228;color:#fbf3e2}
+    .nav-card .icon{width:30px;height:30px;stroke-width:2.5}
+    .nav-card strong{font-size:clamp(25px,3.3vw,35px);letter-spacing:.005em;margin-bottom:4px}
+    .nav-card span{font-size:14px;line-height:1.25}
+    .nav-card .arrow{top:12px;right:16px;font-size:20px}
+    .viewbar{margin-bottom:20px;padding-top:8px;padding-bottom:8px;background:color-mix(in srgb,var(--bg) 94%,transparent)}
+    .viewbar h1{font-size:clamp(25px,4vw,36px);letter-spacing:.01em}
+    .back-btn,.btn{min-height:44px;padding:8px 13px;border-radius:var(--radius-sm);line-height:1.15}
+    .back-btn{padding-inline:4px 10px}
+    .btn{border:1px solid color-mix(in srgb,currentColor 18%,transparent)}
+    .btn.small{min-height:40px;padding:6px 10px;font-size:13px}
+    select,input[type="text"],input[type="date"]{min-height:44px;padding:8px 10px}
+    .section-intro{margin-bottom:17px}.section-intro h2{font-size:clamp(32px,4.5vw,52px)}
+    .project-list,.task-board,.phase-grid{gap:10px}
+    .project,.todo-entry,.phase{border:1px solid var(--line)}
+    .project{padding:17px;gap:17px}.project-num{font-size:46px}.project h3{font-size:28px}
+    .session-note{padding:9px 12px}.todo-entry{padding:10px;margin-bottom:10px}.todo-tools{margin-bottom:14px}
+    .recipe-tab{min-height:44px;padding:9px 12px}.recipe-hero{padding:clamp(18px,3vw,30px)}
+    .recipe-hero h2{font-size:clamp(38px,6vw,62px)}.method{padding:16px}
+    .sketch-tools{padding:8px}.color-input{height:40px}.cmd-row button{width:40px;height:40px}
+    dialog{border:1px solid var(--line)}
+    .letter-thread{max-width:780px;margin:0 auto}
+    .letter-day{text-align:center;margin:30px 0 14px;font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+    .msg{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);padding:14px 16px;margin:0 0 12px;box-shadow:var(--shadow)}
+    .msg.wes{border-left:4px solid var(--teal)}
+    .msg.rachel{border-left:4px solid var(--accent)}
+    .msg-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:8px}
+    .msg-head strong{font-size:15px}
+    .msg-head span{font-size:12.5px;color:var(--muted);white-space:nowrap}
+    .msg p{margin:0 0 10px;line-height:1.6}
+    .msg p:last-child{margin-bottom:0}
+    .msg .attach{display:block;margin-top:8px;font-size:12.5px;color:var(--muted);font-style:italic}
+    .msg.note{background:transparent;border:1px dashed var(--line);box-shadow:none;text-align:center;color:var(--muted);font-style:italic}
+    .letter-more{max-width:780px;margin:28px auto 0;text-align:center;color:var(--muted);font-size:14px}
+    @media(max-width:780px){.home-lead{gap:8px}.nav-card.projects,.nav-card.todo,.nav-card.recipes,.nav-card.sketch,.nav-card.harvest,.nav-card.letters{min-height:116px}.nav-card{padding:14px 16px}.nav-card .icon{width:27px;height:27px}.nav-card strong{font-size:27px}.nav-card span{font-size:13px}.project{padding:14px}.phase{padding:17px}.viewbar{margin-bottom:17px}.sandbox-grid{grid-template-columns:1fr}.sandbox-project{min-height:170px;padding:18px}}
+    @media(max-width:430px){.home-lead h1{font-size:42px}.nav-card.projects,.nav-card.todo,.nav-card.recipes,.nav-card.sketch,.nav-card.harvest,.nav-card.letters{min-height:106px}.nav-card{padding:13px 14px}.nav-card .icon{width:25px;height:25px}.nav-card .arrow{right:13px;top:10px}.nav-card strong{font-size:25px}.nav-card span{max-width:38ch}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+  
+    
+    /* ==== ROPE-CSS v1 ==== */
+/* rope/shibari section */
+.sb-diagram{display:block;max-width:100%;height:auto;margin:14px auto;border:1px solid var(--line);border-radius:var(--radius-sm);background:#f7f4ec}
+.sb-steps{margin:0;padding-left:24px;display:grid;gap:10px;line-height:1.55}
+.sb-steps li::marker{font-weight:800;color:var(--teal)}
+/* ==== ROPE-CSS /v1 ==== */
+    /* ==== IDEAS-CSS v1 ==== */
+/* ideas & shopping section */
+.sb-price{color:var(--teal);font-weight:800;white-space:nowrap}
+.sb-shopnote{background:var(--paper-2);border-radius:var(--radius-sm);padding:14px 16px;margin-top:14px;font-size:15px;line-height:1.55}
+/* ==== IDEAS-CSS /v1 ==== */
+
+    
+    
+        
+    /* Letters load fix: keep the 7,000+ message archive out of the landing-page DOM. */
+    .letter-browser{min-height:260px}
+    .letter-controls{display:grid;grid-template-columns:auto minmax(180px,1fr) auto;gap:10px;align-items:end;margin:0 0 18px;padding:14px;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm)}
+    .letter-controls label{display:none}
+    .letter-controls select{width:100%;min-height:44px;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:600 16px "Source Sans 3",sans-serif}
+    .letter-loading,.letter-error{padding:28px 18px;text-align:center;color:var(--muted)}
+    .letter-error{color:var(--danger,#b43b2d)}
+    @media(max-width:560px){.letter-controls{grid-template-columns:1fr 1fr}.letter-controls select{grid-column:1/-1;grid-row:1}.letter-controls button{width:100%}}
+
+  /* ==== SANDBOX-CSS v1 ==== */
+/* ---- Secret Sandbox hub (scoped .sb-) ---- */
+.sb-subview[hidden]{display:none}
+.sb-dash{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:16px}
+.sb-stat{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);padding:14px;box-shadow:var(--shadow)}
+.sb-stat strong{font:800 30px/1 "Barlow Condensed",sans-serif;display:block}
+.sb-stat span{color:var(--muted);font-size:13px;font-weight:700}
+.sb-search{width:100%;margin-bottom:14px}
+.sb-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:22px}
+.sb-card{border:0;text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-md);box-shadow:var(--shadow);padding:20px;cursor:pointer;display:flex;flex-direction:column;gap:8px;min-height:190px}
+.sb-card:hover{border-color:var(--teal)}
+.sb-card h3{font:800 30px/1 "Barlow Condensed",sans-serif;margin:0}
+.sb-card p{margin:0;color:var(--muted);font-size:15px}
+.sb-card .sb-progress{font-size:13px;font-weight:700;color:var(--teal)}
+.sb-tagrow{display:flex;gap:7px;flex-wrap:wrap;margin-top:auto;padding-top:6px}
+.sb-backrow{display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
+.sb-meta{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);padding:18px;margin-bottom:14px;box-shadow:var(--shadow)}
+.sb-meta dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:8px 16px}
+.sb-meta dt{color:var(--muted);font-weight:700;font-size:14px}
+.sb-meta dd{margin:0}
+.sb-details{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);margin-bottom:14px;box-shadow:var(--shadow)}
+.sb-details summary{padding:15px 18px;font-weight:800;cursor:pointer;list-style:none}
+.sb-details summary::-webkit-details-marker{display:none}
+.sb-details summary::before{content:"▸ ";color:var(--teal)}
+.sb-details[open] summary::before{content:"▾ "}
+.sb-details .sb-details-body{padding:0 18px 18px;white-space:pre-line;line-height:1.55;color:var(--ink)}
+.sb-details .sb-details-body p{margin:0 0 1em}
+.sb-chlist{display:grid;gap:8px;margin-bottom:14px}
+.sb-chrow{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;width:100%;text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);padding:13px 15px;cursor:pointer;font-weight:700}
+.sb-chrow:hover{border-color:var(--teal)}
+.sb-chrow .sb-words{color:var(--muted);font-size:13px;font-weight:600;white-space:nowrap}
+.sb-readbadge{font-size:12px;font-weight:800;color:var(--teal);white-space:nowrap}
+.sb-readbadge.unread{color:var(--muted)}
+.sb-draftflag{font-size:12px;font-weight:800;color:var(--gold);white-space:nowrap}
+.sb-reader-head{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);padding:18px;margin-bottom:14px;box-shadow:var(--shadow)}
+.sb-reader-head h2{font:800 clamp(28px,5vw,42px)/1 "Barlow Condensed",sans-serif;margin:0 0 8px}
+.sb-reader-meta{color:var(--muted);font-size:14px;font-weight:600;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.sb-reader-body{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-md);padding:clamp(20px,4vw,40px);box-shadow:var(--shadow);font-size:18px;line-height:1.68;max-width:72ch}
+.sb-reader-body p{margin:0 0 1.1em}
+.sb-reader-body h2,.sb-reader-body h3,.sb-reader-body h4{font-family:"Barlow Condensed",sans-serif}
+.sb-reader-body hr{border:0;border-top:1px solid var(--line);margin:1.6em auto;width:40%}
+.sb-chapternav{display:flex;gap:10px;justify-content:space-between;margin:16px 0;flex-wrap:wrap}
+.sb-locklist{margin:0;padding-left:22px;display:grid;gap:10px}
+.sb-safety{background:#12312e;color:#eef7f5;border-radius:var(--radius-sm);padding:16px 18px;margin-bottom:16px;border:1px solid #1e4a44}
+.sb-safety strong{font:800 22px/1 "Barlow Condensed",sans-serif;display:block;margin-bottom:8px;letter-spacing:.02em}
+.sb-safety ul{margin:0;padding-left:20px;display:grid;gap:5px;font-size:15px}
+.sb-core{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-md);padding:clamp(20px,4vw,32px);box-shadow:var(--shadow);margin-bottom:16px}
+.sb-core h2{font:800 clamp(28px,5vw,42px)/1 "Barlow Condensed",sans-serif;margin:0 0 10px}
+.sb-core .sb-core-line{font-size:19px;line-height:1.55;margin:0}
+.sb-core .sb-core-line strong{color:var(--teal)}
+.sb-found{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:16px}
+.sb-found .sb-details{margin-bottom:0}
+.sb-found .sb-details-body ul{margin:0;padding-left:20px;display:grid;gap:7px}
+.sb-stepper{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-md);padding:clamp(20px,4vw,32px);box-shadow:var(--shadow);margin-bottom:16px}
+.sb-stepper h2{font:800 clamp(28px,5vw,42px)/1 "Barlow Condensed",sans-serif;margin:0 0 6px}
+.sb-step-scenario{color:var(--muted);font-size:14px;margin:0 0 14px}
+.sb-step-card{background:var(--paper-2);border-radius:var(--radius-sm);padding:18px;min-height:170px}
+.sb-step-card .sb-step-num{font:800 15px/1 "Source Sans 3",sans-serif;color:var(--teal);letter-spacing:.08em}
+.sb-step-card h3{font:800 26px/1 "Barlow Condensed",sans-serif;margin:8px 0}
+.sb-step-card p{margin:0;line-height:1.55}
+.sb-step-dots{display:flex;gap:7px;justify-content:center;margin:14px 0}
+.sb-step-dots span{width:10px;height:10px;border-radius:50%;background:var(--line)}
+.sb-step-dots span.on{background:var(--teal)}
+.sb-step-nav{display:flex;gap:10px;justify-content:space-between}
+.sb-checkin{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-md);padding:clamp(20px,4vw,32px);box-shadow:var(--shadow);margin-bottom:16px}
+.sb-checkin h2{font:800 clamp(28px,5vw,42px)/1 "Barlow Condensed",sans-serif;margin:0 0 6px}
+.sb-checkin .sb-hint{color:var(--muted);font-size:14px;margin:0 0 14px}
+.sb-checkin label{display:grid;gap:6px;font-weight:700;margin-bottom:12px}
+.sb-checkin textarea{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:var(--radius-sm);padding:11px 12px;min-height:64px;font:inherit;resize:vertical}
+.sb-entry{border:1px solid var(--line);border-radius:var(--radius-sm);padding:13px 15px;margin-top:10px;background:var(--paper-2)}
+.sb-entry .sb-entry-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}
+.sb-entry .sb-entry-date{font-weight:800;font-size:14px;color:var(--teal)}
+.sb-entry dl{margin:0;display:grid;gap:6px;font-size:15px}
+.sb-entry dt{font-weight:800;color:var(--muted);font-size:13px}
+.sb-entry dd{margin:0}
+.sb-entry button{border:0;background:transparent;color:var(--muted);cursor:pointer;font-size:14px;font-weight:700;text-decoration:underline}
+.sb-prefs{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-md);padding:clamp(20px,4vw,32px);box-shadow:var(--shadow);margin-bottom:16px}
+.sb-prefs h2{font:800 clamp(28px,5vw,42px)/1 "Barlow Condensed",sans-serif;margin:0 0 10px}
+.sb-prefs ul{margin:0;padding-left:22px;display:grid;gap:9px;line-height:1.5}
+.sb-questions{background:var(--paper-2);border-radius:var(--radius-sm);padding:18px 20px;margin-bottom:8px}
+.sb-questions h3{font:800 24px/1 "Barlow Condensed",sans-serif;margin:0 0 10px}
+.sb-questions ul{margin:0;padding-left:22px;display:grid;gap:8px;color:var(--muted)}
+.sb-note{color:var(--muted);font-size:14px;margin:10px 0 0}
+@media(max-width:780px){.sb-dash{grid-template-columns:repeat(2,minmax(0,1fr))}.sb-grid{grid-template-columns:1fr}.sb-found{grid-template-columns:1fr}}
+/* ==== SANDBOX-CSS /v1 ==== */
+    
+.wl-standalone-bar{justify-content:center}
+.wl-standalone-bar h1{flex:none}
+.view{display:block !important}
+body{max-width:860px;margin:0 auto;padding:18px 14px 60px}
+</style>
+</head>
+<body>
+<main>
+<section class="view" id="watchlist" aria-labelledby="watchlist-heading">
+    <header class="viewbar wl-standalone-bar"><h1 id="watchlist-heading">Watchlist</h1><span class="stamp" id="wl-count">0 to watch</span></header>
+    <form class="todo-entry" id="wl-form"><div class="wl-title-wrap"><label class="sr-only" for="wl-title">Title</label><input class="task-input" id="wl-title" type="text" placeholder="Show or movie title…" required maxlength="120" autocomplete="off" /><div class="wl-suggest" id="wl-suggest" hidden></div></div><label class="sr-only" for="wl-type">Type</label><select id="wl-type"><option>Show</option><option>Movie</option></select><label class="sr-only" for="wl-service">Service</label><input class="task-input" id="wl-service" type="text" placeholder="Where? (Netflix, Max…)" maxlength="40" /><label class="sr-only" for="wl-notes">Notes</label><input class="task-input" id="wl-notes" type="text" placeholder="Notes (optional)" maxlength="180" /><label class="sr-only" for="wl-progress">Progress</label><input class="task-input" id="wl-progress" type="text" placeholder="Progress (S2 E5…)" maxlength="40" /><button class="btn accent add-task" type="submit">Add</button></form>
+    <div class="todo-tools"><button class="btn small secondary filter-btn active" data-wlfilter="all">All</button><button class="btn small secondary filter-btn" data-wlfilter="show">Shows</button><button class="btn small secondary filter-btn" data-wlfilter="movie">Movies</button><button class="btn small secondary filter-btn" data-wlfilter="towatch">To watch</button><button class="btn small secondary filter-btn" data-wlfilter="watched">Watched</button><span class="spacer"></span><input class="task-input wl-search" id="wl-search" type="search" placeholder="Search…" aria-label="Search watchlist" /><button class="btn small secondary" id="wl-export">Export</button><button class="btn small secondary" id="wl-share">Share</button><button class="btn small secondary" id="wl-import">Import</button><input class="sr-only" type="file" id="wl-import-file" accept="application/json,.json" /></div>
+    <div class="wl-grid" id="wl-grid"></div>
+    <p class="wl-empty" id="wl-empty" hidden>Nothing here yet — add your first show or movie above.</p>
+  </section>
+</main>
+<script>
+/* shared snapshot: #list=<base64url JSON> */
+var WL_SHARED_DATA=null;
+try{
+  if(location.hash.indexOf('#list=')===0){
+    var s=location.hash.slice(6).replace(/-/g,'+').replace(/_/g,'/');
+    while(s.length%4) s+='=';
+    WL_SHARED_DATA=JSON.parse(decodeURIComponent(escape(atob(s))));
+  }
+}catch(e){ WL_SHARED_DATA=null; }
+</script>
+<script>
+/* ==== WATCHLIST ==== */
+(function(){
+  var KEY='wl-items-v1';
+  var SHARED=(typeof WL_SHARED_DATA!=='undefined'&&WL_SHARED_DATA)?WL_SHARED_DATA:null;
+  function load(){ if(SHARED) return SHARED; try{ return JSON.parse(localStorage.getItem(KEY)||'[]'); }catch(e){ return []; } }
+  function save(a){ if(SHARED) return; try{ localStorage.setItem(KEY, JSON.stringify(a)); }catch(e){} }
+  function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  var items=load(), filter='all', query='';
+  var WL_SEEDS=[
+    {id:'wl-seed-1',title:'East of Eden',type:'Show',service:'Netflix',notes:'2026 limited series',watched:false},
+    {id:'wl-seed-2',title:'The Magicians',type:'Show',service:'Netflix',notes:'',watched:false},
+    {id:'wl-seed-3',title:'Street Fighter',type:'Movie',service:'',notes:'2026 film',watched:false},
+    {id:'wl-seed-4',title:'Dutton Ranch',type:'Show',service:'Paramount+',notes:'Yellowstone Beth & Rip spinoff',watched:false},
+    {id:'wl-seed-5',title:'Digger',type:'Movie',service:'',notes:'2026 film · Tom Cruise',watched:false},
+    {id:'wl-seed-6',title:'The Deuce',type:'Show',service:'HBO',notes:'70s Times Square',watched:false}
+  ];
+  try{
+    if(!SHARED&&localStorage.getItem('wl-seed-ver')!=='2'){
+      var have={}; items.forEach(function(x){have[x.id]=1;});
+      WL_SEEDS.slice().reverse().forEach(function(s){
+        if(!have[s.id]){ s.added=new Date().toISOString(); items.unshift(s); }
+      });
+      save(items); localStorage.setItem('wl-seed-ver','2');
+    }
+  }catch(e){}
+
+  /* ---- autocomplete: match real releases ---- */
+  var picked=null, searchTimer=null;
+  var titleInput=document.getElementById('wl-title');
+  var suggestBox=document.getElementById('wl-suggest');
+  function tvSearch(q){
+    return fetch('https://api.tvmaze.com/search/shows?q='+encodeURIComponent(q))
+      .then(function(r){ return r.json(); })
+      .then(function(arr){
+        return (arr||[]).slice(0,5).map(function(x){
+          var s=x.show||{};
+          return {title:s.name||'', year:(s.premiered||'').slice(0,4),
+                  premiered:s.premiered||'', status:s.status||'',
+                  network:((s.network||{}).name||'')||((s.webChannel||{}).name||''),
+                  type:'Show',
+                  info:s.officialSite||s.url||'',
+                  poster:((s.image||{}).medium||''), src:'TV'};
+        });
+      }).catch(function(){ return []; });
+  }
+  function wikiSearch(q){
+    var u='https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*'
+      +'&prop=pageimages|info&inprop=url&pithumbsize=200'
+      +'&generator=search&gsrsearch='+encodeURIComponent(q)+'&gsrlimit=5&gsrnamespace=0';
+    return fetch(u).then(function(r){ return r.json(); }).then(function(d){
+      var pages=(d.query&&d.query.pages)||{};
+      return Object.keys(pages).map(function(k){
+        var p=pages[k];
+        return {title:p.title||'', year:'', status:'', type:'',
+                info:p.fullurl||'', poster:((p.thumbnail||{}).source||''), src:'Wiki'};
+      });
+    }).catch(function(){ return []; });
+  }
+  var pickToken=0;
+  function enrichWiki(r,token){
+    var t=encodeURIComponent(r.title.replace(/ /g,'_'));
+    fetch('https://en.wikipedia.org/api/rest_v1/page/summary/'+t)
+      .then(function(x){ return x.json(); })
+      .then(function(d){
+        if(token!==pickToken) return;
+        if(d.thumbnail&&d.thumbnail.source) r.poster=d.thumbnail.source;
+      }).catch(function(){});
+    var u='https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*'
+      +'&prop=extracts&explaintext&titles='+encodeURIComponent(r.title);
+    fetch(u).then(function(x){ return x.json(); }).then(function(d){
+      if(token!==pickToken) return;
+      var pages=(d.query&&d.query.pages)||{};
+      var k=Object.keys(pages)[0];
+      var txt=k&&pages[k].extract?pages[k].extract:'';
+      var m=txt.match(/released theatrically[^.]{0,80}?on ([A-Z][a-z]+ \d{1,2}, \d{4})/)
+        ||txt.match(/released in the United States[^.]{0,80}?on ([A-Z][a-z]+ \d{1,2}, \d{4})/)
+        ||txt.match(/scheduled to be released[^.]{0,80}?on ([A-Z][a-z]+ \d{1,2}, \d{4})/)
+        ||txt.match(/set to be released[^.]{0,80}?on ([A-Z][a-z]+ \d{1,2}, \d{4})/)
+        ||txt.match(/theatrically released[^.]{0,80}?on ([A-Z][a-z]+ \d{1,2}, \d{4})/);
+      if(m){
+        var dt=new Date(m[1]);
+        if(!isNaN(dt)){ r.releaseDate=dt.toISOString().slice(0,10); r.releaseKind='theatrical'; }
+      }
+    }).catch(function(){});
+  }
+  function renderSuggest(list){
+    if(!list.length){ suggestBox.hidden=true; return; }
+    suggestBox.innerHTML=list.map(function(r,i){
+      return '<button type="button" class="wl-sug" data-i="'+i+'">'
+        +(r.poster?'<img src="'+esc(r.poster)+'" alt="" loading="lazy" />':'<span class="wl-sug-nopic"></span>')
+        +'<span class="wl-sug-t"><strong>'+esc(r.title)+'</strong>'
+        +'<small>'+esc([r.year,r.network,r.status,r.src].filter(Boolean).join(' · '))+'</small></span></button>';
+    }).join('');
+    suggestBox.hidden=false;
+    suggestBox.querySelectorAll('.wl-sug').forEach(function(b){
+      b.addEventListener('click',function(){
+        var r=list[+b.getAttribute('data-i')];
+        pickToken++;
+        picked=r;
+        titleInput.value=r.title;
+        if(r.type) document.getElementById('wl-type').value=r.type;
+        if(r.src==='Wiki') enrichWiki(r,pickToken);
+        suggestBox.hidden=true;
+      });
+    });
+    suggestBox._list=list;
+  }
+  if(titleInput){
+    titleInput.addEventListener('input',function(){
+      picked=null;
+      var q=titleInput.value.trim();
+      clearTimeout(searchTimer);
+      if(q.length<2){ suggestBox.hidden=true; return; }
+      searchTimer=setTimeout(function(){
+        Promise.all([tvSearch(q),wikiSearch(q)]).then(function(rs){
+          var seen={}, out=[];
+          rs[0].concat(rs[1]).forEach(function(r){
+            var k=(r.title||'').toLowerCase();
+            if(r.title && !seen[k]){ seen[k]=1; out.push(r); }
+          });
+          if(titleInput.value.trim()===q) renderSuggest(out.slice(0,8));
+        });
+      },350);
+    });
+    titleInput.addEventListener('blur',function(){ setTimeout(function(){ suggestBox.hidden=true; },200); });
+  }
+
+  /* ---- list rendering ---- */
+  function counts(){
+    var tw=items.filter(function(x){return !x.watched;}).length;
+    var w=items.length-tw;
+    document.getElementById('wl-count').textContent=tw+' to watch'+(w?' · '+w+' watched':'');
+  }
+  function releaseBadge(x){
+    if(!x.releaseDate) return '';
+    var d=new Date(x.releaseDate+'T12:00:00');
+    if(isNaN(d)) return '';
+    var s=d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+    var today=new Date(); today.setHours(0,0,0,0);
+    var upcoming=d>=today;
+    var label=x.releaseKind==='premiere'
+      ?(upcoming?'Premieres ':'Premiered ')
+      :(upcoming?'In theaters ':'Released ');
+    return '<span class="wl-badge release">'+esc(label+s)+'</span>';
+  }
+  function cardHTML(x){
+    var title=x.info
+      ? '<a href="'+esc(x.info)+'" target="_blank" rel="noopener">'+esc(x.title)+'</a>'
+      : esc(x.title);
+    return '<article class="wl-card'+(x.watched?' watched':'')+'" data-id="'+x.id+'">'
+      +'<div class="wl-top">'
+      +(x.poster?'<img class="wl-poster" src="'+esc(x.poster)+'" alt="" loading="lazy" />':'')
+      +'<div class="wl-head"><h3 class="wl-title">'+title+'</h3>'
+      +'<div class="wl-badges"><span class="wl-badge '+(x.type==='Show'?'show':'movie')+'">'+esc(x.type||'—')+'</span>'
+      +(x.year?'<span class="wl-badge service">'+esc(x.year)+'</span>':'')
+      +(x.service?'<span class="wl-badge service">'+esc(x.service)+'</span>':'')
+      +(x.watched?'<span class="wl-badge">Watched</span>':'')+releaseBadge(x)+'</div></div></div>'
+      +(x.notes?'<p class="wl-notes">'+esc(x.notes)+'</p>':'')
+      +'<button class="wl-prog" data-wl="prog">'+(x.progress
+          ? 'Progress: <strong>'+esc(x.progress)+'</strong>'
+          : '<span class="wl-prog-add">+ track progress</span>')+'</button>'
+      +'<div class="wl-actions"><button class="btn small '+(x.watched?'secondary':'teal')+'" data-wl="toggle">'+(x.watched?'Watch again':'✓ Watched')+'</button>'
+      +'<button class="btn small secondary" data-wl="del">Remove</button></div></article>';
+  }
+  function render(){
+    var grid=document.getElementById('wl-grid');
+    var q=query.trim().toLowerCase();
+    var list=items.filter(function(x){
+      if(filter==='show'&&(x.type!=='Show')) return false;
+      if(filter==='movie'&&(x.type!=='Movie')) return false;
+      if(filter==='towatch'&&x.watched) return false;
+      if(filter==='watched'&&!x.watched) return false;
+      if(q && (x.title+' '+(x.service||'')+' '+(x.notes||'')+' '+(x.progress||'')).toLowerCase().indexOf(q)<0) return false;
+      return true;
+    });
+    var empty=document.getElementById('wl-empty');
+    empty.hidden=list.length>0;
+    empty.textContent=items.length?'No matches for this filter.':'Nothing here yet — add your first show or movie above.';
+    grid.innerHTML=list.map(cardHTML).join('');
+    counts();
+  }
+  function findItem(id){ var f=null; items.forEach(function(x){ if(x.id===id) f=x; }); return f; }
+
+  document.getElementById('wl-form').addEventListener('submit',function(e){
+    e.preventDefault();
+    var t=titleInput.value.trim(); if(!t) return;
+    var it={id:Date.now()+''+Math.floor(Math.random()*1e6),title:t,
+      type:document.getElementById('wl-type').value,
+      service:document.getElementById('wl-service').value.trim(),
+      notes:document.getElementById('wl-notes').value.trim(),
+      progress:document.getElementById('wl-progress').value.trim(),
+      watched:false,added:new Date().toISOString()};
+    if(picked){
+      it.year=picked.year||''; it.info=picked.info||''; it.poster=picked.poster||'';
+      if(picked.network && !it.service) it.service=picked.network;
+      if(picked.premiered){ it.releaseDate=picked.premiered; it.releaseKind='premiere'; }
+      else if(picked.releaseDate){ it.releaseDate=picked.releaseDate; it.releaseKind=picked.releaseKind||'theatrical'; }
+      if(!it.notes && picked.status) it.notes=picked.status;
+    }
+    items.unshift(it);
+    save(items); this.reset(); picked=null; render();
+  });
+  document.querySelectorAll('[data-wlfilter]').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('[data-wlfilter]').forEach(function(x){x.classList.remove('active');});
+      b.classList.add('active'); filter=b.getAttribute('data-wlfilter'); render();
+    });
+  });
+  document.getElementById('wl-search').addEventListener('input',function(){ query=this.value; render(); });
+  document.getElementById('wl-grid').addEventListener('click',function(e){
+    var card=e.target.closest('.wl-card'); if(!card) return;
+    var it=findItem(card.getAttribute('data-id')); if(!it) return;
+    var b=e.target.closest('[data-wl]');
+    if(!b) return;
+    var act=b.getAttribute('data-wl');
+    if(act==='toggle'){ it.watched=!it.watched; save(items); render(); }
+    else if(act==='del'){ items=items.filter(function(x){return x.id!==it.id;}); save(items); render(); }
+    else if(act==='prog'){
+      var cur=it.progress||'';
+      var inp=document.createElement('input');
+      inp.className='wl-prog-input'; inp.value=cur; inp.placeholder='S2 E5, 50%, …';
+      inp.setAttribute('aria-label','Progress');
+      b.replaceWith(inp); inp.focus(); inp.select();
+      var done=false;
+      function commit(ok){
+        if(done) return; done=true;
+        it.progress=ok?inp.value.trim():cur;
+        save(items); render();
+      }
+      inp.addEventListener('keydown',function(ev){
+        if(ev.key==='Enter') commit(true);
+        else if(ev.key==='Escape') commit(false);
+      });
+      inp.addEventListener('blur',function(){ commit(true); });
+    }
+  });
+  document.getElementById('wl-export').addEventListener('click',function(){
+    var blob=new Blob([JSON.stringify(items,null,2)],{type:'application/json'});
+    var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='watchlist-backup.json'; a.click();
+    setTimeout(function(){URL.revokeObjectURL(a.href);},4000);
+  });
+  document.getElementById('wl-share').addEventListener('click',function(){
+    var btn=this;
+    var data=items.map(function(x){
+      return {title:x.title,type:x.type,year:x.year||'',service:x.service||'',notes:x.notes||'',
+        progress:x.progress||'',watched:!!x.watched,info:x.info||'',poster:x.poster||'',
+        releaseDate:x.releaseDate||'',releaseKind:x.releaseKind||''};
+    });
+    var s=btoa(unescape(encodeURIComponent(JSON.stringify(data))))
+      .replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+    var url='https://dreadpiratewes87.github.io/wesward/watchlist/#list='+s;
+    function ok(){ btn.textContent='Copied!'; setTimeout(function(){btn.textContent='Share';},2000); }
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(url).then(ok,function(){ prompt('Copy your share link:',url); });
+    }else{ prompt('Copy your share link:',url); }
+  });
+  document.getElementById('wl-import').addEventListener('click',function(){ document.getElementById('wl-import-file').click(); });
+  document.getElementById('wl-import-file').addEventListener('change',function(){
+    var f=this.files[0]; if(!f) return;
+    var r=new FileReader();
+    r.onload=function(){
+      try{
+        var a=JSON.parse(r.result);
+        if(Array.isArray(a)){ items=a.filter(function(x){return x&&x.title;}); save(items); render(); }
+      }catch(e){}
+    };
+    r.readAsText(f); this.value='';
+  });
+  if(SHARED){
+    document.body.classList.add('wl-shared');
+    var _f=document.getElementById('wl-form'); if(_f) _f.style.display='none';
+  }
+  render();
+})();
+</script>
+</body>
+</html>
