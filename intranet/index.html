@@ -464,34 +464,39 @@ renderCats();renderGrid();renderIssues();
   </section>
 
   <section class="view" id="watchlist" aria-labelledby="watchlist-heading">
-    <header class="viewbar"><button class="back-btn" data-home>← Main</button><h1 id="watchlist-heading">Watchlist</h1><span class="stamp" id="wl-count">0 to watch</span></header>
-    <form class="todo-entry" id="wl-form"><div class="wl-title-wrap"><label class="sr-only" for="wl-title">Title</label><input class="task-input" id="wl-title" type="text" placeholder="Show or movie title…" required maxlength="120" autocomplete="off" /><div class="wl-suggest" id="wl-suggest" hidden></div></div><label class="sr-only" for="wl-type">Type</label><select id="wl-type"><option>Show</option><option>Movie</option></select><label class="sr-only" for="wl-service">Service</label><input class="task-input" id="wl-service" type="text" placeholder="Where? (Netflix, Max…)" maxlength="40" /><label class="sr-only" for="wl-notes">Notes</label><input class="task-input" id="wl-notes" type="text" placeholder="Notes (optional)" maxlength="180" /><label class="sr-only" for="wl-progress">Progress</label><input class="task-input" id="wl-progress" type="text" placeholder="Progress (S2 E5…)" maxlength="40" /><button class="btn accent add-task" type="submit">Add</button></form>
-    <div class="todo-tools"><button class="btn small secondary filter-btn active" data-wlfilter="all">All</button><button class="btn small secondary filter-btn" data-wlfilter="show">Shows</button><button class="btn small secondary filter-btn" data-wlfilter="movie">Movies</button><button class="btn small secondary filter-btn" data-wlfilter="towatch">To watch</button><button class="btn small secondary filter-btn" data-wlfilter="watched">Watched</button><span class="spacer"></span><input class="task-input wl-search" id="wl-search" type="search" placeholder="Search…" aria-label="Search watchlist" /><button class="btn small secondary" id="wl-export">Export</button><button class="btn small secondary" id="wl-share">Share</button><button class="btn small secondary" id="wl-import">Import</button><input class="sr-only" type="file" id="wl-import-file" accept="application/json,.json" /></div>
-    <div class="wl-grid" id="wl-grid"></div>
+    <header class="viewbar"><button class="back-btn" data-home>← Main</button><h1 id="watchlist-heading">Watchlist</h1><span class="spacer"></span><button class="btn small secondary" id="wl-view-toggle">TV Shows ▾</button><button class="btn small secondary" id="wl-share">Share</button></header>
+    <form class="wl-add" id="wl-form"><div class="wl-title-wrap"><label class="sr-only" for="wl-title">Title</label><input class="task-input" id="wl-title" type="text" placeholder="Add a show or movie…" required maxlength="120" autocomplete="off" /><div class="wl-suggest" id="wl-suggest" hidden></div></div><button class="btn accent" type="submit">Add</button></form>
+    <div class="wl-list" id="wl-grid"></div>
     <p class="wl-empty" id="wl-empty" hidden>Nothing here yet — add your first show or movie above.</p>
+    <h2 class="wl-finished-h" id="wl-finished-h" hidden>Finished Watching</h2>
+    <div class="wl-list finished" id="wl-finished"></div>
   </section>
 
   <style>
 .nav-card.watchlist{grid-column:span 4;border-radius:var(--radius-md);background:#232a4d;color:#eef1ff}
-.wl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-top:6px}
-.wl-card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:8px;box-shadow:var(--shadow)}
-.wl-card.watched{opacity:.62}
-.wl-card.watched .wl-title{text-decoration:line-through}
-.wl-title{font:800 22px/1.1 "Barlow Condensed",sans-serif;margin:0}
-.wl-badges{display:flex;gap:6px;flex-wrap:wrap}
-.wl-badge{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:999px;background:var(--ink);color:var(--bg)}
-.wl-badge.show{background:#232a4d;color:#eef1ff}
-.wl-badge.movie{background:#7a5c2e;color:#fbf3e2}
-.wl-badge.service{background:transparent;border:1px solid var(--line);color:inherit}
-.wl-notes{font-size:14px;opacity:.8;margin:0}
-.wl-actions{display:flex;gap:8px;margin-top:auto;padding-top:6px}
-.wl-search{max-width:200px;min-height:40px}
+.wl-add{display:flex;gap:10px;margin:14px 0 18px}
+.wl-add .task-input{flex:1}
+.wl-list{display:flex;flex-direction:column;gap:10px}
+.wl-card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:12px;display:flex;gap:12px;align-items:center;box-shadow:var(--shadow)}
+.wl-poster{width:48px;height:72px;object-fit:cover;border-radius:8px;flex:none}
+.wl-poster-none{display:flex;align-items:center;justify-content:center;font-size:24px;background:var(--line)}
+.wl-info{flex:1;min-width:0}
+.wl-title{font:800 20px/1.15 "Barlow Condensed",sans-serif;margin:0}
+.wl-title a{color:inherit;text-decoration:none}
+.wl-title a:hover{text-decoration:underline}
+.wl-rel{font-size:13px;opacity:.7;margin-top:2px}
+.wl-prog-line{font-size:13px;font-weight:700;margin-top:2px;color:var(--teal,#2a7f6f)}
+.wl-card-btns{display:flex;gap:8px;flex:none}
+.wl-plus,.wl-check,.wl-undo{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--bg);color:inherit;font-size:18px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none}
+.wl-check{background:#2a7f6f;border-color:#2a7f6f;color:#fff}
+.wl-undo{font-size:16px}
 .wl-empty{color:var(--dim);text-align:center;padding:30px 0}
-#wl-count{white-space:nowrap}
-.wl-title-wrap{position:relative;flex:1;min-width:200px;display:flex}
+.wl-finished-h{font:800 18px/1.2 "Barlow Condensed",sans-serif;margin:26px 0 10px;opacity:.75}
+.wl-list.finished .wl-card{opacity:.75}
+.wl-title-wrap{position:relative;flex:1;min-width:0;display:flex}
 .wl-title-wrap .task-input{flex:1}
 .wl-suggest{position:absolute;top:100%;left:0;right:0;z-index:50;background:var(--paper);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);overflow:hidden;max-height:320px;overflow-y:auto}
-.wl-sug{display:flex;gap:10px;align-items:center;width:100%;padding:8px 10px;border:0;background:none;cursor:pointer;text-align:left;border-bottom:1px solid var(--line)}
+.wl-sug{display:flex;gap:10px;align-items:center;width:100%;padding:8px 10px;border:0;background:none;cursor:pointer;text-align:left;border-bottom:1px solid var(--line);color:inherit}
 .wl-sug:last-child{border-bottom:0}
 .wl-sug:hover{background:var(--teal-soft,#eef4f2)}
 .wl-sug img{width:36px;height:54px;object-fit:cover;border-radius:6px;flex:none}
@@ -499,18 +504,9 @@ renderCats();renderGrid();renderIssues();
 .wl-sug-t{display:flex;flex-direction:column;gap:2px;min-width:0}
 .wl-sug-t strong{font-size:15px}
 .wl-sug-t small{font-size:12px;opacity:.65}
-.wl-top{display:flex;gap:12px;align-items:flex-start}
-.wl-poster{width:52px;height:78px;object-fit:cover;border-radius:8px;flex:none}
-.wl-head{min-width:0;flex:1}
-.wl-title a{color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
-.wl-prog{border:0;background:none;cursor:pointer;text-align:left;font-size:14px;padding:2px 0;color:inherit}
-.wl-prog strong{font-weight:700}
-.wl-prog-add{opacity:.55;font-size:13px}
-.wl-prog-input{font-size:14px;padding:6px 10px;border:1px solid var(--line);border-radius:8px;width:100%;background:var(--bg);color:inherit}
-.wl-badge.release{background:#3a2c12;color:#ffd88a}
-.wl-shared .wl-actions .btn,.wl-shared .wl-prog-add{display:none}
-.wl-shared .wl-prog{pointer-events:none;cursor:default}
-</style>
+.wl-prog-input{font-size:14px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:inherit;min-width:0;flex:1}
+.wl-shared .wl-card-btns,.wl-shared #wl-share{display:none}
+</style></style>
 </main>
 <dialog id="clear-dialog"><div class="dialog-body"><h2>Clear the sketch?</h2><p style="margin:0;color:var(--muted)">Download it first if you want to keep a copy.</p></div><div class="dialog-actions"><button class="btn secondary" data-close-dialog="clear-dialog">Cancel</button><button class="btn danger" id="confirm-clear">Clear</button></div></dialog>
 <script>
@@ -535,7 +531,7 @@ renderCats();renderGrid();renderIssues();
   function load(){ if(SHARED) return SHARED; try{ return JSON.parse(localStorage.getItem(KEY)||'[]'); }catch(e){ return []; } }
   function save(a){ if(SHARED) return; try{ localStorage.setItem(KEY, JSON.stringify(a)); }catch(e){} }
   function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-  var items=load(), filter='all', query='';
+  var items=load(), view='show';
   var WL_SEEDS=[
     {id:'wl-seed-1',title:'East of Eden',type:'Show',service:'Netflix',notes:'2026 limited series',watched:false},
     {id:'wl-seed-2',title:'The Magicians',type:'Show',service:'Netflix',notes:'',watched:false},
@@ -555,7 +551,7 @@ renderCats();renderGrid();renderIssues();
   }catch(e){}
 
   /* ---- autocomplete: match real releases ---- */
-  var picked=null, searchTimer=null;
+  var picked=null, searchTimer=null, pickToken=0;
   var titleInput=document.getElementById('wl-title');
   var suggestBox=document.getElementById('wl-suggest');
   function tvSearch(q){
@@ -581,12 +577,12 @@ renderCats();renderGrid();renderIssues();
       var pages=(d.query&&d.query.pages)||{};
       return Object.keys(pages).map(function(k){
         var p=pages[k];
-        return {title:p.title||'', year:'', status:'', type:'',
-                info:p.fullurl||'', poster:((p.thumbnail||{}).source||''), src:'Wiki'};
+        return {title:p.title||'', year:'', premiered:'', status:'', network:'',
+                type:'', info:p.fullurl||'',
+                poster:((p.thumbnail||{}).source||''), src:'Wiki'};
       });
     }).catch(function(){ return []; });
   }
-  var pickToken=0;
   function enrichWiki(r,token){
     var t=encodeURIComponent(r.title.replace(/ /g,'_'));
     fetch('https://en.wikipedia.org/api/rest_v1/page/summary/'+t)
@@ -619,7 +615,7 @@ renderCats();renderGrid();renderIssues();
       return '<button type="button" class="wl-sug" data-i="'+i+'">'
         +(r.poster?'<img src="'+esc(r.poster)+'" alt="" loading="lazy" />':'<span class="wl-sug-nopic"></span>')
         +'<span class="wl-sug-t"><strong>'+esc(r.title)+'</strong>'
-        +'<small>'+esc([r.year,r.network,r.status,r.src].filter(Boolean).join(' · '))+'</small></span></button>';
+        +'<small>'+esc([r.year,r.network,r.status].filter(Boolean).join(' · '))+'</small></span></button>';
     }).join('');
     suggestBox.hidden=false;
     suggestBox.querySelectorAll('.wl-sug').forEach(function(b){
@@ -628,12 +624,10 @@ renderCats();renderGrid();renderIssues();
         pickToken++;
         picked=r;
         titleInput.value=r.title;
-        if(r.type) document.getElementById('wl-type').value=r.type;
         if(r.src==='Wiki') enrichWiki(r,pickToken);
         suggestBox.hidden=true;
       });
     });
-    suggestBox._list=list;
   }
   if(titleInput){
     titleInput.addEventListener('input',function(){
@@ -655,106 +649,115 @@ renderCats();renderGrid();renderIssues();
     titleInput.addEventListener('blur',function(){ setTimeout(function(){ suggestBox.hidden=true; },200); });
   }
 
-  /* ---- list rendering ---- */
-  function counts(){
-    var tw=items.filter(function(x){return !x.watched;}).length;
-    var w=items.length-tw;
-    document.getElementById('wl-count').textContent=tw+' to watch'+(w?' · '+w+' watched':'');
+  /* ---- release line (upcoming only) ---- */
+  function releaseLine(x){
+    var s='';
+    if(x.releaseDate){
+      var d=new Date(x.releaseDate+'T12:00:00');
+      if(!isNaN(d)){
+        var today=new Date(); today.setHours(0,0,0,0);
+        if(d>=today){
+          s=d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+          s=(x.releaseKind==='premiere'?'Premieres ':'In theaters ')+s;
+          if(x.service) s+=' · '+x.service;
+          return s;
+        }
+      }
+    }
+    if(x.service) return x.service;
+    return '';
   }
-  function releaseBadge(x){
-    if(!x.releaseDate) return '';
-    var d=new Date(x.releaseDate+'T12:00:00');
-    if(isNaN(d)) return '';
-    var s=d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-    var today=new Date(); today.setHours(0,0,0,0);
-    var upcoming=d>=today;
-    var label=x.releaseKind==='premiere'
-      ?(upcoming?'Premieres ':'Premiered ')
-      :(upcoming?'In theaters ':'Released ');
-    return '<span class="wl-badge release">'+esc(label+s)+'</span>';
+
+  /* ---- cards ---- */
+  function posterHTML(x){
+    if(x.poster) return '<img class="wl-poster" src="'+esc(x.poster)+'" alt="" loading="lazy" />';
+    return '<span class="wl-poster wl-poster-none">'+(x.type==='Movie'?'🎬':'📺')+'</span>';
   }
-  function cardHTML(x){
-    var title=x.info
+  function titleHTML(x){
+    return x.info
       ? '<a href="'+esc(x.info)+'" target="_blank" rel="noopener">'+esc(x.title)+'</a>'
       : esc(x.title);
-    return '<article class="wl-card'+(x.watched?' watched':'')+'" data-id="'+x.id+'">'
-      +'<div class="wl-top">'
-      +(x.poster?'<img class="wl-poster" src="'+esc(x.poster)+'" alt="" loading="lazy" />':'')
-      +'<div class="wl-head"><h3 class="wl-title">'+title+'</h3>'
-      +'<div class="wl-badges"><span class="wl-badge '+(x.type==='Show'?'show':'movie')+'">'+esc(x.type||'—')+'</span>'
-      +(x.year?'<span class="wl-badge service">'+esc(x.year)+'</span>':'')
-      +(x.service?'<span class="wl-badge service">'+esc(x.service)+'</span>':'')
-      +(x.watched?'<span class="wl-badge">Watched</span>':'')+releaseBadge(x)+'</div></div></div>'
-      +(x.notes?'<p class="wl-notes">'+esc(x.notes)+'</p>':'')
-      +'<button class="wl-prog" data-wl="prog">'+(x.progress
-          ? 'Progress: <strong>'+esc(x.progress)+'</strong>'
-          : '<span class="wl-prog-add">+ track progress</span>')+'</button>'
-      +'<div class="wl-actions"><button class="btn small '+(x.watched?'secondary':'teal')+'" data-wl="toggle">'+(x.watched?'Watch again':'✓ Watched')+'</button>'
-      +'<button class="btn small secondary" data-wl="del">Remove</button></div></article>';
   }
-  function render(){
-    var grid=document.getElementById('wl-grid');
-    var q=query.trim().toLowerCase();
-    var list=items.filter(function(x){
-      if(filter==='show'&&(x.type!=='Show')) return false;
-      if(filter==='movie'&&(x.type!=='Movie')) return false;
-      if(filter==='towatch'&&x.watched) return false;
-      if(filter==='watched'&&!x.watched) return false;
-      if(q && (x.title+' '+(x.service||'')+' '+(x.notes||'')+' '+(x.progress||'')).toLowerCase().indexOf(q)<0) return false;
-      return true;
-    });
-    var empty=document.getElementById('wl-empty');
-    empty.hidden=list.length>0;
-    empty.textContent=items.length?'No matches for this filter.':'Nothing here yet — add your first show or movie above.';
-    grid.innerHTML=list.map(cardHTML).join('');
-    counts();
+  function cardHTML(x){
+    var rel=releaseLine(x);
+    return '<article class="wl-card" data-id="'+x.id+'">'
+      +posterHTML(x)
+      +'<div class="wl-info"><h3 class="wl-title">'+titleHTML(x)+'</h3>'
+      +(rel?'<div class="wl-rel">'+esc(rel)+'</div>':'')
+      +(x.progress?'<div class="wl-prog-line">'+esc(x.progress)+'</div>':'')
+      +'</div>'
+      +'<div class="wl-card-btns">'
+      +'<button class="wl-plus" data-wl="prog" title="Track progress" aria-label="Track progress">+</button>'
+      +'<button class="wl-check" data-wl="toggle" title="Done watching" aria-label="Mark as watched">✓</button>'
+      +'</div></article>';
+  }
+  function finishedHTML(x){
+    return '<article class="wl-card finished" data-id="'+x.id+'">'
+      +posterHTML(x)
+      +'<div class="wl-info"><h3 class="wl-title">'+titleHTML(x)+'</h3>'
+      +(x.progress?'<div class="wl-prog-line">'+esc(x.progress)+'</div>':'')
+      +'</div>'
+      +'<div class="wl-card-btns">'
+      +'<button class="wl-undo" data-wl="toggle" title="Move back to watchlist" aria-label="Undo">↩</button>'
+      +'</div></article>';
   }
   function findItem(id){ var f=null; items.forEach(function(x){ if(x.id===id) f=x; }); return f; }
+  function render(){
+    var t=view==='show'?'Show':'Movie';
+    var towatch=items.filter(function(x){ return !x.watched&&x.type===t; });
+    var finished=items.filter(function(x){ return x.watched&&x.type===t; });
+    document.getElementById('wl-grid').innerHTML=towatch.map(cardHTML).join('');
+    document.getElementById('wl-empty').hidden=towatch.length>0||items.length>0;
+    document.getElementById('wl-finished').innerHTML=finished.map(finishedHTML).join('');
+    document.getElementById('wl-finished-h').hidden=finished.length===0;
+    var tg=document.getElementById('wl-view-toggle');
+    if(tg) tg.textContent=(view==='show'?'TV Shows':'Movies')+' ▾';
+  }
 
+  /* ---- view toggle ---- */
+  document.getElementById('wl-view-toggle').addEventListener('click',function(){
+    view=view==='show'?'movie':'show';
+    render();
+  });
+
+  /* ---- add ---- */
   document.getElementById('wl-form').addEventListener('submit',function(e){
     e.preventDefault();
     var t=titleInput.value.trim(); if(!t) return;
-    var it={id:Date.now()+''+Math.floor(Math.random()*1e6),title:t,
-      type:document.getElementById('wl-type').value,
-      service:document.getElementById('wl-service').value.trim(),
-      notes:document.getElementById('wl-notes').value.trim(),
-      progress:document.getElementById('wl-progress').value.trim(),
-      watched:false,added:new Date().toISOString()};
+    var type=(picked&&picked.type)?picked.type:(view==='show'?'Show':'Movie');
+    var it={id:Date.now()+''+Math.floor(Math.random()*1e6),title:t,type:type,
+      service:'',notes:'',progress:'',watched:false,added:new Date().toISOString()};
     if(picked){
       it.year=picked.year||''; it.info=picked.info||''; it.poster=picked.poster||'';
-      if(picked.network && !it.service) it.service=picked.network;
+      if(picked.network) it.service=picked.network;
       if(picked.premiered){ it.releaseDate=picked.premiered; it.releaseKind='premiere'; }
       else if(picked.releaseDate){ it.releaseDate=picked.releaseDate; it.releaseKind=picked.releaseKind||'theatrical'; }
-      if(!it.notes && picked.status) it.notes=picked.status;
+      if(picked.status) it.notes=picked.status;
     }
     items.unshift(it);
-    save(items); this.reset(); picked=null; render();
+    save(items); this.reset(); picked=null;
+    view=type==='Show'?'show':'movie';
+    render();
   });
-  document.querySelectorAll('[data-wlfilter]').forEach(function(b){
-    b.addEventListener('click',function(){
-      document.querySelectorAll('[data-wlfilter]').forEach(function(x){x.classList.remove('active');});
-      b.classList.add('active'); filter=b.getAttribute('data-wlfilter'); render();
-    });
-  });
-  document.getElementById('wl-search').addEventListener('input',function(){ query=this.value; render(); });
-  document.getElementById('wl-grid').addEventListener('click',function(e){
+
+  /* ---- card actions ---- */
+  function gridClick(e,gridId){
     var card=e.target.closest('.wl-card'); if(!card) return;
     var it=findItem(card.getAttribute('data-id')); if(!it) return;
-    var b=e.target.closest('[data-wl]');
-    if(!b) return;
+    var b=e.target.closest('[data-wl]'); if(!b) return;
     var act=b.getAttribute('data-wl');
     if(act==='toggle'){ it.watched=!it.watched; save(items); render(); }
-    else if(act==='del'){ items=items.filter(function(x){return x.id!==it.id;}); save(items); render(); }
     else if(act==='prog'){
       var cur=it.progress||'';
       var inp=document.createElement('input');
-      inp.className='wl-prog-input'; inp.value=cur; inp.placeholder='S2 E5, 50%, …';
+      inp.className='wl-prog-input'; inp.value=cur; inp.placeholder='S2 E5, 50%…';
       inp.setAttribute('aria-label','Progress');
+      var wrap=b.closest('.wl-card-btns');
       b.replaceWith(inp); inp.focus(); inp.select();
       var done=false;
       function commit(ok){
         if(done) return; done=true;
-        it.progress=ok?inp.value.trim():cur;
+        if(ok) it.progress=inp.value.trim();
         save(items); render();
       }
       inp.addEventListener('keydown',function(ev){
@@ -763,12 +766,11 @@ renderCats();renderGrid();renderIssues();
       });
       inp.addEventListener('blur',function(){ commit(true); });
     }
-  });
-  document.getElementById('wl-export').addEventListener('click',function(){
-    var blob=new Blob([JSON.stringify(items,null,2)],{type:'application/json'});
-    var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='watchlist-backup.json'; a.click();
-    setTimeout(function(){URL.revokeObjectURL(a.href);},4000);
-  });
+  }
+  document.getElementById('wl-grid').addEventListener('click',function(e){ gridClick(e); });
+  document.getElementById('wl-finished').addEventListener('click',function(e){ gridClick(e); });
+
+  /* ---- share ---- */
   document.getElementById('wl-share').addEventListener('click',function(){
     var btn=this;
     var data=items.map(function(x){
@@ -784,18 +786,7 @@ renderCats();renderGrid();renderIssues();
       navigator.clipboard.writeText(url).then(ok,function(){ prompt('Copy your share link:',url); });
     }else{ prompt('Copy your share link:',url); }
   });
-  document.getElementById('wl-import').addEventListener('click',function(){ document.getElementById('wl-import-file').click(); });
-  document.getElementById('wl-import-file').addEventListener('change',function(){
-    var f=this.files[0]; if(!f) return;
-    var r=new FileReader();
-    r.onload=function(){
-      try{
-        var a=JSON.parse(r.result);
-        if(Array.isArray(a)){ items=a.filter(function(x){return x&&x.title;}); save(items); render(); }
-      }catch(e){}
-    };
-    r.readAsText(f); this.value='';
-  });
+
   if(SHARED){
     document.body.classList.add('wl-shared');
     var _f=document.getElementById('wl-form'); if(_f) _f.style.display='none';
