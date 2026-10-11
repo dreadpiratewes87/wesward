@@ -36,7 +36,10 @@
     .player-inner { width:100%; height:100%; padding:max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom)); display:grid; grid-template-rows:auto 1fr auto; }
     .tabletop .player:nth-child(-n+2) .player-inner { transform:rotate(180deg); }
     .player-head { min-width:0; display:flex; align-items:center; justify-content:space-between; gap:6px; }
-    .name { border:0; background:transparent; padding:5px 4px; max-width:calc(100% - 38px); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; text-align:left; font-weight:700; letter-spacing:.045em; font-size:clamp(15px, 4vw, 21px); text-shadow:0 1px 2px rgba(0,0,0,.3); }
+    .name { border:0; background:transparent; padding:5px 4px; min-width:0; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; text-align:left; font-weight:700; letter-spacing:.045em; font-size:clamp(15px, 4vw, 21px); text-shadow:0 1px 2px rgba(0,0,0,.3); }
+    .player-actions { display:flex; align-items:center; gap:5px; flex:none; }
+    .player-hurry { border:0; border-radius:8px; background:#c92f27; color:#fff; height:30px; padding:0 8px; font-size:11px; font-weight:700; letter-spacing:.045em; line-height:1; box-shadow:inset 0 -2px 0 rgba(0,0,0,.24); touch-action:manipulation; }
+    .player-hurry:active { background:#9f211c; transform:translateY(1px); box-shadow:none; }
     .details { border:1px solid var(--line); background:rgba(0,0,0,.16); width:34px; height:30px; border-radius:9px; font-family:"IBM Plex Mono", monospace; font-size:14px; line-height:1; overflow:hidden; }
     .life-row { min-height:0; display:grid; grid-template-columns:minmax(44px, .65fr) minmax(68px, 1.2fr) minmax(44px, .65fr); align-items:center; gap:3px; }
     .life-btn { border:0; background:transparent; height:100%; min-height:64px; padding:0; font-family:"IBM Plex Mono", monospace; font-size:clamp(35px, 10vw, 62px); font-weight:500; opacity:.86; touch-action:manipulation; }
@@ -53,14 +56,12 @@
     .tool:active { background:rgba(255,255,255,.12); }
     .tool[disabled] { opacity:.32; }
     .tool svg { width:19px; height:19px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
-    .hurry { width:102px; height:34px; border:0; border-radius:10px; background:#c92f27; color:#fff; display:flex; align-items:center; justify-content:center; gap:6px; padding:0 10px; font-size:14px; font-weight:700; letter-spacing:.035em; white-space:nowrap; box-shadow:inset 0 -2px 0 rgba(0,0,0,.24); touch-action:manipulation; }
-    .hurry:active { background:#9f211c; transform:translateY(1px); box-shadow:none; }
-    .hurry svg { width:18px; height:18px; flex:none; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
     @media (max-width:350px) {
       .toolbar { gap:2px; padding:3px; }
       .tool { width:36px; }
-      .hurry { width:91px; padding:0 6px; font-size:12px; gap:4px; }
-      .hurry svg { width:16px; height:16px; }
+      .player-head { gap:3px; }
+      .player-actions { gap:3px; }
+      .player-hurry { padding:0 6px; font-size:10px; }
     }
     #sound .mute-slash { display:none; }
     #sound[aria-pressed="true"] .sound-waves { display:none; }
@@ -159,10 +160,6 @@
     <button class="tool" id="sound" aria-label="Mute sounds" aria-pressed="false">
       <svg viewBox="0 0 24 24"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><g class="sound-waves"><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6a8 8 0 0 1 0 12"/></g><path class="mute-slash" d="m15 9 6 6M21 9l-6 6"/></svg>
     </button>
-    <button class="hurry" id="hurry" aria-label="Say hurry up motherfucker out loud">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9v6M9 6v12M13 4v16M17 7v10M21 10v4"/></svg>
-      <span>HURRY UP!</span>
-    </button>
     <button class="tool" id="reset" aria-label="Start a new game">
       <svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>
     </button>
@@ -204,7 +201,7 @@
           var commanderMatrix=others.map(function(opp,slot){ return '<div class="cmd-source"><span class="cmd-label">'+esc(players[opp].name)+'</span><div class="stat-controls"><button class="mini-btn" data-action="counter" data-type="commander" data-slot="'+slot+'" data-delta="-1" data-i="'+i+'" aria-label="Subtract commander damage from '+esc(players[opp].name)+'">−</button><output class="mini-value">'+p.commander[slot]+'</output><button class="mini-btn" data-action="counter" data-type="commander" data-slot="'+slot+'" data-delta="1" data-i="'+i+'" aria-label="Add commander damage from '+esc(players[opp].name)+'">+</button></div></div>'; }).join('');
           return '<section class="player '+(i===turn?'active-turn ':'')+((p.life<=0 || p.poison>=10 || totalCmd>=21)?'dead':'')+'" data-i="'+i+'" aria-label="'+esc(p.name)+', '+p.life+' life">'+
             '<div class="player-inner">'+
-              '<header class="player-head"><button class="name" data-action="details" data-i="'+i+'">'+esc(p.name)+'</button><button class="details" data-action="details" data-i="'+i+'" aria-label="Edit '+esc(p.name)+' and damage counters">•••</button></header>'+
+              '<header class="player-head"><button class="name" data-action="details" data-i="'+i+'">'+esc(p.name)+'</button><div class="player-actions"><button class="player-hurry" data-action="hurry" data-i="'+i+'" aria-label="Say hurry up, '+esc(p.name)+'">HURRY</button><button class="details" data-action="details" data-i="'+i+'" aria-label="Edit '+esc(p.name)+' and damage counters">•••</button></div></header>'+ 
               '<div class="life-row"><button class="life-btn" data-action="life" data-delta="-1" data-i="'+i+'" aria-label="Subtract 1 life from '+esc(p.name)+'">−</button><output class="life" aria-live="polite">'+p.life+'</output><button class="life-btn" data-action="life" data-delta="1" data-i="'+i+'" aria-label="Add 1 life to '+esc(p.name)+'">+</button></div>'+
               '<footer class="status"><button class="jump" data-action="life" data-delta="-5" data-i="'+i+'" aria-label="Subtract 5 life">−5</button><button class="trackers" data-action="details" data-i="'+i+'" aria-label="Poison '+p.poison+', highest commander damage '+totalCmd+'"><span>'+poisonIcon+p.poison+'</span><span>'+cmdIcon+p.commander.join('·')+'</span></button><button class="jump" data-action="life" data-delta="5" data-i="'+i+'" aria-label="Add 5 life">+5</button></footer>'+
               '<div class="tablet-stats"><div class="stat-block"><span class="stat-title">Poison</span><div class="stat-controls"><button class="mini-btn" data-action="counter" data-type="poison" data-slot="0" data-delta="-1" data-i="'+i+'" aria-label="Subtract poison counter">−</button><output class="mini-value">'+p.poison+'</output><button class="mini-btn" data-action="counter" data-type="poison" data-slot="0" data-delta="1" data-i="'+i+'" aria-label="Add poison counter">+</button></div></div><div class="stat-block"><span class="stat-title">Commander damage</span><div class="cmd-grid">'+commanderMatrix+'</div></div></div>'+
@@ -262,6 +259,7 @@
         if(b.dataset.action==='life'){ if(!held) changeLife(i,+b.dataset.delta); held=false; }
         if(b.dataset.action==='counter') changeCounter(i,b.dataset.type,+b.dataset.slot,+b.dataset.delta);
         if(b.dataset.action==='details') openDetails(i);
+        if(b.dataset.action==='hurry') speakHurry(i,b);
       });
 
       function otherPlayers(i){ return [0,1,2,3].filter(function(x){return x!==i;}); }
@@ -293,17 +291,17 @@
         muted=!muted; this.setAttribute('aria-pressed',muted?'true':'false'); this.setAttribute('aria-label',muted?'Unmute sounds':'Mute sounds');
         if(!muted){ armAudio(); tone('life'); }
       });
-      document.getElementById('hurry').addEventListener('click',function(){
+      function speakHurry(i,button){
         if(!('speechSynthesis' in window) || !window.SpeechSynthesisUtterance){
-          this.disabled=true;
-          this.querySelector('span').textContent='NO SPEECH';
+          button.disabled=true;
+          button.textContent='N/A';
           return;
         }
         window.speechSynthesis.cancel();
-        var utterance=new SpeechSynthesisUtterance('hurry up motherfucker');
+        var utterance=new SpeechSynthesisUtterance('hurry up, '+players[i].name);
         window.speechSynthesis.speak(utterance);
         buzz();
-      });
+      }
       document.getElementById('reset').addEventListener('click',function(){
         active=null; sheet.innerHTML='<div class="grab"></div><div class="confirm"><h2 id="sheetTitle">Start a new game?</h2><p>Life totals return to 40; poison counters and commander damage return to zero. Player names stay.</p><div class="confirm-actions"><button data-close>Keep playing</button><button class="reset-yes" data-reset-yes>New game</button></div></div>';
         shade.classList.add('open'); shade.setAttribute('aria-hidden','false');
