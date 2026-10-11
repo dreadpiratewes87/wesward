@@ -21,6 +21,10 @@ body{margin:0;background:var(--bg);color:var(--txt);font-family:-apple-system,Bl
 .pill b{color:var(--gold)}
 .hint{color:var(--dim);font-size:.9rem;margin:8px 0 4px}
 .dir{color:var(--acc);font-size:.9rem;font-weight:600;margin:0 0 12px}
+.verdict{margin:0 0 12px;padding:10px 14px;border-radius:10px;font-size:.95rem;display:none;background:var(--panel);border:1px solid var(--line)}
+.verdict.show{display:block}
+.verdict b{color:var(--gold)}
+.pnote{font-size:.82rem;color:var(--dim);padding:2px 2px 8px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden;cursor:pointer;transition:transform .12s,border-color .12s;position:relative}
 .card:hover{transform:translateY(-2px);border-color:#4a5a75}
@@ -76,6 +80,7 @@ a.home{color:var(--dim);font-size:.85rem}
   </div>
   <div class="hint" id="hint"></div>
   <div class="dir" id="dir"></div>
+  <div class="verdict" id="verdict"></div>
   <div class="grid" id="grid"></div>
   <div class="controls">
     <button id="poolBtn">My pool (0)</button>
@@ -96,7 +101,7 @@ const COLOR_NAME = {W:'White',U:'Blue',B:'Black',R:'Red',G:'Green'};
 const GROUP_ORDER = ['White','Blue','Black','Red','Green','Multi','Colorless'];
 const SEATS=8, ROUNDS=3, PACK_SIZE=14;
 
-let seats=[], round=0, dir=1, poolOpen=false;
+let seats=[], round=0, dir=1, poolOpen=false, picks=[];
 
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
 function manaHTML(cost){
@@ -118,18 +123,25 @@ function colorGroup(c){
   return COLOR_NAME[cols[0]];
 }
 function buildRealPack(){
-  const pack=[]; const used=new Set();
-  function take(pool){
+  // A realistic 14-card draft booster: 1 rare/mythic, 3 uncommons, 10 commons.
+  // Common lands are capped at 1 per pack — real collation spreads the land
+  // cycle out, you basically never see 3 nonbasic lands in a paper pack.
+  const pack=[]; const used=new Set(); let landTaken=false;
+  function isLand(c){ return /Land/.test(c.t||''); }
+  function take(pool,capLand){
     let guard=0;
     while(guard++<500){
       const c=pool[Math.floor(Math.random()*pool.length)];
       if(!c || used.has(c.n)) continue;
-      used.add(c.n); pack.push(c); return;
+      if(capLand && landTaken && isLand(c)) continue;
+      used.add(c.n); pack.push(c);
+      if(isLand(c)) landTaken=true;
+      return;
     }
   }
-  take(Math.random()<1/7.5 && POOL.M.length ? POOL.M : POOL.R);
+  take(Math.random()<1/7.5 && POOL.M.length ? POOL.M : POOL.R); // mythic ~1 in 7.5 packs
   for(let i=0;i<3;i++) take(POOL.U.length?POOL.U:POOL.C);
-  for(let i=0;i<10;i++) take(POOL.C.length?POOL.C:POOL.U);
+  for(let i=0;i<10;i++) take(POOL.C.length?POOL.C:POOL.U,true);
   return pack;
 }
 // How an AI drafter thinks: take the best card early, then commit to the two
@@ -163,11 +175,79 @@ function aiPick(seat){
   }
   return best;
 }
+function cmc(c){
+  if(!c.c) return 0;
+  let n=0;
+  c.c.replace(/\{([^}]+)\}/g,function(m,s){
+    if(/^\d+$/.test(s)) n+=parseInt(s,10);
+    else if(s!=='X') n+=1;
+  });
+  return n;
+}
+function scoreToLetter(s){
+  if(s>=9.5) return 'A+';
+  if(s>=8.5) return 'A';
+  if(s>=7.5) return 'A-';
+  if(s>=6.5) return 'B+';
+  if(s>=5.5) return 'B';
+  if(s>=4.5) return 'B-';
+  if(s>=3.5) return 'C+';
+  if(s>=2.5) return 'C';
+  if(s>=1.5) return 'C-';
+  if(s>=0.5) return 'D';
+  return 'F';
+}
+// Grade one of Wes's picks: compare against the best card actually in the
+// pack at that moment, weigh color fit vs his committed colors, and flag
+// curve pile-ups.
+function gradeWesPick(card,packBefore,poolBefore,packNo,pickNo){
+  const g=GRADE_VAL[card.g]||0;
+  const best=Math.max.apply(null,packBefore.map(c=>GRADE_VAL[c.g]||0));
+  const diff=best-g;
+  const colors=aiColors(poolBefore);
+  const cols=cardColors(card);
+  const onColor=colors.length===0||cols.length===0||cols.some(x=>colors.indexOf(x)>=0);
+  let score=10-diff*1.5;
+  const notes=[];
+  if(diff===0){ notes.push('Best card in the pack.'); }
+  else{
+    const better=packBefore.filter(c=>c!==card&&(GRADE_VAL[c.g]||0)===best)[0];
+    if(better) notes.push('Better available: '+better.n+' ('+better.g+').');
+  }
+  if(colors.length){
+    const cnames=colors.map(x=>COLOR_NAME[x]).join('/');
+    if(onColor){ score+=1; notes.push('On-color for your '+cnames+'.'); }
+    else{
+      let bo=-1,boc=null;
+      packBefore.forEach(c=>{
+        if(c===card) return;
+        const cc=cardColors(c);
+        if(cc.length===0||cc.some(x=>colors.indexOf(x)>=0)){
+          const gv=GRADE_VAL[c.g]||0;
+          if(gv>bo){ bo=gv; boc=c; }
+        }
+      });
+      if(boc&&bo>=g-1){ score-=2; notes.push('Off-color while '+boc.n+' ('+boc.g+') fit your '+cnames+'.'); }
+      else if(g-bo>=2){ score+=0.5; notes.push('Off-color bomb — taking the power is defensible.'); }
+      else{ score-=1; notes.push('Off-color pick.'); }
+    }
+  }else{
+    notes.push('Early pick — taking power before committing to colors.');
+  }
+  if(poolBefore.length>=8){
+    const c=cmc(card);
+    const atCmc=poolBefore.filter(x=>cmc(x)===c).length+1;
+    if(atCmc>=7) notes.push('Curve is getting heavy at '+c+' mana ('+atCmc+' cards).');
+  }
+  return {letter:scoreToLetter(score),score:score,notes:notes,card:card,packNo:packNo,pickNo:pickNo,diff:diff};
+}
 
 function newDraft(){
   seats=[]; for(let i=0;i<SEATS;i++) seats.push({pool:[],pack:null});
-  round=0; poolOpen=false;
+  round=0; poolOpen=false; picks=[];
   document.getElementById('poolview').className='poolview';
+  document.getElementById('verdict').className='verdict';
+  document.getElementById('verdict').innerHTML='';
   document.getElementById('results').className='results';
   document.getElementById('results').innerHTML='';
   startRound();
@@ -205,8 +285,16 @@ function renderPack(){
 }
 function doWesPick(card){
   const me=seats[0];
+  const packBefore=me.pack.slice();
+  const poolBefore=me.pool.slice();
+  const pickNo=PACK_SIZE-me.pack.length+1;
   me.pool.push(card);
   me.pack=me.pack.filter(x=>x!==card);
+  const analysis=gradeWesPick(card,packBefore,poolBefore,round+1,pickNo);
+  picks.push(analysis);
+  const v=document.getElementById('verdict');
+  v.innerHTML='Pick '+pickNo+': <b>'+analysis.letter+'</b> — '+analysis.notes.map(esc).join(' ');
+  v.className='verdict show';
   // the 7 AI seats draft from their packs
   for(let i=1;i<SEATS;i++){
     const s=seats[i];
@@ -249,12 +337,26 @@ document.getElementById('poolBtn').addEventListener('click',()=>{
 });
 function endDraft(){
   document.getElementById('grid').innerHTML='';
-  document.getElementById('hint').textContent='Draft complete! Here is your pool and how the AI seats ended up.';
+  document.getElementById('hint').textContent='Draft complete! Here is your report card, your pool, and how the AI seats ended up.';
   document.getElementById('dir').textContent='';
+  document.getElementById('verdict').className='verdict';
   const me=seats[0].pool;
   const myColors=aiColors(me).map(x=>COLOR_NAME[x]);
   const playables=me.filter(c=>(GRADE_VAL[c.g]||0)>=3).length;
-  let html='<h2>Your pool \u2014 '+me.length+' cards</h2>'
+  // draft report card
+  const avg=picks.reduce((a,p)=>a+p.score,0)/Math.max(1,picks.length);
+  const overall=scoreToLetter(avg);
+  const bestTaken=picks.filter(p=>p.diff===0).length;
+  let html='<h2>Draft report — <span style="color:var(--gold)">'+overall+'</span></h2>'
+    +'<p class="suggest">You took the best card available on '+bestTaken+' of '+picks.length+' picks.</p>';
+  [1,2,3].forEach(pn=>{
+    html+='<h3>Pack '+pn+'</h3>';
+    picks.filter(p=>p.packNo===pn).forEach(p=>{
+      html+='<div class="prow"><span class="pname">P'+p.pickNo+' — '+esc(p.card.n)+'</span><span class="pgrade">'+p.letter+'</span></div>';
+      if(p.letter.charAt(0)!=='A') html+='<div class="pnote">'+p.notes.map(esc).join(' ')+'</div>';
+    });
+  });
+  html+='<h2 style="margin-top:22px">Your pool \u2014 '+me.length+' cards</h2>'
     +'<p class="suggest">Suggested colors: <b>'+(myColors.join(' / ')||'—')+'</b> \u00B7 '+playables+' playables (C- or better)</p>'
     +poolHTML(me)
     +'<h2 style="margin-top:22px">AI seats</h2>'
