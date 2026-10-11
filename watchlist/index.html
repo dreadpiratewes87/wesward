@@ -375,10 +375,6 @@ try{
   }
 
   /* ---- cards ---- */
-  function posterHTML(x){
-    if(x.poster) return '<img class="wl-poster" src="'+esc(x.poster)+'" alt="" loading="lazy" />';
-    return '<span class="wl-poster wl-poster-none">'+(x.type==='Movie'?'🎬':'📺')+'</span>';
-  }
   function titleHTML(x){
     return x.info
       ? '<a href="'+esc(x.info)+'" target="_blank" rel="noopener">'+esc(x.title)+'</a>'
@@ -386,24 +382,22 @@ try{
   }
   function cardHTML(x){
     var rel=releaseLine(x);
-    return '<article class="wl-card" data-id="'+x.id+'">'
-      +posterHTML(x)
+    return '<article class="wl-row" data-id="'+x.id+'">'
       +'<div class="wl-info"><h3 class="wl-title">'+titleHTML(x)+'</h3>'
-      +(rel?'<div class="wl-rel">'+esc(rel)+'</div>':'')
+      +(rel?'<div class="wl-meta">'+esc(rel)+'</div>':'')
       +(x.progress?'<div class="wl-prog-line">'+esc(x.progress)+'</div>':'')
       +'</div>'
-      +'<div class="wl-card-btns">'
+      +'<div class="wl-row-btns">'
       +'<button class="wl-plus" data-wl="prog" title="Track progress" aria-label="Track progress">+</button>'
       +'<button class="wl-check" data-wl="toggle" title="Done watching" aria-label="Mark as watched">✓</button>'
       +'</div></article>';
   }
   function finishedHTML(x){
-    return '<article class="wl-card finished" data-id="'+x.id+'">'
-      +posterHTML(x)
+    return '<article class="wl-row finished" data-id="'+x.id+'">'
       +'<div class="wl-info"><h3 class="wl-title">'+titleHTML(x)+'</h3>'
       +(x.progress?'<div class="wl-prog-line">'+esc(x.progress)+'</div>':'')
       +'</div>'
-      +'<div class="wl-card-btns">'
+      +'<div class="wl-row-btns">'
       +'<button class="wl-undo" data-wl="toggle" title="Move back to watchlist" aria-label="Undo">↩</button>'
       +'</div></article>';
   }
@@ -448,7 +442,7 @@ try{
 
   /* ---- card actions ---- */
   function gridClick(e,gridId){
-    var card=e.target.closest('.wl-card'); if(!card) return;
+    var card=e.target.closest('.wl-row'); if(!card) return;
     var it=findItem(card.getAttribute('data-id')); if(!it) return;
     var b=e.target.closest('[data-wl]'); if(!b) return;
     var act=b.getAttribute('data-wl');
@@ -458,7 +452,7 @@ try{
       var inp=document.createElement('input');
       inp.className='wl-prog-input'; inp.value=cur; inp.placeholder='S2 E5, 50%…';
       inp.setAttribute('aria-label','Progress');
-      var wrap=b.closest('.wl-card-btns');
+      var wrap=b.closest('.wl-row-btns');
       b.replaceWith(inp); inp.focus(); inp.select();
       var done=false;
       function commit(ok){
