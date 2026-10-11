@@ -21,10 +21,12 @@ body{margin:0;background:var(--bg);color:var(--txt);font-family:-apple-system,Bl
 .pill b{color:var(--gold)}
 .hint{color:var(--dim);font-size:.9rem;margin:8px 0 4px}
 .dir{color:var(--acc);font-size:.9rem;font-weight:600;margin:0 0 12px}
-.verdict{margin:0 0 12px;padding:10px 14px;border-radius:10px;font-size:.95rem;display:none;background:var(--panel);border:1px solid var(--line)}
-.verdict.show{display:block}
-.verdict b{color:var(--gold)}
 .pnote{font-size:.82rem;color:var(--dim);padding:2px 2px 8px}
+.gnote{font-size:.92rem;padding:7px 0;border-bottom:1px solid var(--line);text-align:left}
+.gnote:last-child{border-bottom:0}
+#gradeTitle{margin:0 0 4px;font-size:1.35rem}
+#gradeTitle b{color:var(--gold)}
+#gradeCard{color:var(--dim);font-size:.9rem;margin-bottom:8px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden;cursor:pointer;transition:transform .12s,border-color .12s;position:relative}
 .card:hover{transform:translateY(-2px);border-color:#4a5a75}
@@ -80,7 +82,6 @@ a.home{color:var(--dim);font-size:.85rem}
   </div>
   <div class="hint" id="hint"></div>
   <div class="dir" id="dir"></div>
-  <div class="verdict" id="verdict"></div>
   <div class="grid" id="grid"></div>
   <div class="controls">
     <button id="poolBtn">My pool (0)</button>
@@ -88,6 +89,15 @@ a.home{color:var(--dim);font-size:.85rem}
   <div class="poolview" id="poolview"></div>
   <div class="results" id="results"></div>
   <p style="margin-top:30px"><a class="home" href="../../">← Back to wesward</a></p>
+</div>
+
+<div class="modal" id="gradeModal">
+  <div class="sheet">
+    <h3 id="gradeTitle"></h3>
+    <div id="gradeCard"></div>
+    <div id="gradeNotes"></div>
+    <div class="row"><button class="primary" id="gradeNextBtn">Next pick →</button></div>
+  </div>
 </div>
 
 <script>
@@ -246,8 +256,6 @@ function newDraft(){
   seats=[]; for(let i=0;i<SEATS;i++) seats.push({pool:[],pack:null});
   round=0; poolOpen=false; picks=[];
   document.getElementById('poolview').className='poolview';
-  document.getElementById('verdict').className='verdict';
-  document.getElementById('verdict').innerHTML='';
   document.getElementById('results').className='results';
   document.getElementById('results').innerHTML='';
   startRound();
@@ -283,6 +291,7 @@ function renderPack(){
   document.getElementById('hint').textContent=
     'Pack '+(round+1)+' of '+ROUNDS+' \u00B7 Pick '+pickNo+' \u2014 '+pack.length+' cards in the pack. Tap a card to draft it. You are Seat 1.';
 }
+let afterGrade=null;
 function doWesPick(card){
   const me=seats[0];
   const packBefore=me.pack.slice();
@@ -292,9 +301,6 @@ function doWesPick(card){
   me.pack=me.pack.filter(x=>x!==card);
   const analysis=gradeWesPick(card,packBefore,poolBefore,round+1,pickNo);
   picks.push(analysis);
-  const v=document.getElementById('verdict');
-  v.innerHTML='Pick '+pickNo+': <b>'+analysis.letter+'</b> — '+analysis.notes.map(esc).join(' ');
-  v.className='verdict show';
   // the 7 AI seats draft from their packs
   for(let i=1;i<SEATS;i++){
     const s=seats[i];
@@ -307,13 +313,30 @@ function doWesPick(card){
   // pass every pack simultaneously
   const old=seats.map(s=>s.pack);
   seats.forEach((s,i)=>{ s.pack=old[(i-dir+SEATS)%SEATS]; });
-  if(seats.every(s=>!s.pack || s.pack.length===0)){
-    round++;
-    if(round>=ROUNDS){ endDraft(); return; }
-    startRound(); return;
-  }
-  renderAll();
+  const isLast=(round===ROUNDS-1)&&seats.every(s=>!s.pack || s.pack.length===0);
+  afterGrade=function(){
+    if(seats.every(s=>!s.pack || s.pack.length===0)){
+      round++;
+      if(round>=ROUNDS){ endDraft(); return; }
+      startRound(); return;
+    }
+    renderAll();
+  };
+  showGradePopup(analysis,card,pickNo,isLast);
 }
+function showGradePopup(a,card,pickNo,isLast){
+  document.getElementById('gradeTitle').innerHTML='Pick '+pickNo+' — <b>'+a.letter+'</b>';
+  document.getElementById('gradeCard').textContent=card.n+' ('+card.g+')';
+  document.getElementById('gradeNotes').innerHTML=a.notes.map(n=>'<div class="gnote">'+esc(n)+'</div>').join('');
+  document.getElementById('gradeNextBtn').textContent=isLast?'See results →':'Next pick →';
+  document.getElementById('gradeModal').classList.add('open');
+}
+function closeGradePopup(){ document.getElementById('gradeModal').classList.remove('open'); }
+document.getElementById('gradeNextBtn').addEventListener('click',()=>{
+  closeGradePopup();
+  const f=afterGrade; afterGrade=null;
+  if(f) f();
+});
 function poolHTML(pool){
   const groups={};
   pool.forEach(c=>{ const g=colorGroup(c); (groups[g]=groups[g]||[]).push(c); });
@@ -339,7 +362,6 @@ function endDraft(){
   document.getElementById('grid').innerHTML='';
   document.getElementById('hint').textContent='Draft complete! Here is your report card, your pool, and how the AI seats ended up.';
   document.getElementById('dir').textContent='';
-  document.getElementById('verdict').className='verdict';
   const me=seats[0].pool;
   const myColors=aiColors(me).map(x=>COLOR_NAME[x]);
   const playables=me.filter(c=>(GRADE_VAL[c.g]||0)>=3).length;
