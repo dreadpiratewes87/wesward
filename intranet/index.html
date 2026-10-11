@@ -1,0 +1,587 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="icon" href="data:," />
+  <title>Intranet</title>
+  <style>
+    @font-face{font-family:"Barlow Condensed";src:url("assets/fonts/BarlowCondensed-700-latin.woff2") format("woff2");font-weight:700;font-display:swap}
+    @font-face{font-family:"Barlow Condensed";src:url("assets/fonts/BarlowCondensed-800-latin.woff2") format("woff2");font-weight:800;font-display:swap}
+    @font-face{font-family:"Source Sans 3";src:url("assets/fonts/SourceSans3-400-latin.woff2") format("woff2");font-weight:400;font-display:swap}
+    @font-face{font-family:"Source Sans 3";src:url("assets/fonts/SourceSans3-600-latin.woff2") format("woff2");font-weight:600;font-display:swap}
+    @font-face{font-family:"Source Sans 3";src:url("assets/fonts/SourceSans3-700-latin.woff2") format("woff2");font-weight:700;font-display:swap}
+
+    :root{color-scheme:light dark;--bg:#eef1f2;--paper:#fff;--paper-2:#e3e8e9;--ink:#152022;--muted:#536165;--line:#c8d0d2;--accent:#bb4a21;--accent-ink:#fff8f4;--teal:#0e756e;--teal-soft:#d7efea;--gold:#9b6a10;--red:#b42318;--green:#18764b;--shadow:0 12px 35px rgba(31,46,48,.09);--radius-sm:7px;--radius-md:14px;--radius-lg:26px}
+    @media(prefers-color-scheme:dark){:root{--bg:#0d1416;--paper:#162023;--paper-2:#202d30;--ink:#edf4f4;--muted:#aebcbe;--line:#354447;--accent:#e36a39;--accent-ink:#160a05;--teal:#54bcb1;--teal-soft:#173d39;--gold:#e0ad48;--red:#ff7468;--green:#57c58e;--shadow:0 16px 46px rgba(0,0,0,.26)}}
+    *{box-sizing:border-box}html{background:var(--bg);scroll-behavior:smooth}body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font:17px/1.45 "Source Sans 3",sans-serif}button,input,select{font:inherit}button{color:inherit}a{color:inherit}.app{width:min(1180px,100%);margin:0 auto;padding:clamp(16px,3vw,34px);padding-bottom:calc(48px + env(safe-area-inset-bottom))}.view{display:none}.view.active{display:block}
+    .home-lead{display:flex;align-items:end;justify-content:space-between;gap:20px;margin:clamp(20px,5vw,52px) 0 28px}.home-lead h1{font:800 clamp(42px,8vw,82px)/.88 "Barlow Condensed",sans-serif;letter-spacing:-.02em;margin:0;max-width:760px}.home-lead p{margin:0;color:var(--muted);font-weight:600;white-space:nowrap}.nav-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}.nav-card{border:0;text-align:left;background:var(--paper);box-shadow:var(--shadow);padding:24px;min-height:210px;cursor:pointer;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;transition:transform .15s ease,background .15s ease}.nav-card:hover{transform:translateY(-2px)}.nav-card:focus-visible,.btn:focus-visible,.back-btn:focus-visible{outline:3px solid var(--teal);outline-offset:3px}.nav-card.projects{grid-column:span 7;border-radius:var(--radius-sm);background:var(--ink);color:var(--bg)}.nav-card.todo{grid-column:span 4;border-radius:var(--radius-md)}.nav-card.recipes{grid-column:span 4;border-radius:var(--radius-sm)}.nav-card.sketch{grid-column:span 4;border-radius:var(--radius-lg);background:var(--teal-soft)}.nav-card.harvest{grid-column:span 5;min-height:175px;border-radius:var(--radius-lg) var(--radius-sm);background:var(--teal);color:#fff}.nav-card.letters{grid-column:span 12;min-height:150px;border-radius:var(--radius-lg) var(--radius-sm);background:#7a5c2e;color:#fbf3e2}.nav-card .icon{width:42px;height:42px}.nav-card strong{font:800 clamp(28px,4vw,42px)/1 "Barlow Condensed",sans-serif;display:block;margin-bottom:6px}.nav-card span{font-size:15px;opacity:.78;max-width:34ch}.nav-card .arrow{position:absolute;top:22px;right:22px;font-size:27px;font-weight:700}
+    .viewbar{position:sticky;z-index:20;top:0;margin:0 calc(-1 * clamp(16px,3vw,34px)) 26px;padding:12px clamp(16px,3vw,34px);display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;background:color-mix(in srgb,var(--bg) 93%,transparent);border-bottom:1px solid var(--line);backdrop-filter:blur(12px)}.viewbar h1{font:800 clamp(27px,5vw,42px)/1 "Barlow Condensed",sans-serif;margin:0;text-align:center}.back-btn,.btn{border:0;cursor:pointer;font-weight:700}.back-btn{display:flex;align-items:center;gap:7px;background:transparent;padding:10px 4px;color:var(--muted)}.btn{background:var(--ink);color:var(--bg);padding:11px 15px;border-radius:var(--radius-sm)}.btn.secondary{background:var(--paper-2);color:var(--ink)}.btn.accent{background:var(--accent);color:var(--accent-ink)}.btn.teal{background:var(--teal);color:#fff}.btn.danger{background:var(--red);color:#fff}.btn.small{padding:7px 10px;font-size:14px}.section-intro{display:flex;justify-content:space-between;align-items:end;gap:24px;margin-bottom:22px}.section-intro h2{font:800 clamp(34px,5vw,58px)/.98 "Barlow Condensed";margin:0;letter-spacing:-.01em}.section-intro p{margin:6px 0 0;color:var(--muted);max-width:62ch}.stamp{font-size:14px;color:var(--muted);white-space:nowrap}
+    .project-list{display:grid;gap:14px}.project{background:var(--paper);border-radius:var(--radius-md);box-shadow:var(--shadow);display:grid;grid-template-columns:135px 1fr auto;gap:22px;align-items:center;padding:22px}.project-num{font:800 54px/1 "Barlow Condensed";color:var(--accent)}.project h3{font:800 30px/1 "Barlow Condensed";margin:0 0 8px}.project p{margin:0;color:var(--muted)}.project-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.tag{font-size:13px;font-weight:700;padding:5px 8px;border-radius:99px;background:var(--paper-2)}.tag.live{background:var(--teal-soft);color:var(--teal)}.project-action{text-align:right;min-width:170px}.project-action p{font-size:14px;margin-bottom:10px}.external{display:inline-flex;align-items:center;gap:7px;color:var(--teal);font-weight:700;text-decoration-thickness:2px;text-underline-offset:3px}
+    .session-note{background:var(--teal-soft);padding:12px 14px;border-radius:var(--radius-sm);display:flex;justify-content:space-between;gap:14px;align-items:center;margin-bottom:14px}.session-note strong{color:var(--teal)}.todo-entry{display:grid;grid-template-columns:minmax(180px,1fr) 145px 135px 120px 135px auto;gap:9px;background:var(--paper);padding:14px;border-radius:var(--radius-md);box-shadow:var(--shadow);margin-bottom:14px}.todo-entry input,.todo-entry select{width:100%}.todo-tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:18px}.todo-tools .spacer{flex:1}.filter-btn.active{background:var(--ink);color:var(--bg)}.task-board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.task-group{min-width:0}.task-group-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:0 2px 8px;border-bottom:3px solid var(--line);margin-bottom:8px}.task-group-head h2{font:800 27px/1 "Barlow Condensed";margin:0}.task-group-head span{color:var(--muted);font-size:14px;font-weight:700}.task-list{display:grid;gap:8px}.task{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:start;background:var(--paper);border-radius:var(--radius-sm);padding:13px;border:1px solid transparent}.task.completed{opacity:.62}.task.completed .task-title{text-decoration:line-through}.task-check{width:24px;height:24px;accent-color:var(--teal);margin-top:2px}.task-title{font-weight:700;font-size:18px;overflow-wrap:anywhere}.task-meta{display:flex;gap:7px;flex-wrap:wrap;margin-top:6px;color:var(--muted);font-size:13px}.task-stage{width:100%;margin-top:9px;padding:8px 9px;font-size:14px;background:var(--bg)}.task-delete{border:0;background:transparent;color:var(--muted);font-size:22px;cursor:pointer}.empty{padding:30px 12px;text-align:center;border:1px dashed var(--line);border-radius:var(--radius-sm);color:var(--muted);font-size:15px}
+    .recipe-layout{display:grid;grid-template-columns:260px 1fr;gap:18px}.recipe-index{display:grid;gap:8px;align-content:start;position:sticky;top:88px}.recipe-tab{text-align:left;border:0;background:var(--paper);padding:14px;border-radius:var(--radius-sm);cursor:pointer;font-weight:700}.recipe-tab.active{background:var(--ink);color:var(--bg)}.recipe-page{display:none}.recipe-page.active{display:block}.recipe-hero{background:var(--accent);color:var(--accent-ink);padding:clamp(22px,4vw,40px);border-radius:var(--radius-lg) var(--radius-sm) var(--radius-lg) var(--radius-sm);margin-bottom:14px}.recipe-hero h2{font:800 clamp(42px,7vw,72px)/.9 "Barlow Condensed";margin:0}.recipe-hero p{max-width:56ch;margin:12px 0 0;opacity:.9}.recipe-controls{display:flex;align-items:end;gap:10px;flex-wrap:wrap;margin:14px 0}.ingredient-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.ingredient{display:flex;justify-content:space-between;gap:15px;background:var(--paper);padding:12px 14px;border-radius:var(--radius-sm)}.ingredient strong{font-variant-numeric:tabular-nums}.method{margin-top:16px;background:var(--paper);padding:20px;border-radius:var(--radius-md)}.method h3{font:800 27px/1 "Barlow Condensed";margin:0 0 10px}.method ol,.method ul{margin:0;padding-left:22px}.method li+li{margin-top:8px}.variation-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.variation{padding:13px;background:var(--paper-2);border-radius:var(--radius-sm)}.variation strong{display:block}.working-label{display:inline-block;background:var(--gold);color:#fff;padding:5px 9px;border-radius:99px;font-size:13px;font-weight:700;margin-bottom:12px}
+    .harvest-section+.harvest-section{margin-top:42px}.harvest-heading{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:16px}.harvest-heading h2{font:800 clamp(35px,6vw,58px)/.95 "Barlow Condensed";margin:0}.harvest-heading p{margin:5px 0 0;color:var(--muted);max-width:62ch}.phase-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.phase{background:var(--paper);border-radius:var(--radius-md);padding:clamp(18px,3vw,26px);box-shadow:var(--shadow)}.phase-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-bottom:11px;margin-bottom:12px;border-bottom:1px solid var(--line)}.phase h3{font:800 30px/1 "Barlow Condensed";margin:0}.phase-time{color:var(--teal);font-size:14px;font-weight:800;text-align:right}.phase ul,.harvest-notes ul{margin:0;padding-left:21px}.phase li+li,.harvest-notes li+li{margin-top:9px}.smell-plan{grid-column:1/-1;background:var(--ink);color:var(--bg);border-radius:var(--radius-sm);padding:18px 20px;display:grid;grid-template-columns:160px 1fr;gap:18px;align-items:start}.smell-plan strong{font:800 28px/1 "Barlow Condensed"}.smell-plan p{margin:0}.shop-list{display:grid;gap:9px}.shop-head,.shop-item{display:grid;grid-template-columns:minmax(250px,1fr) 82px 104px 112px minmax(120px,.55fr);gap:12px;align-items:center}.shop-head{padding:0 15px 7px;color:var(--muted);font-size:13px;font-weight:800}.shop-item{background:var(--paper);border-radius:var(--radius-sm);padding:14px 15px;border:1px solid var(--line)}.shop-name{font-weight:700}.shop-item a.shop-name{color:var(--teal);text-decoration-thickness:2px;text-underline-offset:3px}.shop-label{display:none;color:var(--muted);font-size:12px;font-weight:800}.money{font-variant-numeric:tabular-nums;font-weight:700}.shop-total{display:flex;justify-content:space-between;align-items:baseline;gap:18px;background:var(--accent);color:var(--accent-ink);padding:20px 22px;border-radius:var(--radius-md);margin-top:12px}.shop-total strong:first-child{font:800 28px/1 "Barlow Condensed"}.shop-total strong:last-child{font:800 42px/1 "Barlow Condensed"}.harvest-notes{background:var(--paper-2);border-radius:var(--radius-sm);padding:18px 20px;margin-top:12px}.harvest-notes h3{font:800 26px/1 "Barlow Condensed";margin:0 0 11px}
+    .sketch-tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--paper);padding:12px;border-radius:var(--radius-sm);margin-bottom:10px;box-shadow:var(--shadow)}.tool-group{display:flex;gap:6px;align-items:center;padding-right:10px;border-right:1px solid var(--line)}.tool-group:last-child{border:0;margin-left:auto}.color-input{width:42px;height:42px;border:0;padding:2px;background:transparent}.range{width:120px}.sketch-frame{background:#fff;border:1px solid var(--line);border-radius:var(--radius-sm);overflow:hidden;box-shadow:var(--shadow);height:min(68vh,720px);min-height:420px;position:relative}.sketch-frame.grid{background-image:linear-gradient(#d9e1e3 1px,transparent 1px),linear-gradient(90deg,#d9e1e3 1px,transparent 1px);background-size:24px 24px}.sketch-frame canvas{display:block;width:100%;height:100%;touch-action:none}.sketch-hint{font-size:14px;color:var(--muted);margin:8px 0 0}
+    dialog{border:0;border-radius:var(--radius-md);background:var(--paper);color:var(--ink);box-shadow:0 28px 90px rgba(0,0,0,.38);padding:0;max-width:min(92vw,560px);width:100%}dialog::backdrop{background:rgba(6,10,11,.68)}.dialog-body{padding:22px}.dialog-body h2{font:800 34px/1 "Barlow Condensed";margin:0 0 8px}.dialog-actions{padding:14px 22px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px}.cmd-list{display:grid;gap:8px;margin-top:14px}.cmd-row{display:grid;grid-template-columns:1fr auto auto auto;align-items:center;gap:9px;background:var(--paper-2);padding:10px;border-radius:var(--radius-sm)}.cmd-row strong{font-size:22px}.cmd-row button{border:0;background:var(--paper);width:34px;height:34px;border-radius:50%;font-weight:800;cursor:pointer}.warning{color:var(--red);font-weight:700}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    .home-meta{display:flex;align-items:center;gap:12px}.lock-control{border:0;background:transparent;color:var(--muted);font-size:13px;font-weight:700;padding:7px 4px;min-height:36px;cursor:pointer;text-decoration:underline;text-decoration-color:color-mix(in srgb,var(--muted) 45%,transparent);text-underline-offset:3px}.lock-control:hover{color:var(--ink)}.lock-control:focus-visible,.lock-submit:focus-visible,.lock-input:focus-visible{outline:3px solid var(--teal);outline-offset:3px}
+    .lock-overlay{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;padding:24px;background:#070d0f;color:#f0f5f5}.lock-overlay[hidden]{display:none}.lock-panel{width:min(100%,390px);padding:30px 28px;background:#121a1d;border:1px solid #2b3b3f;border-radius:var(--radius-md);box-shadow:0 24px 70px rgba(0,0,0,.52)}.lock-panel h1{font:800 clamp(39px,11vw,54px)/.92 "Barlow Condensed",sans-serif;letter-spacing:-.01em;margin:0 0 10px}.lock-panel p{margin:0 0 22px;color:#a4b2b5}.lock-form{display:grid;gap:11px}.lock-label{font-size:13px;font-weight:700;color:#a4b2b5}.lock-input{width:100%;min-height:50px;border:1px solid #3a4c50;border-radius:var(--radius-sm);background:#090f11;color:#f0f5f5;padding:11px 12px}.lock-submit{min-height:50px;border:0;border-radius:var(--radius-sm);background:#f06b37;color:#fff;font-weight:800;cursor:pointer}.lock-error{min-height:23px;margin:0!important;color:#ff7468!important;font-size:14px;font-weight:700}.locked{overflow:hidden}
+    .sandbox-mark{position:fixed;z-index:45;right:8px;bottom:calc(8px + env(safe-area-inset-bottom));width:32px;height:32px;min-height:32px;padding:0;border:1px solid color-mix(in srgb,var(--muted) 32%,transparent);border-radius:50%;background:color-mix(in srgb,var(--bg) 90%,transparent);color:var(--muted);display:grid;place-items:center;cursor:pointer;opacity:.66;backdrop-filter:blur(8px)}.sandbox-mark:hover{opacity:1;color:var(--ink)}.sandbox-mark:focus-visible,.sandbox-gate-input:focus-visible,.sandbox-gate-submit:focus-visible{outline:3px solid var(--teal);outline-offset:3px}.sandbox-mark svg{width:16px;height:16px}.sandbox-gate{max-width:min(88vw,330px);background:#0c1315;border-color:#2b3b3f}.sandbox-gate-form{display:grid;grid-template-columns:1fr 48px;gap:8px;padding:12px}.sandbox-gate-input{width:100%;min-height:48px;border:1px solid #34474b;border-radius:var(--radius-sm);background:#070d0f;color:#f0f5f5;padding:9px 11px}.sandbox-gate-submit{min-height:48px;border:0;border-radius:var(--radius-sm);background:#26383c;color:#f0f5f5;font-weight:800;cursor:pointer}.sandbox-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.sandbox-project{min-height:210px;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);padding:22px;box-shadow:var(--shadow);display:flex;flex-direction:column;justify-content:space-between}.sandbox-project .project-num{font-size:34px;color:var(--teal)}.sandbox-project h2{font:800 clamp(34px,5vw,50px)/.95 "Barlow Condensed";margin:12px 0 8px}.sandbox-project p{margin:0;color:var(--muted);max-width:38ch}.sandbox-project .tag{align-self:flex-start;margin-top:24px}
+    @media(max-width:780px){.home-lead{align-items:start;flex-direction:column}.home-lead p{white-space:normal}.nav-card.projects{grid-column:span 12}.nav-card.todo,.nav-card.recipes,.nav-card.sketch,.nav-card.harvest,.nav-card.letters{grid-column:span 12;min-height:165px}.project{grid-template-columns:75px 1fr}.project-num{font-size:42px}.project-action{grid-column:2;text-align:left}.todo-entry{grid-template-columns:1fr 1fr}.todo-entry .task-input{grid-column:1/-1}.todo-entry .add-task{grid-column:1/-1}.task-board{grid-template-columns:1fr}.task-group+.task-group{margin-top:10px}.recipe-layout{grid-template-columns:1fr}.recipe-index{position:static;grid-template-columns:1fr 1fr}.ingredient-grid,.variation-grid,.phase-grid{grid-template-columns:1fr}.section-intro,.harvest-heading{align-items:start;flex-direction:column}.smell-plan{grid-column:auto;grid-template-columns:1fr;gap:8px}.shop-head{display:none}.shop-item{grid-template-columns:1fr 1fr;gap:11px 14px}.shop-item>.shop-name{grid-column:1/-1;font-size:18px}.shop-label{display:block;margin-bottom:2px}.sketch-frame{height:58vh;min-height:360px}.tool-group:last-child{margin-left:0}.viewbar{grid-template-columns:auto 1fr}.viewbar>.stamp{display:none}}
+    @media(max-width:430px){.todo-entry{grid-template-columns:1fr}.todo-entry .task-input,.todo-entry .add-task{grid-column:auto}.project{grid-template-columns:1fr}.project-action{grid-column:auto}.recipe-index{grid-template-columns:1fr}}
+    /* Polished compact restyle */
+    :root{--bg:#101719;--paper:#182124;--paper-2:#222d30;--ink:#f0f5f5;--muted:#a8b7ba;--line:#344347;--accent:#f0642f;--accent-ink:#fff;--teal:#38b6a7;--teal-soft:#173c38;--gold:#d7a541;--red:#ef665b;--green:#4cbd83;--shadow:0 10px 28px rgba(0,0,0,.22);--radius-sm:4px;--radius-md:7px;--radius-lg:11px}
+    @media(prefers-color-scheme:dark){:root{--bg:#090f11;--paper:#121a1d;--paper-2:#1b2629;--ink:#f0f5f5;--muted:#a4b2b5;--line:#2b3b3f;--accent:#f06b37;--accent-ink:#fff;--teal:#45c2b3;--teal-soft:#123531;--gold:#e2b24e;--red:#ff7468;--green:#59c991;--shadow:0 12px 34px rgba(0,0,0,.32)}}
+    body{font-size:16px;background:var(--bg)}
+    .app{padding-top:clamp(12px,2vw,24px)}
+    button{min-height:44px}
+    .home-lead{align-items:center;margin:clamp(14px,3vw,32px) 0 20px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+    .home-lead h1{font-size:clamp(38px,6.5vw,68px);line-height:.92;letter-spacing:-.018em}
+    .home-lead p{font-size:13px;letter-spacing:.03em;text-transform:uppercase}
+    .nav-grid{gap:10px}
+    .nav-card{min-height:142px;padding:16px 18px;border:1px solid var(--line);box-shadow:var(--shadow);border-radius:var(--radius-sm)!important}
+    .nav-card:hover{transform:translateY(-1px);border-color:color-mix(in srgb,var(--teal) 58%,var(--line))}
+    .nav-card.projects{background:#101b1e;color:var(--ink)}
+    
+    .nav-card.todo,.nav-card.recipes{background:var(--paper)}
+    .nav-card.sketch{background:#173b3a;color:#ecf9f7}
+    
+    .nav-card.harvest{min-height:124px;background:#116f68;color:#fff}
+    
+    .nav-card.letters{min-height:110px;background:#6e5228;color:#fbf3e2}
+    .nav-card .icon{width:30px;height:30px;stroke-width:2.5}
+    .nav-card strong{font-size:clamp(25px,3.3vw,35px);letter-spacing:.005em;margin-bottom:4px}
+    .nav-card span{font-size:14px;line-height:1.25}
+    .nav-card .arrow{top:12px;right:16px;font-size:20px}
+    .viewbar{margin-bottom:20px;padding-top:8px;padding-bottom:8px;background:color-mix(in srgb,var(--bg) 94%,transparent)}
+    .viewbar h1{font-size:clamp(25px,4vw,36px);letter-spacing:.01em}
+    .back-btn,.btn{min-height:44px;padding:8px 13px;border-radius:var(--radius-sm);line-height:1.15}
+    .back-btn{padding-inline:4px 10px}
+    .btn{border:1px solid color-mix(in srgb,currentColor 18%,transparent)}
+    .btn.small{min-height:40px;padding:6px 10px;font-size:13px}
+    select,input[type="text"],input[type="date"]{min-height:44px;padding:8px 10px}
+    .section-intro{margin-bottom:17px}.section-intro h2{font-size:clamp(32px,4.5vw,52px)}
+    .project-list,.task-board,.phase-grid{gap:10px}
+    .project,.todo-entry,.phase{border:1px solid var(--line)}
+    .project{padding:17px;gap:17px}.project-num{font-size:46px}.project h3{font-size:28px}
+    .session-note{padding:9px 12px}.todo-entry{padding:10px;margin-bottom:10px}.todo-tools{margin-bottom:14px}
+    .recipe-tab{min-height:44px;padding:9px 12px}.recipe-hero{padding:clamp(18px,3vw,30px)}
+    .recipe-hero h2{font-size:clamp(38px,6vw,62px)}.method{padding:16px}
+    .sketch-tools{padding:8px}.color-input{height:40px}.cmd-row button{width:40px;height:40px}
+    dialog{border:1px solid var(--line)}
+    .letter-thread{max-width:780px;margin:0 auto}
+    .letter-day{text-align:center;margin:30px 0 14px;font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+    .msg{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);padding:14px 16px;margin:0 0 12px;box-shadow:var(--shadow)}
+    .msg.wes{border-left:4px solid var(--teal)}
+    .msg.rachel{border-left:4px solid var(--accent)}
+    .msg-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:8px}
+    .msg-head strong{font-size:15px}
+    .msg-head span{font-size:12.5px;color:var(--muted);white-space:nowrap}
+    .msg p{margin:0 0 10px;line-height:1.6}
+    .msg p:last-child{margin-bottom:0}
+    .msg .attach{display:block;margin-top:8px;font-size:12.5px;color:var(--muted);font-style:italic}
+    .msg.note{background:transparent;border:1px dashed var(--line);box-shadow:none;text-align:center;color:var(--muted);font-style:italic}
+    .letter-more{max-width:780px;margin:28px auto 0;text-align:center;color:var(--muted);font-size:14px}
+    @media(max-width:780px){.home-lead{gap:8px}.nav-card.projects,.nav-card.todo,.nav-card.recipes,.nav-card.sketch,.nav-card.harvest,.nav-card.letters{min-height:116px}.nav-card{padding:14px 16px}.nav-card .icon{width:27px;height:27px}.nav-card strong{font-size:27px}.nav-card span{font-size:13px}.project{padding:14px}.phase{padding:17px}.viewbar{margin-bottom:17px}.sandbox-grid{grid-template-columns:1fr}.sandbox-project{min-height:170px;padding:18px}}
+    @media(max-width:430px){.home-lead h1{font-size:42px}.nav-card.projects,.nav-card.todo,.nav-card.recipes,.nav-card.sketch,.nav-card.harvest,.nav-card.letters{min-height:106px}.nav-card{padding:13px 14px}.nav-card .icon{width:25px;height:25px}.nav-card .arrow{right:13px;top:10px}.nav-card strong{font-size:25px}.nav-card span{max-width:38ch}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+  
+    
+    /* ==== ROPE-CSS v1 ==== */
+/* rope/shibari section */
+.sb-diagram{display:block;max-width:100%;height:auto;margin:14px auto;border:1px solid var(--line);border-radius:var(--radius-sm);background:#f7f4ec}
+.sb-steps{margin:0;padding-left:24px;display:grid;gap:10px;line-height:1.55}
+.sb-steps li::marker{font-weight:800;color:var(--teal)}
+/* ==== ROPE-CSS /v1 ==== */
+    /* ==== IDEAS-CSS v1 ==== */
+/* ideas & shopping section */
+.sb-price{color:var(--teal);font-weight:800;white-space:nowrap}
+.sb-shopnote{background:var(--paper-2);border-radius:var(--radius-sm);padding:14px 16px;margin-top:14px;font-size:15px;line-height:1.55}
+/* ==== IDEAS-CSS /v1 ==== */
+
+    
+    
+        
+    /* Letters load fix: keep the 7,000+ message archive out of the landing-page DOM. */
+    .letter-browser{min-height:260px}
+    .letter-controls{display:grid;grid-template-columns:auto minmax(180px,1fr) auto;gap:10px;align-items:end;margin:0 0 18px;padding:14px;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm)}
+    .letter-controls label{display:none}
+    .letter-controls select{width:100%;min-height:44px;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:600 16px "Source Sans 3",sans-serif}
+    .letter-loading,.letter-error{padding:28px 18px;text-align:center;color:var(--muted)}
+    .letter-error{color:var(--danger,#b43b2d)}
+    @media(max-width:560px){.letter-controls{grid-template-columns:1fr 1fr}.letter-controls select{grid-column:1/-1;grid-row:1}.letter-controls button{width:100%}}
+
+  /* ==== SANDBOX-CSS v1 ==== */
+/* ---- Secret Sandbox hub (scoped .sb-) ---- */
+.sb-subview[hidden]{display:none}
+.sb-dash{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:16px}
+.sb-stat{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);padding:14px;box-shadow:var(--shadow)}
+.sb-stat strong{font:800 30px/1 "Barlow Condensed",sans-serif;display:block}
+.sb-stat span{color:var(--muted);font-size:13px;font-weight:700}
+.sb-search{width:100%;margin-bottom:14px}
+.sb-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:22px}
+.sb-card{border:0;text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-md);box-shadow:var(--shadow);padding:20px;cursor:pointer;display:flex;flex-direction:column;gap:8px;min-height:190px}
+.sb-card:hover{border-color:var(--teal)}
+.sb-card h3{font:800 30px/1 "Barlow Condensed",sans-serif;margin:0}
+.sb-card p{margin:0;color:var(--muted);font-size:15px}
+.sb-card .sb-progress{font-size:13px;font-weight:700;color:var(--teal)}
+.sb-tagrow{display:flex;gap:7px;flex-wrap:wrap;margin-top:auto;padding-top:6px}
+.sb-backrow{display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
+.sb-meta{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);padding:18px;margin-bottom:14px;box-shadow:var(--shadow)}
+.sb-meta dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:8px 16px}
+.sb-meta dt{color:var(--muted);font-weight:700;font-size:14px}
+.sb-meta dd{margin:0}
+.sb-details{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);margin-bottom:14px;box-shadow:var(--shadow)}
+.sb-details summary{padding:15px 18px;font-weight:800;cursor:pointer;list-style:none}
+.sb-details summary::-webkit-details-marker{display:none}
+.sb-details summary::before{content:"▸ ";color:var(--teal)}
+.sb-details[open] summary::before{content:"▾ "}
+.sb-details .sb-details-body{padding:0 18px 18px;white-space:pre-line;line-height:1.55;color:var(--ink)}
+.sb-details .sb-details-body p{margin:0 0 1em}
+.sb-chlist{display:grid;gap:8px;margin-bottom:14px}
+.sb-chrow{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;width:100%;text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);padding:13px 15px;cursor:pointer;font-weight:700}
+.sb-chrow:hover{border-color:var(--teal)}
+.sb-chrow .sb-words{color:var(--muted);font-size:13px;font-weight:600;white-space:nowrap}
+.sb-readbadge{font-size:12px;font-weight:800;color:var(--teal);white-space:nowrap}
+.sb-readbadge.unread{color:var(--muted)}
+.sb-draftflag{font-size:12px;font-weight:800;color:var(--gold);white-space:nowrap}
+.sb-reader-head{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);padding:18px;margin-bottom:14px;box-shadow:var(--shadow)}
+.sb-reader-head h2{font:800 clamp(28px,5vw,42px)/1 "Barlow Condensed",sans-serif;margin:0 0 8px}
+.sb-reader-meta{color:var(--muted);font-size:14px;font-weight:600;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.sb-reader-body{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-md);padding:clamp(20px,4vw,40px);box-shadow:var(--shadow);font-size:18px;line-height:1.68;max-width:72ch}
+.sb-reader-body p{margin:0 0 1.1em}
+.sb-reader-body h2,.sb-reader-body h3,.sb-reader-body h4{font-family:"Barlow Condensed",sans-serif}
+.sb-reader-body hr{border:0;border-top:1px solid var(--line);margin:1.6em auto;width:40%}
+.sb-chapternav{display:flex;gap:10px;justify-content:space-between;margin:16px 0;flex-wrap:wrap}
+.sb-locklist{margin:0;padding-left:22px;display:grid;gap:10px}
+.sb-safety{background:#12312e;color:#eef7f5;border-radius:var(--radius-sm);padding:16px 18px;margin-bottom:16px;border:1px solid #1e4a44}
+.sb-safety strong{font:800 22px/1 "Barlow Condensed",sans-serif;display:block;margin-bottom:8px;letter-spacing:.02em}
+.sb-safety ul{margin:0;padding-left:20px;display:grid;gap:5px;font-size:15px}
+.sb-core{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-md);padding:clamp(20px,4vw,32px);box-shadow:var(--shadow);margin-bottom:16px}
+.sb-core h2{font:800 clamp(28px,5vw,42px)/1 "Barlow Condensed",sans-serif;margin:0 0 10px}
+.sb-core .sb-core-line{font-size:19px;line-height:1.55;margin:0}
+.sb-core .sb-core-line strong{color:var(--teal)}
+.sb-found{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:16px}
+.sb-found .sb-details{margin-bottom:0}
+.sb-found .sb-details-body ul{margin:0;padding-left:20px;display:grid;gap:7px}
+.sb-stepper{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-md);padding:clamp(20px,4vw,32px);box-shadow:var(--shadow);margin-bottom:16px}
+.sb-stepper h2{font:800 clamp(28px,5vw,42px)/1 "Barlow Condensed",sans-serif;margin:0 0 6px}
+.sb-step-scenario{color:var(--muted);font-size:14px;margin:0 0 14px}
+.sb-step-card{background:var(--paper-2);border-radius:var(--radius-sm);padding:18px;min-height:170px}
+.sb-step-card .sb-step-num{font:800 15px/1 "Source Sans 3",sans-serif;color:var(--teal);letter-spacing:.08em}
+.sb-step-card h3{font:800 26px/1 "Barlow Condensed",sans-serif;margin:8px 0}
+.sb-step-card p{margin:0;line-height:1.55}
+.sb-step-dots{display:flex;gap:7px;justify-content:center;margin:14px 0}
+.sb-step-dots span{width:10px;height:10px;border-radius:50%;background:var(--line)}
+.sb-step-dots span.on{background:var(--teal)}
+.sb-step-nav{display:flex;gap:10px;justify-content:space-between}
+.sb-checkin{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-md);padding:clamp(20px,4vw,32px);box-shadow:var(--shadow);margin-bottom:16px}
+.sb-checkin h2{font:800 clamp(28px,5vw,42px)/1 "Barlow Condensed",sans-serif;margin:0 0 6px}
+.sb-checkin .sb-hint{color:var(--muted);font-size:14px;margin:0 0 14px}
+.sb-checkin label{display:grid;gap:6px;font-weight:700;margin-bottom:12px}
+.sb-checkin textarea{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:var(--radius-sm);padding:11px 12px;min-height:64px;font:inherit;resize:vertical}
+.sb-entry{border:1px solid var(--line);border-radius:var(--radius-sm);padding:13px 15px;margin-top:10px;background:var(--paper-2)}
+.sb-entry .sb-entry-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}
+.sb-entry .sb-entry-date{font-weight:800;font-size:14px;color:var(--teal)}
+.sb-entry dl{margin:0;display:grid;gap:6px;font-size:15px}
+.sb-entry dt{font-weight:800;color:var(--muted);font-size:13px}
+.sb-entry dd{margin:0}
+.sb-entry button{border:0;background:transparent;color:var(--muted);cursor:pointer;font-size:14px;font-weight:700;text-decoration:underline}
+.sb-prefs{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-md);padding:clamp(20px,4vw,32px);box-shadow:var(--shadow);margin-bottom:16px}
+.sb-prefs h2{font:800 clamp(28px,5vw,42px)/1 "Barlow Condensed",sans-serif;margin:0 0 10px}
+.sb-prefs ul{margin:0;padding-left:22px;display:grid;gap:9px;line-height:1.5}
+.sb-questions{background:var(--paper-2);border-radius:var(--radius-sm);padding:18px 20px;margin-bottom:8px}
+.sb-questions h3{font:800 24px/1 "Barlow Condensed",sans-serif;margin:0 0 10px}
+.sb-questions ul{margin:0;padding-left:22px;display:grid;gap:8px;color:var(--muted)}
+.sb-note{color:var(--muted);font-size:14px;margin:10px 0 0}
+@media(max-width:780px){.sb-dash{grid-template-columns:repeat(2,minmax(0,1fr))}.sb-grid{grid-template-columns:1fr}.sb-found{grid-template-columns:1fr}}
+/* ==== SANDBOX-CSS /v1 ==== */
+    </style>
+
+<style>
+.attachment-table { margin-top: 12px; padding: 10px; background: #f9f9f9; border-radius: 8px; border: 1px solid #e0e0e0; }
+.attach-label { font-weight: bold; margin-bottom: 8px; font-size: 0.9em; }
+.budget-table { width: 100%; border-collapse: collapse; font-size: 0.85em; margin-bottom: 8px; }
+.budget-table th, .budget-table td { border: 1px solid #ddd; padding: 6px 8px; text-align: left; }
+.budget-table th { background: #f0f0f0; font-weight: bold; }
+.budget-table td { background: white; }
+.budget-notes { font-size: 0.85em; color: #666; margin: 4px 0; }
+.msg.rachel .attachment-table { background: #fdf2f8; border-color: #f9a8d4; }
+.msg.wes .attachment-table { background: #eff6ff; border-color: #93c5fd; }
+.attachment-photo { max-width: 100%; border-radius: 8px; margin-top: 8px; }
+</style>
+</head>
+<body>
+<main class="app" id="intranet-main">
+  
+  
+  <section class="view active" id="home" aria-labelledby="home-heading">
+    <div class="home-lead"><h1 id="home-heading">What are we working on?</h1><div class="home-meta"><p>Updated October 4, 2026</p></div></div>
+    <div class="nav-grid">
+      
+      
+      <button class="nav-card recipes" data-open="recipes"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 8h24v34H12z"/><path d="M17 14h14M17 21h14M17 28h9"/></svg><div><strong>Recipe Book</strong><span>Saved formulas, scaling, and kitchen notes.</span></div></button>
+      <button class="nav-card sketch" data-open="sketch"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3"><path d="m9 39 7-2 24-24-5-5-24 24z"/><path d="m30 13 5 5"/></svg><div><strong>Sketch Pad</strong><span>Draw a layout idea and download it as a PNG.</span></div></button>
+      
+      
+      
+      <button class="nav-card watchlist" data-open="watchlist"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3"><rect x="6" y="10" width="36" height="28" rx="5"/><path d="M20 18l11 6-11 6z" fill="currentColor" stroke="none"/></svg><div><strong>Watchlist</strong><span>Shows and movies to watch — your queue, your rules.</span></div></button>
+    </div>
+  </section>
+
+  
+
+  
+
+  
+
+  
+
+  <style>
+.rh-wrap{--rh-card:var(--paper);--rh-line:var(--line)}
+.rh-toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.rh-search{flex:1;min-width:180px;min-height:48px;padding:10px 14px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--paper);color:var(--ink);font-size:16px}
+.rh-cats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.rh-cat{border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:10px 14px;min-height:44px;border-radius:99px;font-weight:700;font-size:14px;cursor:pointer}
+.rh-cat.active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.rh-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
+.rh-filter{border:1px solid var(--line);background:var(--paper-2);color:var(--ink);padding:9px 13px;min-height:44px;border-radius:var(--radius-sm);font-weight:700;font-size:14px;cursor:pointer}
+.rh-filter.active{background:var(--gold);color:#fff;border-color:var(--gold)}
+.rh-count{color:var(--muted);font-size:14px;font-weight:700;margin-bottom:10px}
+.rh-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.rh-card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-md);padding:18px;cursor:pointer;box-shadow:var(--shadow);transition:transform .12s ease;min-height:44px}
+.rh-card:hover{transform:translateY(-2px);border-color:var(--teal)}
+.rh-card h3{font:800 22px/1.05 "Barlow Condensed",sans-serif;margin:0 0 6px;letter-spacing:.01em}
+.rh-card .rh-id{font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.08em}
+.rh-card p{margin:6px 0 10px;color:var(--muted);font-size:14px}
+.rh-badges{display:flex;gap:6px;flex-wrap:wrap}
+.st{font-size:12px;font-weight:800;padding:4px 10px;border-radius:99px;letter-spacing:.02em}
+.st-accepted{background:var(--green);color:#fff}
+.st-recovered{background:var(--teal-soft);color:var(--teal)}
+.st-review{background:var(--gold);color:#fff}
+.st-partial{background:var(--paper-2);color:var(--muted);border:1px solid var(--line)}
+.rh-cat-tag{font-size:12px;font-weight:700;color:var(--muted)}
+.rh-detail{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-md);padding:clamp(18px,3vw,30px);box-shadow:var(--shadow)}
+.rh-detail h2{font:800 clamp(30px,5vw,48px)/1 "Barlow Condensed",sans-serif;margin:0;letter-spacing:-.01em}
+.rh-detail .rh-sub{color:var(--muted);margin:8px 0 16px}
+.rh-scale{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:14px 0;padding:12px;background:var(--paper-2);border-radius:var(--radius-sm)}
+.rh-scale span{font-weight:800;font-size:14px}
+.rh-scale button{border:1px solid var(--line);background:var(--paper);color:var(--ink);min-width:52px;min-height:44px;border-radius:var(--radius-sm);font-weight:800;cursor:pointer;font-size:15px}
+.rh-scale button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.rh-ing{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin:12px 0}
+.rh-ing .ingredient{margin:0}
+.rh-sec{background:var(--paper-2);border-radius:var(--radius-sm);padding:16px 18px;margin-top:14px}
+.rh-sec h3{font:800 24px/1 "Barlow Condensed",sans-serif;margin:0 0 10px}
+.rh-sec ol,.rh-sec ul{margin:0;padding-left:22px}
+.rh-sec li+li{margin-top:8px}
+.rh-unresolved{background:color-mix(in srgb,var(--gold) 14%,transparent);border:1px solid var(--gold);border-radius:var(--radius-sm);padding:14px 16px;margin-top:14px}
+.rh-unresolved h3{font:800 22px/1 "Barlow Condensed",sans-serif;margin:0 0 8px;color:var(--gold)}
+.rh-unresolved ul{margin:0;padding-left:20px;color:var(--ink)}
+.rh-related{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.rh-rel{border:1px solid var(--teal);color:var(--teal);background:transparent;padding:9px 14px;min-height:44px;border-radius:99px;font-weight:700;font-size:14px;cursor:pointer}
+.rh-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.rh-issues{margin-top:26px}
+.rh-issues h2{font:800 clamp(26px,4vw,38px)/1 "Barlow Condensed",sans-serif;margin:0 0 12px}
+.rh-issue{background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:10px}
+.rh-issue strong{display:block;margin-bottom:4px}
+.rh-issue p{margin:0;color:var(--muted);font-size:14px}
+.rh-back{margin-bottom:14px}
+.rh-note{font-size:13px;color:var(--muted);margin-top:10px}
+@media print{.rh-toolbar,.rh-cats,.rh-filters,.rh-actions,.rh-back,.viewbar,.rh-related{display:none!important}.rh-detail{box-shadow:none;border:0}}
+</style>
+<section class="view" id="recipes" aria-labelledby="recipes-heading">
+<header class="viewbar"><button class="back-btn" data-home>← Main</button><h1 id="recipes-heading">Recipe Hub</h1><span class="stamp">30 recipes · Oct 2026</span></header>
+<div class="rh-wrap">
+<div id="rh-list">
+<div class="rh-toolbar"><input class="rh-search" id="rh-search" type="search" placeholder="Search recipes or ingredients…" aria-label="Search recipes" /></div>
+<div class="rh-cats" id="rh-cats" role="tablist" aria-label="Categories"></div>
+<div class="rh-filters">
+<button class="rh-filter" id="rh-needs-review">⚠ Needs your review</button>
+<span class="rh-count" id="rh-count"></span>
+</div>
+<div class="rh-grid" id="rh-grid"></div>
+<div class="rh-issues" id="rh-issues"><h2>Known Issues</h2><p class="rh-note">Data-resolution queue from the source compilation — resolve these before treating flagged recipes as final.</p><div id="rh-issues-list"></div></div>
+</div>
+<div id="rh-detail" hidden></div>
+</div>
+</section>
+<script>
+var RH_RECIPES=[{"id": "R001", "title": "Master Vanilla / Chocolate-Chip Cookie Base", "cat": "cookies", "status": "accepted_formula", "parent": null, "children": ["R002", "R003", "R004", "R005", "R006", "R007"], "blurb": "The accepted base formula. Everything else in the cookie family branches from here.", "ingredients": [["All-purpose flour", "300 g", 300, null, "g"], ["White sugar", "100 g", 100, null, "g"], ["Brown sugar", "200 g", 200, null, "g"], ["Butter", "170 g", 170, null, "g"], ["Whole egg", "1", 1, null, ""], ["Egg yolk", "1", 1, null, ""], ["Vanilla", "2 tsp", 2, null, "tsp"], ["Baking powder", "3 g", 3, null, "g"], ["Baking soda", "6 g", 6, null, "g"], ["Cornstarch", "9 g", 9, null, "g"], ["Chocolate chips or other inclusions", "250\u2013300 g", 250, 300, "g"]], "method": ["Recovered bake setting: <strong>350\u00b0F, 13\u201314 minutes</strong>.", "The base's complete mixing/chilling procedure was not recovered."], "notes": ["Salt is absent from the retained accepted formula; some variations explicitly add it. Preserved as recorded \u2014 do not silently add salt or change the leaveners.", "Yield and scoop size not recovered for this base. Do not assume scoop sizes from another variation apply universally."], "unresolved": ["Complete mixing method", "Chilling procedure", "Scoop size", "Yield"]}, {"id": "R002", "title": "Banana Pudding Cookies", "cat": "cookies", "status": "recovered_recipe", "parent": "R001", "children": [], "blurb": "R001 variation with banana pudding mix, white chips, and Nilla wafers.", "ingredients": [["AP flour", "280 g", 280, null, "g"], ["White sugar", "100 g", 100, null, "g"], ["Brown sugar", "200 g", 200, null, "g"], ["Instant banana pudding mix", "40 g", 40, null, "g"], ["Butter", "170 g", 170, null, "g"], ["Egg + yolk", "1 whole + 1 yolk", null, null, ""], ["Vanilla", "2 tsp", 2, null, "tsp"], ["Banana extract", "1\u20131\u00bd tsp", 1, 1.5, "tsp"], ["Baking powder", "3 g", 3, null, "g"], ["Baking soda", "5 g", 5, null, "g"], ["Cornstarch", "9 g", 9, null, "g"], ["White baking chips", "150\u2013200 g", 150, 200, "g"], ["Crushed Nilla wafers", "120\u2013150 g", 120, 150, "g"]], "method": ["Chill <strong>45\u201360 minutes</strong>; bake <strong>350\u00b0F for 13\u201314 minutes</strong>.", "Full mixing order and scoop size were not recovered."], "notes": ["Preserve the lower flour (280 g) and baking-soda (5 g) amounts rather than importing all R001 values."], "unresolved": ["Full mixing order", "Scoop size"]}, {"id": "R003", "title": "Cardamom\u2013Rose White-Chocolate Cookies", "cat": "cookies", "status": "recovered_recipe", "parent": "R001", "children": [], "blurb": "R001 variation \u2014 cardamom, dried rose petals, white chocolate. No rose water.", "ingredients": [["R001 dough ingredients", "(see R001)", null, null, ""], ["Salt", "5 g", 5, null, "g"], ["White chocolate (replaces generic inclusions)", "180\u2013220 g", 180, 220, "g"], ["Culinary dried rose petals", "5\u20138 g (\u22482\u20133 tbsp lightly crushed)", 5, 8, "g"], ["Ground cardamom", "2 tsp (2\u00bd tsp for stronger)", 2, 2.5, "tsp"], ["Pistachios (optional, suggested not confirmed)", "60\u201380 g", 60, 80, "g"]], "method": ["Rub petals into sugar; incorporate approximately 5 g into the dough and reserve a pinch for the tops.", "Fold in white chocolate.", "Chill at least <strong>1 hour</strong>; bake <strong>350\u00b0F, 13\u201314 minutes</strong>."], "notes": ["Latest flavor direction: <strong>no rose water or rose extract</strong>. Earlier advice used 1\u00bd\u20132 tsp cardamom and 1 tsp rose water or \u00bd tsp extract; that rose-liquid version was superseded.", "Do not exceed 3 tsp cardamom (historical guidance).", "Petal volume-to-weight equivalence was historical advice, not a measured conversion."], "unresolved": ["Scoop size", "Yield"]}, {"id": "R004", "title": "Snickerdoodles", "cat": "cookies", "status": "recovered_recipe", "parent": "R001", "children": [], "blurb": "R001 variation with substantial changes \u2014 cream of tartar, no baking powder.", "ingredients": [["AP flour", "300 g", 300, null, "g"], ["White sugar", "150 g", 150, null, "g"], ["Brown sugar", "140 g", 140, null, "g"], ["Softened butter", "170 g", 170, null, "g"], ["Egg + yolk", "1 whole + 1 yolk", null, null, ""], ["Vanilla", "2 tsp", 2, null, "tsp"], ["Baking soda", "6 g", 6, null, "g"], ["Cream of tartar", "5 g", 5, null, "g"], ["Cornstarch", "4 g", 4, null, "g"], ["Salt", "\u00bd tsp", 0.5, null, "tsp"], ["Coating: white sugar + cinnamon", "100 g sugar + 1 tbsp cinnamon", null, null, ""]], "method": ["Cream butter and sugars; add egg, yolk, vanilla.", "Combine dry ingredients and mix into wet.", "Chill <strong>30\u201360 minutes</strong>, scoop, roll in coating, bake <strong>350\u00b0F for 11\u201313 minutes</strong>."], "notes": ["No baking powder appears in this recovered version. Historical teaspoon guidance for 5 g cream of tartar was approximate; retain grams as canonical."], "unresolved": ["Scoop size", "Yield"]}, {"id": "R005", "title": "Chocolate\u2013Espresso Cookie Base", "cat": "cookies", "status": "recovered_recipe", "parent": "R001", "children": [], "blurb": "R001 variation \u2014 Dutch cocoa, espresso powder, milk.", "ingredients": [["AP flour", "250 g", 250, null, "g"], ["Dutch-process cocoa", "50 g", 50, null, "g"], ["White sugar", "100 g", 100, null, "g"], ["Brown sugar", "200 g", 200, null, "g"], ["Butter", "170 g", 170, null, "g"], ["Egg + yolk", "1 whole + 1 yolk", null, null, ""], ["Vanilla", "2 tsp", 2, null, "tsp"], ["Milk", "10 g", 10, null, "g"], ["Baking powder", "3 g", 3, null, "g"], ["Baking soda", "6 g", 6, null, "g"], ["Cornstarch", "9 g", 9, null, "g"], ["Salt", "5 g", 5, null, "g"], ["Espresso powder", "6 g", 6, null, "g"], ["Mix-ins", "250\u2013300 g", 250, 300, "g"]], "method": ["Cream butter/sugars, add wet ingredients, combine dry ingredients, mix together, fold in inclusions.", "Chill <strong>1\u20132 hours or overnight</strong>. Scoop <strong>100\u2013120 g</strong>. Bake <strong>350\u00b0F, 12\u201314 minutes</strong>."], "notes": [], "unresolved": ["Yield not explicitly recovered"]}, {"id": "R006", "title": "Blueberry Cobbler Cookies", "cat": "cookies", "status": "recovered_recipe", "parent": "R001", "children": [], "blurb": "R001 variation with freeze-dried blueberries, pecans, streusel topping.", "ingredients": [["R001 dough ingredients + \u00bd tsp salt", "(see R001)", null, null, ""], ["Freeze-dried blueberries", "25 g", 25, null, "g"], ["Pecans", "75 g", 75, null, "g"], ["White chocolate", "100 g", 100, null, "g"], ["Apple-pie spice", "1\u00bd tsp", 1.5, null, "tsp"], ["Streusel: flour", "40 g", 40, null, "g"], ["Streusel: brown sugar", "25 g", 25, null, "g"], ["Streusel: butter", "25 g", 25, null, "g"], ["Streusel: apple-pie spice", "\u00bc tsp", 0.25, null, "tsp"]], "method": ["Chill dough <strong>1 hour</strong>; scoop <strong>100\u2013120 g</strong>, add streusel topping, bake <strong>350\u00b0F, 13\u201315 minutes</strong>.", "Full mixing/streusel technique not recovered."], "notes": ["Finishing sugar appears in the saved project summary without a quantity or confirmation it was used with the streusel; kept as an unresolved optional finish."], "unresolved": ["Full mixing technique", "Streusel technique", "Finishing sugar (unresolved)"]}, {"id": "R007", "title": "Orange Creamsicle Cookies", "cat": "cookies", "status": "recovered_recipe", "parent": "R001", "children": [], "blurb": "R001 variation \u2014 orange zest + emulsion, white chocolate chips.", "ingredients": [["R001 dough ingredients", "(see R001)", null, null, ""], ["White chocolate chips (replaces generic inclusions)", "250 g", 250, null, "g"], ["Zest of orange", "1\u20132 oranges", 1, 2, ""], ["Orange bakery emulsion", "1\u20131\u00bd tsp", 1, 1.5, "tsp"], ["Vanilla instant pudding mix (optional, suggested)", "20 g", 20, null, "g"]], "method": ["Cream butter and sugars; add egg, yolk, vanilla, emulsion; mix zest into wet ingredients.", "Add combined dry ingredients, fold in chips.", "Scoop <strong>65\u201375 g</strong>, chill <strong>30\u201360 minutes</strong>, bake <strong>350\u00b0F for 13\u201314 minutes</strong>."], "notes": ["The older summary describes 'zest or emulsion'; the recovered June 10 formula includes both. Both facts preserved \u2014 do not describe the both-flavorings formula as a confirmed final user choice.", "No flour reduction for the optional pudding-mix version was recovered."], "unresolved": []}, {"id": "R008", "title": "Tall Brioche Cinnamon Rolls (Original Dough)", "cat": "cinnamon-rolls", "status": "recovered_recipe", "parent": null, "children": ["R009"], "blurb": "9 tall rolls in 3-inch rings. The foundation for R009/R010/R011.", "ingredients": [["Bread flour", "500 g", 500, null, "g"], ["Salt", "10 g", 10, null, "g"], ["Sugar", "80 g", 80, null, "g"], ["Instant yeast", "10 g", 10, null, "g"], ["Eggs", "3", 3, null, ""], ["Whole milk", "180 g", 180, null, "g"], ["Unsalted butter", "115 g", 115, null, "g"], ["Vanilla", "1 tbsp", 1, null, "tbsp"], ["Filling: brown sugar", "150 g", 150, null, "g"], ["Filling: cinnamon", "2 tbsp", 2, null, "tbsp"], ["Filling: salt", "\u00bd tsp", 0.5, null, "tsp"], ["Filling: butter", "60 g", 60, null, "g"]], "method": ["Mix/knead dough, adding butter gradually.", "First rise <strong>1\u20131\u00bd hours</strong>; refrigerate overnight.", "Roll to approximately <strong>16 \u00d7 12 inches</strong> (\u2248\u00bc inch thick), fill, roll up, cut <strong>9 rolls</strong>.", "Proof <strong>45\u201375 minutes</strong> in the rings. Optional pre-bake cream: <strong>1\u20132 tbsp per roll</strong>.", "Bake <strong>350\u00b0F, 20\u201325 minutes</strong>, to approximately <strong>190\u00b0F internal</strong>."], "notes": ["An earlier same-day proposal had 75 g sugar, 190\u2013200 g milk, 100\u2013115 g butter (same flour/salt/yeast/eggs). Kept as an earlier proposal, not a second simultaneous ingredient list.", "Standard icing was referenced but its formula was not recovered. Maple buttercream is R011.", "Cold-proof questions were discussed, but a fully resolved alternate schedule for refrigerating already-shaped rolls was not recovered."], "unresolved": ["Shaped overnight-proof schedule", "Standard icing formula", "Exact rolling orientation"]}, {"id": "R009", "title": "Tangzhong Cinnamon Rolls", "cat": "cinnamon-rolls", "status": "recovered_recipe", "parent": "R008", "children": [], "blurb": "R008 revision for especially soft, tall rolls. Do not double-count tangzhong.", "ingredients": [["Tangzhong: bread flour", "25 g", 25, null, "g"], ["Tangzhong: milk", "125 g", 125, null, "g"], ["Bread flour (remaining dough)", "475 g", 475, null, "g"], ["Salt", "10 g", 10, null, "g"], ["Sugar", "80 g", 80, null, "g"], ["Instant yeast", "10 g", 10, null, "g"], ["Eggs", "3", 3, null, ""], ["Warm milk", "70 g", 70, null, "g"], ["All tangzhong (from above)", "\u2014", null, null, ""], ["Butter", "115 g", 115, null, "g"], ["Vanilla", "1 tbsp", 1, null, "tbsp"]], "method": ["Tangzhong: whisk 25 g flour + 125 g milk over medium heat until pudding-thick; cool.", "Total formula flour is <strong>500 g</strong> and total milk is <strong>195 g</strong>; do not double-count tangzhong flour or milk.", "Mix and knead, incorporate butter gradually. Rise <strong>1\u20131\u00bd hours</strong>, then refrigerate overnight.", "Use R008 shaping and filling, or the R010 maple-bacon component.", "Proof shaped rolls <strong>45\u201375 minutes</strong>; bake <strong>350\u00b0F, 20\u201325 minutes</strong>, target <strong>188\u2013192\u00b0F internal</strong>."], "notes": [], "unresolved": []}, {"id": "R010", "title": "Maple-Bacon Cinnamon-Roll Filling", "cat": "cinnamon-rolls", "status": "recovered_recipe", "parent": null, "children": [], "blurb": "Component for R008/R009.", "ingredients": [["Brown sugar", "150 g", 150, null, "g"], ["Cinnamon", "2 tbsp", 2, null, "tbsp"], ["Salt", "\u00bd tsp", 0.5, null, "tsp"], ["Butter", "60\u201375 g", 60, 75, "g"], ["Flour", "1 tbsp", 1, null, "tbsp"], ["Maple syrup", "2\u20133 tbsp", 2, 3, "tbsp"], ["Bacon crumbles", "50\u201375 g (\u2248\u00bd\u2013\u00be cup)", 50, 75, "g"]], "method": ["Mix the sugar, cinnamon, salt, butter, flour and syrup into a thick paste; add bacon crumbles."], "notes": ["Bacon cooking instructions and whether its recorded weight was explicitly post-cooking were not recovered; confirm for a production recipe."], "unresolved": ["Bacon cooking method", "Pre/post-cook weight"]}, {"id": "R011", "title": "Maple Buttercream", "cat": "cinnamon-rolls", "status": "recovered_recipe", "parent": null, "children": [], "blurb": "Component for R008/R009.", "ingredients": [["Butter", "115 g", 115, null, "g"], ["Powdered sugar", "260\u2013300 g", 260, 300, "g"], ["Maple syrup", "2\u20133 tbsp", 2, 3, "tbsp"], ["Vanilla", "\u00bd tsp", 0.5, null, "tsp"], ["Salt", "pinch", null, null, ""]], "method": ["Whip butter, add sugar, then maple syrup, vanilla, and salt."], "notes": [], "unresolved": ["Final yield", "Spreading temperature"]}, {"id": "R012", "title": "Same-Day Focaccia (9\u00d79 Pan)", "cat": "bread-pizza-bagels", "status": "needs_review", "parent": null, "children": [], "blurb": "\u26a0\ufe0f Weight conflict: ingredients sum to 930 g, target was 800 g dough.", "ingredients": [["Bread flour", "500 g", 500, null, "g"], ["Water", "400 g", 400, null, "g"], ["Salt", "10 g", 10, null, "g"], ["Instant yeast", "5 g", 5, null, "g"], ["Olive oil (in dough)", "15 g", 15, null, "g"], ["Olive oil (pan/topping)", "unquantified", null, null, ""]], "method": ["Mix water and yeast; add flour; rest <strong>10\u201315 minutes</strong>; add salt and oil.", "Proof around <strong>85\u201390\u00b0F</strong>, using <strong>3\u20134 stretch-and-fold rounds every 20\u201330 minutes over roughly 2 hours</strong>.", "Heavily oil pan, transfer dough, rest <strong>15\u201320 minutes</strong>, stretch to fit.", "Final proof <strong>45\u201360 minutes</strong>. Dimple and top; bake <strong>450\u00b0F, 20\u201325 minutes</strong>."], "notes": ["<strong>Conflict:</strong> recorded ingredients sum to <strong>930 g</strong>, not the requested 800 g. Preserved as-is. A future exact 800 g revision would use a scale factor of 800/930 (excluding pan/topping oil).", "Specific toppings and amounts were not recovered."], "unresolved": ["800 g vs 930 g conflict", "Toppings"]}, {"id": "R013", "title": "Quick '20-Minute' 00-Flour Pizza Dough", "cat": "bread-pizza-bagels", "status": "recovered_recipe", "parent": null, "children": ["R014"], "blurb": "The '20-minute' title reflects the request, not a validated total time.", "ingredients": [["00 flour", "500 g", 500, null, "g"], ["Water (100\u2013105\u00b0F)", "325 g", 325, null, "g"], ["Instant yeast", "10 g", 10, null, "g"], ["Salt", "10 g", 10, null, "g"], ["Olive oil", "15 g", 15, null, "g"], ["Sugar", "10 g", 10, null, "g"]], "method": ["Mix; knead <strong>6\u20138 minutes</strong>; rest <strong>15\u201320 minutes</strong>; divide; optionally relax <strong>5 minutes</strong>; stretch, top, and bake.", "Historical oven guidance favored convection at <strong>550\u00b0F, ~5\u20137 minutes</strong>, checking at 5 minutes."], "notes": ["Recovered kneading/resting steps already exceed 20 minutes before baking or preheating. Toppings/yield not recovered."], "unresolved": ["Conventional stone/steel bake time", "Yield"]}, {"id": "R014", "title": "Quick Pizza \u2014 650 g Flour Version", "cat": "bread-pizza-bagels", "status": "recovered_recipe", "parent": "R013", "children": [], "blurb": "R013 scaled up. Yield: 2 large or 3 medium pies. 650 g = flour, not total dough.", "ingredients": [["00 flour", "650 g", 650, null, "g"], ["Water", "423 g", 423, null, "g"], ["Instant yeast (or 16 g active dry)", "13 g", 13, null, "g"], ["Salt", "13 g", 13, null, "g"], ["Olive oil", "20 g", 20, null, "g"], ["Sugar", "13 g", 13, null, "g"]], "method": ["For active dry yeast, bloom <strong>5\u201310 minutes</strong>.", "Mix, knead <strong>6\u20138 minutes</strong>, rest <strong>15\u201320 minutes</strong>, divide, optionally rest <strong>5\u201310 minutes</strong>, stretch/top/bake using R013 oven guidance."], "notes": [], "unresolved": []}, {"id": "R015", "title": "90-Minute 00-Flour Pizza (Medium Pies)", "cat": "bread-pizza-bagels", "status": "recovered_recipe", "parent": null, "children": ["R016"], "blurb": "Yield: 2 medium pizzas (~432 g dough each).", "ingredients": [["00 flour", "500 g", 500, null, "g"], ["Warm water", "325 g", 325, null, "g"], ["Instant yeast", "7 g", 7, null, "g"], ["Salt", "12 g", 12, null, "g"], ["Olive oil", "15 g", 15, null, "g"], ["Sugar", "5 g", 5, null, "g"]], "method": ["Mix water, yeast, sugar; add flour, then salt/oil. Knead <strong>5\u20137 minutes</strong>.", "Rise <strong>45 minutes</strong>; divide and ball; rest <strong>30\u201335 minutes</strong>.", "Stretch, top, bake <strong>500\u2013550\u00b0F, 6\u201310 minutes</strong>."], "notes": ["Ingredient sum is 864 g \u2192 ~432 g per half before handling losses (historical portion estimate was 429 g)."], "unresolved": []}, {"id": "R016", "title": "Large 90-Minute Pizza (14\u201316 in)", "cat": "bread-pizza-bagels", "status": "recovered_recipe", "parent": "R015", "children": [], "blurb": "R015 scaled for 2 large pizzas (~518 g each), with shortened-proof and 450\u00b0F branches.", "ingredients": [["00 flour", "600 g", 600, null, "g"], ["Warm water", "390 g", 390, null, "g"], ["Instant yeast", "8 g", 8, null, "g"], ["Salt", "14 g", 14, null, "g"], ["Olive oil", "18 g", 18, null, "g"], ["Sugar", "6 g", 6, null, "g"]], "method": ["Standard: mix as R015, knead <strong>6\u20138 minutes</strong>, bulk rise <strong>45 minutes</strong>, divide, final proof <strong>30\u201335 minutes</strong>, stretch/top.", "High-heat bake: <strong>550\u00b0F, 6\u201310 minutes</strong>.", "Shortened schedule: bulk rise ~<strong>60 minutes</strong>, divide, rest covered <strong>10\u201315 minutes</strong> for easier stretching (not zero rest).", "<strong>450\u00b0F branch:</strong> preheat stone/steel <strong>45\u201360 minutes</strong>; bake <strong>10\u201314 minutes</strong>, or <strong>14\u201318 minutes on a pan/sheet</strong>. Retain sugar/oil for browning."], "notes": ["Total ingredient mass 1,036 g \u2192 ~518 g per ball. Center thickness suggestion ~\u215b\u2013\u00bc inch. Toppings and tested outcome not recovered."], "unresolved": ["Tested outcome"]}, {"id": "R017", "title": "Rustic Italian Round Loaf", "cat": "bread-pizza-bagels", "status": "recovered_recipe", "parent": null, "children": ["R018"], "blurb": "Active-dry-yeast loaf with Dutch-oven branch.", "ingredients": [["Bread flour", "500 g", 500, null, "g"], ["Water (105\u2013110\u00b0F)", "350 g", 350, null, "g"], ["Salt", "10 g", 10, null, "g"], ["Active dry yeast", "6 g", 6, null, "g"], ["Olive oil (optional)", "10 g", 10, null, "g"]], "method": ["Bloom yeast <strong>5\u201310 minutes</strong>; mix; knead <strong>8\u201310 minutes</strong>.", "Rise <strong>1\u20131\u00bd hours</strong>. Shape round, rise <strong>30\u201360 minutes</strong>.", "Bake <strong>450\u00b0F, 35\u201345 minutes</strong>; Dutch-oven branch: <strong>30 min covered + 15 min uncovered</strong>.", "Cool at least <strong>1 hour</strong>."], "notes": ["Batch troubleshooting: loaf hit 203\u00b0F internal after 30 min covered while already browned \u2014 historical response was to remove, or optionally uncover 3\u20135 min. Kept as batch-specific, not a mandatory rule."], "unresolved": []}, {"id": "R018", "title": "Rosemary Rustic Italian Loaf", "cat": "bread-pizza-bagels", "status": "recovered_recipe", "parent": "R017", "children": [], "blurb": "R017 with rosemary and 15 g olive oil (not in addition to R017's).", "ingredients": [["R017 flour, water, salt, active dry yeast", "(see R017)", null, null, ""], ["Olive oil", "15 g", 15, null, "g"], ["Fresh rosemary, finely chopped", "8\u201310 g", 8, 10, "g"]], "method": ["Bloom yeast, mix with rosemary, knead. Rise <strong>1\u20131\u00bd hours</strong>, shape, proof <strong>30\u201345 minutes</strong>.", "Dutch oven at <strong>450\u00b0F</strong>: <strong>30 min covered + 5\u201315 min uncovered</strong>. Target <strong>200\u2013210\u00b0F internal</strong>."], "notes": ["Treat 15 g as the variation's oil amount, not an additional 15 g on top of R017's optional 10 g."], "unresolved": []}, {"id": "R020", "title": "Overnight New York-Style Bagels", "cat": "bread-pizza-bagels", "status": "recovered_recipe", "parent": null, "children": ["R021"], "blurb": "Yield: 8 bagels. Cold-ferment 12\u201324 hours (ideal 18\u201320).", "ingredients": [["Bread flour", "500 g", 500, null, "g"], ["Cool water", "275 g", 275, null, "g"], ["Barley malt syrup (or honey)", "15 g", 15, null, "g"], ["Salt", "10 g", 10, null, "g"], ["Instant yeast", "5 g", 5, null, "g"], ["Vegetable oil (optional)", "10 g", 10, null, "g"], ["Boil: water", "3\u20134 quarts", null, null, ""], ["Boil: malt syrup", "30 g", 30, null, "g"], ["Boil: baking soda", "15 g", 15, null, "g"], ["Boil: salt", "10 g", 10, null, "g"]], "method": ["Mix with dough hook at KitchenAid Speed 2 for <strong>2\u20133 min</strong>, then knead <strong>7\u20139 min</strong>.", "Rest <strong>10\u201315 min</strong>; divide into 8, shape; cold-ferment <strong>12\u201324 hours</strong> (ideal 18\u201320).", "Boil <strong>45 seconds per side</strong>. Bake <strong>450\u00b0F, 15\u201320 minutes</strong>."], "notes": ["Formula totals 805 g without oil / 815 g with it \u2014 the original '8 \u00d7 100 g' was approximate."], "unresolved": []}, {"id": "R021", "title": "Same-Day Bread-Flour Bagels", "cat": "bread-pizza-bagels", "status": "recovered_recipe", "parent": "R020", "children": ["R022"], "blurb": "R020 adapted for same-day. Note: boil uses 10 g baking soda (differs from R020).", "ingredients": [["Bread flour", "500 g", 500, null, "g"], ["Water", "275 g", 275, null, "g"], ["Barley malt syrup (or 15 g honey)", "20 g", 20, null, "g"], ["Salt", "10 g", 10, null, "g"], ["Instant yeast", "7 g", 7, null, "g"], ["Neutral oil (optional)", "10 g", 10, null, "g"], ["Boil: water", "3\u20134 quarts", null, null, ""], ["Boil: malt syrup", "30 g", 30, null, "g"], ["Boil: salt", "10 g", 10, null, "g"], ["Boil: baking soda", "10 g", 10, null, "g"]], "method": ["Mix with dough hook Speed 2, <strong>2\u20133 min</strong>, knead <strong>7\u20139 min</strong>.", "First rise <strong>60\u201375 min at 75\u201380\u00b0F</strong>, until puffy.", "Divide into 8; form tight balls, open holes to <strong>1\u00bd\u20132 inches</strong>. Proof covered <strong>20\u201330 min</strong>.", "Boil <strong>45 sec per side</strong>; add toppings immediately.", "Bake on preheated stone/steel at <strong>450\u00b0F, 15\u201320 min</strong>, rotating halfway."], "notes": [], "unresolved": ["Topping quantities", "Preheat duration"]}, {"id": "R022", "title": "Same-Day AP-Flour Bagels", "cat": "bread-pizza-bagels", "status": "recovered_recipe", "parent": "R021", "children": [], "blurb": "R021 adapted for AP flour \u2014 use 255 g water to start, not 275 g.", "ingredients": [["AP flour", "500 g", 500, null, "g"], ["Water (start with 255 g)", "255\u2013265 g", 255, 265, "g"], ["Malt syrup (or 15 g honey)", "20 g", 20, null, "g"], ["Salt", "10 g", 10, null, "g"], ["Instant yeast", "7 g", 7, null, "g"], ["Oil", "10 g", 10, null, "g"]], "method": ["Use R021 same-day method and boil mixture."], "notes": ["'100 g each' is a portion guide, not an exact yield guarantee; weigh and divide the actual dough."], "unresolved": []}, {"id": "R019", "title": "Fresh 00-Flour Spaghetti", "cat": "pasta-tortillas", "status": "needs_review", "parent": null, "children": [], "blurb": "\u26a0\ufe0f Roller direction conflict unresolved \u2014 do not use the 1\u21926 sequence on Wes's machine.", "ingredients": [["00 flour", "400 g", 400, null, "g"], ["Large eggs (\u2248200 g)", "4", 4, null, ""], ["Olive oil", "1\u20132 tsp", 1, 2, "tsp"], ["Salt", "\u00bd tsp", 0.5, null, "tsp"]], "method": ["Rest <strong>30\u201360 minutes</strong>. Fresh cooking time: <strong>1\u20133 minutes</strong>.", "Complete mixing/kneading duration not recovered."], "notes": ["<strong>Unresolved roller conflict:</strong> Wes described a scale where <strong>8 is thickest and 1 is thinnest</strong>. A retrieved assistant response prescribed <strong>1 \u2192 fold \u2192 1 \u2192 2 \u2192 3 \u2192 4 \u2192 5 \u2192 6</strong>, cutting at 6 \u2014 which assumes the opposite direction. Do not present that sequence as correct for Wes's machine.", "Historical machine portions: 4 \u00d7 ~150 g, with 100\u2013125 g easier to handle.", "Historical KitchenAid Speed 2 advice for kneading/rolling/cutting is retained as historical advice, not verified against the attachment manual."], "unresolved": ["Roller/attachment model", "Numbering direction", "Machine-dependent settings"]}, {"id": "R023", "title": "Corn Tortillas", "cat": "pasta-tortillas", "status": "recovered_recipe", "parent": null, "children": [], "blurb": "Yield: ~10\u201312 tortillas (approximate).", "ingredients": [["Masa harina", "240 g", 240, null, "g"], ["Warm water", "330 g", 330, null, "g"], ["Fine salt", "4 g", 4, null, "g"]], "method": ["Rest <strong>15\u201320 minutes</strong>. Portion <strong>40\u201350 g</strong>. Pressing details not recovered.", "Cook on dry skillet over medium-high: <strong>30\u201345 sec</strong> first side, <strong>45\u201360 sec</strong> second side, <strong>15\u201330 sec</strong> third side."], "notes": ["Ingredient mass totals 574 g; 40\u201350 g portions give ~11\u201314 before losses, so the historical 10\u201312 yield is approximate."], "unresolved": ["Pressing details"]}, {"id": "R024", "title": "Poblano\u2013Pineapple\u2013Habanero Louisiana-Style Sauce", "cat": "hot-sauces", "status": "recovered_recipe", "parent": null, "children": [], "blurb": "User-recorded batch kept separate from later gram proposals. Not a validated canning formula.", "ingredients": [["Poblano peppers", "4", 4, null, ""], ["Orange habaneros", "5", 5, null, ""], ["Pineapple", "150 g", 150, null, "g"], ["Yellow onion", "\u00bd", 0.5, null, ""], ["Garlic", "4 cloves", 4, null, ""], ["White vinegar", "2.5 cups", 2.5, null, "cups"]], "method": ["Roughly chop; simmer in vinegar <strong>15\u201320 minutes</strong> until softened; cool and blend smooth; optionally strain.", "Salt advice changed from 10\u201312 g to 12\u201315 g kosher salt; neither confirmed as the user's actual batch amount."], "notes": ["Assistant estimated the batch as ~400 g poblano, 50 g habanero, 150 g pineapple, 100 g onion, 16 g garlic, ~590 g vinegar \u2014 estimates, not measured equivalents.", "A later proposed gram version (300 g poblano, 75\u2013100 g habanero, etc.) is kept separate; pepper quantities differ materially.", "Final yield, measured acidity, and validated storage process not recovered. Not a validated canning/shelf-stability formula."], "unresolved": ["Final yield", "Acidity", "Validated storage"]}, {"id": "R025", "title": "Strawberry\u2013Kiwi\u2013Habanero Sauce", "cat": "hot-sauces", "status": "needs_review", "parent": null, "children": [], "blurb": "\u26a0\ufe0f 65 g habanero was too spicy. Final dilution unresolved.", "ingredients": [["Orange habaneros (original proposal)", "100 g", 100, null, "g"], ["Red bell pepper", "400 g", 400, null, "g"], ["Strawberries", "250 g", 250, null, "g"], ["Kiwi", "100 g", 100, null, "g"], ["Garlic (~15 g)", "4 cloves", 4, null, ""], ["Vinegar", "600 ml", 600, null, "ml"], ["Salt", "15 g", 15, null, "g"]], "method": ["Simmer <strong>10\u201315 minutes</strong>, blend, taste, optionally strain, refrigerate.", "A revised batch used <strong>60\u201365 g habanero</strong> \u2014 saved history reports 65 g as <strong>too spicy</strong>."], "notes": ["Proposed mellowing: add 200 g bell pepper + 150 g strawberries, cook and blend. Adjust consistency with vinegar 30 ml at a time (perhaps 60\u2013120 ml extra \u2014 not confirmed).", "Keep original, lower-pepper trial, and proposed dilution as separate versions."], "unresolved": ["Final dilution amounts", "Outcome", "Shelf life", "Acidity", "Yield"]}, {"id": "R026", "title": "Pellet-Smoked Pork Shoulder", "cat": "savory", "status": "partial", "parent": null, "children": [], "blurb": "Technique notes only \u2014 weight, rub, temps, and endpoints not recovered.", "ingredients": [["Spritz: apple juice \u2014 or 50/50 ACV/water \u2014 or 50/50 apple juice/ACV", "as needed", null, null, ""]], "method": ["No spritz for the first <strong>3\u20134 hours</strong>. Once bark sets, optional spritz every <strong>60\u201390 minutes</strong>.", "Spritzing could be skipped if wrapping at ~<strong>165\u00b0F</strong>."], "notes": ["<strong>Unvalidated:</strong> resting 30\u201360 min, wrapping whole with juices, refrigerating within ~2 hours, reheating covered at 250\u2013300\u00b0F and shredding next day. Safe cooling of a large whole cut and a complete reheating endpoint were not established.", "Missing: pork weight, rub, smoker setting, full smoke schedule, verified cooking endpoint, cooling method, reheating endpoint, yield, actual result."], "unresolved": ["Pork weight", "Rub", "Smoker setting", "Full schedule", "Cooking endpoint", "Cooling method", "Reheating endpoint", "Yield"]}, {"id": "R027", "title": "Fried Wings (Seasoned Buttermilk + Dredge)", "cat": "savory", "status": "recovered_recipe", "parent": null, "children": [], "blurb": "Batch: 2\u20133 lb wings. Fry to 165\u00b0F internal \u2014 time is an estimate, not a substitute.", "ingredients": [["Buttermilk", "2 cups", 2, null, "cups"], ["Eggs", "2", 2, null, ""], ["Hot sauce", "2 tbsp", 2, null, "tbsp"], ["Dijon mustard", "1 tbsp", 1, null, "tbsp"], ["Worcestershire sauce", "1 tbsp", 1, null, "tbsp"], ["Kosher salt", "2 tsp", 2, null, "tsp"], ["Black pepper", "2 tsp", 2, null, "tsp"], ["Smoked paprika", "2 tsp", 2, null, "tsp"], ["Garlic powder", "2 tsp", 2, null, "tsp"], ["Onion powder", "1 tsp", 1, null, "tsp"], ["Cayenne", "1 tsp", 1, null, "tsp"], ["MSG (optional)", "1 tsp", 1, null, "tsp"], ["Dredge: flour", "2 cups", 2, null, "cups"], ["Dredge: cornstarch", "1 cup", 1, null, "cup"], ["Dredge: salt", "2 tsp", 2, null, "tsp"], ["Dredge: black pepper", "2 tsp", 2, null, "tsp"], ["Dredge: garlic powder", "2 tsp", 2, null, "tsp"], ["Dredge: onion powder", "2 tsp", 2, null, "tsp"], ["Dredge: smoked paprika", "2 tsp", 2, null, "tsp"], ["Dredge: baking powder", "1 tsp", 1, null, "tsp"], ["Dredge: cayenne", "\u00bd tsp", 0.5, null, "tsp"]], "method": ["Whisk wet mixture; soak wings <strong>30 minutes\u20134 hours</strong>.", "Coat with combined dry dredge, rest <strong>10\u201315 minutes</strong>.", "Fry at <strong>350\u00b0F for ~8\u201310 minutes</strong>, to <strong>at least 165\u00b0F internal</strong>."], "notes": ["Oil type/volume, batch loading, and storage not recovered. Thawing question retained but the exact answer was not recovered \u2014 resolve thawing and surface moisture before frying."], "unresolved": ["Oil type/volume", "Batch loading", "Thawing procedure", "Storage"]}, {"id": "R028", "title": "Orange Curd Bars", "cat": "dessert", "status": "recovered_recipe", "parent": null, "children": [], "blurb": "8\u00d78 pan, 16 bars. Assumes existing orange curd \u2014 curd recipe not recovered.", "ingredients": [["Crust: softened unsalted butter", "225 g", 225, null, "g"], ["Crust: sugar", "100 g", 100, null, "g"], ["Crust: vanilla", "1 tsp", 1, null, "tsp"], ["Crust: flour", "280 g", 280, null, "g"], ["Crust: salt", "\u00bc tsp", 0.25, null, "tsp"], ["Filling: orange curd", "450\u2013500 g", 450, 500, "g"], ["Filling: eggs", "2", 2, null, ""], ["Filling: cornstarch", "15 g", 15, null, "g"], ["Filling: orange zest (optional)", "1 tbsp", 1, null, "tbsp"], ["Filling: salt", "pinch", null, null, ""]], "method": ["Prepare crust in lined pan; bake <strong>350\u00b0F / 175\u00b0C for 20\u201325 minutes</strong>.", "Whisk filling smooth, pour over hot crust, bake <strong>18\u201322 minutes</strong> until just set.", "Cool, refrigerate <strong>at least 3 hours</strong>, cut into 16 bars."], "notes": ["A separate orange-curd-from-scratch formula was not recovered; do not invent one. Crust-mixing procedure not recovered."], "unresolved": ["Orange curd recipe", "Crust mixing procedure"]}, {"id": "R029", "title": "Garden Romaine and Radish Salad", "cat": "salad", "status": "partial", "parent": null, "children": [], "blurb": "Vinaigrette recovered; assembly and crunchy topping not recovered.", "ingredients": [["Romaine, chopped", "1 large", 1, null, ""], ["Radishes, thinly sliced", "6\u201310", 6, 10, ""], ["Red onion (optional)", "\u00bc", 0.25, null, ""], ["Parmesan or feta", "\u00bc cup", 0.25, null, "cup"], ["Crunchy topping", "unspecified kind/amount", null, null, ""], ["Vinaigrette: olive oil", "3 tbsp", 3, null, "tbsp"], ["Vinaigrette: lemon juice", "1 tbsp", 1, null, "tbsp"], ["Vinaigrette: Dijon", "1 tsp", 1, null, "tsp"], ["Vinaigrette: honey or maple syrup", "1 tsp", 1, null, "tsp"], ["Vinaigrette: kosher salt", "\u00bd tsp", 0.5, null, "tsp"], ["Vinaigrette: pepper", "\u00bc tsp", 0.25, null, "tsp"]], "method": ["The recovered response ends after the vinaigrette ingredients."], "notes": ["Any whisk/toss/serve method added later must be labeled as newly supplied, not original content. Cheese optionality ambiguous in source."], "unresolved": ["Assembly steps", "Crunchy topping", "Yield", "Cheese optionality"]}, {"id": "R030", "title": "Smoked Infused Butter + Infused BBQ Sauce", "cat": "projects", "status": "partial", "parent": null, "children": [], "blurb": "Historical project notes. No quantities, yield, or potency recovered. Do not infer doses.", "ingredients": [["Butter (smoked infused)", "quantity unknown", null, null, ""], ["Cannabis (decarbed)", "quantity unknown", null, null, ""], ["BBQ sauce components", "concept only", null, null, ""]], "method": ["<strong>Smoked infused butter (historical method only):</strong> covered decarboxylation at <strong>230\u00b0F for 30\u201345 min</strong>; smoke butter at <strong>160\u2013180\u00b0F for 1\u20132 hours</strong> (apple/cherry/pecan); add cannabis and hold <strong>160\u2013180\u00b0F for 2\u20133 hours</strong>; strain.", "<strong>Infused BBQ sauce (concept):</strong> ketchup, brown sugar or molasses, apple-cider vinegar, Worcestershire, smoked paprika, garlic, black pepper, chipotle, plus infused butter or oil. Add infused fat near the end, simmer gently, brush on before serving."], "notes": ["No ingredient weights, cannabis potency, butter-to-cannabis ratio, tested extraction efficiency, final yield, serving size, or dose recovered.", "Do not infer potency or generate per-serving dose values. Do not label as finalized tested recipes."], "unresolved": ["All quantities", "Potency", "Yield", "Dose"]}];
+var RH_CATS=[{"id": "cookies", "label": "Cookies", "range": "R001\u2013R007"}, {"id": "cinnamon-rolls", "label": "Cinnamon Rolls", "range": "R008\u2013R011"}, {"id": "bread-pizza-bagels", "label": "Bread / Pizza / Bagels", "range": "R012\u2013R018, R020\u2013R022"}, {"id": "pasta-tortillas", "label": "Pasta & Tortillas", "range": "R019, R023"}, {"id": "hot-sauces", "label": "Hot Sauces", "range": "R024\u2013R025"}, {"id": "savory", "label": "Savory", "range": "R026\u2013R027"}, {"id": "dessert", "label": "Dessert", "range": "R028"}, {"id": "salad", "label": "Salad", "range": "R029"}, {"id": "projects", "label": "Projects", "range": "R030"}];
+var RH_STATUS={"accepted_formula": {"label": "Accepted", "cls": "st-accepted", "desc": "The formula was explicitly accepted by Wes."}, "recovered_recipe": {"label": "Recovered", "cls": "st-recovered", "desc": "Ingredients and method recovered from history; not yet tested/approved by Wes."}, "needs_review": {"label": "Needs Review", "cls": "st-review", "desc": "A material inconsistency must be resolved before treating as final."}, "partial": {"label": "Partial", "cls": "st-partial", "desc": "Some formula or method details remain unavailable."}};
+var RH_ISSUES=[{"t": "Focaccia (R012)", "d": "Desired 800 g dough vs recovered 930 g formula. A future exact revision needs scale factor 800/930."}, {"t": "Pasta roller (R019)", "d": "Wes's machine: 8 = thickest, 1 = thinnest. The retrieved 1\u21926 rolling sequence assumes the opposite. Confirm attachment model before publishing rolling instructions."}, {"t": "Cookie base leaveners", "d": "Preserve the unusual-looking leavener amounts in R001 exactly; any adjustment is a new version."}, {"t": "Orange cookies (R007)", "d": "Older summary says 'zest or emulsion'; June 10 formula uses both. Both preserved \u2014 neither is the confirmed final choice."}, {"t": "Cinnamon rolls", "d": "Shaped overnight-proof schedule unresolved; standard icing formula not recovered."}, {"t": "Hot sauces", "d": "User's count-based batch (R024) kept separate from gram proposals. R025: 65 g habanero confirmed too spicy; final dilution unresolved."}, {"t": "Pork shoulder (R026)", "d": "Cooling/reheating workflow unvalidated \u2014 do not treat as executable yet."}, {"t": "Infused components (R030)", "d": "Quantities, yield, potency all unknown. Never auto-fill or infer doses."}, {"t": "Orange bars (R028)", "d": "Orange curd assumed as ingredient; curd-from-scratch recipe not recovered."}, {"t": "Yields", "d": "Don't force historical portion estimates to equal ingredient totals."}];
+
+(function(){
+var grid=document.getElementById('rh-grid'),catsEl=document.getElementById('rh-cats'),
+    searchEl=document.getElementById('rh-search'),countEl=document.getElementById('rh-count'),
+    issuesList=document.getElementById('rh-issues-list'),
+    listView=document.getElementById('rh-list'),detailView=document.getElementById('rh-detail'),
+    reviewBtn=document.getElementById('rh-needs-review');
+var activeCat='all',reviewOnly=false,query='';
+var catLabel={};RH_CATS.forEach(function(c){catLabel[c.id]=c.label});
+
+function statusBadge(st){var m=RH_STATUS[st];return '<span class="st '+m.cls+'" title="'+m.desc+'">'+m.label+'</span>';}
+
+function renderCats(){
+  var h='<button class="rh-cat'+(activeCat==='all'?' active':'')+'" data-cat="all">All</button>';
+  RH_CATS.forEach(function(c){
+    var n=RH_RECIPES.filter(function(r){return r.cat===c.id}).length;
+    h+='<button class="rh-cat'+(activeCat===c.id?' active':'')+'" data-cat="'+c.id+'">'+c.label+' <span style="opacity:.6">'+n+'</span></button>';
+  });
+  catsEl.innerHTML=h;
+  catsEl.querySelectorAll('.rh-cat').forEach(function(b){b.onclick=function(){activeCat=b.dataset.cat;renderCats();renderGrid();};});
+}
+function matches(r){
+  if(activeCat!=='all'&&r.cat!==activeCat)return false;
+  if(reviewOnly&&!(r.status==='needs_review'||r.status==='partial'))return false;
+  if(query){
+    var q=query.toLowerCase();
+    var hay=(r.title+' '+r.blurb+' '+r.id+' '+r.ingredients.map(function(i){return i[0]}).join(' ')).toLowerCase();
+    if(hay.indexOf(q)<0)return false;
+  }
+  return true;
+}
+function renderGrid(){
+  var list=RH_RECIPES.filter(matches);
+  countEl.textContent=list.length+' of '+RH_RECIPES.length+' recipes';
+  grid.innerHTML=list.map(function(r){
+    return '<article class="rh-card" data-id="'+r.id+'" tabindex="0" role="button" aria-label="'+r.title+'">'
+      +'<div class="rh-id">'+r.id+'</div><h3>'+r.title+'</h3><p>'+r.blurb+'</p>'
+      +'<div class="rh-badges">'+statusBadge(r.status)+'<span class="rh-cat-tag">'+catLabel[r.cat]+'</span></div>'
+      +'</article>';
+  }).join('');
+  grid.querySelectorAll('.rh-card').forEach(function(c){
+    c.onclick=function(){openRecipe(c.dataset.id);};
+    c.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();openRecipe(c.dataset.id);}};
+  });
+}
+function renderIssues(){
+  issuesList.innerHTML=RH_ISSUES.map(function(i){
+    return '<div class="rh-issue"><strong>'+i.t+'</strong><p>'+i.d+'</p></div>';
+  }).join('');
+}
+function fmtQty(ing,scale){
+  var name=ing[0],disp=ing[1],lo=ing[2],hi=ing[3],unit=ing[4];
+  if(lo===null||lo===undefined)return disp;
+  function f(n){
+    var v=n*scale;
+    if(v>=100)return String(Math.round(v));
+    if(v>=10){var r=Math.round(v*2)/2;return (r===Math.round(r))?String(Math.round(r)):String(r);}
+    var r2=Math.round(v*4)/4;return (r2===Math.round(r2))?String(Math.round(r2)):String(r2);
+  }
+  if(hi!==null&&hi!==undefined)return f(lo)+'–'+f(hi)+(unit?' '+unit:'');
+  return f(lo)+(unit?' '+unit:'');
+}
+var curScale=1,curRecipe=null;
+function ingHTML(r,scale){
+  return r.ingredients.map(function(ing){
+    return '<div class="ingredient"><span>'+ing[0]+'</span><strong>'+fmtQty(ing,scale)+'</strong></div>';
+  }).join('');
+}
+function openRecipe(id){
+  var r=RH_RECIPES.find(function(x){return x.id===id});
+  if(!r)return;curRecipe=r;curScale=1;
+  var m=RH_STATUS[r.status];
+  var h='<button class="btn secondary rh-back" id="rh-backbtn">← All recipes</button>';
+  h+='<article class="rh-detail">';
+  h+='<div class="rh-id">'+r.id+' · '+catLabel[r.cat]+'</div>';
+  h+='<h2>'+r.title+'</h2><p class="rh-sub">'+r.blurb+'</p>';
+  h+='<div class="rh-badges">'+statusBadge(r.status)+'</div>';
+  h+='<p class="rh-note">'+m.desc+'</p>';
+  // related
+  var rel=[];
+  if(r.parent){var p=RH_RECIPES.find(function(x){return x.id===r.parent});if(p)rel.push({id:p.id,t:'↑ Parent: '+p.title});}
+  (r.children||[]).forEach(function(cid){var c=RH_RECIPES.find(function(x){return x.id===cid});if(c)rel.push({id:c.id,t:'↓ '+c.title});});
+  // scaler
+  h+='<div class="rh-scale" id="rh-scale"><span>Scale:</span>'
+    +[0.5,1,1.5,2,3].map(function(s){return '<button data-s="'+s+'" class="'+(s===1?'active':'')+'">'+(s===1?'1×':s+'×')+'</button>';}).join('')
+    +'</div>';
+  h+='<div class="rh-ing" id="rh-ing">'+ingHTML(r,1)+'</div>';
+  if(r.method&&r.method.length){
+    h+='<div class="rh-sec"><h3>Method</h3><ol>'+r.method.map(function(s){return '<li>'+s+'</li>';}).join('')+'</ol></div>';
+  }
+  if(r.notes&&r.notes.length){
+    h+='<div class="rh-sec"><h3>Notes</h3><ul>'+r.notes.map(function(s){return '<li>'+s+'</li>';}).join('')+'</ul></div>';
+  }
+  if(r.unresolved&&r.unresolved.length){
+    h+='<div class="rh-unresolved"><h3>Unresolved</h3><ul>'+r.unresolved.map(function(s){return '<li>'+s+'</li>';}).join('')+'</ul></div>';
+  }
+  if(rel.length){
+    h+='<div class="rh-related">'+rel.map(function(x){return '<button class="rh-rel" data-id="'+x.id+'">'+x.t+'</button>';}).join('')+'</div>';
+  }
+  h+='<div class="rh-actions"><button class="btn secondary" id="rh-copy">Copy ingredients</button><button class="btn secondary" id="rh-download">Download recipe</button></div>';
+  h+='</article>';
+  detailView.innerHTML=h;detailView.hidden=false;listView.hidden=true;
+  document.getElementById('rh-backbtn').onclick=closeRecipe;
+  detailView.querySelectorAll('#rh-scale button').forEach(function(b){
+    b.onclick=function(){
+      curScale=parseFloat(b.dataset.s);
+      detailView.querySelectorAll('#rh-scale button').forEach(function(x){x.classList.toggle('active',x===b);});
+      document.getElementById('rh-ing').innerHTML=ingHTML(curRecipe,curScale);
+    };
+  });
+  detailView.querySelectorAll('.rh-rel').forEach(function(b){b.onclick=function(){openRecipe(b.dataset.id);window.scrollTo(0,0);};});
+  document.getElementById('rh-copy').onclick=function(){
+    var t=curRecipe.ingredients.map(function(ing){return ing[0]+': '+fmtQty(ing,curScale);}).join('\n');
+    var label=curRecipe.id+' '+curRecipe.title+(curScale!==1?' ('+curScale+'×)':'');
+    navigator.clipboard.writeText(label+'\n'+t).then(function(){var b=document.getElementById('rh-copy');b.textContent='Copied ✓';setTimeout(function(){b.textContent='Copy ingredients';},1200);});
+  };
+  document.getElementById('rh-download').onclick=function(){
+    var lines=[curRecipe.id+' '+curRecipe.title,'',curRecipe.ingredients.map(function(ing){return fmtQty(ing,curScale)+' '+ing[0];}).join('\n'),'','Method',curRecipe.method.map(function(step,n){return (n+1)+'. '+step.replace(/<[^>]*>/g,'');}).join('\n')];
+    if(curRecipe.notes&&curRecipe.notes.length)lines.push('','Notes',curRecipe.notes.map(function(note){return '- '+note.replace(/<[^>]*>/g,'');}).join('\n'));
+    var blob=new Blob([lines.join('\n')],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+    a.href=url;a.download=curRecipe.id.toLowerCase()+'-'+curRecipe.title.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')+'.txt';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url);},1000);
+  };
+  window.scrollTo(0,0);
+}
+function closeRecipe(){detailView.hidden=true;listView.hidden=false;detailView.innerHTML='';}
+searchEl.addEventListener('input',function(){query=searchEl.value.trim();renderGrid();});
+reviewBtn.onclick=function(){reviewOnly=!reviewOnly;reviewBtn.classList.toggle('active',reviewOnly);renderGrid();};
+renderCats();renderGrid();renderIssues();
+})();
+
+</script>
+
+
+
+
+
+  
+  <section class="view" id="sketch" aria-labelledby="sketch-heading">
+    <header class="viewbar"><button class="back-btn" data-home>← Main</button><h1 id="sketch-heading">Sketch Pad</h1><span class="stamp">Download when finished</span></header>
+    <div class="sketch-tools"><div class="tool-group"><button class="btn small teal" id="pen-tool">Pen</button><button class="btn small secondary" id="eraser-tool">Eraser</button></div><div class="tool-group"><label class="field">Color<input class="color-input" type="color" id="pen-color" value="#152022" /></label><label class="field">Size<input class="range" type="range" id="pen-size" min="1" max="36" value="5" /></label></div><div class="tool-group"><button class="btn small secondary" id="sketch-undo">Undo</button><button class="btn small secondary" id="sketch-redo">Redo</button><button class="btn small secondary" id="toggle-grid">Grid</button></div><div class="tool-group"><button class="btn small danger" id="clear-sketch">Clear</button><button class="btn small accent" id="download-sketch">Download PNG</button></div></div>
+    <div class="sketch-frame" id="sketch-frame"><canvas id="sketch-canvas" aria-label="Drawing canvas"></canvas></div><p class="sketch-hint">Use a finger, mouse, or Apple Pencil. The PNG keeps your marks; the optional grid is only a guide and is not included.</p>
+  </section>
+
+  <section class="view" id="watchlist" aria-labelledby="watchlist-heading">
+    <header class="viewbar"><button class="back-btn" data-home>← Main</button><h1 id="watchlist-heading">Watchlist</h1><span class="stamp" id="wl-count">0 to watch</span></header>
+    <form class="todo-entry" id="wl-form"><label class="sr-only" for="wl-title">Title</label><input class="task-input" id="wl-title" type="text" placeholder="Show or movie title…" required maxlength="120" /><label class="sr-only" for="wl-type">Type</label><select id="wl-type"><option>Show</option><option>Movie</option></select><label class="sr-only" for="wl-service">Service</label><input class="task-input" id="wl-service" type="text" placeholder="Where? (Netflix, Max…)" maxlength="40" /><label class="sr-only" for="wl-notes">Notes</label><input class="task-input" id="wl-notes" type="text" placeholder="Notes (optional)" maxlength="180" /><button class="btn accent add-task" type="submit">Add</button></form>
+    <div class="todo-tools"><button class="btn small secondary filter-btn active" data-wlfilter="all">All</button><button class="btn small secondary filter-btn" data-wlfilter="show">Shows</button><button class="btn small secondary filter-btn" data-wlfilter="movie">Movies</button><button class="btn small secondary filter-btn" data-wlfilter="towatch">To watch</button><button class="btn small secondary filter-btn" data-wlfilter="watched">Watched</button><span class="spacer"></span><input class="task-input wl-search" id="wl-search" type="search" placeholder="Search…" aria-label="Search watchlist" /><button class="btn small secondary" id="wl-export">Export</button><button class="btn small secondary" id="wl-import">Import</button><input class="sr-only" type="file" id="wl-import-file" accept="application/json,.json" /></div>
+    <div class="wl-grid" id="wl-grid"></div>
+    <p class="wl-empty" id="wl-empty" hidden>Nothing here yet — add your first show or movie above.</p>
+  </section>
+
+  <style>
+.nav-card.watchlist{grid-column:span 4;border-radius:var(--radius-md);background:#232a4d;color:#eef1ff}
+.wl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-top:6px}
+.wl-card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:8px;box-shadow:var(--shadow)}
+.wl-card.watched{opacity:.62}
+.wl-card.watched .wl-title{text-decoration:line-through}
+.wl-title{font:800 22px/1.1 "Barlow Condensed",sans-serif;margin:0}
+.wl-badges{display:flex;gap:6px;flex-wrap:wrap}
+.wl-badge{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:999px;background:var(--ink);color:var(--bg)}
+.wl-badge.show{background:#232a4d;color:#eef1ff}
+.wl-badge.movie{background:#7a5c2e;color:#fbf3e2}
+.wl-badge.service{background:transparent;border:1px solid var(--line);color:inherit}
+.wl-notes{font-size:14px;opacity:.8;margin:0}
+.wl-actions{display:flex;gap:8px;margin-top:auto;padding-top:6px}
+.wl-search{max-width:200px;min-height:40px}
+.wl-empty{color:var(--dim);text-align:center;padding:30px 0}
+#wl-count{white-space:nowrap}
+</style>
+</main>
+<dialog id="clear-dialog"><div class="dialog-body"><h2>Clear the sketch?</h2><p style="margin:0;color:var(--muted)">Download it first if you want to keep a copy.</p></div><div class="dialog-actions"><button class="btn secondary" data-close-dialog="clear-dialog">Cancel</button><button class="btn danger" id="confirm-clear">Clear</button></div></dialog>
+<script>
+(function(){"use strict";
+  function escapeHtml(value){return String(value).replace(/[&<>"']/g,function(ch){return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[ch]})}
+  var views=document.querySelectorAll('.view');
+  function openView(id){views.forEach(function(v){v.classList.toggle('active',v.id===id)});window.scrollTo(0,0);if(id==='sketch')setTimeout(sizeCanvas,50);if(id==='letters')loadLetterMonth(false)}document.querySelectorAll('[data-open]').forEach(function(b){b.addEventListener('click',function(){openView(b.dataset.open)})});document.querySelectorAll('[data-home]').forEach(function(b){b.addEventListener('click',function(){openView('home')})});document.querySelectorAll('[data-close-dialog]').forEach(function(b){b.addEventListener('click',function(){document.getElementById(b.dataset.closeDialog).close()})});
+var canvas=document.getElementById('sketch-canvas'),ctx=canvas.getContext('2d'),drawing=false,last=null,mode='pen',sketchUndo=[],sketchRedo=[];function sizeCanvas(){var frame=document.getElementById('sketch-frame'),rect=frame.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,2),old=document.createElement('canvas');old.width=canvas.width;old.height=canvas.height;if(canvas.width&&canvas.height)old.getContext('2d').drawImage(canvas,0,0);canvas.width=Math.max(1,Math.round(rect.width*dpr));canvas.height=Math.max(1,Math.round(rect.height*dpr));ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);if(old.width)ctx.drawImage(old,0,0,old.width,old.height,0,0,rect.width,rect.height);ctx.lineCap='round';ctx.lineJoin='round'}function point(e){var r=canvas.getBoundingClientRect();return {x:e.clientX-r.left,y:e.clientY-r.top}}function saveSketch(){try{sketchUndo.push(canvas.toDataURL());if(sketchUndo.length>30)sketchUndo.shift();sketchRedo=[]}catch(e){}}function loadSketch(url){var img=new Image();img.onload=function(){var r=canvas.getBoundingClientRect();ctx.clearRect(0,0,r.width,r.height);ctx.drawImage(img,0,0,r.width,r.height)};img.src=url}canvas.addEventListener('pointerdown',function(e){saveSketch();drawing=true;last=point(e);canvas.setPointerCapture(e.pointerId)});canvas.addEventListener('pointermove',function(e){if(!drawing)return;var p=point(e);ctx.save();ctx.globalCompositeOperation=mode==='eraser'?'destination-out':'source-over';ctx.strokeStyle=document.getElementById('pen-color').value;ctx.lineWidth=Number(document.getElementById('pen-size').value);ctx.lineCap='round';ctx.lineJoin='round';ctx.beginPath();ctx.moveTo(last.x,last.y);ctx.lineTo(p.x,p.y);ctx.stroke();ctx.restore();last=p});canvas.addEventListener('pointerup',function(){drawing=false});canvas.addEventListener('pointercancel',function(){drawing=false});function setTool(which){mode=which;document.getElementById('pen-tool').className='btn small '+(which==='pen'?'teal':'secondary');document.getElementById('eraser-tool').className='btn small '+(which==='eraser'?'teal':'secondary')}document.getElementById('pen-tool').onclick=function(){setTool('pen')};document.getElementById('eraser-tool').onclick=function(){setTool('eraser')};document.getElementById('toggle-grid').onclick=function(){document.getElementById('sketch-frame').classList.toggle('grid')};document.getElementById('sketch-undo').onclick=function(){if(!sketchUndo.length)return;sketchRedo.push(canvas.toDataURL());loadSketch(sketchUndo.pop())};document.getElementById('sketch-redo').onclick=function(){if(!sketchRedo.length)return;sketchUndo.push(canvas.toDataURL());loadSketch(sketchRedo.pop())};document.getElementById('clear-sketch').onclick=function(){document.getElementById('clear-dialog').showModal()};document.getElementById('confirm-clear').onclick=function(){saveSketch();var r=canvas.getBoundingClientRect();ctx.clearRect(0,0,r.width,r.height);document.getElementById('clear-dialog').close()};document.getElementById('download-sketch').onclick=function(){var out=document.createElement('canvas');out.width=canvas.width;out.height=canvas.height;var o=out.getContext('2d');o.fillStyle='#fff';o.fillRect(0,0,out.width,out.height);o.drawImage(canvas,0,0);out.toBlob(function(blob){var url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='template-sketch.png';a.click();setTimeout(function(){URL.revokeObjectURL(url)},1000)},'image/png')};window.addEventListener('resize',function(){if(document.getElementById('sketch').classList.contains('active'))sizeCanvas()});
+})();
+
+
+
+
+
+/* ==== WATCHLIST ==== */
+(function(){
+  var KEY='wl-items-v1';
+  function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||'[]'); }catch(e){ return []; } }
+  function save(a){ try{ localStorage.setItem(KEY, JSON.stringify(a)); }catch(e){} }
+  var items=load(), filter='all', query='';
+  if(!items.length){ try{ if(!localStorage.getItem('wl-seeded')){
+    items=[
+      {id:'wl-seed-1',title:'East of Eden',type:'Show',service:'Netflix',notes:'2026 limited series',watched:false,added:new Date().toISOString()},
+      {id:'wl-seed-2',title:'The Magicians',type:'Show',service:'Netflix',notes:'',watched:false,added:new Date().toISOString()},
+      {id:'wl-seed-3',title:'Street Fighter',type:'Movie',service:'',notes:'2026 film',watched:false,added:new Date().toISOString()},
+      {id:'wl-seed-4',title:'Dutton Ranch',type:'Show',service:'Paramount+',notes:'Yellowstone Beth & Rip spinoff',watched:false,added:new Date().toISOString()}
+    ];
+    save(items); localStorage.setItem('wl-seeded','1');
+  }}catch(e){} }
+  function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function counts(){
+    var tw=items.filter(function(x){return !x.watched;}).length;
+    var w=items.length-tw;
+    document.getElementById('wl-count').textContent=tw+' to watch'+(w?' · '+w+' watched':'');
+  }
+  function render(){
+    var grid=document.getElementById('wl-grid');
+    var q=query.trim().toLowerCase();
+    var list=items.filter(function(x){
+      if(filter==='show'&&x.type!=='Show') return false;
+      if(filter==='movie'&&x.type!=='Movie') return false;
+      if(filter==='towatch'&&x.watched) return false;
+      if(filter==='watched'&&!x.watched) return false;
+      if(q && (x.title+' '+(x.service||'')+' '+(x.notes||'')).toLowerCase().indexOf(q)<0) return false;
+      return true;
+    });
+    var empty=document.getElementById('wl-empty');
+    empty.hidden=list.length>0;
+    empty.textContent=items.length?'No matches for this filter.':'Nothing here yet — add your first show or movie above.';
+    grid.innerHTML=list.map(function(x){
+      return '<article class="wl-card'+(x.watched?' watched':'')+'" data-id="'+x.id+'">'
+        +'<h3 class="wl-title">'+esc(x.title)+'</h3>'
+        +'<div class="wl-badges"><span class="wl-badge '+(x.type==='Show'?'show':'movie')+'">'+esc(x.type)+'</span>'
+        +(x.service?'<span class="wl-badge service">'+esc(x.service)+'</span>':'')
+        +(x.watched?'<span class="wl-badge">Watched</span>':'')+'</div>'
+        +(x.notes?'<p class="wl-notes">'+esc(x.notes)+'</p>':'')
+        +'<div class="wl-actions"><button class="btn small '+(x.watched?'secondary':'teal')+'" data-wl="toggle">'+(x.watched?'Watch again':'✓ Watched')+'</button>'
+        +'<button class="btn small secondary" data-wl="del">Remove</button></div></article>';
+    }).join('');
+    counts();
+  }
+  document.getElementById('wl-form').addEventListener('submit',function(e){
+    e.preventDefault();
+    var t=document.getElementById('wl-title').value.trim(); if(!t) return;
+    items.unshift({id:Date.now()+''+Math.floor(Math.random()*1e6),title:t,type:document.getElementById('wl-type').value,service:document.getElementById('wl-service').value.trim(),notes:document.getElementById('wl-notes').value.trim(),watched:false,added:new Date().toISOString()});
+    save(items); this.reset(); render();
+  });
+  document.querySelectorAll('[data-wlfilter]').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('[data-wlfilter]').forEach(function(x){x.classList.remove('active');});
+      b.classList.add('active'); filter=b.getAttribute('data-wlfilter'); render();
+    });
+  });
+  document.getElementById('wl-search').addEventListener('input',function(){ query=this.value; render(); });
+  document.getElementById('wl-grid').addEventListener('click',function(e){
+    var b=e.target.closest('[data-wl]'); if(!b) return;
+    var card=e.target.closest('.wl-card'); if(!card) return;
+    var id=card.getAttribute('data-id');
+    var it=null; items.forEach(function(x){ if(x.id===id) it=x; });
+    if(!it) return;
+    if(b.getAttribute('data-wl')==='toggle'){ it.watched=!it.watched; }
+    else{ items=items.filter(function(x){return x.id!==id;}); }
+    save(items); render();
+  });
+  document.getElementById('wl-export').addEventListener('click',function(){
+    var blob=new Blob([JSON.stringify(items,null,2)],{type:'application/json'});
+    var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='watchlist-backup.json'; a.click();
+    setTimeout(function(){URL.revokeObjectURL(a.href);},4000);
+  });
+  document.getElementById('wl-import').addEventListener('click',function(){ document.getElementById('wl-import-file').click(); });
+  document.getElementById('wl-import-file').addEventListener('change',function(){
+    var f=this.files[0]; if(!f) return;
+    var r=new FileReader();
+    r.onload=function(){
+      try{
+        var a=JSON.parse(r.result);
+        if(Array.isArray(a)){ items=a.filter(function(x){return x&&x.title;}); save(items); render(); }
+      }catch(e){}
+    };
+    r.readAsText(f); this.value='';
+  });
+  render();
+})();
+</script>
+</body>
+</html>
