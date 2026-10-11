@@ -72,6 +72,7 @@ a.home{color:var(--dim);font-size:.85rem}
     <h1>Reality Fracture Draft Simulator<small>Pick the best card in each pack — 50 packs</small></h1>
     <div class="stats">
       <div class="pill">Pack <b id="packNum">1</b> / 50</div>
+      <div class="pill">Pick <b id="pickNum">1</b></div>
       <div class="pill">Score <b id="score">0</b></div>
     </div>
   </div>
@@ -101,7 +102,6 @@ const CARDS = [{"n":"Enlightened Confidant","c":"{1}{W}","t":"Creature 2/1","r":
 const GRADE_VAL = {'S':12,'A+':11,'A':10,'A-':9,'B+':8,'B':7,'B-':6,'C+':5,'C':4,'C-':3,'D+':2,'D':1,'F':0};
 const POOL = {M:[],R:[],U:[],C:[]};
 CARDS.forEach(c=>{ if(POOL[c.r]) POOL[c.r].push(c); });
-const W = {M:0.03,R:0.12,U:0.30,C:0.55};
 
 let packIdx=0, score=0, currentPack=[], locked=false, modalCard=null;
 
@@ -114,19 +114,41 @@ function manaHTML(cost){
 }
 function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;');}
 
-function drawPack(){
-  const size = 5 + Math.floor(Math.random()*11); // 5..15
+function buildRealPack(){
+  // A realistic 14-card draft booster: 1 rare/mythic, 3 uncommons, 10 commons.
   const pack=[]; const used=new Set();
-  let guard=0;
-  while(pack.length<size && guard++<500){
-    const roll=Math.random(); let r='C';
-    if(roll<W.M) r='M'; else if(roll<W.M+W.R) r='R'; else if(roll<W.M+W.R+W.U) r='U';
-    let pool=POOL[r]; if(!pool.length) pool=POOL.C;
-    const c=pool[Math.floor(Math.random()*pool.length)];
-    if(used.has(c.n)) continue;
-    used.add(c.n); pack.push(c);
+  function take(pool){
+    let guard=0;
+    while(guard++<500){
+      const c=pool[Math.floor(Math.random()*pool.length)];
+      if(!c || used.has(c.n)) continue;
+      used.add(c.n); pack.push(c); return;
+    }
   }
+  take(Math.random()<1/7.5 && POOL.M.length ? POOL.M : POOL.R); // mythic ~1 in 7.5 packs
+  for(let i=0;i<3;i++) take(POOL.U.length?POOL.U:POOL.C);
+  for(let i=0;i<10;i++) take(POOL.C.length?POOL.C:POOL.U);
   return pack;
+}
+
+function drawPack(){
+  // Simulate a real draft: build a full pack, then let the drafters ahead of
+  // you take the best cards first. You only ever see what's actually left —
+  // no pack-one-pick-one bombs sitting in a 4-card pack.
+  const full=buildRealPack();
+  const pickNum=1+Math.floor(Math.random()*12); // you are pick 1..12
+  const byGrade=full.slice().sort((a,b)=>{
+    const d=(GRADE_VAL[b.g]||0)-(GRADE_VAL[a.g]||0);
+    return d!==0?d:Math.random()-0.5;
+  });
+  const taken=new Set(byGrade.slice(0,pickNum-1).map(c=>c.n));
+  const remaining=full.filter(c=>!taken.has(c.n));
+  for(let i=remaining.length-1;i>0;i--){ // shuffle so position isn't a tell
+    const j=Math.floor(Math.random()*(i+1));
+    const t=remaining[i]; remaining[i]=remaining[j]; remaining[j]=t;
+  }
+  drawPack.pickNum=pickNum;
+  return remaining;
 }
 
 function renderPack(){
@@ -150,7 +172,11 @@ function renderPack(){
     grid.appendChild(d);
   });
   document.getElementById('packNum').textContent=packIdx+1;
-  document.getElementById('hint').textContent='Tap a card to preview it, then pick. Grades are hidden until you lock in.';
+  var pn=drawPack.pickNum||1;
+  document.getElementById('pickNum').textContent=pn;
+  document.getElementById('hint').textContent = pn===1
+    ? 'Fresh pack — you have first pick. Take the best card. Grades are hidden until you lock in.'
+    : 'You are pick '+pn+' of this pack — the '+(pn-1)+' best card'+(pn>2?'s were':' was')+' already drafted. Pick the best of what\'s left. Grades are hidden until you lock in.';
 }
 
 function openModal(c,el){
