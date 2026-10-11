@@ -210,12 +210,14 @@ body{max-width:860px;margin:0 auto;padding:18px 14px 60px}
 <body>
 <main>
 <section class="view" id="watchlist" aria-labelledby="watchlist-heading">
-    <header class="viewbar wl-standalone-bar"><h1 id="watchlist-heading">Watchlist</h1><span class="spacer"></span><button class="btn small secondary" id="wl-view-toggle">TV Shows ▾</button><button class="btn small secondary" id="wl-share">Share</button></header>
+    <header class="viewbar wl-standalone-bar"><h1 id="watchlist-heading">Watchlist</h1><span class="spacer"></span><button class="btn small secondary" id="wl-share">Share</button></header>
     <form class="wl-add" id="wl-form"><div class="wl-title-wrap"><label class="sr-only" for="wl-title">Title</label><input class="task-input" id="wl-title" type="text" placeholder="Add a show or movie…" required maxlength="120" autocomplete="off" /><div class="wl-suggest" id="wl-suggest" hidden></div></div><button class="btn accent" type="submit">Add</button></form>
-    <div class="wl-list" id="wl-grid"></div>
-    <p class="wl-empty" id="wl-empty" hidden>Nothing here yet — add your first show or movie above.</p>
+    <div class="wl-tabs" role="tablist"><button class="wl-tab active" data-view="movie" role="tab">Movies</button><button class="wl-tab" data-view="show" role="tab">TV Shows</button></div>
+    <div class="wl-grid" id="wl-grid"></div>
+    <p class="wl-empty" id="wl-empty" hidden>Nothing here yet — add your first one above.</p>
     <h2 class="wl-finished-h" id="wl-finished-h" hidden>Finished Watching</h2>
-    <div class="wl-list finished" id="wl-finished"></div>
+    <div class="wl-grid finished" id="wl-finished"></div>
+    <div class="wl-modal" id="wl-modal" hidden><div class="wl-modal-bg" data-m="close"></div><div class="wl-sheet"><button class="wl-sheet-x" data-m="close" aria-label="Close">×</button><div class="wl-sheet-top"><img id="wl-m-poster" alt="" /><div class="wl-sheet-info"><h3 id="wl-m-title"></h3><div class="wl-m-rel" id="wl-m-rel"></div><a class="wl-m-link" id="wl-m-link" href="#" target="_blank" rel="noopener" hidden>More info ↗</a></div></div><button class="wl-m-prog" id="wl-m-prog"></button><button class="wl-m-done" id="wl-m-done">✓ Watched</button></div></div>
   </section>
 </main>
 <script>
@@ -237,14 +239,14 @@ try{
   function load(){ if(SHARED) return SHARED; try{ return JSON.parse(localStorage.getItem(KEY)||'[]'); }catch(e){ return []; } }
   function save(a){ if(SHARED) return; try{ localStorage.setItem(KEY, JSON.stringify(a)); }catch(e){} }
   function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-  var items=load(), view='show';
+  var items=load(), view='movie';
   var WL_SEEDS=[
-    {id:'wl-seed-1',title:'East of Eden',type:'Show',service:'Netflix',notes:'2026 limited series',watched:false},
-    {id:'wl-seed-2',title:'The Magicians',type:'Show',service:'Netflix',notes:'',watched:false},
-    {id:'wl-seed-3',title:'Street Fighter',type:'Movie',service:'',notes:'2026 film',watched:false},
-    {id:'wl-seed-4',title:'Dutton Ranch',type:'Show',service:'Paramount+',notes:'Yellowstone Beth & Rip spinoff',watched:false},
-    {id:'wl-seed-5',title:'Digger',type:'Movie',service:'',notes:'2026 film · Tom Cruise',watched:false},
-    {id:'wl-seed-6',title:'The Deuce',type:'Show',service:'HBO',notes:'70s Times Square',watched:false}
+    {id:'wl-seed-1',title:'East of Eden',type:'Show',service:'Netflix',notes:'2026 limited series',watched:false,poster:'https://static.tvmaze.com/uploads/images/medium_portrait/643/1609556.jpg'},
+    {id:'wl-seed-2',title:'The Magicians',type:'Show',service:'Netflix',notes:'',watched:false,poster:'https://static.tvmaze.com/uploads/images/medium_portrait/229/573329.jpg'},
+    {id:'wl-seed-3',title:'Street Fighter',type:'Movie',service:'',notes:'2026 film',watched:false,poster:'https://upload.wikimedia.org/wikipedia/en/d/d4/Street_Fighter_2026_film_poster.jpeg',info:'https://en.wikipedia.org/wiki/Street_Fighter_(2026_film)'},
+    {id:'wl-seed-4',title:'Dutton Ranch',type:'Show',service:'Paramount+',notes:'Yellowstone Beth & Rip spinoff',watched:false,poster:'https://static.tvmaze.com/uploads/images/medium_portrait/625/1563140.jpg'},
+    {id:'wl-seed-5',title:'Digger',type:'Movie',service:'',notes:'2026 film · Tom Cruise',watched:false,poster:'https://upload.wikimedia.org/wikipedia/en/7/7b/Digger_%282026_film%29_poster.jpg',info:'https://en.wikipedia.org/wiki/Digger_(2026_film)',releaseDate:'2026-10-02',releaseKind:'theatrical'},
+    {id:'wl-seed-6',title:'The Deuce',type:'Show',service:'HBO',notes:'70s Times Square',watched:false,poster:'https://static.tvmaze.com/uploads/images/medium_portrait/210/526668.jpg'}
   ];
   try{
     if(!SHARED&&localStorage.getItem('wl-seed-ver')!=='2'){
@@ -375,43 +377,89 @@ try{
   }
 
   /* ---- cards ---- */
-  function cardHTML(x){
-    var rel=releaseLine(x);
-    return '<div class="wl-entry" data-id="'+x.id+'">'
-      +'<button class="wl-pill" data-wl="expand"><span>'+esc(x.title)+'</span></button>'
-      +'<div class="wl-detail" hidden>'
-      +(x.info?'<a class="wl-detail-link" href="'+esc(x.info)+'" target="_blank" rel="noopener">More info ↗</a>':'')
-      +(rel?'<div class="wl-detail-rel">'+esc(rel)+'</div>':'')
-      +'<button class="wl-detail-prog" data-wl="prog">'+(x.progress?'Progress: <strong>'+esc(x.progress)+'</strong>':'Set progress')+'</button>'
-      +'<button class="wl-detail-done" data-wl="toggle">✓ Watched</button>'
-      +'</div></div>';
-  }
-  function finishedHTML(x){
-    return '<div class="wl-entry" data-id="'+x.id+'">'
-      +'<button class="wl-pill" data-wl="expand"><span>'+esc(x.title)+'</span></button>'
-      +'<div class="wl-detail" hidden>'
-      +(x.progress?'<div class="wl-detail-rel">Ended at: '+esc(x.progress)+'</div>':'')
-      +'<button class="wl-detail-done" data-wl="toggle">↩ Move back to watchlist</button>'
-      +'</div></div>';
+  function tileHTML(x){
+    var poster=x.poster
+      ? '<img src="'+esc(x.poster)+'" alt="" loading="lazy" />'
+      : '<span class="wl-tile-none">'+esc(x.title)+'</span>';
+    return '<button class="wl-tile" data-id="'+x.id+'">'+poster
+      +'<span class="wl-tile-title">'+esc(x.title)+'</span></button>';
   }
   function findItem(id){ var f=null; items.forEach(function(x){ if(x.id===id) f=x; }); return f; }
   function render(){
     var t=view==='show'?'Show':'Movie';
     var towatch=items.filter(function(x){ return !x.watched&&x.type===t; });
     var finished=items.filter(function(x){ return x.watched&&x.type===t; });
-    document.getElementById('wl-grid').innerHTML=towatch.map(cardHTML).join('');
+    document.getElementById('wl-grid').innerHTML=towatch.map(tileHTML).join('');
     document.getElementById('wl-empty').hidden=towatch.length>0||items.length>0;
-    document.getElementById('wl-finished').innerHTML=finished.map(finishedHTML).join('');
+    document.getElementById('wl-finished').innerHTML=finished.map(tileHTML).join('');
     document.getElementById('wl-finished-h').hidden=finished.length===0;
-    var tg=document.getElementById('wl-view-toggle');
-    if(tg) tg.textContent=(view==='show'?'TV Shows':'Movies')+' ▾';
+    document.querySelectorAll('.wl-tab').forEach(function(b){
+      b.classList.toggle('active',b.getAttribute('data-view')===view);
+    });
   }
 
-  /* ---- view toggle ---- */
-  document.getElementById('wl-view-toggle').addEventListener('click',function(){
-    view=view==='show'?'movie':'show';
-    render();
+  /* ---- tabs ---- */
+  document.querySelectorAll('.wl-tab').forEach(function(b){
+    b.addEventListener('click',function(){ view=b.getAttribute('data-view'); render(); });
   });
+
+  /* ---- detail sheet ---- */
+  var modalItem=null;
+  function openModal(it){
+    modalItem=it;
+    var p=document.getElementById('wl-m-poster');
+    if(it.poster){ p.src=it.poster; p.style.display=''; }
+    else{ p.removeAttribute('src'); p.style.display='none'; }
+    document.getElementById('wl-m-title').textContent=it.title;
+    var rel=releaseLine(it);
+    var relEl=document.getElementById('wl-m-rel');
+    relEl.textContent=rel; relEl.style.display=rel?'':'none';
+    var link=document.getElementById('wl-m-link');
+    if(it.info){ link.href=it.info; link.hidden=false; } else link.hidden=true;
+    var prog=document.getElementById('wl-m-prog');
+    prog.innerHTML=it.progress?'Progress: <strong>'+esc(it.progress)+'</strong>':'Set progress';
+    var done=document.getElementById('wl-m-done');
+    done.textContent=it.watched?'↩ Move back to watchlist':'✓ Watched';
+    document.getElementById('wl-modal').hidden=false;
+    document.body.style.overflow='hidden';
+  }
+  function closeModal(){
+    document.getElementById('wl-modal').hidden=true;
+    document.body.style.overflow='';
+    modalItem=null;
+  }
+  document.getElementById('wl-modal').addEventListener('click',function(e){
+    if(e.target.closest('[data-m="close"]')) closeModal();
+  });
+  document.getElementById('wl-m-done').addEventListener('click',function(){
+    if(!modalItem) return;
+    modalItem.watched=!modalItem.watched;
+    save(items); closeModal(); render();
+  });
+  document.getElementById('wl-m-prog').addEventListener('click',function(){
+    if(!modalItem) return;
+    var it=modalItem, btn=this, cur=it.progress||'';
+    var inp=document.createElement('input');
+    inp.className='wl-prog-input'; inp.value=cur; inp.placeholder='S2 E5, 50%…';
+    inp.setAttribute('aria-label','Progress');
+    btn.replaceWith(inp); inp.focus(); inp.select();
+    var done=false;
+    function commit(ok){
+      if(done) return; done=true;
+      if(ok) it.progress=inp.value.trim();
+      save(items); openModal(it);
+    }
+    inp.addEventListener('keydown',function(ev){
+      if(ev.key==='Enter') commit(true);
+      else if(ev.key==='Escape') commit(false);
+    });
+    inp.addEventListener('blur',function(){ commit(true); });
+  });
+  function gridClick(e){
+    var tile=e.target.closest('.wl-tile'); if(!tile) return;
+    var it=findItem(tile.getAttribute('data-id')); if(!it) return;
+    openModal(it);
+  }
 
   /* ---- add ---- */
   document.getElementById('wl-form').addEventListener('submit',function(e){
@@ -434,37 +482,7 @@ try{
   });
 
   /* ---- card actions ---- */
-  function gridClick(e){
-    var entry=e.target.closest('.wl-entry'); if(!entry) return;
-    var it=findItem(entry.getAttribute('data-id')); if(!it) return;
-    var b=e.target.closest('[data-wl]'); if(!b) return;
-    var act=b.getAttribute('data-wl');
-    if(act==='expand'){
-      var det=entry.querySelector('.wl-detail');
-      var open=det.hidden;
-      document.querySelectorAll('.wl-detail').forEach(function(d){ d.hidden=true; });
-      det.hidden=!open;
-    }
-    else if(act==='toggle'){ it.watched=!it.watched; save(items); render(); }
-    else if(act==='prog'){
-      var cur=it.progress||'';
-      var inp=document.createElement('input');
-      inp.className='wl-prog-input'; inp.value=cur; inp.placeholder='S2 E5, 50%…';
-      inp.setAttribute('aria-label','Progress');
-      b.replaceWith(inp); inp.focus(); inp.select();
-      var done=false;
-      function commit(ok){
-        if(done) return; done=true;
-        if(ok) it.progress=inp.value.trim();
-        save(items); render();
-      }
-      inp.addEventListener('keydown',function(ev){
-        if(ev.key==='Enter') commit(true);
-        else if(ev.key==='Escape') commit(false);
-      });
-      inp.addEventListener('blur',function(){ commit(true); });
-    }
-  }
+
   document.getElementById('wl-grid').addEventListener('click',function(e){ gridClick(e); });
   document.getElementById('wl-finished').addEventListener('click',function(e){ gridClick(e); });
 
