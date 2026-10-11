@@ -476,22 +476,19 @@ renderCats();renderGrid();renderIssues();
 .nav-card.watchlist{grid-column:span 4;border-radius:var(--radius-md);background:#232a4d;color:#eef1ff}
 .wl-add{display:flex;gap:10px;margin:14px 0 18px}
 .wl-add .task-input{flex:1}
-.wl-list{display:flex;flex-direction:column}
-.wl-row{display:flex;gap:12px;align-items:center;padding:13px 4px;border-bottom:1px solid var(--line)}
-.wl-list .wl-row:first-child{border-top:1px solid var(--line)}
-.wl-info{flex:1;min-width:0}
-.wl-title{font:800 20px/1.2 "Barlow Condensed",sans-serif;margin:0}
-.wl-title a{color:inherit;text-decoration:none}
-.wl-title a:hover{text-decoration:underline}
-.wl-meta{font-size:13px;opacity:.65;margin-top:2px}
-.wl-prog-line{font-size:13px;font-weight:700;margin-top:2px;color:var(--teal,#2a7f6f)}
-.wl-row-btns{display:flex;gap:8px;flex:none}
-.wl-plus,.wl-check,.wl-undo{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:transparent;color:inherit;font-size:17px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none}
-.wl-check{background:#2a7f6f;border-color:#2a7f6f;color:#fff}
-.wl-undo{font-size:15px}
+.wl-list{display:flex;flex-direction:column;gap:8px}
+.wl-entry{margin:0}
+.wl-pill{display:block;width:100%;text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:14px 16px;font:800 19px/1.2 "Barlow Condensed",sans-serif;color:inherit;cursor:pointer;box-shadow:var(--shadow)}
+.wl-pill:hover{transform:translateY(-1px)}
+.wl-detail{background:var(--bg);border:1px solid var(--line);border-top:0;border-radius:0 0 16px 16px;margin:-8px 8px 0;padding:16px 14px 14px;display:flex;flex-direction:column;gap:10px}
+.wl-detail-link{font-size:14px;font-weight:700;color:var(--teal,#2a7f6f);text-decoration:none}
+.wl-detail-rel{font-size:14px;opacity:.7}
+.wl-detail-prog{border:1px dashed var(--line);background:none;border-radius:10px;padding:9px 12px;font-size:14px;color:inherit;cursor:pointer;text-align:left}
+.wl-detail-prog strong{font-weight:700}
+.wl-detail-done{border:0;border-radius:10px;padding:10px;font-size:15px;font-weight:700;cursor:pointer;background:#2a7f6f;color:#fff}
 .wl-empty{color:var(--dim);text-align:center;padding:30px 0}
-.wl-finished-h{font:800 18px/1.2 "Barlow Condensed",sans-serif;margin:26px 0 6px;opacity:.7}
-.wl-list.finished .wl-row{opacity:.7}
+.wl-finished-h{font:800 18px/1.2 "Barlow Condensed",sans-serif;margin:26px 0 10px;opacity:.7}
+.wl-list.finished .wl-pill{opacity:.65}
 .wl-title-wrap{position:relative;flex:1;min-width:0;display:flex}
 .wl-title-wrap .task-input{flex:1}
 .wl-suggest{position:absolute;top:100%;left:0;right:0;z-index:50;background:var(--paper);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);overflow:hidden;max-height:320px;overflow-y:auto}
@@ -503,9 +500,9 @@ renderCats();renderGrid();renderIssues();
 .wl-sug-t{display:flex;flex-direction:column;gap:2px;min-width:0}
 .wl-sug-t strong{font-size:15px}
 .wl-sug-t small{font-size:12px;opacity:.65}
-.wl-prog-input{font-size:14px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:inherit;min-width:0;flex:1}
-.wl-shared .wl-row-btns,.wl-shared #wl-share{display:none}
-</style></style></style>
+.wl-prog-input{font-size:14px;padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:inherit;width:100%}
+.wl-shared .wl-detail-done,.wl-shared .wl-detail-prog,.wl-shared #wl-share{display:none}
+</style></style></style></style>
 </main>
 <dialog id="clear-dialog"><div class="dialog-body"><h2>Clear the sketch?</h2><p style="margin:0;color:var(--muted)">Download it first if you want to keep a copy.</p></div><div class="dialog-actions"><button class="btn secondary" data-close-dialog="clear-dialog">Cancel</button><button class="btn danger" id="confirm-clear">Clear</button></div></dialog>
 <script>
@@ -668,31 +665,24 @@ renderCats();renderGrid();renderIssues();
   }
 
   /* ---- cards ---- */
-  function titleHTML(x){
-    return x.info
-      ? '<a href="'+esc(x.info)+'" target="_blank" rel="noopener">'+esc(x.title)+'</a>'
-      : esc(x.title);
-  }
   function cardHTML(x){
     var rel=releaseLine(x);
-    return '<article class="wl-row" data-id="'+x.id+'">'
-      +'<div class="wl-info"><h3 class="wl-title">'+titleHTML(x)+'</h3>'
-      +(rel?'<div class="wl-meta">'+esc(rel)+'</div>':'')
-      +(x.progress?'<div class="wl-prog-line">'+esc(x.progress)+'</div>':'')
-      +'</div>'
-      +'<div class="wl-row-btns">'
-      +'<button class="wl-plus" data-wl="prog" title="Track progress" aria-label="Track progress">+</button>'
-      +'<button class="wl-check" data-wl="toggle" title="Done watching" aria-label="Mark as watched">✓</button>'
-      +'</div></article>';
+    return '<div class="wl-entry" data-id="'+x.id+'">'
+      +'<button class="wl-pill" data-wl="expand"><span>'+esc(x.title)+'</span></button>'
+      +'<div class="wl-detail" hidden>'
+      +(x.info?'<a class="wl-detail-link" href="'+esc(x.info)+'" target="_blank" rel="noopener">More info ↗</a>':'')
+      +(rel?'<div class="wl-detail-rel">'+esc(rel)+'</div>':'')
+      +'<button class="wl-detail-prog" data-wl="prog">'+(x.progress?'Progress: <strong>'+esc(x.progress)+'</strong>':'Set progress')+'</button>'
+      +'<button class="wl-detail-done" data-wl="toggle">✓ Watched</button>'
+      +'</div></div>';
   }
   function finishedHTML(x){
-    return '<article class="wl-row finished" data-id="'+x.id+'">'
-      +'<div class="wl-info"><h3 class="wl-title">'+titleHTML(x)+'</h3>'
-      +(x.progress?'<div class="wl-prog-line">'+esc(x.progress)+'</div>':'')
-      +'</div>'
-      +'<div class="wl-row-btns">'
-      +'<button class="wl-undo" data-wl="toggle" title="Move back to watchlist" aria-label="Undo">↩</button>'
-      +'</div></article>';
+    return '<div class="wl-entry" data-id="'+x.id+'">'
+      +'<button class="wl-pill" data-wl="expand"><span>'+esc(x.title)+'</span></button>'
+      +'<div class="wl-detail" hidden>'
+      +(x.progress?'<div class="wl-detail-rel">Ended at: '+esc(x.progress)+'</div>':'')
+      +'<button class="wl-detail-done" data-wl="toggle">↩ Move back to watchlist</button>'
+      +'</div></div>';
   }
   function findItem(id){ var f=null; items.forEach(function(x){ if(x.id===id) f=x; }); return f; }
   function render(){
@@ -734,18 +724,23 @@ renderCats();renderGrid();renderIssues();
   });
 
   /* ---- card actions ---- */
-  function gridClick(e,gridId){
-    var card=e.target.closest('.wl-row'); if(!card) return;
-    var it=findItem(card.getAttribute('data-id')); if(!it) return;
+  function gridClick(e){
+    var entry=e.target.closest('.wl-entry'); if(!entry) return;
+    var it=findItem(entry.getAttribute('data-id')); if(!it) return;
     var b=e.target.closest('[data-wl]'); if(!b) return;
     var act=b.getAttribute('data-wl');
-    if(act==='toggle'){ it.watched=!it.watched; save(items); render(); }
+    if(act==='expand'){
+      var det=entry.querySelector('.wl-detail');
+      var open=det.hidden;
+      document.querySelectorAll('.wl-detail').forEach(function(d){ d.hidden=true; });
+      det.hidden=!open;
+    }
+    else if(act==='toggle'){ it.watched=!it.watched; save(items); render(); }
     else if(act==='prog'){
       var cur=it.progress||'';
       var inp=document.createElement('input');
       inp.className='wl-prog-input'; inp.value=cur; inp.placeholder='S2 E5, 50%…';
       inp.setAttribute('aria-label','Progress');
-      var wrap=b.closest('.wl-row-btns');
       b.replaceWith(inp); inp.focus(); inp.select();
       var done=false;
       function commit(ok){
