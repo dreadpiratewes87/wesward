@@ -476,23 +476,22 @@ renderCats();renderGrid();renderIssues();
 .nav-card.watchlist{grid-column:span 4;border-radius:var(--radius-md);background:#232a4d;color:#eef1ff}
 .wl-add{display:flex;gap:10px;margin:14px 0 18px}
 .wl-add .task-input{flex:1}
-.wl-list{display:flex;flex-direction:column;gap:10px}
-.wl-card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:12px;display:flex;gap:12px;align-items:center;box-shadow:var(--shadow)}
-.wl-poster{width:48px;height:72px;object-fit:cover;border-radius:8px;flex:none}
-.wl-poster-none{display:flex;align-items:center;justify-content:center;font-size:24px;background:var(--line)}
+.wl-list{display:flex;flex-direction:column}
+.wl-row{display:flex;gap:12px;align-items:center;padding:13px 4px;border-bottom:1px solid var(--line)}
+.wl-list .wl-row:first-child{border-top:1px solid var(--line)}
 .wl-info{flex:1;min-width:0}
-.wl-title{font:800 20px/1.15 "Barlow Condensed",sans-serif;margin:0}
+.wl-title{font:800 20px/1.2 "Barlow Condensed",sans-serif;margin:0}
 .wl-title a{color:inherit;text-decoration:none}
 .wl-title a:hover{text-decoration:underline}
-.wl-rel{font-size:13px;opacity:.7;margin-top:2px}
+.wl-meta{font-size:13px;opacity:.65;margin-top:2px}
 .wl-prog-line{font-size:13px;font-weight:700;margin-top:2px;color:var(--teal,#2a7f6f)}
-.wl-card-btns{display:flex;gap:8px;flex:none}
-.wl-plus,.wl-check,.wl-undo{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--bg);color:inherit;font-size:18px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none}
+.wl-row-btns{display:flex;gap:8px;flex:none}
+.wl-plus,.wl-check,.wl-undo{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:transparent;color:inherit;font-size:17px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none}
 .wl-check{background:#2a7f6f;border-color:#2a7f6f;color:#fff}
-.wl-undo{font-size:16px}
+.wl-undo{font-size:15px}
 .wl-empty{color:var(--dim);text-align:center;padding:30px 0}
-.wl-finished-h{font:800 18px/1.2 "Barlow Condensed",sans-serif;margin:26px 0 10px;opacity:.75}
-.wl-list.finished .wl-card{opacity:.75}
+.wl-finished-h{font:800 18px/1.2 "Barlow Condensed",sans-serif;margin:26px 0 6px;opacity:.7}
+.wl-list.finished .wl-row{opacity:.7}
 .wl-title-wrap{position:relative;flex:1;min-width:0;display:flex}
 .wl-title-wrap .task-input{flex:1}
 .wl-suggest{position:absolute;top:100%;left:0;right:0;z-index:50;background:var(--paper);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);overflow:hidden;max-height:320px;overflow-y:auto}
@@ -505,8 +504,8 @@ renderCats();renderGrid();renderIssues();
 .wl-sug-t strong{font-size:15px}
 .wl-sug-t small{font-size:12px;opacity:.65}
 .wl-prog-input{font-size:14px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:inherit;min-width:0;flex:1}
-.wl-shared .wl-card-btns,.wl-shared #wl-share{display:none}
-</style></style>
+.wl-shared .wl-row-btns,.wl-shared #wl-share{display:none}
+</style></style></style>
 </main>
 <dialog id="clear-dialog"><div class="dialog-body"><h2>Clear the sketch?</h2><p style="margin:0;color:var(--muted)">Download it first if you want to keep a copy.</p></div><div class="dialog-actions"><button class="btn secondary" data-close-dialog="clear-dialog">Cancel</button><button class="btn danger" id="confirm-clear">Clear</button></div></dialog>
 <script>
@@ -669,10 +668,6 @@ renderCats();renderGrid();renderIssues();
   }
 
   /* ---- cards ---- */
-  function posterHTML(x){
-    if(x.poster) return '<img class="wl-poster" src="'+esc(x.poster)+'" alt="" loading="lazy" />';
-    return '<span class="wl-poster wl-poster-none">'+(x.type==='Movie'?'🎬':'📺')+'</span>';
-  }
   function titleHTML(x){
     return x.info
       ? '<a href="'+esc(x.info)+'" target="_blank" rel="noopener">'+esc(x.title)+'</a>'
@@ -680,24 +675,22 @@ renderCats();renderGrid();renderIssues();
   }
   function cardHTML(x){
     var rel=releaseLine(x);
-    return '<article class="wl-card" data-id="'+x.id+'">'
-      +posterHTML(x)
+    return '<article class="wl-row" data-id="'+x.id+'">'
       +'<div class="wl-info"><h3 class="wl-title">'+titleHTML(x)+'</h3>'
-      +(rel?'<div class="wl-rel">'+esc(rel)+'</div>':'')
+      +(rel?'<div class="wl-meta">'+esc(rel)+'</div>':'')
       +(x.progress?'<div class="wl-prog-line">'+esc(x.progress)+'</div>':'')
       +'</div>'
-      +'<div class="wl-card-btns">'
+      +'<div class="wl-row-btns">'
       +'<button class="wl-plus" data-wl="prog" title="Track progress" aria-label="Track progress">+</button>'
       +'<button class="wl-check" data-wl="toggle" title="Done watching" aria-label="Mark as watched">✓</button>'
       +'</div></article>';
   }
   function finishedHTML(x){
-    return '<article class="wl-card finished" data-id="'+x.id+'">'
-      +posterHTML(x)
+    return '<article class="wl-row finished" data-id="'+x.id+'">'
       +'<div class="wl-info"><h3 class="wl-title">'+titleHTML(x)+'</h3>'
       +(x.progress?'<div class="wl-prog-line">'+esc(x.progress)+'</div>':'')
       +'</div>'
-      +'<div class="wl-card-btns">'
+      +'<div class="wl-row-btns">'
       +'<button class="wl-undo" data-wl="toggle" title="Move back to watchlist" aria-label="Undo">↩</button>'
       +'</div></article>';
   }
@@ -742,7 +735,7 @@ renderCats();renderGrid();renderIssues();
 
   /* ---- card actions ---- */
   function gridClick(e,gridId){
-    var card=e.target.closest('.wl-card'); if(!card) return;
+    var card=e.target.closest('.wl-row'); if(!card) return;
     var it=findItem(card.getAttribute('data-id')); if(!it) return;
     var b=e.target.closest('[data-wl]'); if(!b) return;
     var act=b.getAttribute('data-wl');
@@ -752,7 +745,7 @@ renderCats();renderGrid();renderIssues();
       var inp=document.createElement('input');
       inp.className='wl-prog-input'; inp.value=cur; inp.placeholder='S2 E5, 50%…';
       inp.setAttribute('aria-label','Progress');
-      var wrap=b.closest('.wl-card-btns');
+      var wrap=b.closest('.wl-row-btns');
       b.replaceWith(inp); inp.focus(); inp.select();
       var done=false;
       function commit(ok){
