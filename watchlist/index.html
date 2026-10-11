@@ -375,31 +375,24 @@ try{
   }
 
   /* ---- cards ---- */
-  function titleHTML(x){
-    return x.info
-      ? '<a href="'+esc(x.info)+'" target="_blank" rel="noopener">'+esc(x.title)+'</a>'
-      : esc(x.title);
-  }
   function cardHTML(x){
     var rel=releaseLine(x);
-    return '<article class="wl-row" data-id="'+x.id+'">'
-      +'<div class="wl-info"><h3 class="wl-title">'+titleHTML(x)+'</h3>'
-      +(rel?'<div class="wl-meta">'+esc(rel)+'</div>':'')
-      +(x.progress?'<div class="wl-prog-line">'+esc(x.progress)+'</div>':'')
-      +'</div>'
-      +'<div class="wl-row-btns">'
-      +'<button class="wl-plus" data-wl="prog" title="Track progress" aria-label="Track progress">+</button>'
-      +'<button class="wl-check" data-wl="toggle" title="Done watching" aria-label="Mark as watched">✓</button>'
-      +'</div></article>';
+    return '<div class="wl-entry" data-id="'+x.id+'">'
+      +'<button class="wl-pill" data-wl="expand"><span>'+esc(x.title)+'</span></button>'
+      +'<div class="wl-detail" hidden>'
+      +(x.info?'<a class="wl-detail-link" href="'+esc(x.info)+'" target="_blank" rel="noopener">More info ↗</a>':'')
+      +(rel?'<div class="wl-detail-rel">'+esc(rel)+'</div>':'')
+      +'<button class="wl-detail-prog" data-wl="prog">'+(x.progress?'Progress: <strong>'+esc(x.progress)+'</strong>':'Set progress')+'</button>'
+      +'<button class="wl-detail-done" data-wl="toggle">✓ Watched</button>'
+      +'</div></div>';
   }
   function finishedHTML(x){
-    return '<article class="wl-row finished" data-id="'+x.id+'">'
-      +'<div class="wl-info"><h3 class="wl-title">'+titleHTML(x)+'</h3>'
-      +(x.progress?'<div class="wl-prog-line">'+esc(x.progress)+'</div>':'')
-      +'</div>'
-      +'<div class="wl-row-btns">'
-      +'<button class="wl-undo" data-wl="toggle" title="Move back to watchlist" aria-label="Undo">↩</button>'
-      +'</div></article>';
+    return '<div class="wl-entry" data-id="'+x.id+'">'
+      +'<button class="wl-pill" data-wl="expand"><span>'+esc(x.title)+'</span></button>'
+      +'<div class="wl-detail" hidden>'
+      +(x.progress?'<div class="wl-detail-rel">Ended at: '+esc(x.progress)+'</div>':'')
+      +'<button class="wl-detail-done" data-wl="toggle">↩ Move back to watchlist</button>'
+      +'</div></div>';
   }
   function findItem(id){ var f=null; items.forEach(function(x){ if(x.id===id) f=x; }); return f; }
   function render(){
@@ -441,18 +434,23 @@ try{
   });
 
   /* ---- card actions ---- */
-  function gridClick(e,gridId){
-    var card=e.target.closest('.wl-row'); if(!card) return;
-    var it=findItem(card.getAttribute('data-id')); if(!it) return;
+  function gridClick(e){
+    var entry=e.target.closest('.wl-entry'); if(!entry) return;
+    var it=findItem(entry.getAttribute('data-id')); if(!it) return;
     var b=e.target.closest('[data-wl]'); if(!b) return;
     var act=b.getAttribute('data-wl');
-    if(act==='toggle'){ it.watched=!it.watched; save(items); render(); }
+    if(act==='expand'){
+      var det=entry.querySelector('.wl-detail');
+      var open=det.hidden;
+      document.querySelectorAll('.wl-detail').forEach(function(d){ d.hidden=true; });
+      det.hidden=!open;
+    }
+    else if(act==='toggle'){ it.watched=!it.watched; save(items); render(); }
     else if(act==='prog'){
       var cur=it.progress||'';
       var inp=document.createElement('input');
       inp.className='wl-prog-input'; inp.value=cur; inp.placeholder='S2 E5, 50%…';
       inp.setAttribute('aria-label','Progress');
-      var wrap=b.closest('.wl-row-btns');
       b.replaceWith(inp); inp.focus(); inp.select();
       var done=false;
       function commit(ok){
