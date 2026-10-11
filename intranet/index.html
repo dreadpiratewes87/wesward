@@ -466,7 +466,7 @@ renderCats();renderGrid();renderIssues();
   <section class="view" id="watchlist" aria-labelledby="watchlist-heading">
     <header class="viewbar"><button class="back-btn" data-home>← Main</button><h1 id="watchlist-heading">Watchlist</h1><span class="stamp" id="wl-count">0 to watch</span></header>
     <form class="todo-entry" id="wl-form"><div class="wl-title-wrap"><label class="sr-only" for="wl-title">Title</label><input class="task-input" id="wl-title" type="text" placeholder="Show or movie title…" required maxlength="120" autocomplete="off" /><div class="wl-suggest" id="wl-suggest" hidden></div></div><label class="sr-only" for="wl-type">Type</label><select id="wl-type"><option>Show</option><option>Movie</option></select><label class="sr-only" for="wl-service">Service</label><input class="task-input" id="wl-service" type="text" placeholder="Where? (Netflix, Max…)" maxlength="40" /><label class="sr-only" for="wl-notes">Notes</label><input class="task-input" id="wl-notes" type="text" placeholder="Notes (optional)" maxlength="180" /><label class="sr-only" for="wl-progress">Progress</label><input class="task-input" id="wl-progress" type="text" placeholder="Progress (S2 E5…)" maxlength="40" /><button class="btn accent add-task" type="submit">Add</button></form>
-    <div class="todo-tools"><button class="btn small secondary filter-btn active" data-wlfilter="all">All</button><button class="btn small secondary filter-btn" data-wlfilter="show">Shows</button><button class="btn small secondary filter-btn" data-wlfilter="movie">Movies</button><button class="btn small secondary filter-btn" data-wlfilter="towatch">To watch</button><button class="btn small secondary filter-btn" data-wlfilter="watched">Watched</button><span class="spacer"></span><input class="task-input wl-search" id="wl-search" type="search" placeholder="Search…" aria-label="Search watchlist" /><button class="btn small secondary" id="wl-export">Export</button><button class="btn small secondary" id="wl-import">Import</button><input class="sr-only" type="file" id="wl-import-file" accept="application/json,.json" /></div>
+    <div class="todo-tools"><button class="btn small secondary filter-btn active" data-wlfilter="all">All</button><button class="btn small secondary filter-btn" data-wlfilter="show">Shows</button><button class="btn small secondary filter-btn" data-wlfilter="movie">Movies</button><button class="btn small secondary filter-btn" data-wlfilter="towatch">To watch</button><button class="btn small secondary filter-btn" data-wlfilter="watched">Watched</button><span class="spacer"></span><input class="task-input wl-search" id="wl-search" type="search" placeholder="Search…" aria-label="Search watchlist" /><button class="btn small secondary" id="wl-export">Export</button><button class="btn small secondary" id="wl-share">Share</button><button class="btn small secondary" id="wl-import">Import</button><input class="sr-only" type="file" id="wl-import-file" accept="application/json,.json" /></div>
     <div class="wl-grid" id="wl-grid"></div>
     <p class="wl-empty" id="wl-empty" hidden>Nothing here yet — add your first show or movie above.</p>
   </section>
@@ -507,6 +507,9 @@ renderCats();renderGrid();renderIssues();
 .wl-prog strong{font-weight:700}
 .wl-prog-add{opacity:.55;font-size:13px}
 .wl-prog-input{font-size:14px;padding:6px 10px;border:1px solid var(--line);border-radius:8px;width:100%;background:var(--bg);color:inherit}
+.wl-badge.release{background:#3a2c12;color:#ffd88a}
+.wl-shared .wl-actions .btn,.wl-shared .wl-prog-add{display:none}
+.wl-shared .wl-prog{pointer-events:none;cursor:default}
 </style>
 </main>
 <dialog id="clear-dialog"><div class="dialog-body"><h2>Clear the sketch?</h2><p style="margin:0;color:var(--muted)">Download it first if you want to keep a copy.</p></div><div class="dialog-actions"><button class="btn secondary" data-close-dialog="clear-dialog">Cancel</button><button class="btn danger" id="confirm-clear">Clear</button></div></dialog>
@@ -528,8 +531,9 @@ renderCats();renderGrid();renderIssues();
 /* ==== WATCHLIST ==== */
 (function(){
   var KEY='wl-items-v1';
-  function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||'[]'); }catch(e){ return []; } }
-  function save(a){ try{ localStorage.setItem(KEY, JSON.stringify(a)); }catch(e){} }
+  var SHARED=(typeof WL_SHARED_DATA!=='undefined'&&WL_SHARED_DATA)?WL_SHARED_DATA:null;
+  function load(){ if(SHARED) return SHARED; try{ return JSON.parse(localStorage.getItem(KEY)||'[]'); }catch(e){ return []; } }
+  function save(a){ if(SHARED) return; try{ localStorage.setItem(KEY, JSON.stringify(a)); }catch(e){} }
   function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
   var items=load(), filter='all', query='';
   var WL_SEEDS=[
@@ -541,7 +545,7 @@ renderCats();renderGrid();renderIssues();
     {id:'wl-seed-6',title:'The Deuce',type:'Show',service:'HBO',notes:'70s Times Square',watched:false}
   ];
   try{
-    if(localStorage.getItem('wl-seed-ver')!=='2'){
+    if(!SHARED&&localStorage.getItem('wl-seed-ver')!=='2'){
       var have={}; items.forEach(function(x){have[x.id]=1;});
       WL_SEEDS.slice().reverse().forEach(function(s){
         if(!have[s.id]){ s.added=new Date().toISOString(); items.unshift(s); }
@@ -561,7 +565,9 @@ renderCats();renderGrid();renderIssues();
         return (arr||[]).slice(0,5).map(function(x){
           var s=x.show||{};
           return {title:s.name||'', year:(s.premiered||'').slice(0,4),
-                  status:s.status||'', type:'Show',
+                  premiered:s.premiered||'', status:s.status||'',
+                  network:((s.network||{}).name||'')||((s.webChannel||{}).name||''),
+                  type:'Show',
                   info:s.officialSite||s.url||'',
                   poster:((s.image||{}).medium||''), src:'TV'};
         });
@@ -580,21 +586,50 @@ renderCats();renderGrid();renderIssues();
       });
     }).catch(function(){ return []; });
   }
+  var pickToken=0;
+  function enrichWiki(r,token){
+    var t=encodeURIComponent(r.title.replace(/ /g,'_'));
+    fetch('https://en.wikipedia.org/api/rest_v1/page/summary/'+t)
+      .then(function(x){ return x.json(); })
+      .then(function(d){
+        if(token!==pickToken) return;
+        if(d.thumbnail&&d.thumbnail.source) r.poster=d.thumbnail.source;
+      }).catch(function(){});
+    var u='https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*'
+      +'&prop=extracts&explaintext&titles='+encodeURIComponent(r.title);
+    fetch(u).then(function(x){ return x.json(); }).then(function(d){
+      if(token!==pickToken) return;
+      var pages=(d.query&&d.query.pages)||{};
+      var k=Object.keys(pages)[0];
+      var txt=k&&pages[k].extract?pages[k].extract:'';
+      var m=txt.match(/released theatrically[^.]{0,80}?on ([A-Z][a-z]+ \d{1,2}, \d{4})/)
+        ||txt.match(/released in the United States[^.]{0,80}?on ([A-Z][a-z]+ \d{1,2}, \d{4})/)
+        ||txt.match(/scheduled to be released[^.]{0,80}?on ([A-Z][a-z]+ \d{1,2}, \d{4})/)
+        ||txt.match(/set to be released[^.]{0,80}?on ([A-Z][a-z]+ \d{1,2}, \d{4})/)
+        ||txt.match(/theatrically released[^.]{0,80}?on ([A-Z][a-z]+ \d{1,2}, \d{4})/);
+      if(m){
+        var dt=new Date(m[1]);
+        if(!isNaN(dt)){ r.releaseDate=dt.toISOString().slice(0,10); r.releaseKind='theatrical'; }
+      }
+    }).catch(function(){});
+  }
   function renderSuggest(list){
     if(!list.length){ suggestBox.hidden=true; return; }
     suggestBox.innerHTML=list.map(function(r,i){
       return '<button type="button" class="wl-sug" data-i="'+i+'">'
         +(r.poster?'<img src="'+esc(r.poster)+'" alt="" loading="lazy" />':'<span class="wl-sug-nopic"></span>')
         +'<span class="wl-sug-t"><strong>'+esc(r.title)+'</strong>'
-        +'<small>'+esc([r.year,r.status,r.src].filter(Boolean).join(' · '))+'</small></span></button>';
+        +'<small>'+esc([r.year,r.network,r.status,r.src].filter(Boolean).join(' · '))+'</small></span></button>';
     }).join('');
     suggestBox.hidden=false;
     suggestBox.querySelectorAll('.wl-sug').forEach(function(b){
       b.addEventListener('click',function(){
         var r=list[+b.getAttribute('data-i')];
+        pickToken++;
         picked=r;
         titleInput.value=r.title;
         if(r.type) document.getElementById('wl-type').value=r.type;
+        if(r.src==='Wiki') enrichWiki(r,pickToken);
         suggestBox.hidden=true;
       });
     });
@@ -626,6 +661,18 @@ renderCats();renderGrid();renderIssues();
     var w=items.length-tw;
     document.getElementById('wl-count').textContent=tw+' to watch'+(w?' · '+w+' watched':'');
   }
+  function releaseBadge(x){
+    if(!x.releaseDate) return '';
+    var d=new Date(x.releaseDate+'T12:00:00');
+    if(isNaN(d)) return '';
+    var s=d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+    var today=new Date(); today.setHours(0,0,0,0);
+    var upcoming=d>=today;
+    var label=x.releaseKind==='premiere'
+      ?(upcoming?'Premieres ':'Premiered ')
+      :(upcoming?'In theaters ':'Released ');
+    return '<span class="wl-badge release">'+esc(label+s)+'</span>';
+  }
   function cardHTML(x){
     var title=x.info
       ? '<a href="'+esc(x.info)+'" target="_blank" rel="noopener">'+esc(x.title)+'</a>'
@@ -637,7 +684,7 @@ renderCats();renderGrid();renderIssues();
       +'<div class="wl-badges"><span class="wl-badge '+(x.type==='Show'?'show':'movie')+'">'+esc(x.type||'—')+'</span>'
       +(x.year?'<span class="wl-badge service">'+esc(x.year)+'</span>':'')
       +(x.service?'<span class="wl-badge service">'+esc(x.service)+'</span>':'')
-      +(x.watched?'<span class="wl-badge">Watched</span>':'')+'</div></div></div>'
+      +(x.watched?'<span class="wl-badge">Watched</span>':'')+releaseBadge(x)+'</div></div></div>'
       +(x.notes?'<p class="wl-notes">'+esc(x.notes)+'</p>':'')
       +'<button class="wl-prog" data-wl="prog">'+(x.progress
           ? 'Progress: <strong>'+esc(x.progress)+'</strong>'
@@ -675,6 +722,9 @@ renderCats();renderGrid();renderIssues();
       watched:false,added:new Date().toISOString()};
     if(picked){
       it.year=picked.year||''; it.info=picked.info||''; it.poster=picked.poster||'';
+      if(picked.network && !it.service) it.service=picked.network;
+      if(picked.premiered){ it.releaseDate=picked.premiered; it.releaseKind='premiere'; }
+      else if(picked.releaseDate){ it.releaseDate=picked.releaseDate; it.releaseKind=picked.releaseKind||'theatrical'; }
       if(!it.notes && picked.status) it.notes=picked.status;
     }
     items.unshift(it);
@@ -719,6 +769,21 @@ renderCats();renderGrid();renderIssues();
     var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='watchlist-backup.json'; a.click();
     setTimeout(function(){URL.revokeObjectURL(a.href);},4000);
   });
+  document.getElementById('wl-share').addEventListener('click',function(){
+    var btn=this;
+    var data=items.map(function(x){
+      return {title:x.title,type:x.type,year:x.year||'',service:x.service||'',notes:x.notes||'',
+        progress:x.progress||'',watched:!!x.watched,info:x.info||'',poster:x.poster||'',
+        releaseDate:x.releaseDate||'',releaseKind:x.releaseKind||''};
+    });
+    var s=btoa(unescape(encodeURIComponent(JSON.stringify(data))))
+      .replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+    var url='https://dreadpiratewes87.github.io/wesward/watchlist/#list='+s;
+    function ok(){ btn.textContent='Copied!'; setTimeout(function(){btn.textContent='Share';},2000); }
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(url).then(ok,function(){ prompt('Copy your share link:',url); });
+    }else{ prompt('Copy your share link:',url); }
+  });
   document.getElementById('wl-import').addEventListener('click',function(){ document.getElementById('wl-import-file').click(); });
   document.getElementById('wl-import-file').addEventListener('change',function(){
     var f=this.files[0]; if(!f) return;
@@ -731,6 +796,10 @@ renderCats();renderGrid();renderIssues();
     };
     r.readAsText(f); this.value='';
   });
+  if(SHARED){
+    document.body.classList.add('wl-shared');
+    var _f=document.getElementById('wl-form'); if(_f) _f.style.display='none';
+  }
   render();
 })();
 
