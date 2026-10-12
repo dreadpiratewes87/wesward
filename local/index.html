@@ -35,6 +35,7 @@ main{max-width:680px;margin:0 auto;padding:16px 16px 40px}
 .status.closed{background:rgba(248,113,113,.13);color:var(--red)}
 .status.closed .dot{background:var(--red)}
 .tile .sub{font-size:12.5px;color:var(--muted);line-height:1.45}
+.tile-food{font-size:13px;line-height:1.5;color:#f5c66b;background:rgba(245,166,35,.09);border:1px solid rgba(245,166,35,.25);border-radius:9px;padding:7px 10px;margin-top:2px}
 .tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}
 .tag{font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--surface2);color:var(--muted);border:1px solid var(--border)}
 /* detail */
@@ -139,12 +140,14 @@ function renderGrid(){
   var html='';
   items.forEach(function(b){
     var s=statusOf(b,now);
-    var tags=(b.vibe||'').split(',').map(function(t){return t.trim();}).filter(Boolean);
+    var foodLine='';
+    if(b.food&&b.food.length){
+      foodLine='<div class="tile-food">🍽️ '+b.food.slice(0,2).join(' · ')+(b.food.length>2?' · +'+(b.food.length-2)+' more':'')+'</div>';
+    }
     html+='<div class="tile" data-id="'+b.id+'">'
       +'<h3>'+b.name+'</h3>'
       +'<span class="status '+(s.open?'open':'closed')+'"><span class="dot"></span>'+(s.open?'Open':'Closed')+' · '+s.msg+'</span>'
-      +'<div class="sub">'+(b.knownFor||'')+'</div>'
-      +(tags.length?'<div class="tags">'+tags.map(function(t){return '<span class="tag">'+t+'</span>';}).join('')+'</div>':'')
+      +foodLine
       +'</div>';
   });
   document.getElementById('grid').innerHTML=html||'<p style="color:var(--muted)">Nothing here yet.</p>';
@@ -171,7 +174,7 @@ function openDetail(id){
   }
   var foodHtml='';
   if(b.food&&b.food.length){
-    foodHtml='<div class="d-sec"><h4>Known for eating</h4><ul>'+b.food.map(function(f){return '<li>'+f+'</li>';}).join('')+'</ul></div>';
+    foodHtml='<div class="d-sec"><h4>'+(b.category==='bars'?'Known for eating':'What they carry')+'</h4><ul>'+b.food.map(function(f){return '<li>'+f+'</li>';}).join('')+'</ul></div>';
   }
   var mapsUrl='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(b.name+' '+b.address);
   document.getElementById('dWrap').innerHTML=
