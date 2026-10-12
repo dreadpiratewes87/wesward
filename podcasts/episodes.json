@@ -1,23 +1,49 @@
-[
- {
-  "slug": "deck-tech-wesley-ward-master-of-many-paths-2026-10-12",
-  "title": "Deck Tech: Wesley Ward, Master of Many Paths",
-  "description": "Ellis and Theo break down a custom Azorius draw-engine commander deck \u2014 second-draw synergies, bobblehead ramp, and a full report card.",
-  "duration": 420,
-  "date": "2026-10-12"
+{
+ "shows": {
+  "deck-tech": {
+   "name": "Deck Tech",
+   "hosts": "Ellis & Theo",
+   "cover": "series-deck-tech.jpg"
+  },
+  "draft-show": {
+   "name": "Draft Show",
+   "hosts": "Milo & Jax",
+   "cover": "series-draft-show.jpg"
+  }
  },
- {
-  "slug": "deck-tech-rachel-ward-louisiana-swamp-witch-2026-10-12",
-  "title": "Deck Tech: Rachel Ward, Louisiana Swamp Witch",
-  "description": "Ellis and Theo break down a custom Golgari Food aristocrats commander deck \u2014 synergy, win conditions, weaknesses, and a full report card.",
-  "duration": 372,
-  "date": "2026-10-12"
- },
- {
-  "slug": "reality-fracture-draft-deep-dive-2026-10-12",
-  "title": "Reality Fracture Draft Deep Dive",
-  "description": "Milo and Jax break down the wildest draft format in years \u2014 echoed pairs, mirror Chandras, and how to not lose your mind drafting the Echoverse.",
-  "duration": 336,
-  "date": "2026-10-12"
- }
-]
+ "episodes": [
+  {
+   "slug": "deck-tech-rachel-ward-louisiana-swamp-witch-2026-10-12",
+   "show": "deck-tech",
+   "showName": "Deck Tech \u00b7 Ellis & Theo",
+   "num": 1,
+   "title": "Rachel Ward, Louisiana Swamp Witch",
+   "description": "Ellis and Theo break down a custom Golgari Food commander deck \u2014 synergies, power level, and honest weaknesses.",
+   "duration": 372,
+   "date": "2026-10-12",
+   "cover": "series-deck-tech.jpg"
+  },
+  {
+   "slug": "deck-tech-wesley-ward-master-of-many-paths-2026-10-12",
+   "show": "deck-tech",
+   "showName": "Deck Tech \u00b7 Ellis & Theo",
+   "num": 2,
+   "title": "Wesley Ward, Master of Many Paths",
+   "description": "Ellis and Theo break down a custom Azorius draw-engine commander deck \u2014 second-draw synergies, bobblehead ramp, and a full report card.",
+   "duration": 420,
+   "date": "2026-10-12",
+   "cover": "series-deck-tech.jpg"
+  },
+  {
+   "slug": "reality-fracture-draft-deep-dive-2026-10-12",
+   "show": "draft-show",
+   "showName": "Draft Show \u00b7 Milo & Jax",
+   "num": 1,
+   "title": "Reality Fracture Draft Deep Dive",
+   "description": "Milo and Jax talk Reality Fracture draft \u2014 what to pick early, which colors are open, and the traps to avoid.",
+   "duration": 336,
+   "date": "2026-10-12",
+   "cover": "series-draft-show.jpg"
+  }
+ ]
+}
