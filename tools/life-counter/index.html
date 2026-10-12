@@ -165,6 +165,15 @@
     }
     @media (prefers-reduced-motion:reduce) { .shade, .sheet { transition:none; } }
   </style>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+<style>
+.resume-list{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
+.resume-btn{background:#1c1c24;border:1px solid #2c2c36;border-radius:10px;padding:10px 12px;text-align:left;color:#f2f2f5;cursor:pointer;display:flex;flex-direction:column;gap:2px;}
+.resume-btn strong{font-size:14px;}
+.resume-btn span{font-size:12px;color:#9a9aa5;}
+.resume-btn:active{background:#2c2c36;}
+</style>
 </head>
 <body class="tabletop">
   <main class="board" id="board" aria-label="Four player Magic life counter"></main>
@@ -223,6 +232,7 @@
       var poisonIcon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c3.5 0 6.5 2.6 6.5 6 0 2.1-1.1 3.9-2.8 5v2.5h-2V13h-3.4v2.5h-2V13a5.9 5.9 0 0 1-2.8-5c0-3.4 3-6 6.5-6Zm-2.7 6.2a1.3 1.3 0 1 0 0 2.6 1.3 1.3 0 0 0 0-2.6Zm5.4 0a1.3 1.3 0 1 0 0 2.6 1.3 1.3 0 0 0 0-2.6ZM9 18h6v2H9v-2Z"/></svg>';
       var cmdIcon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 8 4v5c0 5.2-3.4 9.7-8 11-4.6-1.3-8-5.8-8-11V6l8-4Zm0 3.1L7 7.6V11c0 3.6 2.1 6.8 5 7.9 2.9-1.1 5-4.3 5-7.9V7.6l-5-2.5Z"/></svg>';
 
+      var _saveT=null;
       function render(){
         var cols = players.length<=2 ? players.length : (players.length<=4 ? 2 : 3);
         board.style.gridTemplateColumns='repeat('+cols+', 1fr)';
@@ -360,41 +370,101 @@
       function storeGames(g){ try{ localStorage.setItem('lc-games', JSON.stringify(g)); }catch(e){} }
       function lastNames(){ try{ return JSON.parse(localStorage.getItem('lc-names')||'null'); }catch(e){ return null; } }
       function storeNames(n){ try{ localStorage.setItem('lc-names', JSON.stringify(n)); }catch(e){} }
-      /* ---- cloud sync: games POST to a Google Form, merged games.json pulled on launch ---- */
-      var SYNC_FORM='https://docs.google.com/forms/d/e/1FAIpQLSdey-wSaBfAL5v2eDi9zLfGs_sKiK19H-LJBO7aLzejV9CdVg/formResponse';
-      var SYNC_E={type:'entry.1976563659',game_id:'entry.1433116870',date:'entry.102324293',players:'entry.1675586423',winner:'entry.293529439',life:'entry.601203592'};
-      var SYNC_JSON='https://dreadpiratewes87.github.io/wesward/tools/life-counter/games.json';
+      /* ---- cloud sync: Firebase Realtime Database (live, replaces Form+cron) ---- */
+      var lcFbDb=null, lcFbReady=false;
       function gameId(g){ return g.d+'|'+g.players.join(',')+'|'+g.winner; }
-      function loadPending(){ try{ return JSON.parse(localStorage.getItem('lc-pending')||'[]'); }catch(e){ return []; } }
-      function storePending(p){ try{ localStorage.setItem('lc-pending', JSON.stringify(p)); }catch(e){} }
-      function syncPost(rec){
+      function fbGameKey(id){ return id.replace(/[.#$\[\]]/g,'_'); }
+      function initLcFirebase(){
         try{
-          var b=new URLSearchParams();
-          b.append(SYNC_E.type,rec.type); b.append(SYNC_E.game_id,rec.game_id||'');
-          b.append(SYNC_E.date,rec.date||''); b.append(SYNC_E.players,rec.players||'');
-          b.append(SYNC_E.winner,rec.winner||''); b.append(SYNC_E.life,rec.life||'');
-          fetch(SYNC_FORM,{mode:'no-cors',method:'POST',body:b}).catch(function(){});
+          if(typeof firebase==='undefined') return;
+          if(!firebase.apps.length) firebase.initializeApp({apiKey:"AIzaSyCOZbXH7bwuQsNFXeSNNi1eS90KrJxlvOw",authDomain:"wesward-watchlist.firebaseapp.com",databaseURL:"https://wesward-watchlist-default-rtdb.firebaseio.com",projectId:"wesward-watchlist"});
+          lcFbDb=firebase.database();
+          lcFbReady=true;
+          // listen for finished games
+          lcFbDb.ref('lifecounter/games').on('value',function(snap){
+            var cloud=snap.val()||{}, local=loadGames(), ids={}, merged=local.slice(), added=0;
+            local.forEach(function(g){ ids[gameId(g)]=1; });
+            var clearedAt=null; try{ clearedAt=localStorage.getItem('lc-cleared-at'); }catch(e){}
+            Object.keys(cloud).forEach(function(k){
+              var g=cloud[k];
+              if(!g||!g.d) return;
+              if(clearedAt && g.d<clearedAt) return;
+              if(!ids[gameId(g)]){ merged.push(g); added++; ids[gameId(g)]=1; }
+            });
+            if(added){ storeGames(merged); if(typeof renderStatsIfOpen==='function') renderStatsIfOpen(); }
+            try{ localStorage.setItem('lc-synced-at',new Date().toISOString()); }catch(e){}
+          });
+          // listen for active (resumable) games
+          lcFbDb.ref('lifecounter/active').on('value',function(snap){
+            try{ localStorage.setItem('lc-active-cloud', JSON.stringify(snap.val()||{})); }catch(e){}
+          });
         }catch(e){}
       }
-      function queueSync(rec){ var p=loadPending(); p.push(rec); storePending(p); flushSync(); }
-      function flushSync(){ loadPending().forEach(syncPost); }
-      function pullSync(){
-        fetch(SYNC_JSON+'?t='+Date.now(),{cache:'no-store'}).then(function(r){
-          if(!r.ok) throw 0; return r.json();
-        }).then(function(data){
-          var remote=data.games||[], local=loadGames(), ids={}, merged=local.slice(), added=0;
-          local.forEach(function(g){ ids[gameId(g)]=1; });
-          var clearedAt=null; try{ clearedAt=localStorage.getItem('lc-cleared-at'); }catch(e){}
-          var remoteIds={};
-          remote.forEach(function(g){ remoteIds[gameId(g)]=1; });
-          remote.forEach(function(g){
-            if(clearedAt && g.d<clearedAt) return;
-            if(!ids[gameId(g)]){ merged.push(g); added++; ids[gameId(g)]=1; }
+      function queueSync(rec){
+        // rec: {type:'game', ...} — write finished game to Firebase
+        if(rec.type!=='game') return;
+        try{
+          var g={d:rec.date, players:rec.players.split(', '), winner:rec.winner, life:parseInt(rec.life,10)||40};
+          if(lcFbDb&&lcFbReady) lcFbDb.ref('lifecounter/games/'+fbGameKey(rec.game_id)).set(g);
+          // also save locally for offline
+          var games=loadGames(), ids={};
+          games.forEach(function(x){ ids[gameId(x)]=1; });
+          if(!ids[gameId(g)]){ games.push(g); storeGames(games); }
+        }catch(e){}
+      }
+      function flushSync(){}
+      setInterval(function(){ try{ if(players&&players.length&&players[0].life!==undefined) saveActiveGame(); }catch(e){} }, 15000);
+      function pullSync(){ /* Firebase on('value') handles this live */ }
+      try{ initLcFirebase(); }catch(e){}
+      /* ---- save/resume in-progress game ---- */
+      function saveActiveGame(){
+        try{
+          var snap={players:players, turn:turn, round:round, startLife:START_LIFE,
+            savedAt:new Date().toISOString(), device:(navigator.userAgent||'').slice(0,40)};
+          localStorage.setItem('lc-active-local', JSON.stringify(snap));
+          if(lcFbDb&&lcFbReady) lcFbDb.ref('lifecounter/active/'+fbGameKey('dev-'+Date.now())).set(snap);
+        }catch(e){}
+      }
+      function getResumableGames(){
+        var out=[];
+        try{
+          var local=JSON.parse(localStorage.getItem('lc-active-local')||'null');
+          if(local&&local.players&&local.players.length) out.push({src:'This device', snap:local});
+          var cloud=JSON.parse(localStorage.getItem('lc-active-cloud')||'{}');
+          Object.keys(cloud).forEach(function(k){
+            var s=cloud[k];
+            if(s&&s.players&&s.players.length) out.push({src:'Another device', snap:s, key:k});
           });
-          storePending(loadPending().filter(function(rec){ return rec.type!=='game'||!remoteIds[rec.game_id]; }));
-          if(added) storeGames(merged);
-          try{ localStorage.setItem('lc-synced-at',new Date().toISOString()); }catch(e){}
-        }).catch(function(){});
+        }catch(e){}
+        return out;
+      }
+      function resumeGame(snap){
+        try{
+          players=snap.players; turn=snap.turn||0; round=snap.round||1; START_LIFE=snap.startLife||40;
+          history=[]; events=['Resumed game · '+players.map(function(p){return p.name;}).join(', ')];
+          undoBtn.disabled=true;
+          shade.classList.remove('open'); shade.setAttribute('aria-hidden','true');
+          render(); buzz();
+        }catch(e){}
+      }
+      function populateResumeList(){
+        try{
+          var el=document.getElementById('resume-list');
+          if(!el) return;
+          var games=getResumableGames();
+          if(!games.length){ el.innerHTML=''; return; }
+          var h='<h2 class="section-title">Resume saved game</h2><div class="resume-list">';
+          games.forEach(function(g,i){
+            var s=g.snap;
+            var names=s.players.map(function(p){return p.name+' ('+p.life+')';}).join(', ');
+            var when=''; try{ when=new Date(s.savedAt).toLocaleString(); }catch(e){}
+            h+='<button class="resume-btn" data-resume="'+i+'"><strong>'+esc(names)+'</strong><span>'+esc(g.src)+' · '+esc(when)+' · Round '+s.round+'</span></button>';
+          });
+          h+='</div>';
+          el.innerHTML=h;
+          // store for click handler
+          window._resumeGames=games;
+        }catch(e){}
       }
       function openSheet(html){
         active=null;
@@ -421,7 +491,7 @@
           '<div class="setup-names">'+nameInputs+'</div>'+
           '<h2 class="section-title">Starting player</h2><div class="seg" id="setupStarter">'+starterBtns+'</div>'+
           '<h2 class="section-title">Starting life</h2><div class="seg">'+lifeBtns+'</div>'+
-          '<div class="confirm"><div class="confirm-actions" style="grid-template-columns:1fr;"><button class="reset-yes" data-setup-start style="background:#23617a;">Start game</button></div></div>');
+          '<div id="resume-list"></div><div class="confirm"><div class="confirm-actions" style="grid-template-columns:1fr;"><button class="reset-yes" data-setup-start style="background:#23617a;">Start game</button></div></div>');
       }
       function startGame(){
         var s=setupState, names=[];
@@ -483,7 +553,9 @@
         var t=e.target.closest('[data-setup],[data-winner],[data-setup-start],[data-setup-open],[data-clear-history]');
         if(!t) return;
         if(t.hasAttribute('data-setup-start')){ startGame(); return; }
-        if(t.hasAttribute('data-setup-open')){ openSetup(); return; }
+        if(t.hasAttribute('data-setup-open')){ openSetup(); setTimeout(populateResumeList,50); return; }
+        var rb=e.target.closest('[data-resume]');
+        if(rb){ var g=(window._resumeGames||[])[parseInt(rb.getAttribute('data-resume'),10)]; if(g) resumeGame(g.snap); return; }
         if(t.hasAttribute('data-clear-history')){ if(window.confirm('Clear all recorded games? This clears history on all your devices.')){ var now=new Date().toISOString(); try{ localStorage.setItem('lc-cleared-at',now); }catch(e){} storeGames([]); queueSync({type:'clear_all',game_id:'',date:now,players:'',winner:'',life:''}); openStats(); } return; }
         if(t.hasAttribute('data-winner')){ finishGame(+t.getAttribute('data-winner')); return; }
         var kind=t.getAttribute('data-setup'), v=+t.getAttribute('data-v');
