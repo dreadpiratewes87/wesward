@@ -463,6 +463,8 @@ renderCats();renderGrid();renderIssues();
     <div class="sketch-frame" id="sketch-frame"><canvas id="sketch-canvas" aria-label="Drawing canvas"></canvas></div><p class="sketch-hint">Use a finger, mouse, or Apple Pencil. The PNG keeps your marks; the optional grid is only a guide and is not included.</p>
   </section>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
   <section class="view" id="watchlist" aria-labelledby="watchlist-heading">
     <header class="viewbar"><button class="back-btn" data-home>← Main</button><h1 id="watchlist-heading">Watchlist</h1><span class="spacer"></span><button class="btn small secondary" id="wl-sync-btn" title="Sync now">⟳</button><button class="btn small secondary" id="wl-share">Share</button></header>
     <form class="wl-add" id="wl-form"><div class="wl-title-wrap"><label class="sr-only" for="wl-title">Title</label><input class="task-input" id="wl-title" type="text" placeholder="Add a show or movie…" required maxlength="120" autocomplete="off" /><div class="wl-suggest" id="wl-suggest" hidden></div></div><button class="btn accent" type="submit">Add</button></form>
@@ -550,36 +552,24 @@ renderCats();renderGrid();renderIssues();
       return d;
     }catch(e){ return 'd-unknown'; }
   })();
-  function touch(it){ it.updated_at=Date.now(); it.device_id=DEVICE_ID; queueSync(it); }
-  /* ---- automatic cloud sync (shared form inbox + items.json) ---- */
-  var SYNC_FORM='https://docs.google.com/forms/d/e/1FAIpQLSdey-wSaBfAL5v2eDi9zLfGs_sKiK19H-LJBO7aLzejV9CdVg/formResponse';
-  var SYNC_E={type:'entry.1976563659',game_id:'entry.1433116870',players:'entry.1675586423'};
-  var SYNC_STATE_URL='https://dreadpiratewes87.github.io/wesward/watchlist/items.json';
-  var syncQueue=[], syncTimer=null;
-  function queueSync(it){
-    if(SHARED) return;
-    try{ syncQueue.push(JSON.parse(JSON.stringify(it))); }catch(e){}
-    clearTimeout(syncTimer);
-    syncTimer=setTimeout(flushSync,2500);
+  function touch(it){ it.updated_at=Date.now(); it.device_id=DEVICE_ID; fbWrite(it); }
+  /* ---- Firebase real-time sync ---- */
+  var FB_CONFIG={apiKey:"AIzaSyCOZbXH7bwuQsNFXeSNNi1eS90KrJxlvOw",authDomain:"wesward-watchlist.firebaseapp.com",databaseURL:"https://wesward-watchlist-default-rtdb.firebaseio.com",projectId:"wesward-watchlist"};
+  var fbDb=null, fbReady=false;
+  function fbClean(x){ try{ return JSON.parse(JSON.stringify(x)); }catch(e){ return null; } }
+  function fbWrite(it){
+    if(!fbDb||!fbReady||SHARED) return;
+    try{ var c=fbClean(it); if(c) fbDb.ref('watchlist/items/'+it.id).set(c); }catch(e){}
   }
-  function syncPost(it){
-    try{
-      var fd=new FormData();
-      fd.append(SYNC_E.type,'watchlist');
-      fd.append(SYNC_E.game_id,it.id||'');
-      fd.append(SYNC_E.players,JSON.stringify(it));
-      fetch(SYNC_FORM,{method:'POST',mode:'no-cors',body:fd}).catch(function(){});
-    }catch(e){}
-  }
-  function flushSync(){ var q=syncQueue; syncQueue=[]; q.forEach(syncPost); }
-  function mergeCloud(cloud){
-    if(!cloud||!cloud.items) return;
+  function fbMerge(cloud){
+    if(!cloud) return;
     var changed=false, byId={};
     items.forEach(function(x){ byId[x.id]=x; });
-    cloud.items.forEach(function(c){
-      var l=byId[c.id];
+    Object.keys(cloud).forEach(function(id){
+      var c=cloud[id]; if(!c) return;
+      var l=byId[id];
       if(c.deleted){
-        if(l){ items=items.filter(function(x){return x.id!==c.id;}); changed=true; }
+        if(l){ items=items.filter(function(x){return x.id!==id;}); changed=true; }
       }else if(!l||(c.updated_at||0)>(l.updated_at||0)){
         if(l){ for(var k in c){ l[k]=c[k]; } }
         else{ items.push(c); }
@@ -588,10 +578,23 @@ renderCats();renderGrid();renderIssues();
     });
     if(changed){ save(items); render(); }
   }
-  function fetchCloud(){
+  function initFirebase(){
     if(SHARED) return;
-    fetch(SYNC_STATE_URL+'?t='+Date.now()).then(function(r){return r.json();})
-      .then(mergeCloud).catch(function(){});
+    try{
+      if(typeof firebase==='undefined') return;
+      firebase.initializeApp(FB_CONFIG);
+      fbDb=firebase.database();
+      var ref=fbDb.ref('watchlist/items');
+      ref.once('value').then(function(snap){
+        var cloud=snap.val()||{};
+        items.forEach(function(x){
+          var c=cloud[x.id];
+          if(!c||(x.updated_at||0)>(c.updated_at||0)){ try{ fbDb.ref('watchlist/items/'+x.id).set(fbClean(x)); }catch(e){} }
+        });
+        fbReady=true;
+      }).catch(function(){ fbReady=true; });
+      ref.on('value',function(snap){ fbMerge(snap.val()||{}); });
+    }catch(e){}
   }
   function buildSyncLink(){
     var data=items.map(function(x){
@@ -876,7 +879,7 @@ renderCats();renderGrid();renderIssues();
   document.getElementById('wl-sync-btn').addEventListener('click',function(){
     var btn=this; btn.textContent='…';
     items.forEach(function(x){ touch(x); });
-    flushSync(); fetchCloud();
+    /* firebase is real-time */
     setTimeout(function(){ btn.textContent='⟳'; },3000);
   });
 
@@ -901,8 +904,7 @@ renderCats();renderGrid();renderIssues();
     }
   }
   render();
-  fetchCloud();
-  document.addEventListener('visibilitychange',function(){ if(!document.hidden) fetchCloud(); });
+  initFirebase();
 })();
 
 </script>
