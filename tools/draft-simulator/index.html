@@ -108,6 +108,43 @@ const CARDS = [{"n":"Enlightened Confidant","c":"{1}{W}","t":"Creature 2/1","r":
 <script>
 const GRADE_VAL = {'S':12,'A+':11,'A':10,'A-':9,'B+':8,'B':7,'B-':6,'C+':5,'C':4,'C-':3,'D+':2,'D':1,'F':0};
 const POOL = {M:[],R:[],U:[],C:[]};
+const FRA_PAIRS = [
+  ["Arni, Renowned Champion","Arni, Humble Scribe"],
+  ["Chandra, Torch of Defiance","Chandra, Chill of Compliance"],
+  ["Danitha, Sword of Hope","Danitha, Spear of Agony"],
+  ["Edgar, Ancient Bloodlord","Edgar, Moonlit Sovereign"],
+  ["Fblthp, Impossibly Lost","Fblthp, Knows the Way"],
+  ["Gallia, the Merrymaker","Gallia, Tragic Host"],
+  ["Garruk, Curse Breaker","Garruk, Veiled Butcher"],
+  ["Ghalta the Unstoppable","Ghalta the Immovable"],
+  ["Hapatra, the Desert Fang","Hapatra, the Desert Frost"],
+  ["Jiang Yanggu, Never Alone","Jiang Yanggu, Alone"],
+  ["Karn, Argent Defender","Karn, Gilded Guardian"],
+  ["Liliana the Repentant","Liliana the Faultless"],
+  ["Loot, the Nexus","Loot, the Anomaly"],
+  ["Lyra, Archangel of Dawn","Lyra, Tolarian Archangel"],
+  ["Mabel, Valley Hero","Mabel, Bitter Recluse"],
+  ["Marwyn, the Preserver","Marwyn, the Clearcutter"],
+  ["Pia, Determined Rebuilder","Pia, Aether Ascetic"],
+  ["Proft, Consulting Detective","Proft, Sinister Mastermind"],
+  ["Ruric Thar, Magecrusher","Ruric Thar, Biomagus"],
+  ["Saheeli, Jewel of Avishkar","Saheeli, Consul of Oversight"],
+  ["Samut, Hazoret's Champion","Samut, Tyrant of Naktamun"],
+  ["Tetsuko Umezawa, Fugitive","Tetsuko Umezawa, Pursuer"],
+  ["Teyo, Lightshield Expert","Teyo, Diamondblade Mage"],
+  ["Tomik, Orzhov Lawmage","Tomik, Izzet Sparkmage"],
+  ["Traxos, Scourge Eternal","Traxos, Academy Guardian"],
+  ["Vraska, the Cutting Glare","Vraska, Soul of Stone"],
+  ["Way of the Mentor","Way of the Healer"],
+  ["Way of the Mentor","Way of the Cryomancer"],
+  ["Way of the Mentor","Way of the Deathbringer"],
+  ["Way of the Mentor","Way of the Warlord"],
+  ["Winter, Tormented Loner","Winter, Team Player"],
+  ["Yargle, Glutton of Urborg","Yargle, Goliath of Otaria"],
+  ["Yoshimaru, Beloved Companion","Yoshimaru, Scrappy Stray"],
+  ["Yuriko, Hope from the Shadows","Yuriko, Blade of the Mighty"]
+];
+const FRA_PAIR_NAMES = new Set(); FRA_PAIRS.forEach(p=>{FRA_PAIR_NAMES.add(p[0]);FRA_PAIR_NAMES.add(p[1]);});
 CARDS.forEach(c=>{ if(POOL[c.r]) POOL[c.r].push(c); });
 const COLOR_NAME = {W:'White',U:'Blue',B:'Black',R:'Red',G:'Green'};
 const GROUP_ORDER = ['White','Blue','Black','Red','Green','Multi','Colorless'];
@@ -135,25 +172,40 @@ function colorGroup(c){
   return COLOR_NAME[cols[0]];
 }
 function buildRealPack(){
-  // A realistic 14-card draft booster: 1 rare/mythic, 3 uncommons, 10 commons.
-  // Common lands are capped at 1 per pack — real collation spreads the land
-  // cycle out, you basically never see 3 nonbasic lands in a paper pack.
+  // Reality Fracture pack: 1 rare/mythic, 3 echoed-pair cards (2 paired + 1 single),
+  // 3 uncommons, 7 commons. Pair cards are excluded from general pools to avoid dupes.
   const pack=[]; const used=new Set(); let landTaken=false;
   function isLand(c){ return /Land/.test(c.t||''); }
-  function take(pool,capLand){
+  function byName(n){ return CARDS.find(c=>c.n===n); }
+  function take(pool,capLand,excludePairs){
     let guard=0;
     while(guard++<500){
       const c=pool[Math.floor(Math.random()*pool.length)];
       if(!c || used.has(c.n)) continue;
+      if(excludePairs && FRA_PAIR_NAMES.has(c.n)) continue;
       if(capLand && landTaken && isLand(c)) continue;
       used.add(c.n); pack.push(c);
       if(isLand(c)) landTaken=true;
-      return;
+      return c;
     }
   }
-  take(Math.random()<1/7.5 && POOL.M.length ? POOL.M : POOL.R); // mythic ~1 in 7.5 packs
-  for(let i=0;i<3;i++) take(POOL.U.length?POOL.U:POOL.C);
-  for(let i=0;i<10;i++) take(POOL.C.length?POOL.C:POOL.U,true);
+  // 1. rare/mythic (not from pair sheet)
+  take(Math.random()<1/7.5 && POOL.M.length ? POOL.M : POOL.R, false, true);
+  // 2. echoed pair: pick a random pair, add both
+  const pr = FRA_PAIRS[Math.floor(Math.random()*FRA_PAIRS.length)];
+  const pa = byName(pr[0]), pb = byName(pr[1]);
+  if(pa && !used.has(pa.n)){ used.add(pa.n); pack.push(pa); }
+  if(pb && !used.has(pb.n)){ used.add(pb.n); pack.push(pb); }
+  // 3. one unpaired pair-sheet card
+  let guard=0;
+  while(guard++<200){
+    const pr2 = FRA_PAIRS[Math.floor(Math.random()*FRA_PAIRS.length)];
+    const c = byName(pr2[Math.floor(Math.random()*2)]);
+    if(c && !used.has(c.n)){ used.add(c.n); pack.push(c); break; }
+  }
+  // 4. fill: 3 uncommons, 7 commons (excluding pair cards)
+  for(let i=0;i<3;i++) take(POOL.U.length?POOL.U:POOL.C, false, true);
+  for(let i=0;i<7;i++) take(POOL.C.length?POOL.C:POOL.U, true, true);
   return pack;
 }
 // How an AI drafter thinks: take the best card early, then commit to the two
