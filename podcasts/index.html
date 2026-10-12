@@ -28,6 +28,7 @@ main{max-width:640px;margin:0 auto;padding:16px}
 .ep{display:flex;gap:14px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:12px;margin-bottom:12px;cursor:pointer;transition:transform .1s}
 .ep:active{transform:scale(.98)}
 .ep-num{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;font-weight:800;font-size:15px;flex:0 0 auto;align-self:center}
+.ep-num.special{background:linear-gradient(135deg,#f59e0b,#f97316);font-size:17px}
 .ep-info{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center}
 .ep-info h3{font-size:15px;font-weight:700;line-height:1.3;margin-bottom:4px}
 .ep-info p{font-size:12.5px;color:var(--muted);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
@@ -91,9 +92,13 @@ fetch('episodes.json').then(function(r){return r.json();}).then(function(data){
       +'<div><h2>'+s.name+'</h2><div class="hosts">'+s.hosts+'</div>'
       +'<div class="count">'+ge.length+' episode'+(ge.length>1?'s':'')+'</div></div></div>';
     ge.forEach(function(e){
+      var badge = e.kind==='special'
+        ? '<div class="ep-num special">★</div>'
+        : '<div class="ep-num">'+e.num+'</div>';
+      var label = e.kind==='special' ? 'Special · '+e.title : '#'+e.num+' '+e.title;
       html+='<div class="ep" data-slug="'+e.slug+'">'
-        +'<div class="ep-num">'+e.num+'</div>'
-        +'<div class="ep-info"><h3>'+e.title+'</h3><p>'+(e.description||'')+'</p>'
+        + badge
+        +'<div class="ep-info"><h3>'+label+'</h3><p>'+(e.description||'')+'</p>'
         +'<div class="ep-meta"><span>'+fmtLong(e.duration)+'</span><span>'+e.date+'</span></div>'
         +'<span class="playing-badge" hidden>▶ Playing</span></div></div>';
     });
@@ -111,7 +116,7 @@ function playEp(slug){
   audio.src='audio/'+slug+'.mp3';
   audio.play();
   document.getElementById('pCover').src='covers/'+e.cover;
-  document.getElementById('pTitle').textContent='#'+e.num+' '+e.title;
+  document.getElementById('pTitle').textContent = e.kind==='special' ? '★ '+e.title : '#'+e.num+' '+e.title;
   document.getElementById('pShow').textContent=e.showName;
   document.getElementById('player').classList.add('show');
   document.getElementById('playBtn').textContent='⏸';
