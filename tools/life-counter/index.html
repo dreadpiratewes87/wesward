@@ -42,12 +42,7 @@
       border-radius:14px; pointer-events:none; }
     .player::after { content:""; position:absolute; inset:0; z-index:1; pointer-events:none; border-radius:14px;
       background:radial-gradient(120% 90% at 50% 0%, var(--neon-wash), transparent 55%); }
-    .player[data-i="0"] { --neon:#ff3b30; --neon-dim:rgba(255,59,48,.28); --neon-border:rgba(255,59,48,.55); --neon-wash:rgba(255,59,48,.10); }
-    .player[data-i="1"] { --neon:#0a84ff; --neon-dim:rgba(10,132,255,.28); --neon-border:rgba(10,132,255,.55); --neon-wash:rgba(10,132,255,.10); }
-    .player[data-i="2"] { --neon:#30d158; --neon-dim:rgba(48,209,88,.28); --neon-border:rgba(48,209,88,.55); --neon-wash:rgba(48,209,88,.10); }
-    .player[data-i="3"] { --neon:#ff9f0a; --neon-dim:rgba(255,159,10,.28); --neon-border:rgba(255,159,10,.55); --neon-wash:rgba(255,159,10,.10); }
-    .player[data-i="4"] { --neon:#bf5af2; --neon-dim:rgba(191,90,242,.28); --neon-border:rgba(191,90,242,.55); --neon-wash:rgba(191,90,242,.10); }
-    .player[data-i="5"] { --neon:#64d2ff; --neon-dim:rgba(100,210,255,.28); --neon-border:rgba(100,210,255,.55); --neon-wash:rgba(100,210,255,.10); }
+    /* neon colors set dynamically via JS per playerMana */
     .player-inner { width:100%; height:100%; padding:max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom)); display:grid; grid-template-rows:auto 1fr auto; }
     .tabletop .player:nth-child(-n+2) .player-inner { transform:rotate(180deg); }
     .player-head { min-width:0; display:flex; align-items:center; justify-content:space-between; gap:6px; }
@@ -69,6 +64,17 @@
     .toolbar { position:fixed; z-index:10; left:50%; top:50%; transform:translate(-50%,-50%); display:flex; gap:3px; padding:5px; border:1px solid rgba(255,255,255,.18); border-radius:16px; background:linear-gradient(160deg,#1a1d21,#0a0c0e); box-shadow:inset 0 1px 0 var(--chrome-hi), 0 6px 24px rgba(0,0,0,.7), 0 0 24px rgba(10,132,255,.15); }
     .tool { width:42px; height:34px; border:0; border-radius:10px; background:transparent; color:#f6f8f7; display:grid; place-items:center; touch-action:manipulation; }
     .tool:active { background:rgba(255,255,255,.12); }
+    /* ---- mana color picker ---- */
+    .mana-pick-btn{border:1px solid var(--line);background:rgba(0,0,0,.2);width:30px;height:30px;border-radius:50%;display:grid;place-items:center;cursor:pointer;flex:none;padding:0}
+    .mana-pick-btn svg{width:18px;height:18px}
+    .mana-sheet{position:fixed;z-index:60;left:50%;top:50%;transform:translate(-50%,-50%);background:linear-gradient(160deg,#1a1d21,#0a0c0e);border:1px solid rgba(255,255,255,.18);border-radius:16px;padding:16px;display:flex;gap:12px;box-shadow:0 8px 32px rgba(0,0,0,.8)}
+    .mana-opt{width:52px;height:52px;border-radius:50%;border:2px solid transparent;background:rgba(255,255,255,.04);display:grid;place-items:center;cursor:pointer;padding:0}
+    .mana-opt svg{width:36px;height:36px}
+    .mana-opt:active{transform:scale(.92)}
+    .mana-opt.sel{border-color:#fff;box-shadow:0 0 12px rgba(255,255,255,.4)}
+    .mana-bg{position:absolute;right:-10px;bottom:-20px;width:140px;height:140px;opacity:.07;pointer-events:none;z-index:0}
+    .mana-bg svg{width:100%;height:100%}
+
     .tool[disabled] { opacity:.32; }
     .tool svg { width:19px; height:19px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
     @media (max-width:350px) {
@@ -234,6 +240,24 @@
       var START_LIFE = 40;
       function makePlayers(n,names,life){ var arr=[]; for(var i=0;i<n;i++){ arr.push({ name:(names&&names[i])||('Player '+(i+1)), life:life, poison:0, commander:Array(Math.max(0,n-1)).fill(0) }); } return arr; }
       var players = makePlayers(4,null,START_LIFE);
+
+      /* ---- mana symbols (WUBRG) ---- */
+      var MANA_SVG={
+        W:'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="#FFFBD5" stroke="#000" stroke-width="4"/><circle cx="50" cy="50" r="20" fill="#FFFBD5" stroke="#000" stroke-width="3"/>'+[0,45,90,135,180,225,270,315].map(function(a){var r=a*Math.PI/180;return '<line x1="50" y1="50" x2="'+(50+32*Math.cos(r))+'" y2="'+(50+32*Math.sin(r))+'" stroke="#000" stroke-width="4"/>';}).join('')+'</svg>',
+        U:'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="#0E68AB" stroke="#000" stroke-width="4"/><path d="M50 22 C50 22 32 48 32 62 A18 18 0 0 0 68 62 C68 48 50 22 50 22 Z" fill="#0E68AB" stroke="#000" stroke-width="3"/></svg>',
+        B:'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="#150B00" stroke="#555" stroke-width="4"/><circle cx="38" cy="42" r="8" fill="#CCC2C0"/><circle cx="62" cy="42" r="8" fill="#CCC2C0"/><path d="M38 62 Q50 72 62 62" stroke="#CCC2C0" stroke-width="3" fill="none"/></svg>',
+        R:'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="#D3202A" stroke="#000" stroke-width="4"/><path d="M50 20 C42 38 30 44 34 62 C36 72 44 76 50 76 C56 76 64 72 66 62 C70 44 58 38 50 20 Z" fill="#D3202A" stroke="#000" stroke-width="3"/></svg>',
+        G:'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="#00733E" stroke="#000" stroke-width="4"/><path d="M50 24 L50 72 M50 40 L36 52 M50 40 L64 52 M50 54 L38 64 M50 54 L62 64" stroke="#000" stroke-width="4" stroke-linecap="round"/></svg>'
+      };
+      var MANA_NEON={
+        W:{neon:'#fffbd5',dim:'rgba(255,251,213,.25)',border:'rgba(255,251,213,.5)',wash:'rgba(255,251,213,.08)'},
+        U:{neon:'#0a84ff',dim:'rgba(10,132,255,.28)',border:'rgba(10,132,255,.55)',wash:'rgba(10,132,255,.10)'},
+        B:{neon:'#a090a8',dim:'rgba(160,144,168,.28)',border:'rgba(160,144,168,.55)',wash:'rgba(160,144,168,.10)'},
+        R:{neon:'#ff3b30',dim:'rgba(255,59,48,.28)',border:'rgba(255,59,48,.55)',wash:'rgba(255,59,48,.10)'},
+        G:{neon:'#30d158',dim:'rgba(48,209,88,.28)',border:'rgba(48,209,88,.55)',wash:'rgba(48,209,88,.10)'}
+      };
+      var playerMana=['R','U','G','W','B','U']; // defaults per seat
+
       var history = [], events = ['Game ready · 40 life'], turn = 0, round = 1, active = null, wakeLock = null;
       var audioContext = null, muted = false;
       var board = document.getElementById('board');
@@ -253,9 +277,12 @@
           var totalCmd = Math.max.apply(null,p.commander);
           var others=otherPlayers(i);
           var commanderMatrix=others.map(function(opp,slot){ return '<div class="cmd-source"><span class="cmd-label">'+esc(players[opp].name)+'</span><div class="stat-controls"><button class="mini-btn" data-action="counter" data-type="commander" data-slot="'+slot+'" data-delta="-1" data-i="'+i+'" aria-label="Subtract commander damage from '+esc(players[opp].name)+'">−</button><output class="mini-value">'+p.commander[slot]+'</output><button class="mini-btn" data-action="counter" data-type="commander" data-slot="'+slot+'" data-delta="1" data-i="'+i+'" aria-label="Add commander damage from '+esc(players[opp].name)+'">+</button></div></div>'; }).join('');
-          return '<section class="player '+(i===turn?'active-turn ':'')+((p.life<=0 || p.poison>=10 || totalCmd>=21)?'dead':'')+'" data-i="'+i+'" aria-label="'+esc(p.name)+', '+p.life+' life">'+
+          var mc=MANA_NEON[playerMana[i]||'R']||MANA_NEON.R;
+          var neonStyle='--neon:'+mc.neon+';--neon-dim:'+mc.dim+';--neon-border:'+mc.border+';--neon-wash:'+mc.wash+';';
+          return '<section class="player '+(i===turn?'active-turn ':'')+((p.life<=0 || p.poison>=10 || totalCmd>=21)?'dead':'')+'" data-i="'+i+'" style="'+neonStyle+'" aria-label="'+esc(p.name)+', '+p.life+' life">'+
+            '<div class="mana-bg">'+(MANA_SVG[playerMana[i]||'R']||'')+'</div>'+
             '<div class="player-inner">'+
-              '<header class="player-head"><button class="name" data-action="details" data-i="'+i+'">'+esc(p.name)+'</button><div class="player-actions"><button class="player-hurry" data-action="hurry" data-i="'+i+'" aria-label="Say hurry up, '+esc(p.name)+'">HURRY</button><button class="details" data-action="details" data-i="'+i+'" aria-label="Edit '+esc(p.name)+' and damage counters">•••</button></div></header>'+ 
+              '<header class="player-head"><button class="name" data-action="details" data-i="'+i+'">'+esc(p.name)+'</button><div class="player-actions"><button class="mana-pick-btn" data-action="mana" data-i="'+i+'" aria-label="Choose color for '+esc(p.name)+'">'+(MANA_SVG[playerMana[i]||'R']||'')+'</button><button class="player-hurry" data-action="hurry" data-i="'+i+'" aria-label="Say hurry up, '+esc(p.name)+'">HURRY</button><button class="details" data-action="details" data-i="'+i+'" aria-label="Edit '+esc(p.name)+' and damage counters">•••</button></div></header>'+ 
               '<div class="life-row"><button class="life-btn" data-action="life" data-delta="-1" data-i="'+i+'" aria-label="Subtract 1 life from '+esc(p.name)+'">−</button><output class="life" aria-live="polite">'+p.life+'</output><button class="life-btn" data-action="life" data-delta="1" data-i="'+i+'" aria-label="Add 1 life to '+esc(p.name)+'">+</button></div>'+
               '<footer class="status"><button class="jump" data-action="life" data-delta="-5" data-i="'+i+'" aria-label="Subtract 5 life">−5</button><button class="trackers" data-action="details" data-i="'+i+'" aria-label="Poison '+p.poison+', highest commander damage '+totalCmd+'"><span>'+poisonIcon+p.poison+'</span><span>'+cmdIcon+p.commander.join('·')+'</span></button><button class="jump" data-action="life" data-delta="5" data-i="'+i+'" aria-label="Add 5 life">+5</button></footer>'+
               '<div class="tablet-stats"><div class="stat-block"><span class="stat-title">Poison</span><div class="stat-controls"><button class="mini-btn" data-action="counter" data-type="poison" data-slot="0" data-delta="-1" data-i="'+i+'" aria-label="Subtract poison counter">−</button><output class="mini-value">'+p.poison+'</output><button class="mini-btn" data-action="counter" data-type="poison" data-slot="0" data-delta="1" data-i="'+i+'" aria-label="Add poison counter">+</button></div></div><div class="stat-block"><span class="stat-title">Commander damage</span><div class="cmd-grid">'+commanderMatrix+'</div></div></div>'+
@@ -314,8 +341,27 @@
         if(b.dataset.action==='counter') changeCounter(i,b.dataset.type,+b.dataset.slot,+b.dataset.delta);
         if(b.dataset.action==='details') openDetails(i);
         if(b.dataset.action==='hurry') speakHurry(i,b);
+        if(b.dataset.action==='mana') openManaPicker(i);
       });
 
+
+      function openManaPicker(i){
+        var cur=playerMana[i]||'R';
+        var opts=['W','U','B','R','G'].map(function(m){
+          return '<button class="mana-opt'+(m===cur?' sel':'')+'" data-mana="'+m+'" data-i="'+i+'">'+MANA_SVG[m]+'</button>';
+        }).join('');
+        openSheet('<div class="sheet-head"><h2 id="sheetTitle" style="margin:0;flex:1;font-size:20px;">Choose color</h2><button class="close" data-close aria-label="Close">×</button></div><div class="mana-sheet" style="position:static;transform:none;box-shadow:none;border:none;background:none;padding:8px 0;">'+opts+'</div>');
+        sheet.querySelectorAll('[data-mana]').forEach(function(btn){
+          btn.addEventListener('click',function(){
+            var mi=+btn.dataset.i, mm=btn.dataset.mana;
+            playerMana[mi]=mm;
+            try{ localStorage.setItem('lc-mana', JSON.stringify(playerMana)); }catch(e){}
+            closeSheet(); render();
+          });
+        });
+      }
+      // load saved mana choices
+      try{ var _sm=JSON.parse(localStorage.getItem('lc-mana')||'null'); if(_sm&&_sm.length) playerMana=_sm; }catch(e){}
       function otherPlayers(i){ var out=[]; for(var x=0;x<players.length;x++){ if(x!==i) out.push(x); } return out; }
       function openDetails(i){ active=i; var p=players[i], others=otherPlayers(i);
         sheet.innerHTML='<div class="grab"></div><div class="sheet-head"><label class="sr-only" for="pname">Player name</label><input id="pname" class="player-name-input" maxlength="18" value="'+esc(p.name)+'"><button class="close" data-close aria-label="Close">×</button></div>'+
