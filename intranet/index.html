@@ -248,10 +248,107 @@
   
 
   <section class="view" id="todo" aria-labelledby="todo-heading">
-    <header class="viewbar"><button class="back-btn" data-home>← Main</button><h1 id="todo-heading">To-do</h1><span class="stamp">Portable list</span></header>
-    <div class="session-note"><div><strong>Keep your list:</strong> changes live in this session. Download a backup after editing, then import it next time.</div><button class="btn small teal" id="download-json">Download backup</button></div>
-    <form class="todo-entry" id="todo-form"><label class="sr-only" for="task-title">Task</label><input class="task-input" id="task-title" type="text" placeholder="What needs doing?" required maxlength="180" /><label class="sr-only" for="task-stage">When</label><select id="task-stage"><option>Today</option><option selected>Upcoming</option><option>Long-term</option></select><label class="sr-only" for="task-area">Area</label><select id="task-area"><option>General</option><option>Home</option><option>RV</option><option>Work</option></select><label class="sr-only" for="task-priority">Priority</label><select id="task-priority"><option>Normal</option><option>High</option><option>Low</option></select><label class="sr-only" for="task-due">Due date</label><input id="task-due" type="date" /><button class="btn accent add-task" type="submit">Add task</button></form>
-    <div class="todo-tools"><button class="btn small secondary filter-btn active" data-filter="all">All</button><button class="btn small secondary filter-btn" data-filter="open">Open</button><button class="btn small secondary filter-btn" data-filter="done">Done</button><span class="spacer"></span><button class="btn small secondary" id="download-csv">Export CSV</button><button class="btn small secondary" id="import-json">Import backup</button><input class="sr-only" type="file" id="import-file" accept="application/json,.json" /></div><div class="task-board" id="task-board"></div>
+    <header class="viewbar"><button class="back-btn" data-home>&larr; Main</button><h1 id="todo-heading">To-do</h1><span class="stamp">Today first</span></header>
+    <div class="task-board" id="task-board"></div>
+    <button class="todo-addbar" id="todo-add-open" type="button" aria-label="Add a task">+</button>
+    <details class="todo-more">
+      <summary>List options</summary>
+      <div class="todo-more-btns">
+        <button class="btn small secondary" id="download-json" type="button">Download backup</button>
+        <button class="btn small secondary" id="import-json" type="button">Import backup</button>
+        <button class="btn small secondary" id="download-csv" type="button">Export CSV</button>
+        <input class="sr-only" type="file" id="import-file" accept="application/json,.json" />
+      </div>
+      <p class="todo-msg" id="todo-msg" hidden></p>
+    </details>
+    <div class="todo-sheet" id="todo-sheet" hidden>
+      <div class="todo-sheet-card">
+        <div class="todo-sheet-head"><strong>New task</strong><button class="todo-sheet-x" id="todo-sheet-close" type="button" aria-label="Close">&times;</button></div>
+        <form id="todo-form">
+          <input class="task-input" id="task-title" type="text" placeholder="What needs doing?" required maxlength="180" autocomplete="off" />
+          <div class="td-seg" id="task-stage-seg" role="group" aria-label="When">
+            <button type="button" data-stage="Today">Today</button>
+            <button type="button" data-stage="Upcoming" class="on">Upcoming</button>
+            <button type="button" data-stage="Long-term">Long-term</button>
+          </div>
+          <input type="hidden" id="task-stage" value="Upcoming" />
+          <details class="todo-form-more">
+            <summary>More options</summary>
+            <div class="todo-form-grid">
+              <label>Area <select id="task-area"><option>General</option><option>Home</option><option>RV</option><option>Work</option></select></label>
+              <label>Priority <select id="task-priority"><option>Normal</option><option>High</option><option>Low</option></select></label>
+              <label>Due <input id="task-due" type="date" /></label>
+            </div>
+          </details>
+          <button class="btn accent todo-add-submit" type="submit">Add task</button>
+        </form>
+      </div>
+    </div>
+    <style>
+      #todo .task-board{display:block;max-width:760px;margin:0 auto}
+      .td-group{margin-bottom:26px}
+      .td-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:0 4px 9px;border-bottom:2px solid var(--line);margin-bottom:11px}
+      .td-head h2{font:800 25px/1 "Barlow Condensed",sans-serif;margin:0;letter-spacing:.01em}
+      .td-head span{color:var(--muted);font-size:13px;font-weight:700}
+      .td-list{display:grid;gap:9px}
+      .td-row{display:flex;gap:12px;align-items:flex-start;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow)}
+      .td-row.completed{opacity:.6}
+      .td-row.completed .td-title{text-decoration:line-through}
+      .td-check{width:26px;height:26px;flex:none;accent-color:var(--teal);margin-top:1px;cursor:pointer}
+      .td-main{flex:1;min-width:0}
+      .td-title{font-weight:650;font-size:17px;line-height:1.3;overflow-wrap:anywhere;cursor:pointer}
+      .td-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:5px;color:var(--muted);font-size:13px;align-items:center}
+      .td-meta span+span:before{content:"\00B7";margin-right:6px;opacity:.6}
+      .td-overdue{color:#b3382e;font-weight:700}
+      .td-high{color:#b3382e;font-weight:700}
+      .td-empty{padding:38px 16px;text-align:center;color:var(--muted);font-size:16px}
+      .td-done-head{display:flex;justify-content:space-between;width:100%;background:none;border:0;border-bottom:2px solid var(--line);padding:0 4px 9px;cursor:pointer;color:inherit}
+      .td-done-head span:first-child{font:800 25px/1 "Barlow Condensed",sans-serif}
+      .td-done-head span:last-child{color:var(--muted);font-size:13px;font-weight:700;align-self:end}
+      .td-done .td-list{margin-top:11px}
+      .td-edit{margin-top:12px;border-top:1px dashed var(--line);padding-top:12px}
+      .td-seg{display:flex;gap:6px;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:4px}
+      .td-seg button{flex:1;border:0;background:transparent;padding:9px 4px;border-radius:999px;font-weight:700;font-size:14px;cursor:pointer;color:var(--muted)}
+      .td-seg button.on{background:var(--ink);color:var(--bg)}
+      .td-edit-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px}
+      .td-edit-grid label{font-size:12px;font-weight:700;color:var(--muted);display:grid;gap:4px}
+      .td-edit-grid select,.td-edit-grid input{width:100%;padding:8px;font-size:14px}
+      .td-del{margin-top:12px;border:0;background:none;color:#b3382e;font-weight:700;font-size:14px;cursor:pointer;padding:4px 0}
+      .todo-addbar{display:block;width:100%;max-width:760px;margin:6px auto 0;height:58px;border:0;border-radius:999px;background:var(--teal);color:#fff;font-size:34px;line-height:1;font-weight:400;cursor:pointer;box-shadow:var(--shadow);position:sticky;bottom:14px;z-index:30}
+      .todo-addbar:active{transform:scale(.99)}
+      .todo-more{max-width:760px;margin:20px auto 0}
+      .todo-more summary{color:var(--muted);font-size:13px;font-weight:700;cursor:pointer;text-align:center;list-style:none;padding:8px}
+      .todo-more summary::-webkit-details-marker{display:none}
+      .todo-more-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;padding:8px 0 2px}
+      .todo-msg{text-align:center;color:#b3382e;font-size:14px;font-weight:600}
+      .todo-sheet{position:fixed;inset:0;background:rgba(22,20,16,.48);z-index:300;display:flex;align-items:flex-end;justify-content:center}
+      .todo-sheet[hidden]{display:none}
+      .todo-sheet-card{background:var(--bg);width:100%;max-width:560px;max-height:88vh;overflow:auto;border-radius:22px 22px 0 0;padding:20px 20px calc(20px + env(safe-area-inset-bottom));box-shadow:var(--shadow)}
+      @media(min-width:640px){.todo-sheet{align-items:center;padding:20px}.todo-sheet-card{border-radius:22px}}
+      .todo-sheet-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+      .todo-sheet-head strong{font:800 24px/1 "Barlow Condensed",sans-serif}
+      .todo-sheet-x{border:0;background:none;font-size:28px;line-height:1;cursor:pointer;color:var(--muted);padding:2px 6px}
+      #todo-form{display:grid;gap:12px}
+      #todo-form .task-input{width:100%;padding:13px 14px;font-size:17px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink)}
+      .todo-form-more summary{color:var(--muted);font-size:13px;font-weight:700;cursor:pointer;padding:2px}
+      .todo-form-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px}
+      .todo-form-grid label{font-size:12px;font-weight:700;color:var(--muted);display:grid;gap:4px}
+      .todo-form-grid select,.todo-form-grid input{width:100%;padding:9px;font-size:14px}
+      @media(max-width:520px){.todo-form-grid,.td-edit-grid{grid-template-columns:1fr}}
+      .todo-add-submit{width:100%;padding:14px;font-size:16px;border-radius:12px}
+    </style>
+    <script>
+    (function(){
+      var sheet=document.getElementById('todo-sheet'),openBtn=document.getElementById('todo-add-open'),closeBtn=document.getElementById('todo-sheet-close'),form=document.getElementById('todo-form'),seg=document.getElementById('task-stage-seg'),stageInput=document.getElementById('task-stage');
+      function setStage(s){stageInput.value=s;seg.querySelectorAll('button').forEach(function(b){b.classList.toggle('on',b.dataset.stage===s)})}
+      seg.querySelectorAll('button').forEach(function(b){b.addEventListener('click',function(){setStage(b.dataset.stage)})});
+      openBtn.addEventListener('click',function(){sheet.hidden=false;setTimeout(function(){document.getElementById('task-title').focus()},40)});
+      closeBtn.addEventListener('click',function(){sheet.hidden=true});
+      sheet.addEventListener('click',function(e){if(e.target===sheet)sheet.hidden=true});
+      form.addEventListener('submit',function(){setTimeout(function(){setStage('Upcoming');sheet.hidden=true},0)});
+      document.addEventListener('keydown',function(e){if(e.key==='Escape')sheet.hidden=true});
+    })();
+    </script>
   </section>
 
   <style>
@@ -621,8 +718,61 @@ renderCats();renderGrid();renderIssues();
   }
   // hook renderTasks to sync (wrap the original)
   var _origRenderTasks=null;document.getElementById('todo-form').addEventListener('submit',function(e){e.preventDefault();var title=document.getElementById('task-title').value.trim();if(!title)return;tasks.push({id:Date.now()+Math.random(),title:title,area:document.getElementById('task-area').value,priority:document.getElementById('task-priority').value,due:document.getElementById('task-due').value,stage:document.getElementById('task-stage').value,done:false});e.target.reset();todoSync();renderTasks()});
-  function taskVisible(t){return taskFilter==='all'||(taskFilter==='open'&&!t.done)||(taskFilter==='done'&&t.done)}function renderTasks(){var board=document.getElementById('task-board');board.innerHTML='';taskStages.forEach(function(stage){var shown=tasks.filter(function(t){return t.stage===stage&&taskVisible(t)}),section=document.createElement('section');section.className='task-group';section.setAttribute('aria-labelledby','task-group-'+stage.toLowerCase().replace(/[^a-z]+/g,'-'));section.innerHTML='<div class="task-group-head"><h2 id="task-group-'+stage.toLowerCase().replace(/[^a-z]+/g,'-')+'">'+stage+'</h2><span>'+shown.length+' '+(shown.length===1?'task':'tasks')+'</span></div><div class="task-list"></div>';var root=section.querySelector('.task-list');if(!shown.length){root.innerHTML='<div class="empty">No '+taskFilter+' tasks here.</div>'}shown.forEach(function(t){var row=document.createElement('div');row.className='task'+(t.done?' completed':'');row.innerHTML='<input class="task-check" type="checkbox" '+(t.done?'checked':'')+' aria-label="Mark task complete"><div><div class="task-title">'+escapeHtml(t.title)+'</div><div class="task-meta"><span class="tag">'+escapeHtml(t.area)+'</span><span class="tag">'+escapeHtml(t.priority)+'</span>'+(t.due?'<span>Due '+escapeHtml(t.due)+'</span>':'')+'</div><label class="sr-only" for="task-stage-'+escapeHtml(t.id)+'">Move '+escapeHtml(t.title)+'</label><select class="task-stage" id="task-stage-'+escapeHtml(t.id)+'" aria-label="Move '+escapeHtml(t.title)+'"><option'+(t.stage==='Today'?' selected':'')+'>Today</option><option'+(t.stage==='Upcoming'?' selected':'')+'>Upcoming</option><option'+(t.stage==='Long-term'?' selected':'')+'>Long-term</option></select></div><button class="task-delete" aria-label="Delete task">×</button>';row.querySelector('.task-check').onchange=function(e){t.done=e.target.checked;todoSync();renderTasks()};row.querySelector('.task-stage').onchange=function(e){t.stage=e.target.value;todoSync();renderTasks()};row.querySelector('.task-delete').onclick=function(){tasks=tasks.filter(function(x){return x.id!==t.id});todoSync();renderTasks()};root.appendChild(row)});board.appendChild(section)})}document.querySelectorAll('.filter-btn').forEach(function(b){b.onclick=function(){taskFilter=b.dataset.filter;document.querySelectorAll('.filter-btn').forEach(function(x){x.classList.toggle('active',x===b)});renderTasks()}});
-  function download(name,type,text){var blob=new Blob([text],{type:type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url)},1000)}document.getElementById('download-json').onclick=function(){download('todo-backup.json','application/json',JSON.stringify({version:2,exported:new Date().toISOString(),tasks:tasks},null,2))};document.getElementById('download-csv').onclick=function(){var rows=[['Task','List','Area','Priority','Due','Status']].concat(tasks.map(function(t){return [t.title,t.stage,t.area,t.priority,t.due,t.done?'Done':'Open']}));download('todo-list.csv','text/csv',rows.map(function(r){return r.map(function(v){return '"'+String(v).replace(/"/g,'""')+'"'}).join(',')}).join('\n'))};document.getElementById('import-json').onclick=function(){document.getElementById('import-file').click()};document.getElementById('import-file').onchange=function(e){var file=e.target.files[0];if(!file)return;var reader=new FileReader();reader.onload=function(){try{var parsed=JSON.parse(reader.result);if(!parsed||!Array.isArray(parsed.tasks))throw new Error();tasks=parsed.tasks.filter(function(t){return t&&typeof t.title==='string'}).map(function(t){return {id:t.id||Date.now()+Math.random(),title:t.title,area:t.area||'General',priority:t.priority||'Normal',due:t.due||'',stage:taskStages.indexOf(t.stage)>-1?t.stage:'Upcoming',done:!!t.done}});todoSync();renderTasks()}catch(err){e.target.value='';var note=document.querySelector('.session-note div');note.innerHTML='<strong>That file could not be imported.</strong> Choose a backup downloaded from this to-do list.'}};reader.readAsText(file)};renderTasks();
+    var todoEditing=null,todoShowDone=false;
+  function fmtDue(d){if(!d)return '';var p=d.split('-');if(p.length<3)return d;var M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return M[Number(p[1])-1]+' '+Number(p[2])+', '+p[0]}
+  function todayStr(){var n=new Date();return n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')+'-'+String(n.getDate()).padStart(2,'0')}
+  function buildEditor(t,el){
+    el.innerHTML='<div class="td-seg" role="group" aria-label="Move task">'+taskStages.map(function(s){return '<button type="button" data-s="'+s+'" class="'+(t.stage===s?'on':'')+'">'+s+'</button>'}).join('')+'</div><div class="td-edit-grid"><label>Area <select class="td-area"><option>General</option><option>Home</option><option>RV</option><option>Work</option></select></label><label>Priority <select class="td-pri"><option>Normal</option><option>High</option><option>Low</option></select></label><label>Due <input class="td-due" type="date"></label></div><button type="button" class="td-del">Delete task</button>';
+    el.querySelector('.td-area').value=t.area||'General';
+    el.querySelector('.td-pri').value=t.priority||'Normal';
+    el.querySelector('.td-due').value=t.due||'';
+    el.querySelectorAll('.td-seg button').forEach(function(b){b.onclick=function(){t.stage=b.dataset.s;todoSync();renderTasks()}});
+    el.querySelector('.td-area').onchange=function(e){t.area=e.target.value;todoSync();renderTasks()};
+    el.querySelector('.td-pri').onchange=function(e){t.priority=e.target.value;todoSync();renderTasks()};
+    el.querySelector('.td-due').onchange=function(e){t.due=e.target.value;todoSync();renderTasks()};
+    el.querySelector('.td-del').onclick=function(){tasks=tasks.filter(function(x){return x.id!==t.id});if(todoEditing===t.id)todoEditing=null;todoSync();renderTasks()};
+  }
+  function taskRow(t){
+    var row=document.createElement('div');row.className='td-row'+(t.done?' completed':'');
+    var meta='';
+    if(t.due){var over=!t.done&&t.due<todayStr();meta+='<span class="'+(over?'td-overdue':'')+'">'+(over?'Overdue · ':'Due ')+fmtDue(t.due)+'</span>'}
+    if(t.priority==='High'&&!t.done)meta+='<span class="td-high">High priority</span>';
+    if(t.area&&t.area!=='General')meta+='<span>'+escapeHtml(t.area)+'</span>';
+    row.innerHTML='<input class="td-check" type="checkbox" '+(t.done?'checked':'')+' aria-label="Mark task complete"><div class="td-main"><div class="td-title" role="button" tabindex="0" aria-label="Task options">'+escapeHtml(t.title)+'</div>'+(meta?'<div class="td-meta">'+meta+'</div>':'')+'<div class="td-edit" hidden></div></div>';
+    row.querySelector('.td-check').onchange=function(e){t.done=e.target.checked;todoSync();renderTasks()};
+    var editEl=row.querySelector('.td-edit');
+    function toggleEdit(){if(todoEditing===t.id){todoEditing=null;editEl.hidden=true;editEl.innerHTML=''}else{todoEditing=t.id;renderTasks()}}
+    row.querySelector('.td-title').onclick=toggleEdit;
+    row.querySelector('.td-title').onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleEdit()}};
+    if(todoEditing===t.id){editEl.hidden=false;buildEditor(t,editEl)}
+    return row;
+  }
+  function renderTasks(){
+    var board=document.getElementById('task-board');board.innerHTML='';
+    var open=tasks.filter(function(t){return !t.done}),done=tasks.filter(function(t){return t.done});
+    if(!tasks.length){board.innerHTML='<div class="td-empty">Nothing on your list. Tap + below to add something.</div>';return}
+    if(!open.length){var note=document.createElement('div');note.className='td-empty';note.textContent='All caught up — everything below is done.';board.appendChild(note)}
+    taskStages.forEach(function(stage){
+      var shown=open.filter(function(t){return t.stage===stage});
+      if(!shown.length)return;
+      var sec=document.createElement('section');sec.className='td-group';
+      sec.innerHTML='<div class="td-head"><h2>'+stage+'</h2><span>'+shown.length+(shown.length===1?' task':' tasks')+'</span></div>';
+      var list=document.createElement('div');list.className='td-list';
+      shown.forEach(function(t){list.appendChild(taskRow(t))});
+      sec.appendChild(list);board.appendChild(sec);
+    });
+    if(done.length){
+      var wrap=document.createElement('section');wrap.className='td-group td-done';
+      var head=document.createElement('button');head.type='button';head.className='td-done-head';
+      head.innerHTML='<span>Completed</span><span>'+done.length+' · '+(todoShowDone?'Hide':'Show')+'</span>';
+      head.onclick=function(){todoShowDone=!todoShowDone;renderTasks()};
+      wrap.appendChild(head);
+      if(todoShowDone){var dl=document.createElement('div');dl.className='td-list';done.forEach(function(t){dl.appendChild(taskRow(t))});wrap.appendChild(dl)}
+      board.appendChild(wrap);
+    }
+  }
+
+  function download(name,type,text){var blob=new Blob([text],{type:type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url)},1000)}document.getElementById('download-json').onclick=function(){download('todo-backup.json','application/json',JSON.stringify({version:2,exported:new Date().toISOString(),tasks:tasks},null,2))};document.getElementById('download-csv').onclick=function(){var rows=[['Task','List','Area','Priority','Due','Status']].concat(tasks.map(function(t){return [t.title,t.stage,t.area,t.priority,t.due,t.done?'Done':'Open']}));download('todo-list.csv','text/csv',rows.map(function(r){return r.map(function(v){return '"'+String(v).replace(/"/g,'""')+'"'}).join(',')}).join('\n'))};document.getElementById('import-json').onclick=function(){document.getElementById('import-file').click()};document.getElementById('import-file').onchange=function(e){var file=e.target.files[0];if(!file)return;var reader=new FileReader();reader.onload=function(){try{var parsed=JSON.parse(reader.result);if(!parsed||!Array.isArray(parsed.tasks))throw new Error();tasks=parsed.tasks.filter(function(t){return t&&typeof t.title==='string'}).map(function(t){return {id:t.id||Date.now()+Math.random(),title:t.title,area:t.area||'General',priority:t.priority||'Normal',due:t.due||'',stage:taskStages.indexOf(t.stage)>-1?t.stage:'Upcoming',done:!!t.done}});todoSync();renderTasks()}catch(err){e.target.value='';var note=document.getElementById('todo-msg');if(note){note.hidden=false;note.textContent='That file could not be imported. Choose a backup downloaded from this to-do list.'}}};reader.readAsText(file)};renderTasks();
   initTodoSync();
   var canvas=document.getElementById('sketch-canvas'),ctx=canvas.getContext('2d'),drawing=false,last=null,mode='pen',sketchUndo=[],sketchRedo=[];function sizeCanvas(){var frame=document.getElementById('sketch-frame'),rect=frame.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,2),old=document.createElement('canvas');old.width=canvas.width;old.height=canvas.height;if(canvas.width&&canvas.height)old.getContext('2d').drawImage(canvas,0,0);canvas.width=Math.max(1,Math.round(rect.width*dpr));canvas.height=Math.max(1,Math.round(rect.height*dpr));ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);if(old.width)ctx.drawImage(old,0,0,old.width,old.height,0,0,rect.width,rect.height);ctx.lineCap='round';ctx.lineJoin='round'}function point(e){var r=canvas.getBoundingClientRect();return {x:e.clientX-r.left,y:e.clientY-r.top}}function saveSketch(){try{sketchUndo.push(canvas.toDataURL());if(sketchUndo.length>30)sketchUndo.shift();sketchRedo=[]}catch(e){}}function loadSketch(url){var img=new Image();img.onload=function(){var r=canvas.getBoundingClientRect();ctx.clearRect(0,0,r.width,r.height);ctx.drawImage(img,0,0,r.width,r.height)};img.src=url}canvas.addEventListener('pointerdown',function(e){saveSketch();drawing=true;last=point(e);canvas.setPointerCapture(e.pointerId)});canvas.addEventListener('pointermove',function(e){if(!drawing)return;var p=point(e);ctx.save();ctx.globalCompositeOperation=mode==='eraser'?'destination-out':'source-over';ctx.strokeStyle=document.getElementById('pen-color').value;ctx.lineWidth=Number(document.getElementById('pen-size').value);ctx.lineCap='round';ctx.lineJoin='round';ctx.beginPath();ctx.moveTo(last.x,last.y);ctx.lineTo(p.x,p.y);ctx.stroke();ctx.restore();last=p});canvas.addEventListener('pointerup',function(){drawing=false});canvas.addEventListener('pointercancel',function(){drawing=false});function setTool(which){mode=which;document.getElementById('pen-tool').className='btn small '+(which==='pen'?'teal':'secondary');document.getElementById('eraser-tool').className='btn small '+(which==='eraser'?'teal':'secondary')}document.getElementById('pen-tool').onclick=function(){setTool('pen')};document.getElementById('eraser-tool').onclick=function(){setTool('eraser')};document.getElementById('toggle-grid').onclick=function(){document.getElementById('sketch-frame').classList.toggle('grid')};document.getElementById('sketch-undo').onclick=function(){if(!sketchUndo.length)return;sketchRedo.push(canvas.toDataURL());loadSketch(sketchUndo.pop())};document.getElementById('sketch-redo').onclick=function(){if(!sketchRedo.length)return;sketchUndo.push(canvas.toDataURL());loadSketch(sketchRedo.pop())};document.getElementById('clear-sketch').onclick=function(){document.getElementById('clear-dialog').showModal()};document.getElementById('confirm-clear').onclick=function(){saveSketch();var r=canvas.getBoundingClientRect();ctx.clearRect(0,0,r.width,r.height);document.getElementById('clear-dialog').close()};document.getElementById('download-sketch').onclick=function(){var out=document.createElement('canvas');out.width=canvas.width;out.height=canvas.height;var o=out.getContext('2d');o.fillStyle='#fff';o.fillRect(0,0,out.width,out.height);o.drawImage(canvas,0,0);out.toBlob(function(blob){var url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='template-sketch.png';a.click();setTimeout(function(){URL.revokeObjectURL(url)},1000)},'image/png')};window.addEventListener('resize',function(){if(document.getElementById('sketch').classList.contains('active'))sizeCanvas()});
 })();
