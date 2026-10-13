@@ -2290,7 +2290,7 @@ When this creature enters, target creature can't be blocked this turn.</p>
     document.getElementById('card-dialog-type').textContent=card.type||'\u2014';
     document.getElementById('card-dialog-text').textContent=card.text||'';
     var pt=document.getElementById('card-dialog-pt');pt.textContent='';pt.hidden=true;
-    var img=document.getElementById('card-dialog-img');img.hidden=true;img.removeAttribute('src');img.parentNode.classList.remove('image-only');
+    if(window.setCardDialogImage){window.setCardDialogImage(card.name)}else{var img=document.getElementById('card-dialog-img');if(img){var body=img.parentNode,base=String(card.name).split(' — ')[0].replace(/\s*×\s*\d+\s*$/,'').trim();body.classList.remove('image-only');img.hidden=true;img.removeAttribute('src');img.alt=base;img.onload=function(){img.hidden=false;body.classList.add('image-only')};img.onerror=function(){img.hidden=true;body.classList.remove('image-only')};img.src='https://api.scryfall.com/cards/named?exact='+encodeURIComponent(base)+'&format=image&version=large'}}
     if(!dialog.open)dialog.showModal();
   }
   renderStapleBody();
