@@ -84,6 +84,13 @@
 @media print{body.pw-print-mode{background:#fff!important}.pw-print-mode .pw-print-toolbar{display:none!important}.pw-print-mode main.app{max-width:none;padding:0;margin:0}.pw-print-mode #proxy-wizard{padding:0}.pw-print-mode .pw-print-sheet{padding:0}.pw-sheet{break-after:page}.pw-sheet.letter{width:216mm;height:279mm;min-height:279mm}.pw-sheet.a4{width:210mm;height:297mm;min-height:297mm}@page{margin:0}}
 
 </style>
+<style>
+/* Floating back button (moved off the top bar 2026-10-12 — the sticky viewbar back button slid behind the iPhone notch) */
+.viewbar .back-btn{display:none}
+.float-back{position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:1200;display:inline-flex;align-items:center;gap:7px;padding:12px 19px;border:0;border-radius:999px;background:var(--ink);color:var(--bg);font:inherit;font-weight:800;font-size:16px;box-shadow:0 10px 30px rgba(0,0,0,.42);cursor:pointer}
+.float-back[hidden]{display:none}
+.float-back:active{transform:translateY(1px)}
+</style>
 </head>
 <body>
 <main class="app" id="mtg-hub-main">
@@ -2987,5 +2994,8 @@ document.addEventListener('DOMContentLoaded', function(){
 
 })();
 </script>
+<button class="float-back" id="floatBack" type="button" hidden>← Main</button>
+
+<script>(function(){var fb=document.getElementById('floatBack');if(!fb)return;var EXCLUDE=["counter"];function sync(){var a=document.querySelector('.view.active');fb.hidden=!a||a.id==='home'||EXCLUDE.indexOf(a.id)>=0}fb.addEventListener('click',function(){openView('home')});var obs=new MutationObserver(sync);document.querySelectorAll('.view').forEach(function(v){obs.observe(v,{attributes:true,attributeFilter:['class']})});sync()})();</script>
 </body>
 </html>
