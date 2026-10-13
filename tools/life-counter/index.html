@@ -50,7 +50,7 @@
     .player-head { min-width:0; display:flex; align-items:center; justify-content:space-between; gap:6px; }
     .name { border:0; background:transparent; padding:5px 4px; min-width:0; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; text-align:left; font-weight:700; letter-spacing:.045em; font-size:clamp(15px, 4vw, 21px); text-shadow:0 1px 2px rgba(0,0,0,.3); }
     .player-actions { display:flex; align-items:center; gap:5px; flex:none; }
-    .player-hurry { border:0; border-radius:8px; background:#c92f27; color:#fff; height:30px; padding:0 8px; font-size:11px; font-weight:700; letter-spacing:.045em; line-height:1; box-shadow:inset 0 -2px 0 rgba(0,0,0,.24); touch-action:manipulation; }
+    .player-hurry { border:0; border-radius:8px; background:#c92f27; color:#fff; height:30px; width:54px; padding:0 8px; font-size:11px; font-weight:700; letter-spacing:.045em; line-height:1; box-shadow:inset 0 -2px 0 rgba(0,0,0,.24); touch-action:manipulation; }
     .player-hurry:active { background:#9f211c; transform:translateY(1px); box-shadow:none; }
     .details { border:1px solid var(--line); background:rgba(0,0,0,.16); width:34px; height:30px; border-radius:9px; font-family:"IBM Plex Mono", monospace; font-size:14px; line-height:1; overflow:hidden; }
     .life-row { min-height:0; display:grid; grid-template-columns:minmax(44px, .65fr) minmax(68px, 1.2fr) minmax(44px, .65fr); align-items:center; gap:3px; }
@@ -84,7 +84,7 @@
       .tool { width:36px; }
       .player-head { gap:3px; }
       .player-actions { gap:3px; }
-      .player-hurry { padding:0 6px; font-size:10px; }
+      .player-hurry { padding:0 6px; font-size:10px; width:46px; }
     }
     #sound .mute-slash { display:none; }
     #sound[aria-pressed="true"] .sound-waves { display:none; }
@@ -284,7 +284,7 @@
           return '<section class="player '+(i===turn?'active-turn ':'')+((p.life<=0 || p.poison>=10 || totalCmd>=21)?'dead':'')+'" data-i="'+i+'" style="'+neonStyle+'" aria-label="'+esc(p.name)+', '+p.life+' life">'+
             '<div class="mana-bg">'+(MANA_SVG[playerMana[i]||'R']||'')+'</div>'+
             '<div class="player-inner">'+
-              '<header class="player-head"><button class="name" data-action="details" data-i="'+i+'">'+esc(p.name)+'</button><div class="player-actions"><button class="mana-pick-btn" data-action="mana" data-i="'+i+'" aria-label="Choose color for '+esc(p.name)+'">'+(MANA_SVG[playerMana[i]||'R']||'')+'</button><button class="player-hurry" data-action="hurry" data-i="'+i+'" aria-label="Say hurry up, '+esc(p.name)+'">HURRY</button><button class="details" data-action="details" data-i="'+i+'" aria-label="Edit '+esc(p.name)+' and damage counters">•••</button></div></header>'+ 
+              '<header class="player-head"><button class="name" data-action="details" data-i="'+i+'">'+esc(p.name)+'</button><div class="player-actions"><button class="mana-pick-btn" data-action="mana" data-i="'+i+'" aria-label="Choose color for '+esc(p.name)+'">'+(MANA_SVG[playerMana[i]||'R']||'')+'</button><button class="player-hurry" data-action="hurry" data-i="'+i+'" aria-label="Say hurry up, '+esc(p.name)+'"></button><button class="details" data-action="details" data-i="'+i+'" aria-label="Edit '+esc(p.name)+' and damage counters">•••</button></div></header>'+ 
               '<div class="life-row"><button class="life-btn" data-action="life" data-delta="-1" data-i="'+i+'" aria-label="Subtract 1 life from '+esc(p.name)+'">−</button><output class="life" aria-live="polite">'+p.life+'</output><button class="life-btn" data-action="life" data-delta="1" data-i="'+i+'" aria-label="Add 1 life to '+esc(p.name)+'">+</button></div>'+
               '<footer class="status"><button class="jump" data-action="life" data-delta="-5" data-i="'+i+'" aria-label="Subtract 5 life">−5</button><button class="trackers" data-action="details" data-i="'+i+'" aria-label="Poison '+p.poison+', highest commander damage '+totalCmd+'"><span>'+poisonIcon+p.poison+'</span><span>'+cmdIcon+p.commander.join('·')+'</span></button><button class="jump" data-action="life" data-delta="5" data-i="'+i+'" aria-label="Add 5 life">+5</button></footer>'+
               '<div class="tablet-stats"><div class="stat-block"><span class="stat-title">Poison</span><div class="stat-controls"><button class="mini-btn" data-action="counter" data-type="poison" data-slot="0" data-delta="-1" data-i="'+i+'" aria-label="Subtract poison counter">−</button><output class="mini-value">'+p.poison+'</output><button class="mini-btn" data-action="counter" data-type="poison" data-slot="0" data-delta="1" data-i="'+i+'" aria-label="Add poison counter">+</button></div></div><div class="stat-block"><span class="stat-title">Commander damage</span><div class="cmd-grid">'+commanderMatrix+'</div></div></div>'+
