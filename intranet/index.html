@@ -1195,6 +1195,6 @@ renderCats();renderGrid();renderIssues();
 </script>
 <button class="float-back" id="floatBack" type="button" hidden>← Main</button>
 
-<script>(function(){var fb=document.getElementById('floatBack');if(!fb)return;var EXCLUDE=[];function sync(){var a=document.querySelector('.view.active');fb.hidden=!a||a.id==='home'||EXCLUDE.indexOf(a.id)>=0}fb.addEventListener('click',function(){openView('home')});var obs=new MutationObserver(sync);document.querySelectorAll('.view').forEach(function(v){obs.observe(v,{attributes:true,attributeFilter:['class']})});sync()})();</script>
+<script>(function(){var fb=document.getElementById('floatBack');if(!fb)return;var EXCLUDE=[];function sync(){var a=document.querySelector('.view.active');fb.hidden=!a||a.id==='home'||EXCLUDE.indexOf(a.id)>=0}fb.addEventListener('click',function(){document.querySelectorAll('.view').forEach(function(v){v.classList.toggle('active',v.id==='home')});window.scrollTo(0,0)});var obs=new MutationObserver(sync);document.querySelectorAll('.view').forEach(function(v){obs.observe(v,{attributes:true,attributeFilter:['class']})});sync()})();</script>
 </body>
 </html>
