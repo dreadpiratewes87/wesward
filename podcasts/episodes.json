@@ -56,6 +56,18 @@
    "duration": 531,
    "date": "2026-10-13",
    "cover": "leo-and-virgo-1-why-we-keep-dating-each-other-2026-10-13.jpg"
+  },
+  {
+   "slug": "1993-the-year-it-all-began-2026-10-13",
+   "show": "history",
+   "showName": "History of Magic \u00b7 Walter & Maya",
+   "kind": "episode",
+   "num": 1,
+   "title": "1993: The Year It All Began",
+   "description": "Series premiere: Walter (playing since month one) and Maya (Commander-era convert) start a year-by-year trip through Magic history. 1993: Richard Garfield, Gen Con, Alpha, the Power Nine, ante, Chaos Orb, and Arabian Nights, the first expansion ever.",
+   "duration": 566,
+   "date": "2026-10-13",
+   "cover": "1993-the-year-it-all-began-2026-10-13.jpg"
   }
  ],
  "shows": {
@@ -73,6 +85,11 @@
    "cover": "series-leo-and-virgo.jpg",
    "hosts": "Leo & Vera",
    "name": "Leo and Virgo"
+  },
+  "history": {
+   "cover": "series-history.jpg",
+   "hosts": "Walter & Maya",
+   "name": "History of Magic"
   }
  }
 }
