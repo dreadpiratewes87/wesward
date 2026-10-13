@@ -68,6 +68,29 @@
    "duration": 566,
    "date": "2026-10-13",
    "cover": "1993-the-year-it-all-began-2026-10-13.jpg"
+  },
+  {
+   "slug": "1994-the-year-magic-grew-up-2026-10-13",
+   "show": "history",
+   "showName": "History of Magic \u00b7 Walter & Maya",
+   "kind": "episode",
+   "num": 2,
+   "title": "1994: The Year Magic Grew Up",
+   "description": "Year two: Antiquities brings the Brothers' War, Revised rotates the Power Nine out forever, Legends introduces gold cards and legendary creatures, and Zak Dolan wins the first World Championship by actually sideboarding. Plus The Dark, Fallen Empires, and the first restricted list.",
+   "duration": 560,
+   "date": "2026-10-13",
+   "cover": "1994-the-year-magic-grew-up-2026-10-13.jpg"
+  },
+  {
+   "slug": "special-arabian-nights-the-first-expansion-deep-dive-2026-10-13",
+   "show": "history",
+   "showName": "History of Magic \u00b7 Walter & Maya",
+   "kind": "special",
+   "title": "Arabian Nights: The First Expansion \u2014 Deep Dive",
+   "description": "History of Magic's first special: the full story of Arabian Nights \u2014 Garfield's solo design, the purple-and-gold card back that almost happened, the scimitar symbol, the accidental Mountain, and the cards (Library of Alexandria, Bazaar of Baghdad, Juzam Djinn, Shahrazad) still echoing today.",
+   "duration": 471,
+   "date": "2026-10-13",
+   "cover": "special-arabian-nights-the-first-expansion-deep-dive-2026-10-13.jpg"
   }
  ],
  "shows": {
