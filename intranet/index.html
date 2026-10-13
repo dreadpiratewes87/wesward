@@ -217,6 +217,13 @@
 .msg.wes .attachment-table { background: #eff6ff; border-color: #93c5fd; }
 .attachment-photo { max-width: 100%; border-radius: 8px; margin-top: 8px; }
 </style>
+<style>
+/* Floating back button (moved off the top bar 2026-10-12 — the sticky viewbar back button slid behind the iPhone notch) */
+.viewbar .back-btn{display:none}
+.float-back{position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:1200;display:inline-flex;align-items:center;gap:7px;padding:12px 19px;border:0;border-radius:999px;background:var(--ink);color:var(--bg);font:inherit;font-weight:800;font-size:16px;box-shadow:0 10px 30px rgba(0,0,0,.42);cursor:pointer}
+.float-back[hidden]{display:none}
+.float-back:active{transform:translateY(1px)}
+</style>
 </head>
 <body>
 <main class="app" id="intranet-main">
@@ -1186,5 +1193,8 @@ renderCats();renderGrid();renderIssues();
 })();
 
 </script>
+<button class="float-back" id="floatBack" type="button" hidden>← Main</button>
+
+<script>(function(){var fb=document.getElementById('floatBack');if(!fb)return;var EXCLUDE=[];function sync(){var a=document.querySelector('.view.active');fb.hidden=!a||a.id==='home'||EXCLUDE.indexOf(a.id)>=0}fb.addEventListener('click',function(){openView('home')});var obs=new MutationObserver(sync);document.querySelectorAll('.view').forEach(function(v){obs.observe(v,{attributes:true,attributeFilter:['class']})});sync()})();</script>
 </body>
 </html>
