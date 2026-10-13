@@ -60,6 +60,11 @@ main{max-width:680px;margin:0 auto;padding:16px 16px 40px}
 .note{font-size:12px;color:var(--muted);margin-top:8px;font-style:italic}
 .footer-note{text-align:center;color:var(--muted);font-size:12px;padding:8px 20px 30px;line-height:1.5}
 </style>
+<style>
+/* Floating back button for the detail view (2026-10-12 — moved off the top, kept getting stuck behind the iPhone top edge) */
+.backbtn.float{position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:90;margin:0;padding:12px 19px;font-size:16px;font-weight:800;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.d-wrap{padding-bottom:110px}
+</style>
 </head>
 <body>
 <header>
@@ -207,5 +212,8 @@ function tick(){
 renderTabs();renderGrid();tick();
 setInterval(function(){tick();renderGrid();},60000);
 </script>
+
+<script>(function(){function stale(){var b=document.getElementById('dBack');if(b&&b.parentNode===document.body)b.remove()}var _open=openDetail;openDetail=function(id){stale();_open(id);var b=document.getElementById('dBack');if(b){b.classList.add('float');document.body.appendChild(b)}};var _close=closeDetail;closeDetail=function(){stale();_close()};})();</script>
+
 </body>
 </html>
