@@ -213,7 +213,7 @@ renderTabs();renderGrid();tick();
 setInterval(function(){tick();renderGrid();},60000);
 </script>
 
-<script>(function(){function stale(){var b=document.getElementById('dBack');if(b&&b.parentNode===document.body)b.remove()}var _open=openDetail;openDetail=function(id){stale();_open(id);var b=document.getElementById('dBack');if(b){b.classList.add('float');document.body.appendChild(b)}};var _close=closeDetail;closeDetail=function(){stale();_close()};})();</script>
+<script>(function(){var detail=document.getElementById('detail'),wrap=document.getElementById('dWrap');function move(){var b=document.getElementById('dBack');if(!b)return;if(detail.classList.contains('show')){if(b.parentNode!==document.body){b.classList.add('float');document.body.appendChild(b)}}else if(b.parentNode===document.body){b.remove()}}new MutationObserver(move).observe(detail,{attributes:true,attributeFilter:['class']});new MutationObserver(move).observe(wrap,{childList:true});move()})();</script>
 
 </body>
 </html>
