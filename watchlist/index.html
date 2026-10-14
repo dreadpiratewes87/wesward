@@ -307,6 +307,12 @@
 .wl-sheet-info h3{font:800 24px/1.15 "Barlow Condensed",sans-serif;margin:0 0 6px}
 .wl-m-rel{font-size:14px;opacity:.7;margin-bottom:8px}
 .wl-m-stream{font-size:14px;font-weight:600;margin-bottom:8px}
+.wl-m-tags{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.wl-pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 8px 5px 11px;font-size:13px;font-weight:700;color:#fff;cursor:pointer}
+.wl-pill-x{border:0;background:rgba(255,255,255,.25);color:#fff;border-radius:50%;width:17px;height:17px;line-height:1;font-size:12px;cursor:pointer;padding:0}
+.wl-pill-add{background:none;border:1px dashed var(--line);color:inherit}
+.wl-tagbar{margin:0 0 12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.wl-tagbar-note{font-size:13px;opacity:.7}
 .wl-m-link{font-size:14px;font-weight:700;color:var(--teal,#2a7f6f);text-decoration:none}
 .wl-m-prog{display:block;width:100%;border:1px dashed var(--line);background:none;border-radius:12px;padding:12px;font-size:15px;color:inherit;cursor:pointer;text-align:left;margin-bottom:10px}
 .wl-m-prog strong{font-weight:700}
@@ -363,13 +369,15 @@ body{max-width:860px;margin:0 auto;padding:18px 14px 60px}
       <div class="wl-filter-row"><label>Service</label><select id="wl-f-service"><option value="">All services</option></select></div>
       <div class="wl-filter-row"><label>Status</label><select id="wl-f-status"><option value="">All</option><option value="unwatched">To watch</option><option value="watched">Watched</option></select></div>
       <div class="wl-filter-row"><label>Sort by</label><select id="wl-f-sort"><option value="alpha">A–Z</option><option value="recent">Recently added</option><option value="service">Service</option></select></div>
+      <div class="wl-filter-row"><label>Tag</label><select id="wl-f-tag"><option value="">All tags</option></select></div>
       <button class="btn small secondary" id="wl-f-clear">Clear filters</button>
     </div>
+    <div class="wl-tagbar" id="wl-tagbar" hidden></div>
     <div class="wl-grid" id="wl-grid"></div>
     <p class="wl-empty" id="wl-empty" hidden>Nothing here yet — add your first one above.</p>
     <h2 class="wl-finished-h" id="wl-finished-h" hidden>Finished Watching</h2>
     <div class="wl-grid finished" id="wl-finished"></div>
-    <div class="wl-modal" id="wl-modal" hidden><div class="wl-modal-bg" data-m="close"></div><div class="wl-sheet"><button class="wl-sheet-x" data-m="close" aria-label="Close">×</button><div class="wl-sheet-top"><img id="wl-m-poster" alt="" /><div class="wl-sheet-info"><h3 id="wl-m-title"></h3><div class="wl-m-rel" id="wl-m-rel"></div><div class="wl-m-stream" id="wl-m-stream"></div><a class="wl-m-link" id="wl-m-link" href="#" target="_blank" rel="noopener" hidden>More info ↗</a></div></div><button class="wl-m-prog" id="wl-m-prog"></button><button class="wl-m-done" id="wl-m-done">✓ Watched</button><button class="wl-m-del" id="wl-m-del">🗑 Delete</button></div></div>
+    <div class="wl-modal" id="wl-modal" hidden><div class="wl-modal-bg" data-m="close"></div><div class="wl-sheet"><button class="wl-sheet-x" data-m="close" aria-label="Close">×</button><div class="wl-sheet-top"><img id="wl-m-poster" alt="" /><div class="wl-sheet-info"><h3 id="wl-m-title"></h3><div class="wl-m-rel" id="wl-m-rel"></div><div class="wl-m-stream" id="wl-m-stream"></div><a class="wl-m-link" id="wl-m-link" href="#" target="_blank" rel="noopener" hidden>More info ↗</a></div></div><div class="wl-m-tags" id="wl-m-tags"></div><button class="wl-m-prog" id="wl-m-prog"></button><button class="wl-m-done" id="wl-m-done">✓ Watched</button><button class="wl-m-del" id="wl-m-del">🗑 Delete</button></div></div>
   </section>
 </main>
 <script>
@@ -463,7 +471,7 @@ try{
         progress:x.progress||'',watched:!!x.watched,info:x.info||'',poster:x.poster||'',
         releaseDate:x.releaseDate||'',releaseKind:x.releaseKind||'',
         streamingService:x.streamingService||'',streamingDate:x.streamingDate||'',
-        tmdbId:x.tmdbId||'',tmdbType:x.tmdbType||'',
+        tmdbId:x.tmdbId||'',tmdbType:x.tmdbType||'',tags:x.tags||[],
         updated_at:x.updated_at||0};
     });
     var s=btoa(unescape(encodeURIComponent(JSON.stringify(data))))
@@ -710,9 +718,10 @@ try{
       +'</span></button>';
   }
   function findItem(id){ var f=null; items.forEach(function(x){ if(x.id===id) f=x; }); return f; }
-  var wlFilters={service:'',status:'',sort:'alpha'}, wlView='grid';
+  var wlFilters={service:'',status:'',sort:'alpha'}, wlView='grid', wlTag='';
   function applyWlFilters(list){
     var out=list.slice();
+    if(wlTag) out=out.filter(function(x){ return (x.tags||[]).indexOf(wlTag)>=0; });
     if(wlFilters.service) out=out.filter(function(x){ return (x.service||'')===wlFilters.service; });
     if(wlFilters.status==='watched') out=out.filter(function(x){ return x.watched; });
     if(wlFilters.status==='unwatched') out=out.filter(function(x){ return !x.watched; });
@@ -723,9 +732,9 @@ try{
   }
   function render(){
     var t=view==='show'?'Show':'Movie';
-    document.getElementById('wl-filter-btn').classList.toggle('active',!!(wlFilters.service||wlFilters.status||wlFilters.sort!=='alpha'));
-    var towatch=applyWlFilters(items.filter(function(x){ return !x.watched&&x.type===t; }));
-    var finished=applyWlFilters(items.filter(function(x){ return x.watched&&x.type===t; }));
+    document.getElementById('wl-filter-btn').classList.toggle('active',!!(wlFilters.service||wlFilters.status||wlFilters.sort!=='alpha'||wlTag));
+    var towatch=applyWlFilters(items.filter(function(x){ return !x.watched&&(!wlTag||x.type===t); }));
+    var finished=applyWlFilters(items.filter(function(x){ return x.watched&&(!wlTag||x.type===t); }));
     var mk=wlView==='list'?rowHTML:tileHTML;
     var grid=document.getElementById('wl-grid');
     grid.innerHTML=towatch.map(mk).join('');
@@ -742,11 +751,24 @@ try{
     var svcs={}; items.forEach(function(x){ if(x.service) svcs[x.service]=1; });
     var sel=document.getElementById('wl-f-service'), cur=sel.value;
     sel.innerHTML='<option value="">All services</option>'+Object.keys(svcs).sort().map(function(s){ return '<option'+(s===cur?' selected':'')+'>'+esc(s)+'</option>'; }).join('');
+    // populate tag filter + tag banner
+    var allTags={}; items.forEach(function(x){ (x.tags||[]).forEach(function(tg){ allTags[tg]=1; }); });
+    var tsel=document.getElementById('wl-f-tag');
+    tsel.innerHTML='<option value="">All tags</option>'+Object.keys(allTags).sort().map(function(s){ return '<option'+(s===wlTag?' selected':'')+'>'+esc(s)+'</option>'; }).join('');
+    tsel.value=wlTag;
+    var tb=document.getElementById('wl-tagbar');
+    if(wlTag){
+      tb.hidden=false;
+      tb.innerHTML='<span class="wl-pill" style="background:hsl('+tagHue(wlTag)+' 55% 42%)">'+esc(wlTag)+'</span><span class="wl-tagbar-note">all titles with this tag</span><button class="btn small secondary" id="wl-tag-clear">Clear</button>';
+      document.getElementById('wl-tag-clear').addEventListener('click',function(){ wlTag=''; render(); });
+    }else{
+      tb.hidden=true; tb.innerHTML='';
+    }
   }
 
   /* ---- tabs ---- */
   document.querySelectorAll('.wl-tab').forEach(function(b){
-    b.addEventListener('click',function(){ view=b.getAttribute('data-view'); render(); });
+    b.addEventListener('click',function(){ view=b.getAttribute('data-view'); wlTag=''; render(); });
   });
 
   /* ---- filter panel + view toggle ---- */
@@ -769,9 +791,12 @@ try{
   document.getElementById('wl-f-service').addEventListener('change',function(){ wlFilters.service=this.value; render(); });
   document.getElementById('wl-f-status').addEventListener('change',function(){ wlFilters.status=this.value; render(); });
   document.getElementById('wl-f-sort').addEventListener('change',function(){ wlFilters.sort=this.value; render(); });
+  document.getElementById('wl-f-tag').addEventListener('change',function(){ wlTag=this.value; render(); });
   document.getElementById('wl-f-clear').addEventListener('click',function(){
     wlFilters={service:'',status:'',sort:'alpha'};
+    wlTag='';
     document.getElementById('wl-f-service').value='';
+    document.getElementById('wl-f-tag').value='';
     document.getElementById('wl-f-status').value='';
     document.getElementById('wl-f-sort').value='alpha';
     document.getElementById('wl-filter-panel').hidden=true;
@@ -798,7 +823,7 @@ try{
   function refreshModalLines(it){
     if(modalItem!==it) return;
     var rel=document.getElementById('wl-m-rel');
-    var rl=releaseLine(it);
+    var rl=detailReleaseLine(it);
     rel.textContent=rl; rel.style.display=rl?'':'none';
     var st=document.getElementById('wl-m-stream');
     var sl=streamLine(it);
@@ -913,6 +938,56 @@ try{
     }
   }
 
+  function tagHue(t){
+    var h=0;
+    for(var i=0;i<t.length;i++) h=(h*31+t.charCodeAt(i))%360;
+    return h;
+  }
+  function detailReleaseLine(it){
+    if(it.releaseDate){
+      var d=new Date(it.releaseDate+'T12:00:00');
+      if(!isNaN(d)){
+        var s=d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+        var today=new Date(); today.setHours(0,0,0,0);
+        if(it.releaseKind==='premiere') return (d>=today?'Premieres ':'Premiered ')+s;
+        return 'In theaters '+s;
+      }
+    }
+    return releaseLine(it);
+  }
+  function renderTags(it){
+    var box=document.getElementById('wl-m-tags');
+    if(!box) return;
+    var tags=it.tags||[];
+    box.innerHTML=tags.map(function(t){
+      return '<span class="wl-pill" data-tag="'+esc(t)+'" style="background:hsl('+tagHue(t)+' 55% 42%)">'+esc(t)+'<button class="wl-pill-x" data-untag="'+esc(t)+'" aria-label="Remove tag">×</button></span>';
+    }).join('')+'<button class="wl-pill wl-pill-add" id="wl-tag-add">+ Tag</button>';
+    box.querySelectorAll('.wl-pill[data-tag]').forEach(function(p){
+      p.addEventListener('click',function(){
+        wlTag=p.getAttribute('data-tag');
+        closeModal(); render();
+      });
+    });
+    box.querySelectorAll('.wl-pill-x').forEach(function(x){
+      x.addEventListener('click',function(e){
+        e.stopPropagation();
+        var t=x.getAttribute('data-untag');
+        it.tags=(it.tags||[]).filter(function(y){ return y!==t; });
+        touch(it); save(items); renderTags(it); render();
+      });
+    });
+    var add=document.getElementById('wl-tag-add');
+    if(add) add.addEventListener('click',function(){
+      var t=prompt('Add a tag for "'+it.title+'":','');
+      if(t===null) return;
+      t=t.trim().toLowerCase();
+      if(!t) return;
+      it.tags=it.tags||[];
+      if(it.tags.indexOf(t)<0){ it.tags.push(t); touch(it); save(items); }
+      renderTags(it); render();
+    });
+  }
+
   /* ---- detail sheet ---- */
   var modalItem=null;
   function openModal(it){
@@ -921,11 +996,12 @@ try{
     if(it.poster){ p.src=it.poster; p.style.display=''; }
     else{ p.removeAttribute('src'); p.style.display='none'; }
     document.getElementById('wl-m-title').textContent=it.title;
-    var rel=releaseLine(it);
+    var rel=detailReleaseLine(it);
     var relEl=document.getElementById('wl-m-rel');
     relEl.textContent=rel; relEl.style.display=rel?'':'none';
     var stEl=document.getElementById('wl-m-stream');
     var stl=streamLine(it); stEl.textContent=stl; stEl.style.display=stl?'':'none';
+    renderTags(it);
     var link=document.getElementById('wl-m-link');
     if(it.info){ link.href=it.info; link.hidden=false; } else link.hidden=true;
     var prog=document.getElementById('wl-m-prog');
