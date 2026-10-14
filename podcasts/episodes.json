@@ -188,6 +188,54 @@
    "showName": "Draft Show \u00b7 Milo & Jax",
    "slug": "garruk-first-pick-another-draft-graded-2026-10-14",
    "title": "Garruk First Pick: Another Draft, Graded"
+  },
+  {
+   "cover": "special-ice-age-deep-dive-2026-10-14.jpg",
+   "date": "2026-10-14",
+   "description": "History of Magic special, follow-on to the 1995 episode: Ice Age in full \u2014 the first standalone set, snow and cumulative upkeep, slow cantrips and Brainstorm, Necropotence, and the cards the whole game still orbits.",
+   "duration": 497,
+   "kind": "special",
+   "num": 302,
+   "show": "history",
+   "showName": "History of Magic \u00b7 Walter & Maya",
+   "slug": "special-ice-age-deep-dive-2026-10-14",
+   "title": "Ice Age \u2014 Deep Dive"
+  },
+  {
+   "cover": "special-chronicles-the-reprint-crisis-deep-dive-2026-10-14.jpg",
+   "date": "2026-10-14",
+   "description": "History of Magic special, follow-on to the 1995 episode: Chronicles, the white-bordered reprint set that crashed the crown jewels, split players from collectors, and made a certain famous promise inevitable.",
+   "duration": 411,
+   "kind": "special",
+   "num": 303,
+   "show": "history",
+   "showName": "History of Magic \u00b7 Walter & Maya",
+   "slug": "special-chronicles-the-reprint-crisis-deep-dive-2026-10-14",
+   "title": "Chronicles: The Reprint Crisis \u2014 Deep Dive"
+  },
+  {
+   "cover": "special-worlds-1995-blumke-and-the-hymn-deck-deep-dive-2026-10-14.jpg",
+   "date": "2026-10-14",
+   "description": "History of Magic special, follow-on to the 1995 episode: Worlds 1995 in Seattle \u2014 Blumke's Rack Control, Hernandez's creatureless Vise prison, the locked-deck rule, and the first team title.",
+   "duration": 395,
+   "kind": "special",
+   "num": 304,
+   "show": "history",
+   "showName": "History of Magic \u00b7 Walter & Maya",
+   "slug": "special-worlds-1995-blumke-and-the-hymn-deck-deep-dive-2026-10-14",
+   "title": "Worlds 1995: Blumke and the Hymn Deck \u2014 Deep Dive"
+  },
+  {
+   "cover": "special-homelands-the-worst-set-ever-with-love-deep-dive-2026-10-14.jpg",
+   "date": "2026-10-14",
+   "description": "History of Magic special, follow-on to the 1995 episode: Homelands with love and honesty \u2014 Ulgrotha, Feroz and Serra, Baron Sengir, why the set was so weak, and its strange beloved afterlife.",
+   "duration": 475,
+   "kind": "special",
+   "num": 305,
+   "show": "history",
+   "showName": "History of Magic \u00b7 Walter & Maya",
+   "slug": "special-homelands-the-worst-set-ever-with-love-deep-dive-2026-10-14",
+   "title": "Homelands: The Worst Set Ever (With Love) \u2014 Deep Dive"
   }
  ],
  "shows": {
