@@ -653,7 +653,10 @@ renderCats();renderGrid();renderIssues();
 .wl-tabs{align-items:center}
 .wl-icon-btn{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:transparent;color:inherit;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;flex:0 0 auto}
 .wl-icon-btn:active{background:var(--line)}
-.wl-filter-panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;margin:0 0 16px;display:flex;flex-direction:column;gap:10px}
+#watchlist{position:relative}
+.wl-filter-panel{position:absolute;left:0;right:0;z-index:60;margin-top:8px;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px}
+.wl-filter-panel[hidden]{display:none}
+.wl-icon-btn.active{background:var(--ink);color:var(--bg)}
 .wl-filter-row{display:flex;align-items:center;gap:10px}
 .wl-filter-row label{width:70px;font-size:13px;font-weight:700;color:var(--muted);flex:0 0 auto}
 .wl-filter-row select{flex:1;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:inherit;font-size:14px}
@@ -1098,6 +1101,7 @@ renderCats();renderGrid();renderIssues();
   }
   function render(){
     var t=view==='show'?'Show':'Movie';
+    document.getElementById('wl-filter-btn').classList.toggle('active',!!(wlFilters.service||wlFilters.status||wlFilters.sort!=='alpha'));
     var towatch=applyWlFilters(items.filter(function(x){ return !x.watched&&x.type===t; }));
     var finished=applyWlFilters(items.filter(function(x){ return x.watched&&x.type===t; }));
     var mk=wlView==='list'?rowHTML:tileHTML;
@@ -1128,6 +1132,13 @@ renderCats();renderGrid();renderIssues();
     var p=document.getElementById('wl-filter-panel');
     p.hidden=!p.hidden;
   });
+  document.addEventListener('click',function(e){
+    var p=document.getElementById('wl-filter-panel');
+    if(!p||p.hidden) return;
+    if(e.target.closest&&e.target.closest('#wl-filter-panel')) return;
+    if(e.target.closest&&e.target.closest('#wl-filter-btn')) return;
+    p.hidden=true;
+  });
   document.getElementById('wl-view-toggle').addEventListener('click',function(){
     wlView=wlView==='grid'?'list':'grid';
     this.textContent=wlView==='grid'?'☰':'▦';
@@ -1141,6 +1152,7 @@ renderCats();renderGrid();renderIssues();
     document.getElementById('wl-f-service').value='';
     document.getElementById('wl-f-status').value='';
     document.getElementById('wl-f-sort').value='alpha';
+    document.getElementById('wl-filter-panel').hidden=true;
     render();
   });
 
