@@ -47,6 +47,11 @@
     /* neon colors set dynamically via JS per playerMana */
     .player-inner { width:100%; height:100%; padding:max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom)); display:grid; grid-template-rows:auto 1fr auto; }
     .tabletop .player:nth-child(-n+2) .player-inner { transform:rotate(180deg); }
+    /* 2-player portrait: stack full-width, player 1 near (bottom), player 2 far (top) */
+    .board.stack2 .player:nth-child(1) { grid-row:2; }
+    .board.stack2 .player:nth-child(2) { grid-row:1; }
+    .tabletop .board.stack2 .player:nth-child(1) .player-inner { transform:none; }
+    .tabletop .board.stack2 .player:nth-child(2) .player-inner { transform:rotate(180deg); }
     .player-head { min-width:0; display:flex; align-items:center; justify-content:space-between; gap:6px; }
     .name { border:0; background:transparent; padding:5px 4px; min-width:0; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; text-align:left; font-weight:700; letter-spacing:.045em; font-size:clamp(15px, 4vw, 21px); text-shadow:0 1px 2px rgba(0,0,0,.3); }
     .player-actions { display:flex; align-items:center; gap:5px; flex:none; }
@@ -271,7 +276,9 @@
 
       var _saveT=null;
       function render(){
-        var cols = players.length<=2 ? players.length : (players.length<=4 ? 2 : 3);
+        var portrait = window.matchMedia('(orientation: portrait)').matches;
+        var cols = players.length<=2 ? ((players.length===2 && portrait) ? 1 : players.length) : (players.length<=4 ? 2 : 3);
+        board.classList.toggle('stack2', players.length===2 && portrait);
         board.style.gridTemplateColumns='repeat('+cols+', 1fr)';
         board.style.gridTemplateRows='repeat('+Math.ceil(players.length/cols)+', 1fr)';
         board.setAttribute('aria-label', players.length+' player Magic life counter');
@@ -389,6 +396,8 @@
 
       undoBtn.addEventListener('click',function(){ if(!history.length)return; var state=JSON.parse(history.pop()); players=state.players; events=state.events; turn=state.turn; round=state.round; undoBtn.disabled=!history.length; buzz(); render(); });
       document.getElementById('rotate').addEventListener('click',function(){ var on=document.body.classList.toggle('tabletop'); this.setAttribute('aria-pressed',on?'true':'false'); });
+      var _rzT=null;
+      window.addEventListener('resize',function(){ clearTimeout(_rzT); _rzT=setTimeout(function(){ try{ render(); }catch(e){} },160); });
       document.getElementById('sound').addEventListener('click',function(){
         muted=!muted; this.setAttribute('aria-pressed',muted?'true':'false'); this.setAttribute('aria-label',muted?'Unmute sounds':'Mute sounds');
         if(!muted){ armAudio(); tone('life'); }
