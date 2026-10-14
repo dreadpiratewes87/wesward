@@ -735,8 +735,8 @@ try{
   function render(){
     var t=view==='show'?'Show':'Movie';
     document.getElementById('wl-filter-btn').classList.toggle('active',!!(wlFilters.service||wlFilters.status||wlFilters.sort!=='alpha'||wlTag));
-    var towatch=applyWlFilters(items.filter(function(x){ return !x.watched&&(!wlTag||x.type===t); }));
-    var finished=applyWlFilters(items.filter(function(x){ return x.watched&&(!wlTag||x.type===t); }));
+    var towatch=applyWlFilters(items.filter(function(x){ return !x.watched&&x.type===t; }));
+    var finished=applyWlFilters(items.filter(function(x){ return x.watched&&x.type===t; }));
     var mk=wlView==='list'?rowHTML:tileHTML;
     var grid=document.getElementById('wl-grid');
     grid.innerHTML=towatch.map(mk).join('');
@@ -761,7 +761,7 @@ try{
     var tb=document.getElementById('wl-tagbar');
     if(wlTag){
       tb.hidden=false;
-      tb.innerHTML='<span class="wl-pill" style="background:hsl('+tagHue(wlTag)+' 55% 42%)">'+esc(wlTag)+'</span><span class="wl-tagbar-note">all titles with this tag</span><button class="btn small secondary" id="wl-tag-clear">Clear</button>';
+      tb.innerHTML='<span class="wl-pill" style="background:hsl('+tagHue(wlTag)+' 55% 42%)">'+esc(wlTag)+'</span><span class="wl-tagbar-note">titles with this tag</span><button class="btn small secondary" id="wl-tag-clear">Clear</button>';
       document.getElementById('wl-tag-clear').addEventListener('click',function(){ wlTag=''; render(); });
     }else{
       tb.hidden=true; tb.innerHTML='';
