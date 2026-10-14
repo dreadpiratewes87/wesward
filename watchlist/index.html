@@ -1097,7 +1097,7 @@ try{
   /* ---- TMDB key (kept in this device + the watchlist cloud, never in the page code) ---- */
   function tmdbBtnLabel(){
     var b=document.getElementById('wl-tmdb-btn');
-    if(b) b.textContent=WL_TMDB_KEY?'TMDB ✓':'TMDB key';
+    if(b){ b.textContent=WL_TMDB_KEY?'TMDB ✓':'TMDB key'; b.style.display=WL_TMDB_KEY?'none':''; }
   }
   function setTmdbKey(k){
     WL_TMDB_KEY=k||'';
