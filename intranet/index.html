@@ -590,7 +590,7 @@ renderCats();renderGrid();renderIssues();
     <p class="wl-empty" id="wl-empty" hidden>Nothing here yet — add your first one above.</p>
     <h2 class="wl-finished-h" id="wl-finished-h" hidden>Finished Watching</h2>
     <div class="wl-grid finished" id="wl-finished"></div>
-    <div class="wl-modal" id="wl-modal" hidden><div class="wl-modal-bg" data-m="close"></div><div class="wl-sheet"><button class="wl-sheet-x" data-m="close" aria-label="Close">×</button><div class="wl-sheet-top"><img id="wl-m-poster" alt="" /><div class="wl-sheet-info"><h3 id="wl-m-title"></h3><div class="wl-m-rel" id="wl-m-rel"></div><div class="wl-m-stream" id="wl-m-stream"></div><a class="wl-m-link" id="wl-m-link" href="#" target="_blank" rel="noopener" hidden>More info ↗</a></div></div><button class="wl-m-prog" id="wl-m-prog"></button><button class="wl-m-done" id="wl-m-done">✓ Watched</button></div></div>
+    <div class="wl-modal" id="wl-modal" hidden><div class="wl-modal-bg" data-m="close"></div><div class="wl-sheet"><button class="wl-sheet-x" data-m="close" aria-label="Close">×</button><div class="wl-sheet-top"><img id="wl-m-poster" alt="" /><div class="wl-sheet-info"><h3 id="wl-m-title"></h3><div class="wl-m-rel" id="wl-m-rel"></div><div class="wl-m-stream" id="wl-m-stream"></div><a class="wl-m-link" id="wl-m-link" href="#" target="_blank" rel="noopener" hidden>More info ↗</a></div></div><button class="wl-m-prog" id="wl-m-prog"></button><button class="wl-m-done" id="wl-m-done">✓ Watched</button><button class="wl-m-del" id="wl-m-del">🗑 Delete</button></div></div>
   </section>
 
   <section class="view" id="links" aria-labelledby="links-heading">
@@ -645,6 +645,7 @@ renderCats();renderGrid();renderIssues();
 .wl-m-prog{display:block;width:100%;border:1px dashed var(--line);background:none;border-radius:12px;padding:12px;font-size:15px;color:inherit;cursor:pointer;text-align:left;margin-bottom:10px}
 .wl-m-prog strong{font-weight:700}
 .wl-m-done{display:block;width:100%;border:0;border-radius:12px;padding:13px;font-size:16px;font-weight:700;cursor:pointer;background:#2a7f6f;color:#fff}
+.wl-m-del{display:block;width:100%;margin-top:10px;border:0;border-radius:12px;padding:12px;font-size:15px;font-weight:700;cursor:pointer;background:none;color:#c0392b}
 .wl-prog-input{font-size:15px;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:inherit;width:100%;margin-bottom:10px}
 .wl-title-wrap{position:relative;flex:1;min-width:0;display:flex}
 .wl-title-wrap .task-input{flex:1}
@@ -675,7 +676,7 @@ renderCats();renderGrid();renderIssues();
 .wl-sug-t strong{font-size:15px}
 .wl-sug-t small{font-size:12px;opacity:.65}
 .wl-shared #wl-share{display:none}
-.wl-shared .wl-m-done,.wl-shared .wl-m-prog{display:none}
+.wl-shared .wl-m-done,.wl-shared .wl-m-prog,.wl-shared .wl-m-del{display:none}
 </style></style></style></style></style>
 </main>
 <dialog id="clear-dialog"><div class="dialog-body"><h2>Clear the sketch?</h2><p style="margin:0;color:var(--muted)">Download it first if you want to keep a copy.</p></div><div class="dialog-actions"><button class="btn secondary" data-close-dialog="clear-dialog">Cancel</button><button class="btn danger" id="confirm-clear">Clear</button></div></dialog>
@@ -815,6 +816,10 @@ renderCats();renderGrid();renderIssues();
   function fbWrite(it){
     if(!fbDb||!fbReady||SHARED) return;
     try{ var c=fbClean(it); if(c) fbDb.ref('watchlist/items/'+it.id).set(c); }catch(e){}
+  }
+  function fbDelete(it){
+    if(!fbDb||!fbReady||SHARED) return;
+    try{ fbDb.ref('watchlist/items/'+it.id).set({id:it.id,deleted:true,updated_at:Date.now()}); }catch(e){}
   }
   function fbMerge(cloud){
     if(!cloud) return;
@@ -1269,6 +1274,13 @@ renderCats();renderGrid();renderIssues();
     if(!modalItem) return;
     modalItem.watched=!modalItem.watched;
     touch(modalItem);
+    save(items); closeModal(); render();
+  });
+  document.getElementById('wl-m-del').addEventListener('click',function(){
+    if(!modalItem) return;
+    var it=modalItem;
+    items=items.filter(function(x){ return x.id!==it.id; });
+    fbDelete(it);
     save(items); closeModal(); render();
   });
   document.getElementById('wl-m-prog').addEventListener('click',function(){
