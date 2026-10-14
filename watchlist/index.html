@@ -288,8 +288,8 @@
 .wl-tabs{display:flex;gap:8px;margin:0 0 16px}
 .wl-tab{border:1px solid var(--line);background:transparent;color:inherit;border-radius:999px;padding:8px 20px;font-size:15px;font-weight:700;cursor:pointer}
 .wl-tab.active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.wl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-@media(max-width:430px){.wl-grid{grid-template-columns:repeat(3,1fr);gap:10px}}
+.wl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:12px}
+@media(max-width:430px){.wl-grid{grid-template-columns:repeat(4,1fr);gap:8px}}
 .wl-tile{border:0;background:none;padding:0;cursor:pointer;text-align:left;display:flex;flex-direction:column;gap:6px}
 .wl-tile img{width:100%;aspect-ratio:2/3;object-fit:cover;border-radius:10px;box-shadow:var(--shadow);background:var(--line)}
 .wl-tile-none{width:100%;aspect-ratio:2/3;border-radius:10px;background:var(--ink);color:var(--bg);display:flex;align-items:center;justify-content:center;text-align:center;font-size:14px;font-weight:700;padding:10px}
@@ -306,6 +306,7 @@
 .wl-sheet-info{flex:1;min-width:0}
 .wl-sheet-info h3{font:800 24px/1.15 "Barlow Condensed",sans-serif;margin:0 0 6px}
 .wl-m-rel{font-size:14px;opacity:.7;margin-bottom:8px}
+.wl-m-stream{font-size:14px;font-weight:600;margin-bottom:8px}
 .wl-m-link{font-size:14px;font-weight:700;color:var(--teal,#2a7f6f);text-decoration:none}
 .wl-m-prog{display:block;width:100%;border:1px dashed var(--line);background:none;border-radius:12px;padding:12px;font-size:15px;color:inherit;cursor:pointer;text-align:left;margin-bottom:10px}
 .wl-m-prog strong{font-weight:700}
@@ -323,9 +324,12 @@
 .wl-filter-row select{flex:1;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:inherit;font-size:14px}
 /* list view */
 .wl-grid.list-view{display:flex;flex-direction:column;gap:8px}
-.wl-grid.list-view .wl-card{display:flex;flex-direction:row;align-items:center;gap:12px;padding:8px}
-.wl-grid.list-view .wl-poster{width:48px;height:72px;flex:0 0 auto}
-.wl-grid.list-view .wl-card-info{flex:1;min-width:0}
+.wl-row{flex-direction:row;align-items:center;gap:12px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:8px 10px;width:100%}
+.wl-row-img{width:46px !important;height:69px;flex:0 0 auto;border-radius:6px;object-fit:cover;box-shadow:none;background:var(--line)}
+.wl-row-none{width:46px;height:69px;flex:0 0 auto;border-radius:6px;background:var(--ink);color:var(--bg);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px}
+.wl-row-main{display:flex;flex-direction:column;gap:2px;min-width:0;text-align:left}
+.wl-row-title{font-size:15px;font-weight:700;line-height:1.25}
+.wl-row-sub{font-size:13px;opacity:.7}
 
 .wl-suggest{position:absolute;top:100%;left:0;right:0;z-index:50;background:var(--paper);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);overflow:hidden;max-height:320px;overflow-y:auto}
 .wl-sug{display:flex;gap:10px;align-items:center;width:100%;padding:8px 10px;border:0;background:none;cursor:pointer;text-align:left;border-bottom:1px solid var(--line);color:inherit}
@@ -361,7 +365,7 @@ body{max-width:860px;margin:0 auto;padding:18px 14px 60px}
     <p class="wl-empty" id="wl-empty" hidden>Nothing here yet — add your first one above.</p>
     <h2 class="wl-finished-h" id="wl-finished-h" hidden>Finished Watching</h2>
     <div class="wl-grid finished" id="wl-finished"></div>
-    <div class="wl-modal" id="wl-modal" hidden><div class="wl-modal-bg" data-m="close"></div><div class="wl-sheet"><button class="wl-sheet-x" data-m="close" aria-label="Close">×</button><div class="wl-sheet-top"><img id="wl-m-poster" alt="" /><div class="wl-sheet-info"><h3 id="wl-m-title"></h3><div class="wl-m-rel" id="wl-m-rel"></div><a class="wl-m-link" id="wl-m-link" href="#" target="_blank" rel="noopener" hidden>More info ↗</a></div></div><button class="wl-m-prog" id="wl-m-prog"></button><button class="wl-m-done" id="wl-m-done">✓ Watched</button></div></div>
+    <div class="wl-modal" id="wl-modal" hidden><div class="wl-modal-bg" data-m="close"></div><div class="wl-sheet"><button class="wl-sheet-x" data-m="close" aria-label="Close">×</button><div class="wl-sheet-top"><img id="wl-m-poster" alt="" /><div class="wl-sheet-info"><h3 id="wl-m-title"></h3><div class="wl-m-rel" id="wl-m-rel"></div><div class="wl-m-stream" id="wl-m-stream"></div><a class="wl-m-link" id="wl-m-link" href="#" target="_blank" rel="noopener" hidden>More info ↗</a></div></div><button class="wl-m-prog" id="wl-m-prog"></button><button class="wl-m-done" id="wl-m-done">✓ Watched</button></div></div>
   </section>
 </main>
 <script>
@@ -440,6 +444,7 @@ try{
       return {title:x.title,type:x.type,year:x.year||'',service:x.service||'',notes:x.notes||'',
         progress:x.progress||'',watched:!!x.watched,info:x.info||'',poster:x.poster||'',
         releaseDate:x.releaseDate||'',releaseKind:x.releaseKind||'',
+        streamingService:x.streamingService||'',streamingDate:x.streamingDate||'',
         updated_at:x.updated_at||0};
     });
     var s=btoa(unescape(encodeURIComponent(JSON.stringify(data))))
@@ -497,42 +502,89 @@ try{
   function wikiSearch(q){
     var u='https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*'
       +'&prop=pageimages|info&inprop=url&pithumbsize=200'
-      +'&generator=search&gsrsearch='+encodeURIComponent(q)+'&gsrlimit=5&gsrnamespace=0';
+      +'&generator=search&gsrsearch='+encodeURIComponent(q)+'&gsrlimit=8&gsrnamespace=0';
     return fetch(u).then(function(r){ return r.json(); }).then(function(d){
       var pages=(d.query&&d.query.pages)||{};
-      return Object.keys(pages).map(function(k){
+      var out=Object.keys(pages).map(function(k){
         var p=pages[k];
-        return {title:p.title||'', year:'', premiered:'', status:'', network:'',
-                type:'', info:p.fullurl||'',
-                poster:((p.thumbnail||{}).source||''), src:'Wiki'};
+        var ttl=p.title||'';
+        var ym=ttl.match(/\((\d{4}) film\)/);
+        var isFilm=/\(\d{4} film\)/.test(ttl)||/\(film\)/.test(ttl);
+        var isShow=/\(TV series\)/.test(ttl)||/\(miniseries\)/.test(ttl);
+        var clean=ttl.replace(/\s*\((?:\d{4} )?(?:film|TV series|miniseries)\)\s*$/,'');
+        return {title:clean, wiki:ttl, year:ym?ym[1]:'', premiered:'', status:'', network:'',
+                type:isFilm?'Movie':(isShow?'Show':''), info:p.fullurl||'',
+                poster:((p.thumbnail||{}).source||''), src:'Wiki',
+                _ord:(isFilm||isShow)?0:1, _idx:(p.index||99)};
       });
+      out.sort(function(a,b){ return (a._ord-b._ord)||(a._idx-b._idx); });
+      return out;
     }).catch(function(){ return []; });
   }
-  function enrichWiki(r,token){
-    var t=encodeURIComponent(r.title.replace(/ /g,'_'));
-    fetch('https://en.wikipedia.org/api/rest_v1/page/summary/'+t)
+  var WL_SERVICES='Netflix|Hulu|Peacock|Paramount\\+|Disney\\+|Max|HBO Max|Apple TV\\+|Amazon Prime Video|Prime Video|Starz|AMC\\+|Crunchyroll|Tubi';
+  function parseWikiInfo(txt){
+    var out={};
+    if(!txt) return out;
+    var m=txt.match(/released theatrically[^.]{0,80}?on ([A-Z][a-z]+ \d{1,2}, \d{4})/)
+      ||txt.match(/released in the United States[^.]{0,80}?on ([A-Z][a-z]+ \d{1,2}, \d{4})/)
+      ||txt.match(/scheduled to be released[^.]{0,80}?on ([A-Z][a-z]+ \d{1,2}, \d{4})/)
+      ||txt.match(/set to be released[^.]{0,80}?on ([A-Z][a-z]+ \d{1,2}, \d{4})/)
+      ||txt.match(/theatrically released[^.]{0,80}?on ([A-Z][a-z]+ \d{1,2}, \d{4})/);
+    if(m){
+      var dt=new Date(m[1]);
+      if(!isNaN(dt)){ out.releaseDate=dt.toISOString().slice(0,10); out.releaseKind='theatrical'; }
+    }
+    var sm=txt.match(new RegExp('(?: released| premiered| debuted) on ('+WL_SERVICES+') on ([A-Z][a-z]+ \\d{1,2}, \\d{4})'))
+      ||txt.match(new RegExp('(?: streaming| available)[^.]{0,60}?on ('+WL_SERVICES+')(?: from| starting| on) ([A-Z][a-z]+ \\d{1,2}, \\d{4})'))
+      ||txt.match(new RegExp('will be released on ('+WL_SERVICES+') on ([A-Z][a-z]+ \\d{1,2}, \\d{4})'));
+    if(sm){
+      out.streamingService=sm[1];
+      var sd=new Date(sm[2]);
+      if(!isNaN(sd)) out.streamingDate=sd.toISOString().slice(0,10);
+    }else{
+      var sv=txt.match(new RegExp('(?: released| premiered| streaming| available)[^.]{0,80}?\\bon ('+WL_SERVICES+')\\b'));
+      if(sv) out.streamingService=sv[1];
+      var dg=txt.match(/released (?:on|through) digital platforms?[^.]{0,40}?on ([A-Z][a-z]+ \d{1,2}, \d{4})/);
+      if(dg){
+        var dd=new Date(dg[1]);
+        if(!isNaN(dd)){ out.streamingService=out.streamingService||'Digital / VOD'; out.streamingDate=dd.toISOString().slice(0,10); }
+      }
+    }
+    return out;
+  }
+  function enrichWiki(r){
+    var pageTitle=r.wiki||r.title;
+    var t=encodeURIComponent(pageTitle.replace(/ /g,'_'));
+    var p1=fetch('https://en.wikipedia.org/api/rest_v1/page/summary/'+t)
       .then(function(x){ return x.json(); })
       .then(function(d){
-        if(token!==pickToken) return;
         if(d.thumbnail&&d.thumbnail.source) r.poster=d.thumbnail.source;
       }).catch(function(){});
     var u='https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*'
-      +'&prop=extracts&explaintext&titles='+encodeURIComponent(r.title);
-    fetch(u).then(function(x){ return x.json(); }).then(function(d){
-      if(token!==pickToken) return;
+      +'&prop=extracts&explaintext&titles='+encodeURIComponent(pageTitle);
+    var p2=fetch(u).then(function(x){ return x.json(); }).then(function(d){
       var pages=(d.query&&d.query.pages)||{};
       var k=Object.keys(pages)[0];
       var txt=k&&pages[k].extract?pages[k].extract:'';
-      var m=txt.match(/released theatrically[^.]{0,80}?on ([A-Z][a-z]+ \d{1,2}, \d{4})/)
-        ||txt.match(/released in the United States[^.]{0,80}?on ([A-Z][a-z]+ \d{1,2}, \d{4})/)
-        ||txt.match(/scheduled to be released[^.]{0,80}?on ([A-Z][a-z]+ \d{1,2}, \d{4})/)
-        ||txt.match(/set to be released[^.]{0,80}?on ([A-Z][a-z]+ \d{1,2}, \d{4})/)
-        ||txt.match(/theatrically released[^.]{0,80}?on ([A-Z][a-z]+ \d{1,2}, \d{4})/);
-      if(m){
-        var dt=new Date(m[1]);
-        if(!isNaN(dt)){ r.releaseDate=dt.toISOString().slice(0,10); r.releaseKind='theatrical'; }
-      }
+      var info=parseWikiInfo(txt);
+      if(info.releaseDate){ r.releaseDate=info.releaseDate; r.releaseKind=info.releaseKind; }
+      if(info.streamingService) r.streamingService=info.streamingService;
+      if(info.streamingDate) r.streamingDate=info.streamingDate;
     }).catch(function(){});
+    return Promise.all([p1,p2]);
+  }
+  function rankResults(list,q){
+    var ql=q.toLowerCase();
+    function score(r){
+      var t=(r.title||'').toLowerCase(), s=0;
+      if(t===ql) s+=100; else if(t.indexOf(ql)===0) s+=50; else if(t.indexOf(ql)>=0) s+=20;
+      if(r.src==='TV') s+=10;
+      if(r.type) s+=4;
+      if(r.poster) s+=3;
+      if(r.year) s+=2;
+      return s;
+    }
+    return list.slice().sort(function(a,b){ return score(b)-score(a); });
   }
   function renderSuggest(list){
     if(!list.length){ suggestBox.hidden=true; return; }
@@ -540,17 +592,19 @@ try{
       return '<button type="button" class="wl-sug" data-i="'+i+'">'
         +(r.poster?'<img src="'+esc(r.poster)+'" alt="" loading="lazy" />':'<span class="wl-sug-nopic"></span>')
         +'<span class="wl-sug-t"><strong>'+esc(r.title)+'</strong>'
-        +'<small>'+esc([r.year,r.network,r.status].filter(Boolean).join(' · '))+'</small></span></button>';
+        +'<small>'+esc([r.type,r.year,r.network,r.status].filter(Boolean).join(' · '))+'</small></span></button>';
     }).join('');
     suggestBox.hidden=false;
     suggestBox.querySelectorAll('.wl-sug').forEach(function(b){
       b.addEventListener('click',function(){
         var r=list[+b.getAttribute('data-i')];
-        pickToken++;
-        picked=r;
-        titleInput.value=r.title;
-        if(r.src==='Wiki') enrichWiki(r,pickToken);
         suggestBox.hidden=true;
+        if(r.src==='Wiki'){
+          Promise.race([enrichWiki(r),new Promise(function(res){ setTimeout(res,1500); })])
+            .then(function(){ commitAdd(r); });
+        }else{
+          commitAdd(r);
+        }
       });
     });
   }
@@ -564,10 +618,10 @@ try{
         Promise.all([tvSearch(q),wikiSearch(q)]).then(function(rs){
           var seen={}, out=[];
           rs[0].concat(rs[1]).forEach(function(r){
-            var k=(r.title||'').toLowerCase();
+            var k=(r.title||'').toLowerCase()+'|'+(r.year||'');
             if(r.title && !seen[k]){ seen[k]=1; out.push(r); }
           });
-          if(titleInput.value.trim()===q) renderSuggest(out.slice(0,8));
+          if(titleInput.value.trim()===q) renderSuggest(rankResults(out,q).slice(0,10));
         });
       },350);
     });
@@ -601,6 +655,18 @@ try{
     return '<button class="wl-tile" data-id="'+x.id+'">'+poster
       +'<span class="wl-tile-title">'+esc(x.title)+'</span></button>';
   }
+  function rowHTML(x){
+    var poster=x.poster
+      ? '<img class="wl-row-img" src="'+esc(x.poster)+'" alt="" loading="lazy" />'
+      : '<span class="wl-row-none">'+esc((x.title||'?').slice(0,1))+'</span>';
+    var sub=releaseLine(x);
+    if(!sub) sub=streamLine(x);
+    var meta=[x.year,sub].filter(Boolean).join(' · ');
+    return '<button class="wl-tile wl-row" data-id="'+x.id+'">'+poster
+      +'<span class="wl-row-main"><span class="wl-row-title">'+esc(x.title)+'</span>'
+      +(meta?'<span class="wl-row-sub">'+esc(meta)+'</span>':'')
+      +'</span></button>';
+  }
   function findItem(id){ var f=null; items.forEach(function(x){ if(x.id===id) f=x; }); return f; }
   var wlFilters={service:'',status:'',sort:'alpha'}, wlView='grid';
   function applyWlFilters(list){
@@ -617,12 +683,13 @@ try{
     var t=view==='show'?'Show':'Movie';
     var towatch=applyWlFilters(items.filter(function(x){ return !x.watched&&x.type===t; }));
     var finished=applyWlFilters(items.filter(function(x){ return x.watched&&x.type===t; }));
+    var mk=wlView==='list'?rowHTML:tileHTML;
     var grid=document.getElementById('wl-grid');
-    grid.innerHTML=towatch.map(tileHTML).join('');
+    grid.innerHTML=towatch.map(mk).join('');
     grid.classList.toggle('list-view', wlView==='list');
     document.getElementById('wl-empty').hidden=towatch.length>0||items.length>0;
     var fg=document.getElementById('wl-finished');
-    fg.innerHTML=finished.map(tileHTML).join('');
+    fg.innerHTML=finished.map(mk).join('');
     fg.classList.toggle('list-view', wlView==='list');
     document.getElementById('wl-finished-h').hidden=finished.length===0;
     document.querySelectorAll('.wl-tab').forEach(function(b){
@@ -660,6 +727,100 @@ try{
     render();
   });
 
+  /* ---- detail-sheet live info: release dates + streaming checks ---- */
+  function streamLine(it){
+    if(it.streamingService||it.streamingDate){
+      var parts=[];
+      if(it.streamingService) parts.push(it.streamingService);
+      if(it.streamingDate){
+        var d=new Date(it.streamingDate+'T12:00:00');
+        if(!isNaN(d)) parts.push(d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}));
+      }
+      return parts.length?('Streaming: '+parts.join(' · ')):'';
+    }
+    if(it.type==='Movie'&&it.streamingChecked&&it.releaseDate){
+      var d2=new Date(it.releaseDate+'T12:00:00');
+      if(!isNaN(d2)&&d2<=new Date()) return 'Streaming: not announced yet';
+    }
+    return '';
+  }
+  function refreshModalLines(it){
+    if(modalItem!==it) return;
+    var rel=document.getElementById('wl-m-rel');
+    var rl=releaseLine(it);
+    rel.textContent=rl; rel.style.display=rl?'':'none';
+    var st=document.getElementById('wl-m-stream');
+    var sl=streamLine(it);
+    st.textContent=sl; st.style.display=sl?'':'none';
+    var p=document.getElementById('wl-m-poster');
+    if(it.poster&&p.style.display==='none'){ p.src=it.poster; p.style.display=''; }
+    var link=document.getElementById('wl-m-link');
+    if(it.info){ link.href=it.info; link.hidden=false; }
+  }
+  function fetchWikiText(it){
+    function get(titles){
+      var u='https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*'
+        +'&prop=extracts&explaintext&titles='+encodeURIComponent(titles);
+      return fetch(u).then(function(x){ return x.json(); }).then(function(d){
+        var pages=(d.query&&d.query.pages)||{};
+        var k=Object.keys(pages)[0];
+        return (k&&pages[k].extract)?pages[k].extract:'';
+      }).catch(function(){ return ''; });
+    }
+    var t='';
+    if(it.info&&it.info.indexOf('/wiki/')>=0){
+      try{ t=decodeURIComponent(it.info.split('/wiki/')[1].split('#')[0]); }catch(e){}
+    }
+    if(t) return get(t.replace(/_/g,' '));
+    return wikiSearch(it.title).then(function(rs){
+      var hit=null;
+      rs.forEach(function(r){ if(!hit&&r.wiki) hit=r; });
+      if(!hit) return '';
+      if(!it.info&&hit.info) it.info=hit.info;
+      return get(hit.wiki);
+    });
+  }
+  function maybeRefreshRelease(it){
+    if(it.releaseDate) return;
+    if(it.type==='Show'){
+      tvSearch(it.title).then(function(rs){
+        var hit=null;
+        rs.forEach(function(r){ if(!hit&&r.premiered&&r.title.toLowerCase()===it.title.toLowerCase()) hit=r; });
+        if(!hit) rs.forEach(function(r){ if(!hit&&r.premiered) hit=r; });
+        if(hit){
+          it.releaseDate=hit.premiered; it.releaseKind='premiere';
+          if(!it.year) it.year=hit.year;
+          if(!it.service&&hit.network) it.service=hit.network;
+          if(!it.poster&&hit.poster) it.poster=hit.poster;
+          touch(it); save(items); refreshModalLines(it);
+        }
+      });
+    }else{
+      fetchWikiText(it).then(function(txt){
+        var info=parseWikiInfo(txt), changed=false;
+        if(info.releaseDate){ it.releaseDate=info.releaseDate; it.releaseKind=info.releaseKind||'theatrical'; changed=true; }
+        if(info.streamingService&&!it.streamingService){ it.streamingService=info.streamingService; changed=true; }
+        if(info.streamingDate&&!it.streamingDate){ it.streamingDate=info.streamingDate; changed=true; }
+        if(changed){ touch(it); save(items); refreshModalLines(it); }
+      });
+    }
+  }
+  function maybeCheckStreaming(it){
+    if(it.type!=='Movie'||it.streamingService) return;
+    if(it.releaseDate){
+      var d=new Date(it.releaseDate+'T12:00:00');
+      if(!isNaN(d)&&d>new Date()) return; /* not in theaters yet */
+    }
+    if(it.streamingChecked&&Date.now()-it.streamingChecked<864e5){ refreshModalLines(it); return; }
+    fetchWikiText(it).then(function(txt){
+      var info=parseWikiInfo(txt);
+      it.streamingChecked=Date.now();
+      if(info.streamingService) it.streamingService=info.streamingService;
+      if(info.streamingDate) it.streamingDate=info.streamingDate;
+      touch(it); save(items); refreshModalLines(it);
+    });
+  }
+
   /* ---- detail sheet ---- */
   var modalItem=null;
   function openModal(it){
@@ -671,6 +832,8 @@ try{
     var rel=releaseLine(it);
     var relEl=document.getElementById('wl-m-rel');
     relEl.textContent=rel; relEl.style.display=rel?'':'none';
+    var stEl=document.getElementById('wl-m-stream');
+    var stl=streamLine(it); stEl.textContent=stl; stEl.style.display=stl?'':'none';
     var link=document.getElementById('wl-m-link');
     if(it.info){ link.href=it.info; link.hidden=false; } else link.hidden=true;
     var prog=document.getElementById('wl-m-prog');
@@ -679,6 +842,8 @@ try{
     done.textContent=it.watched?'↩ Move back to watchlist':'✓ Watched';
     document.getElementById('wl-modal').hidden=false;
     document.body.style.overflow='hidden';
+    maybeRefreshRelease(it);
+    maybeCheckStreaming(it);
   }
   function closeModal(){
     document.getElementById('wl-modal').hidden=true;
@@ -720,24 +885,31 @@ try{
   }
 
   /* ---- add ---- */
-  document.getElementById('wl-form').addEventListener('submit',function(e){
-    e.preventDefault();
-    var t=titleInput.value.trim(); if(!t) return;
-    var type=(picked&&picked.type)?picked.type:(view==='show'?'Show':'Movie');
+  function commitAdd(r){
+    var t=(r&&r.title)?r.title:titleInput.value.trim(); if(!t) return;
+    var type=(r&&r.type)?r.type:(view==='show'?'Show':'Movie');
     var it={id:Date.now()+''+Math.floor(Math.random()*1e6),title:t,type:type,
       service:'',notes:'',progress:'',watched:false,added:new Date().toISOString()};
-    if(picked){
-      it.year=picked.year||''; it.info=picked.info||''; it.poster=picked.poster||'';
-      if(picked.network) it.service=picked.network;
-      if(picked.premiered){ it.releaseDate=picked.premiered; it.releaseKind='premiere'; }
-      else if(picked.releaseDate){ it.releaseDate=picked.releaseDate; it.releaseKind=picked.releaseKind||'theatrical'; }
-      if(picked.status) it.notes=picked.status;
+    if(r){
+      it.year=r.year||''; it.info=r.info||''; it.poster=r.poster||'';
+      if(r.network) it.service=r.network;
+      if(r.premiered){ it.releaseDate=r.premiered; it.releaseKind='premiere'; }
+      else if(r.releaseDate){ it.releaseDate=r.releaseDate; it.releaseKind=r.releaseKind||'theatrical'; }
+      if(r.status) it.notes=r.status;
+      if(r.streamingService) it.streamingService=r.streamingService;
+      if(r.streamingDate) it.streamingDate=r.streamingDate;
+      if(it.streamingService||it.streamingDate) it.streamingChecked=Date.now();
     }
     items.unshift(it);
     touch(it);
-    save(items); this.reset(); picked=null;
+    save(items);
+    titleInput.value=''; picked=null; suggestBox.hidden=true;
     view=type==='Show'?'show':'movie';
     render();
+  }
+  document.getElementById('wl-form').addEventListener('submit',function(e){
+    e.preventDefault();
+    commitAdd(picked);
   });
 
   /* ---- card actions ---- */
