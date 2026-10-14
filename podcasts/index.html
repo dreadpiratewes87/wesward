@@ -87,7 +87,7 @@ var allEps=[];
 function fmt(s){s=Math.floor(s||0);var m=Math.floor(s/60),ss=s%60;return m+':'+(ss<10?'0':'')+ss;}
 function fmtLong(s){s=Math.floor(s||0);var h=Math.floor(s/3600),m=Math.floor(s%3600/60);if(h)return h+'h '+m+'m';return m+' min';}
 
-fetch('episodes.json?v=3',{cache:'no-store'}).then(function(r){return r.json();}).then(function(data){
+fetch('episodes.json?v=4',{cache:'no-store'}).then(function(r){return r.json();}).then(function(data){
   var list=document.getElementById('list');
   var shows=data.shows||{};
   var eps=data.episodes||[];
@@ -111,10 +111,10 @@ fetch('episodes.json?v=3',{cache:'no-store'}).then(function(r){return r.json();}
       +'<div class="chev">▾</div></button>'
       +'<div class="ep-list"><div class="ep-list-inner">';
     ge.forEach(function(e){
-      var chip = e.kind==='special'
-        ? '<div class="ep-num special">★</div>'
-        : '<div class="ep-num">'+e.num+'</div>';
-      var label = e.kind==='special' ? 'Special · '+e.title : '#'+e.num+' '+e.title;
+      var chip = e.num
+        ? '<div class="ep-num'+(e.kind==='special'?' special':'')+'">'+e.num+'</div>'
+        : '<div class="ep-num special">★</div>';
+      var label = e.num ? '#'+e.num+' '+e.title : (e.kind==='special' ? 'Special · '+e.title : e.title);
       html+='<div class="ep" data-slug="'+e.slug+'">'
         +'<div class="ep-cover"><img src="covers/'+(e.cover||s.cover)+'" alt="" loading="lazy">'+chip+'</div>'
         +'<div class="ep-info"><h3>'+label+'</h3><p>'+(e.description||'')+'</p>'
