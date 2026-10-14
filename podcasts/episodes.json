@@ -1,275 +1,275 @@
 {
- "episodes": [
-  {
-   "cover": "deck-tech-rachel-ward-louisiana-swamp-witch-2026-10-12.jpg",
-   "date": "2026-10-12",
-   "description": "Deck review special \u2014 Ellis and Theo break down a custom Golgari Food commander deck.",
-   "duration": 372,
-   "kind": "special",
-   "show": "deck-tech",
-   "showName": "Deck Tech \u00b7 Ellis & Theo",
-   "slug": "deck-tech-rachel-ward-louisiana-swamp-witch-2026-10-12",
-   "title": "Rachel Ward, Louisiana Swamp Witch"
-  },
-  {
-   "cover": "deck-tech-wesley-ward-master-of-many-paths-2026-10-12.jpg",
-   "date": "2026-10-12",
-   "description": "Deck review special \u2014 Ellis and Theo break down a custom Azorius draw-engine commander deck.",
-   "duration": 420,
-   "kind": "special",
-   "show": "deck-tech",
-   "showName": "Deck Tech \u00b7 Ellis & Theo",
-   "slug": "deck-tech-wesley-ward-master-of-many-paths-2026-10-12",
-   "title": "Wesley Ward, Master of Many Paths"
-  },
-  {
-   "cover": "reality-fracture-draft-deep-dive-2026-10-12.jpg",
-   "date": "2026-10-12",
-   "description": "Milo and Jax talk Reality Fracture draft \u2014 what to pick early, which colors are open, and the traps to avoid.",
-   "duration": 336,
-   "kind": "episode",
-   "num": 1,
-   "show": "draft-show",
-   "showName": "Draft Show \u00b7 Milo & Jax",
-   "slug": "reality-fracture-draft-deep-dive-2026-10-12",
-   "title": "Reality Fracture Draft Deep Dive"
-  },
-  {
-   "cover": "commander-academy-complete-guide-2026-10-12.jpg",
-   "date": "2026-10-12",
-   "description": "The full Commander Academy series in one listen \u2014 building from scratch, upgrading precons, and rookie mistakes. All four parts stitched together.",
-   "duration": 2274,
-   "kind": "special",
-   "show": "deck-tech",
-   "showName": "Deck Tech \u00b7 Ellis & Theo",
-   "slug": "commander-academy-complete-guide-2026-10-12",
-   "title": "Commander Academy: The Complete Guide"
-  },
-  {
-   "cover": "leo-and-virgo-1-why-we-keep-dating-each-other-2026-10-13.jpg",
-   "date": "2026-10-13",
-   "description": "Series premiere: Leo (a Leo) and Vera (a Virgo) break down why Leos and Virgos keep dating each other, the compliment-versus-correction translation guide, plus today's horoscope for both signs.",
-   "duration": 531,
-   "kind": "episode",
-   "num": 1,
-   "show": "leo-and-virgo",
-   "showName": "Leo and Virgo \u00b7 Leo & Vera",
-   "slug": "leo-and-virgo-1-why-we-keep-dating-each-other-2026-10-13",
-   "title": "Why We Keep Dating Each Other"
-  },
-  {
-   "cover": "1993-the-year-it-all-began-2026-10-13.jpg",
-   "date": "2026-10-13",
-   "description": "Series premiere: Walter (playing since month one) and Maya (Commander-era convert) start a year-by-year trip through Magic history. 1993: Richard Garfield, Gen Con, Alpha, the Power Nine, ante, Chaos Orb, and Arabian Nights, the first expansion ever.",
-   "duration": 566,
-   "kind": "episode",
-   "num": 101,
-   "show": "history",
-   "showName": "History of Magic \u00b7 Walter & Maya",
-   "slug": "1993-the-year-it-all-began-2026-10-13",
-   "title": "1993: The Year It All Began"
-  },
-  {
-   "cover": "1994-the-year-magic-grew-up-2026-10-13.jpg",
-   "date": "2026-10-13",
-   "description": "Year two: Antiquities brings the Brothers' War, Revised rotates the Power Nine out forever, Legends introduces gold cards and legendary creatures, and Zak Dolan wins the first World Championship by actually sideboarding. Plus The Dark, Fallen Empires, and the first restricted list.",
-   "duration": 560,
-   "kind": "episode",
-   "num": 201,
-   "show": "history",
-   "showName": "History of Magic \u00b7 Walter & Maya",
-   "slug": "1994-the-year-magic-grew-up-2026-10-13",
-   "title": "1994: The Year Magic Grew Up"
-  },
-  {
-   "cover": "special-arabian-nights-the-first-expansion-deep-dive-2026-10-13.jpg",
-   "date": "2026-10-13",
-   "description": "History of Magic's first special: the full story of Arabian Nights \u2014 Garfield's solo design, the purple-and-gold card back that almost happened, the scimitar symbol, the accidental Mountain, and the cards (Library of Alexandria, Bazaar of Baghdad, Juzam Djinn, Shahrazad) still echoing today.",
-   "duration": 471,
-   "kind": "special",
-   "num": 102,
-   "show": "history",
-   "showName": "History of Magic \u00b7 Walter & Maya",
-   "slug": "special-arabian-nights-the-first-expansion-deep-dive-2026-10-13",
-   "title": "Arabian Nights: The First Expansion \u2014 Deep Dive"
-  },
-  {
-   "cover": "special-legends-deep-dive-2026-10-13.jpg",
-   "date": "2026-10-13",
-   "description": "History of Magic special, follow-on to the 1994 episode: Legends in full \u2014 first gold cards, first legendary creatures, the five Elder Dragons and the road to Commander, and the booster-box collation disaster.",
-   "duration": 489,
-   "kind": "special",
-   "num": 202,
-   "show": "history",
-   "showName": "History of Magic \u00b7 Walter & Maya",
-   "slug": "special-legends-deep-dive-2026-10-13",
-   "title": "Legends \u2014 Deep Dive"
-  },
-  {
-   "cover": "special-antiquities-the-brothers-war-deep-dive-2026-10-13.jpg",
-   "date": "2026-10-13",
-   "description": "History of Magic special, follow-on to the 1994 episode: Antiquities and the Brothers' War in full \u2014 Urza vs Mishra, the Sylex Blast, Mishra's Workshop and the Urza lands, and the 2022 set that returned to the story.",
-   "duration": 427,
-   "kind": "special",
-   "num": 203,
-   "show": "history",
-   "showName": "History of Magic \u00b7 Walter & Maya",
-   "slug": "special-antiquities-the-brothers-war-deep-dive-2026-10-13",
-   "title": "Antiquities \u2014 The Brothers' War, Deep Dive"
-  },
-  {
-   "cover": "special-the-first-world-championship-zak-dolan-deep-dive-2026-10-13.jpg",
-   "date": "2026-10-13",
-   "description": "History of Magic special, follow-on to the 1994 episode: the first World Championship in full \u2014 512 open-entry players at Gen Con, Zak Dolan's singleton control deck vs Bertrand Lestree's Channel-Fireball beatdown, and the sideboarding lesson that still holds.",
-   "duration": 425,
-   "kind": "special",
-   "num": 204,
-   "show": "history",
-   "showName": "History of Magic \u00b7 Walter & Maya",
-   "slug": "special-the-first-world-championship-zak-dolan-deep-dive-2026-10-13",
-   "title": "The First World Championship \u2014 Zak Dolan, Deep Dive"
-  },
-  {
-   "cover": "special-the-dark-and-fallen-empires-deep-dive-2026-10-13.jpg",
-   "date": "2026-10-13",
-   "description": "History of Magic special, follow-on to the 1994 episode: a double feature \u2014 The Dark's gothic tone, Blood Moon and Maze of Ith, paired with Fallen Empires' Hymn to Tourach, thallids and thrulls, and the great overprinting lesson.",
-   "duration": 439,
-   "kind": "special",
-   "num": 205,
-   "show": "history",
-   "showName": "History of Magic \u00b7 Walter & Maya",
-   "slug": "special-the-dark-and-fallen-empires-deep-dive-2026-10-13",
-   "title": "The Dark and Fallen Empires \u2014 Deep Dive"
-  },
-  {
-   "cover": "1995-the-year-magic-stood-alone-2026-10-13.jpg",
-   "date": "2026-10-13",
-   "description": "Year three: Standard is created, Fourth Edition goes worldwide, Ice Age becomes the first standalone set with Necropotence and Brainstorm, Chronicles triggers the reprint crisis behind the Reserved List, Alexander Blumke wins Worlds in Seattle, and Homelands closes the year.",
-   "duration": 805,
-   "kind": "episode",
-   "num": 301,
-   "show": "history",
-   "showName": "History of Magic \u00b7 Walter & Maya",
-   "slug": "1995-the-year-magic-stood-alone-2026-10-13",
-   "title": "1995: The Year Magic Stood Alone"
-  },
-  {
-   "cover": "leo-and-virgo-2-who-apologizes-first-2026-10-14.jpg",
-   "date": "2026-10-14",
-   "description": "Episode two: Leo and Vera settle who apologizes first in a Leo-Virgo relationship \u2014 the Leo grand gesture versus the Virgo three-paragraph essay, a three-step apology formula, plus today's horoscope for both signs.",
-   "duration": 269,
-   "kind": "episode",
-   "num": 2,
-   "show": "leo-and-virgo",
-   "showName": "Leo and Virgo \u00b7 Leo & Vera",
-   "slug": "leo-and-virgo-2-who-apologizes-first-2026-10-14",
-   "title": "Who Apologizes First?"
-  },
-  {
-   "cover": "your-draft-graded-a-reality-fracture-walk-through-2026-10-14.jpg",
-   "date": "2026-10-14",
-   "description": "Milo and Jax walk through Wes's real Reality Fracture draft: the full fifty four card pool, all fourteen cuts graded, his final forty, a recommended forty with two swaps \u2014 Unsummon over Countersculpt, Twinned Vision over Sphinx's Approach \u2014 and the opening hand verdict. Keep, and bottom Denzilore.",
-   "duration": 858,
-   "kind": "episode",
-   "num": 2,
-   "show": "draft-show",
-   "showName": "Draft Show \u00b7 Milo & Jax",
-   "slug": "your-draft-graded-a-reality-fracture-walk-through-2026-10-14",
-   "title": "Your Draft, Graded: A Reality Fracture Walk-Through"
-  },
-  {
-   "cover": "garruk-first-pick-another-draft-graded-2026-10-14.jpg",
-   "date": "2026-10-14",
-   "description": "Milo and Jax grade Wes's second Reality Fracture draft from his pack one pick one \u2014 Garruk, Veiled Butcher over Wrath of the Bloodmane and Saheeli \u2014 through the full pool: two mythics, seven removal spells, zero fixing lands. Their forty: blue-black control splashing four red spells, with all fifteen cuts explained.",
-   "duration": 719,
-   "kind": "episode",
-   "num": 3,
-   "show": "draft-show",
-   "showName": "Draft Show \u00b7 Milo & Jax",
-   "slug": "garruk-first-pick-another-draft-graded-2026-10-14",
-   "title": "Garruk First Pick: Another Draft, Graded"
-  },
-  {
-   "cover": "special-ice-age-deep-dive-2026-10-14.jpg",
-   "date": "2026-10-14",
-   "description": "History of Magic special, follow-on to the 1995 episode: Ice Age in full \u2014 the first standalone set, snow and cumulative upkeep, slow cantrips and Brainstorm, Necropotence, and the cards the whole game still orbits.",
-   "duration": 497,
-   "kind": "special",
-   "num": 302,
-   "show": "history",
-   "showName": "History of Magic \u00b7 Walter & Maya",
-   "slug": "special-ice-age-deep-dive-2026-10-14",
-   "title": "Ice Age \u2014 Deep Dive"
-  },
-  {
-   "cover": "special-chronicles-the-reprint-crisis-deep-dive-2026-10-14.jpg",
-   "date": "2026-10-14",
-   "description": "History of Magic special, follow-on to the 1995 episode: Chronicles, the white-bordered reprint set that crashed the crown jewels, split players from collectors, and made a certain famous promise inevitable.",
-   "duration": 411,
-   "kind": "special",
-   "num": 303,
-   "show": "history",
-   "showName": "History of Magic \u00b7 Walter & Maya",
-   "slug": "special-chronicles-the-reprint-crisis-deep-dive-2026-10-14",
-   "title": "Chronicles: The Reprint Crisis \u2014 Deep Dive"
-  },
-  {
-   "cover": "special-worlds-1995-blumke-and-the-hymn-deck-deep-dive-2026-10-14.jpg",
-   "date": "2026-10-14",
-   "description": "History of Magic special, follow-on to the 1995 episode: Worlds 1995 in Seattle \u2014 Blumke's Rack Control, Hernandez's creatureless Vise prison, the locked-deck rule, and the first team title.",
-   "duration": 395,
-   "kind": "special",
-   "num": 304,
-   "show": "history",
-   "showName": "History of Magic \u00b7 Walter & Maya",
-   "slug": "special-worlds-1995-blumke-and-the-hymn-deck-deep-dive-2026-10-14",
-   "title": "Worlds 1995: Blumke and the Hymn Deck \u2014 Deep Dive"
-  },
-  {
-   "cover": "special-homelands-the-worst-set-ever-with-love-deep-dive-2026-10-14.jpg",
-   "date": "2026-10-14",
-   "description": "History of Magic special, follow-on to the 1995 episode: Homelands with love and honesty \u2014 Ulgrotha, Feroz and Serra, Baron Sengir, why the set was so weak, and its strange beloved afterlife.",
-   "duration": 475,
-   "kind": "special",
-   "num": 305,
-   "show": "history",
-   "showName": "History of Magic \u00b7 Walter & Maya",
-   "slug": "special-homelands-the-worst-set-ever-with-love-deep-dive-2026-10-14",
-   "title": "Homelands: The Worst Set Ever (With Love) \u2014 Deep Dive"
-  },
-  {
-   "cover": "mana-bases-from-budget-taplands-to-optimized-fixing-2026-10-14.jpg",
-   "date": "2026-10-14",
-   "description": "Commander Academy \u2014 Ellis and Theo break down mana bases using Rachel's Food deck, from budget taplands to optimized fixing.",
-   "duration": 484,
-   "kind": "episode",
-   "num": 5,
-   "show": "deck-tech",
-   "showName": "Deck Tech \u00b7 Ellis & Theo",
-   "slug": "mana-bases-from-budget-taplands-to-optimized-fixing-2026-10-14",
-   "title": "Commander Academy #5: Mana Bases - From Budget Taplands to Optimized Fixing"
+  "episodes": [
+    {
+      "cover": "deck-tech-rachel-ward-louisiana-swamp-witch-2026-10-12.jpg",
+      "date": "2026-10-12",
+      "description": "Deck review special — Ellis and Theo break down a custom Golgari Food commander deck.",
+      "duration": 372,
+      "kind": "special",
+      "show": "deck-tech",
+      "showName": "Deck Tech · Ellis & Theo",
+      "slug": "deck-tech-rachel-ward-louisiana-swamp-witch-2026-10-12",
+      "title": "Rachel Ward, Louisiana Swamp Witch"
+    },
+    {
+      "cover": "deck-tech-wesley-ward-master-of-many-paths-2026-10-12.jpg",
+      "date": "2026-10-12",
+      "description": "Deck review special — Ellis and Theo break down a custom Azorius draw-engine commander deck.",
+      "duration": 420,
+      "kind": "special",
+      "show": "deck-tech",
+      "showName": "Deck Tech · Ellis & Theo",
+      "slug": "deck-tech-wesley-ward-master-of-many-paths-2026-10-12",
+      "title": "Wesley Ward, Master of Many Paths"
+    },
+    {
+      "cover": "reality-fracture-draft-deep-dive-2026-10-12.jpg",
+      "date": "2026-10-12",
+      "description": "Milo and Jax talk Reality Fracture draft — what to pick early, which colors are open, and the traps to avoid.",
+      "duration": 336,
+      "kind": "episode",
+      "num": 1,
+      "show": "draft-show",
+      "showName": "Draft Show · Milo & Jax",
+      "slug": "reality-fracture-draft-deep-dive-2026-10-12",
+      "title": "Reality Fracture Draft Deep Dive"
+    },
+    {
+      "cover": "commander-academy-complete-guide-2026-10-12.jpg",
+      "date": "2026-10-12",
+      "description": "The full Commander Academy series in one listen — building from scratch, upgrading precons, and rookie mistakes. All four parts stitched together.",
+      "duration": 2274,
+      "kind": "special",
+      "show": "deck-tech",
+      "showName": "Deck Tech · Ellis & Theo",
+      "slug": "commander-academy-complete-guide-2026-10-12",
+      "title": "Commander Academy: The Complete Guide"
+    },
+    {
+      "cover": "leo-and-virgo-1-why-we-keep-dating-each-other-2026-10-13.jpg",
+      "date": "2026-10-13",
+      "description": "Series premiere: Leo (a Leo) and Vera (a Virgo) break down why Leos and Virgos keep dating each other, the compliment-versus-correction translation guide, plus today's horoscope for both signs.",
+      "duration": 531,
+      "kind": "episode",
+      "num": 1,
+      "show": "leo-and-virgo",
+      "showName": "Leo and Virgo · Leo & Vera",
+      "slug": "leo-and-virgo-1-why-we-keep-dating-each-other-2026-10-13",
+      "title": "Why We Keep Dating Each Other"
+    },
+    {
+      "cover": "1993-the-year-it-all-began-2026-10-13.jpg",
+      "date": "2026-10-13",
+      "description": "Series premiere: Walter (playing since month one) and Maya (Commander-era convert) start a year-by-year trip through Magic history. 1993: Richard Garfield, Gen Con, Alpha, the Power Nine, ante, Chaos Orb, and Arabian Nights, the first expansion ever.",
+      "duration": 566,
+      "kind": "episode",
+      "num": 101,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "1993-the-year-it-all-began-2026-10-13",
+      "title": "1993: The Year It All Began"
+    },
+    {
+      "cover": "1994-the-year-magic-grew-up-2026-10-13.jpg",
+      "date": "2026-10-13",
+      "description": "Year two: Antiquities brings the Brothers' War, Revised rotates the Power Nine out forever, Legends introduces gold cards and legendary creatures, and Zak Dolan wins the first World Championship by actually sideboarding. Plus The Dark, Fallen Empires, and the first restricted list.",
+      "duration": 560,
+      "kind": "episode",
+      "num": 201,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "1994-the-year-magic-grew-up-2026-10-13",
+      "title": "1994: The Year Magic Grew Up"
+    },
+    {
+      "cover": "special-arabian-nights-the-first-expansion-deep-dive-2026-10-13.jpg",
+      "date": "2026-10-13",
+      "description": "History of Magic's first special: the full story of Arabian Nights — Garfield's solo design, the purple-and-gold card back that almost happened, the scimitar symbol, the accidental Mountain, and the cards (Library of Alexandria, Bazaar of Baghdad, Juzam Djinn, Shahrazad) still echoing today.",
+      "duration": 471,
+      "kind": "special",
+      "num": 102,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "special-arabian-nights-the-first-expansion-deep-dive-2026-10-13",
+      "title": "Arabian Nights: The First Expansion — Deep Dive"
+    },
+    {
+      "cover": "special-legends-deep-dive-2026-10-13.jpg",
+      "date": "2026-10-13",
+      "description": "History of Magic special, follow-on to the 1994 episode: Legends in full — first gold cards, first legendary creatures, the five Elder Dragons and the road to Commander, and the booster-box collation disaster.",
+      "duration": 489,
+      "kind": "special",
+      "num": 202,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "special-legends-deep-dive-2026-10-13",
+      "title": "Legends — Deep Dive"
+    },
+    {
+      "cover": "special-antiquities-the-brothers-war-deep-dive-2026-10-13.jpg",
+      "date": "2026-10-13",
+      "description": "History of Magic special, follow-on to the 1994 episode: Antiquities and the Brothers' War in full — Urza vs Mishra, the Sylex Blast, Mishra's Workshop and the Urza lands, and the 2022 set that returned to the story.",
+      "duration": 427,
+      "kind": "special",
+      "num": 203,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "special-antiquities-the-brothers-war-deep-dive-2026-10-13",
+      "title": "Antiquities — The Brothers' War, Deep Dive"
+    },
+    {
+      "cover": "special-the-first-world-championship-zak-dolan-deep-dive-2026-10-13.jpg",
+      "date": "2026-10-13",
+      "description": "History of Magic special, follow-on to the 1994 episode: the first World Championship in full — 512 open-entry players at Gen Con, Zak Dolan's singleton control deck vs Bertrand Lestree's Channel-Fireball beatdown, and the sideboarding lesson that still holds.",
+      "duration": 425,
+      "kind": "special",
+      "num": 204,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "special-the-first-world-championship-zak-dolan-deep-dive-2026-10-13",
+      "title": "The First World Championship — Zak Dolan, Deep Dive"
+    },
+    {
+      "cover": "special-the-dark-and-fallen-empires-deep-dive-2026-10-13.jpg",
+      "date": "2026-10-13",
+      "description": "History of Magic special, follow-on to the 1994 episode: a double feature — The Dark's gothic tone, Blood Moon and Maze of Ith, paired with Fallen Empires' Hymn to Tourach, thallids and thrulls, and the great overprinting lesson.",
+      "duration": 439,
+      "kind": "special",
+      "num": 205,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "special-the-dark-and-fallen-empires-deep-dive-2026-10-13",
+      "title": "The Dark and Fallen Empires — Deep Dive"
+    },
+    {
+      "cover": "1995-the-year-magic-stood-alone-2026-10-13.jpg",
+      "date": "2026-10-13",
+      "description": "Year three: Standard is created, Fourth Edition goes worldwide, Ice Age becomes the first standalone set with Necropotence and Brainstorm, Chronicles triggers the reprint crisis behind the Reserved List, Alexander Blumke wins Worlds in Seattle, and Homelands closes the year.",
+      "duration": 805,
+      "kind": "episode",
+      "num": 301,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "1995-the-year-magic-stood-alone-2026-10-13",
+      "title": "1995: The Year Magic Stood Alone"
+    },
+    {
+      "cover": "leo-and-virgo-2-who-apologizes-first-2026-10-14.jpg",
+      "date": "2026-10-14",
+      "description": "Episode two: Leo and Vera settle who apologizes first in a Leo-Virgo relationship — the Leo grand gesture versus the Virgo three-paragraph essay, a three-step apology formula, plus today's horoscope for both signs.",
+      "duration": 269,
+      "kind": "episode",
+      "num": 2,
+      "show": "leo-and-virgo",
+      "showName": "Leo and Virgo · Leo & Vera",
+      "slug": "leo-and-virgo-2-who-apologizes-first-2026-10-14",
+      "title": "Who Apologizes First?"
+    },
+    {
+      "cover": "your-draft-graded-a-reality-fracture-walk-through-2026-10-14.jpg",
+      "date": "2026-10-14",
+      "description": "Milo and Jax walk through Wes's real Reality Fracture draft: the full fifty four card pool, all fourteen cuts graded, his final forty, a recommended forty with two swaps — Unsummon over Countersculpt, Twinned Vision over Sphinx's Approach — and the opening hand verdict. Keep, and bottom Denzilore.",
+      "duration": 858,
+      "kind": "episode",
+      "num": 2,
+      "show": "draft-show",
+      "showName": "Draft Show · Milo & Jax",
+      "slug": "your-draft-graded-a-reality-fracture-walk-through-2026-10-14",
+      "title": "Your Draft, Graded: A Reality Fracture Walk-Through"
+    },
+    {
+      "cover": "garruk-first-pick-another-draft-graded-2026-10-14.jpg",
+      "date": "2026-10-14",
+      "description": "Milo and Jax grade Wes's second Reality Fracture draft from his pack one pick one — Garruk, Veiled Butcher over Wrath of the Bloodmane and Saheeli — through the full pool: two mythics, seven removal spells, zero fixing lands. Their forty: blue-black control splashing four red spells, with all fifteen cuts explained.",
+      "duration": 719,
+      "kind": "episode",
+      "num": 3,
+      "show": "draft-show",
+      "showName": "Draft Show · Milo & Jax",
+      "slug": "garruk-first-pick-another-draft-graded-2026-10-14",
+      "title": "Garruk First Pick: Another Draft, Graded"
+    },
+    {
+      "cover": "special-ice-age-deep-dive-2026-10-14.jpg",
+      "date": "2026-10-14",
+      "description": "History of Magic special, follow-on to the 1995 episode: Ice Age in full — the first standalone set, snow and cumulative upkeep, slow cantrips and Brainstorm, Necropotence, and the cards the whole game still orbits.",
+      "duration": 497,
+      "kind": "special",
+      "num": 302,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "special-ice-age-deep-dive-2026-10-14",
+      "title": "Ice Age — Deep Dive"
+    },
+    {
+      "cover": "special-chronicles-the-reprint-crisis-deep-dive-2026-10-14.jpg",
+      "date": "2026-10-14",
+      "description": "History of Magic special, follow-on to the 1995 episode: Chronicles, the white-bordered reprint set that crashed the crown jewels, split players from collectors, and made a certain famous promise inevitable.",
+      "duration": 411,
+      "kind": "special",
+      "num": 303,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "special-chronicles-the-reprint-crisis-deep-dive-2026-10-14",
+      "title": "Chronicles: The Reprint Crisis — Deep Dive"
+    },
+    {
+      "cover": "special-worlds-1995-blumke-and-the-hymn-deck-deep-dive-2026-10-14.jpg",
+      "date": "2026-10-14",
+      "description": "History of Magic special, follow-on to the 1995 episode: Worlds 1995 in Seattle — Blumke's Rack Control, Hernandez's creatureless Vise prison, the locked-deck rule, and the first team title.",
+      "duration": 395,
+      "kind": "special",
+      "num": 304,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "special-worlds-1995-blumke-and-the-hymn-deck-deep-dive-2026-10-14",
+      "title": "Worlds 1995: Blumke and the Hymn Deck — Deep Dive"
+    },
+    {
+      "cover": "special-homelands-the-worst-set-ever-with-love-deep-dive-2026-10-14.jpg",
+      "date": "2026-10-14",
+      "description": "History of Magic special, follow-on to the 1995 episode: Homelands with love and honesty — Ulgrotha, Feroz and Serra, Baron Sengir, why the set was so weak, and its strange beloved afterlife.",
+      "duration": 475,
+      "kind": "special",
+      "num": 305,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "special-homelands-the-worst-set-ever-with-love-deep-dive-2026-10-14",
+      "title": "Homelands: The Worst Set Ever (With Love) — Deep Dive"
+    },
+    {
+      "cover": "mana-bases-from-budget-taplands-to-optimized-fixing-2026-10-14.jpg",
+      "date": "2026-10-14",
+      "description": "Commander Academy — Ellis and Theo break down mana bases using Rachel's Food deck, from budget taplands to optimized fixing.",
+      "duration": 901,
+      "kind": "episode",
+      "num": 5,
+      "show": "deck-tech",
+      "showName": "Deck Tech · Ellis & Theo",
+      "slug": "mana-bases-from-budget-taplands-to-optimized-fixing-2026-10-14",
+      "title": "Commander Academy #5: Mana Bases - From Budget Taplands to Optimized Fixing"
+    }
+  ],
+  "shows": {
+    "deck-tech": {
+      "cover": "series-deck-tech.jpg",
+      "hosts": "Ellis & Theo",
+      "name": "Deck Tech"
+    },
+    "draft-show": {
+      "cover": "series-draft-show.jpg",
+      "hosts": "Milo & Jax",
+      "name": "Draft Show"
+    },
+    "history": {
+      "cover": "series-history.jpg",
+      "hosts": "Walter & Maya",
+      "name": "History of Magic"
+    },
+    "leo-and-virgo": {
+      "cover": "series-leo-and-virgo.jpg",
+      "hosts": "Leo & Vera",
+      "name": "Leo and Virgo"
+    }
   }
- ],
- "shows": {
-  "deck-tech": {
-   "cover": "series-deck-tech.jpg",
-   "hosts": "Ellis & Theo",
-   "name": "Deck Tech"
-  },
-  "draft-show": {
-   "cover": "series-draft-show.jpg",
-   "hosts": "Milo & Jax",
-   "name": "Draft Show"
-  },
-  "history": {
-   "cover": "series-history.jpg",
-   "hosts": "Walter & Maya",
-   "name": "History of Magic"
-  },
-  "leo-and-virgo": {
-   "cover": "series-leo-and-virgo.jpg",
-   "hosts": "Leo & Vera",
-   "name": "Leo and Virgo"
-  }
- }
 }
