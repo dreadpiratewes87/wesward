@@ -644,8 +644,10 @@ renderCats();renderGrid();renderIssues();
 .wl-m-rel{font-size:14px;opacity:.7;margin-bottom:8px}
 .wl-m-stream{font-size:14px;font-weight:600;margin-bottom:8px}
 .wl-m-tags{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
-.wl-pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 8px 5px 11px;font-size:13px;font-weight:700;color:#fff;cursor:pointer}
-.wl-pill-x{border:0;background:rgba(255,255,255,.25);color:#fff;border-radius:50%;width:17px;height:17px;line-height:1;font-size:12px;cursor:pointer;padding:0}
+.wl-pill{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:2px 6px 2px 9px;font-size:12.5px;line-height:1.15;font-weight:700;color:#fff;cursor:pointer}
+.wl-pill-x{border:0;background:rgba(255,255,255,.25);color:#fff;border-radius:50%;width:15px;height:15px;line-height:1;font-size:11px;cursor:pointer;padding:0}
+.wl-tag-edit{display:inline-flex;gap:6px;align-items:center;flex-wrap:wrap}
+#wl-tag-input{font-size:16px;padding:6px 10px;border-radius:10px;border:1px solid var(--line);max-width:150px;background:#fff;color:#111}
 .wl-pill-add{background:none;border:1px dashed var(--line);color:inherit}
 .wl-tagbar{margin:0 0 12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .wl-tagbar-note{font-size:13px;opacity:.7}
@@ -1389,15 +1391,27 @@ renderCats();renderGrid();renderIssues();
       });
     });
     var add=document.getElementById('wl-tag-add');
-    if(add) add.addEventListener('click',function(){
-      var t=prompt('Add a tag for "'+it.title+'":','');
-      if(t===null) return;
-      t=t.trim().toLowerCase();
-      if(!t) return;
-      it.tags=it.tags||[];
-      if(it.tags.indexOf(t)<0){ it.tags.push(t); touch(it); save(items); }
+    if(add) add.addEventListener('click',function(){ renderTagEditor(it); });
+  }
+  function renderTagEditor(it){
+    var box=document.getElementById('wl-m-tags');
+    if(!box) return;
+    var all={}; items.forEach(function(x){ (x.tags||[]).forEach(function(t){ all[t]=1; }); });
+    var list=Object.keys(all).filter(function(t){ return (it.tags||[]).indexOf(t)<0; }).sort();
+    box.innerHTML='<span class="wl-tag-edit"><input id="wl-tag-input" list="wl-tag-list" placeholder="Tag name" autocomplete="off"><datalist id="wl-tag-list">'+list.map(function(t){ return '<option value="'+esc(t)+'">'; }).join('')+'</datalist><button class="btn small teal" id="wl-tag-ok">Add</button><button class="btn small secondary" id="wl-tag-cancel">Cancel</button></span>';
+    var inp=document.getElementById('wl-tag-input');
+    inp.focus();
+    function commit(){
+      var t=inp.value.trim().toLowerCase();
+      if(t){
+        it.tags=it.tags||[];
+        if(it.tags.indexOf(t)<0){ it.tags.push(t); touch(it); save(items); }
+      }
       renderTags(it); render();
-    });
+    }
+    document.getElementById('wl-tag-ok').addEventListener('click',commit);
+    document.getElementById('wl-tag-cancel').addEventListener('click',function(){ renderTags(it); });
+    inp.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); commit(); } });
   }
 
   /* ---- detail sheet ---- */
