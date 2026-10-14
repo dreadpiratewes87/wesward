@@ -577,7 +577,7 @@ renderCats();renderGrid();renderIssues();
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
   <section class="view" id="watchlist" aria-labelledby="watchlist-heading">
-    <header class="viewbar"><button class="back-btn" data-home>← Main</button><h1 id="watchlist-heading">Watchlist</h1><span class="spacer"></span><button class="btn small secondary" id="wl-share">Share</button></header>
+    <header class="viewbar"><button class="back-btn" data-home>← Main</button><h1 id="watchlist-heading">Watchlist</h1><span class="spacer"></span><button class="btn small secondary" id="wl-tmdb-btn" title="TMDB API key">TMDB key</button><button class="btn small secondary" id="wl-share">Share</button></header>
     <form class="wl-add" id="wl-form"><div class="wl-title-wrap"><label class="sr-only" for="wl-title">Title</label><input class="task-input" id="wl-title" type="text" placeholder="Add a show or movie…" required maxlength="120" autocomplete="off" /><div class="wl-suggest" id="wl-suggest" hidden></div></div><button class="btn accent" type="submit">Add</button></form>
     <div class="wl-tabs" role="tablist"><button class="wl-tab active" data-view="movie" role="tab">Movies</button><button class="wl-tab" data-view="show" role="tab">TV Shows</button><span style="flex:1"></span><button class="wl-icon-btn" id="wl-view-toggle" title="Toggle list/thumbnail view" aria-label="Toggle view">☰</button><button class="wl-icon-btn" id="wl-filter-btn" title="Filter & sort" aria-label="Filter and sort"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><circle cx="9" cy="6" r="2.2" fill="currentColor" stroke="none"/><line x1="4" y1="12" x2="20" y2="12"/><circle cx="15" cy="12" r="2.2" fill="currentColor" stroke="none"/><line x1="4" y1="18" x2="20" y2="18"/><circle cx="7" cy="18" r="2.2" fill="currentColor" stroke="none"/></svg></button></div>
     <div class="wl-filter-panel" id="wl-filter-panel" hidden>
@@ -678,7 +678,7 @@ renderCats();renderGrid();renderIssues();
 .wl-sug-t{display:flex;flex-direction:column;gap:2px;min-width:0}
 .wl-sug-t strong{font-size:15px}
 .wl-sug-t small{font-size:12px;opacity:.65}
-.wl-shared #wl-share{display:none}
+.wl-shared #wl-share,.wl-shared #wl-tmdb-btn{display:none}
 .wl-shared .wl-m-done,.wl-shared .wl-m-prog,.wl-shared .wl-m-del{display:none}
 </style></style></style></style></style>
 </main>
@@ -847,6 +847,16 @@ renderCats();renderGrid();renderIssues();
       if(typeof firebase==='undefined') return;
       firebase.initializeApp(FB_CONFIG);
       fbDb=firebase.database();
+      try{
+        fbDb.ref('watchlist/config').on('value',function(snap){
+          var v=snap.val()||{};
+          if(v.tmdbKey&&v.tmdbKey!==WL_TMDB_KEY){
+            WL_TMDB_KEY=v.tmdbKey;
+            try{ localStorage.setItem('wl-tmdb-key',v.tmdbKey); }catch(e){}
+            tmdbBtnLabel();
+          }
+        });
+      }catch(e){}
       var ref=fbDb.ref('watchlist/items');
       ref.once('value').then(function(snap){
         var cloud=snap.val()||{};
@@ -865,6 +875,7 @@ renderCats();renderGrid();renderIssues();
         progress:x.progress||'',watched:!!x.watched,info:x.info||'',poster:x.poster||'',
         releaseDate:x.releaseDate||'',releaseKind:x.releaseKind||'',
         streamingService:x.streamingService||'',streamingDate:x.streamingDate||'',
+        tmdbId:x.tmdbId||'',tmdbType:x.tmdbType||'',
         updated_at:x.updated_at||0};
     });
     var s=btoa(unescape(encodeURIComponent(JSON.stringify(data))))
@@ -904,6 +915,28 @@ renderCats();renderGrid();renderIssues();
   var picked=null, searchTimer=null, pickToken=0;
   var titleInput=document.getElementById('wl-title');
   var suggestBox=document.getElementById('wl-suggest');
+  var WL_TMDB_KEY=''; try{ WL_TMDB_KEY=localStorage.getItem('wl-tmdb-key')||''; }catch(e){}
+  function tmdbSearch(q){
+    if(!WL_TMDB_KEY) return Promise.resolve([]);
+    return fetch('https://api.themoviedb.org/3/search/multi?api_key='+encodeURIComponent(WL_TMDB_KEY)+'&include_adult=false&query='+encodeURIComponent(q))
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        return (d.results||[]).filter(function(x){ return x.media_type==='movie'||x.media_type==='tv'; }).slice(0,8).map(function(x){
+          var isM=x.media_type==='movie';
+          var date=isM?(x.release_date||''):(x.first_air_date||'');
+          return {title:(isM?x.title:x.name)||'', year:(date||'').slice(0,4),
+            premiered:isM?'':date, releaseDate:isM?date:'', releaseKind:'theatrical',
+            status:'', network:'', type:isM?'Movie':'Show',
+            info:'https://www.themoviedb.org/'+(isM?'movie':'tv')+'/'+x.id,
+            poster:x.poster_path?('https://image.tmdb.org/t/p/w342'+x.poster_path):'',
+            tmdbId:x.id, tmdbType:x.media_type, src:'TMDB'};
+        });
+      }).catch(function(){ return []; });
+  }
+  function tmdbGet(path){
+    return fetch('https://api.themoviedb.org/3'+path+(path.indexOf('?')>=0?'&':'?')+'api_key='+encodeURIComponent(WL_TMDB_KEY))
+      .then(function(r){ return r.json(); });
+  }
   function tvSearch(q){
     return fetch('https://api.tvmaze.com/search/shows?q='+encodeURIComponent(q))
       .then(function(r){ return r.json(); })
@@ -999,6 +1032,7 @@ renderCats();renderGrid();renderIssues();
       var t=(r.title||'').toLowerCase(), s=0;
       if(t===ql) s+=100; else if(t.indexOf(ql)===0) s+=50; else if(t.indexOf(ql)>=0) s+=20;
       if(r.src==='TV') s+=10;
+      if(r.src==='TMDB') s+=15;
       if(r.type) s+=4;
       if(r.poster) s+=3;
       if(r.year) s+=2;
@@ -1035,9 +1069,9 @@ renderCats();renderGrid();renderIssues();
       clearTimeout(searchTimer);
       if(q.length<2){ suggestBox.hidden=true; return; }
       searchTimer=setTimeout(function(){
-        Promise.all([tvSearch(q),wikiSearch(q)]).then(function(rs){
+        Promise.all([tmdbSearch(q),tvSearch(q),wikiSearch(q)]).then(function(rs){
           var seen={}, out=[];
-          rs[0].concat(rs[1]).forEach(function(r){
+          rs[0].concat(rs[1],rs[2]).forEach(function(r){
             var k=(r.title||'').toLowerCase()+'|'+(r.year||'');
             if(r.title && !seen[k]){ seen[k]=1; out.push(r); }
           });
@@ -1210,6 +1244,7 @@ renderCats();renderGrid();renderIssues();
     });
   }
   function maybeRefreshRelease(it){
+    if(it.tmdbId&&WL_TMDB_KEY) return;
     if(it.releaseDate) return;
     if(it.type==='Show'){
       tvSearch(it.title).then(function(rs){
@@ -1235,6 +1270,7 @@ renderCats();renderGrid();renderIssues();
     }
   }
   function maybeCheckStreaming(it){
+    if(it.tmdbId&&WL_TMDB_KEY) return;
     if(it.type!=='Movie'||it.streamingService) return;
     if(it.releaseDate){
       var d=new Date(it.releaseDate+'T12:00:00');
@@ -1248,6 +1284,45 @@ renderCats();renderGrid();renderIssues();
       if(info.streamingDate) it.streamingDate=info.streamingDate;
       touch(it); save(items); refreshModalLines(it);
     });
+  }
+
+  function maybeTmdbInfo(it){
+    if(!WL_TMDB_KEY||!it.tmdbId) return;
+    if(it.tmdbType==='movie'){
+      if(!it.releaseDate||!it.streamingDate){
+        tmdbGet('/movie/'+it.tmdbId+'/release_dates').then(function(d){
+          var us=null;
+          (d.results||[]).forEach(function(x){ if(x.iso_3166_1==='US') us=x; });
+          var rows=(us&&us.release_dates)||[], changed=false;
+          var th=null, dg=null;
+          rows.forEach(function(x){
+            if(x.type===3&&(!th||x.release_date<th)) th=x.release_date;
+            if(x.type===4&&(!dg||x.release_date<dg)) dg=x.release_date;
+          });
+          if(th&&!it.releaseDate){ it.releaseDate=th.slice(0,10); it.releaseKind='theatrical'; changed=true; }
+          if(dg&&!it.streamingDate){ it.streamingDate=dg.slice(0,10); changed=true; }
+          if(changed){ touch(it); save(items); refreshModalLines(it); }
+        }).catch(function(){});
+      }
+      if(!it.streamingService){
+        tmdbGet('/movie/'+it.tmdbId+'/watch/providers').then(function(d){
+          var us=((d.results||{}).US)||{};
+          var flat=(us.flatrate||[]).map(function(p){ return p.provider_name; });
+          var plain=flat.filter(function(n){ return n.indexOf(' Channel')<0; });
+          var names=(plain.length?plain:flat).slice(0,2);
+          if(names.length){ it.streamingService=names.join(' · '); it.streamingChecked=Date.now(); touch(it); save(items); refreshModalLines(it); }
+        }).catch(function(){});
+      }
+    }else if(it.tmdbType==='tv'){
+      if(!it.releaseDate||!it.service){
+        tmdbGet('/tv/'+it.tmdbId).then(function(d){
+          var changed=false;
+          if(d.first_air_date&&!it.releaseDate){ it.releaseDate=d.first_air_date; it.releaseKind='premiere'; changed=true; }
+          if(d.networks&&d.networks.length&&!it.service){ it.service=d.networks[0].name; changed=true; }
+          if(changed){ touch(it); save(items); refreshModalLines(it); }
+        }).catch(function(){});
+      }
+    }
   }
 
   /* ---- detail sheet ---- */
@@ -1273,6 +1348,7 @@ renderCats();renderGrid();renderIssues();
     document.body.style.overflow='hidden';
     maybeRefreshRelease(it);
     maybeCheckStreaming(it);
+    maybeTmdbInfo(it);
   }
   function closeModal(){
     document.getElementById('wl-modal').hidden=true;
@@ -1332,6 +1408,7 @@ renderCats();renderGrid();renderIssues();
       if(r.premiered){ it.releaseDate=r.premiered; it.releaseKind='premiere'; }
       else if(r.releaseDate){ it.releaseDate=r.releaseDate; it.releaseKind=r.releaseKind||'theatrical'; }
       if(r.status) it.notes=r.status;
+      if(r.tmdbId){ it.tmdbId=r.tmdbId; it.tmdbType=r.tmdbType; }
       if(r.streamingService) it.streamingService=r.streamingService;
       if(r.streamingDate) it.streamingDate=r.streamingDate;
       if(it.streamingService||it.streamingDate) it.streamingChecked=Date.now();
@@ -1352,6 +1429,28 @@ renderCats();renderGrid();renderIssues();
 
   document.getElementById('wl-grid').addEventListener('click',function(e){ gridClick(e); });
   document.getElementById('wl-finished').addEventListener('click',function(e){ gridClick(e); });
+
+  /* ---- TMDB key (kept in this device + the watchlist cloud, never in the page code) ---- */
+  function tmdbBtnLabel(){
+    var b=document.getElementById('wl-tmdb-btn');
+    if(b) b.textContent=WL_TMDB_KEY?'TMDB ✓':'TMDB key';
+  }
+  function setTmdbKey(k){
+    WL_TMDB_KEY=k||'';
+    try{ if(WL_TMDB_KEY) localStorage.setItem('wl-tmdb-key',WL_TMDB_KEY); else localStorage.removeItem('wl-tmdb-key'); }catch(e){}
+    if(fbDb&&fbReady&&!SHARED){ try{ fbDb.ref('watchlist/config').update({tmdbKey:WL_TMDB_KEY}); }catch(e){} }
+    tmdbBtnLabel();
+  }
+  (function(){
+    var b=document.getElementById('wl-tmdb-btn');
+    if(!b) return;
+    tmdbBtnLabel();
+    b.addEventListener('click',function(){
+      var k=prompt(WL_TMDB_KEY?'TMDB search is on. Paste a new key to replace it, or clear the box and tap OK to turn it off.':'Paste your TMDB API key (the v3 one, from themoviedb.org, Settings, API):',WL_TMDB_KEY);
+      if(k===null) return;
+      setTmdbKey(k.trim());
+    });
+  })();
 
   /* ---- share ---- */
   document.getElementById('wl-share').addEventListener('click',function(){
