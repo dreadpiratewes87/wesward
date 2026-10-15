@@ -845,18 +845,23 @@
   @media(max-width:560px){details.rep-node>summary{flex-direction:column;gap:3px}.rep-node-hint{text-align:left}.rep-index-row{align-items:flex-start}}
 </style>
 
+
+<style>
+  /* Hub navigation restructure — in-bar Back (tap history) beside the pinned Return main */
+  .viewbar{grid-template-columns:auto 1fr auto}
+  .back-nav-btn{border:1px solid var(--line);background:var(--paper-2);color:var(--ink);padding:8px 13px;min-height:44px;border-radius:var(--radius-sm);font-weight:700;cursor:pointer;white-space:nowrap}
+  .back-nav-btn:hover{border-color:var(--teal)}
+  .back-nav-btn:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+  #mtg-hub-main>.view>.viewbar{top:0}
+  .fra-sec{scroll-margin-top:84px}
+  .rep-report{scroll-margin-top:84px}
+  @media(max-width:780px){.viewbar{grid-template-columns:auto 1fr}.viewbar>.stamp{display:none}}
+  @media(max-width:700px){.fra-sec{scroll-margin-top:84px}}
+</style>
 </head>
 <body>
 <main class="app" id="mtg-hub-main">
-  <nav class="hub-tabs" aria-label="Get Good Hub sections">
-    <button class="hub-tab active" type="button" data-open="home">Home</button>
-    <button class="hub-tab" type="button" data-open="fra-draft-guide">Draft Guide</button>
-    <button class="hub-tab" type="button" data-open="puzzles">Puzzles</button>
-    <button class="hub-tab" type="button" data-open="articles">Articles</button>
-    <button class="hub-tab" type="button" data-open="development">Guides</button>
-    <button class="hub-tab" type="button" data-open="tools">Tools</button>
-    <button class="hub-tab" type="button" data-open="sim-reports">Sim Reports</button>
-  </nav>
+  
 
   <section class="view active" id="home" aria-label="Home">
     <div class="nav-grid">
@@ -867,26 +872,27 @@
       <button class="nav-card gg4" data-open="puzzles"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><circle cx="24" cy="24" r="17"/><path d="M24 15v5l4 3"/></svg><div><strong>Puzzles</strong><span>Role assignment, combat math, and mulligan calls — commit to a line, then check the reasoning.</span></div></button>
       <a class="nav-card gg6" href="https://dreadpiratewes87.github.io/wesward/tools/draft-quiz/" target="_blank" rel="noopener noreferrer"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M14 10h20v22H14z"/><path d="M19 17h10M19 23h10M19 29h6"/><path d="M18 38l6-4 6 4"/></svg><div><strong>Draft Quiz</strong><span>Realistic 14-card Reality Fracture packs — every pick graded against the draft guide, with a running score and drafter tier.</span></div></a>
       <a class="nav-card gg6" href="https://dreadpiratewes87.github.io/wesward/tools/draft-simulator/" target="_blank" rel="noopener noreferrer"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><circle cx="24" cy="24" r="5"/><circle cx="10" cy="12" r="3"/><circle cx="38" cy="12" r="3"/><circle cx="10" cy="36" r="3"/><circle cx="38" cy="36" r="3"/></svg><div><strong>Draft Simulator</strong><span>A full pod draft against 7 AI drafters — per-pick A+–F grades with popups and an end-of-draft report card.</span></div></a>
-      <button class="nav-card gg7 gg-sim" data-open="sim-study"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M8 40h32"/><path d="M12 40V24l8-6 7 4 9-9"/><circle cx="36" cy="13" r="2.5"/></svg><div><strong>Sim Study</strong><span>Monte Carlo results and the Forge research program — what the games actually say about your decks and the format.</span></div></button>
-      <button class="nav-card gg5 gg-reports" data-open="sim-reports"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M10 6h28v36H10z"/><path d="M17 15h14M17 22h14M17 29h9"/><path d="m30 33 3 3 5-6"/></svg><div><strong>Sim Reports</strong><span>Full simulation reports and research notes — scan the findings, then drill into the expandable trees for the evidence.</span></div></button>
+      <button class="nav-card gg7 gg-sim" data-open="sim-study"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M8 40h32"/><path d="M12 40V24l8-6 7 4 9-9"/><circle cx="36" cy="13" r="2.5"/></svg><div><strong>Sim Study</strong><span>Monte Carlo results and the Forge research program — plus the full Sim Reports inside. What the games actually say about your decks and the format.</span></div></button>
+      
       <button class="nav-card gg5" data-open="articles"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M24 10c-2.2-1.8-5-2.6-9-2.6v33.2c4 0 6.8.8 9 2.6 2.2-1.8 5-2.6 9-2.6V7.4c-4 0-6.8.8-9 2.6Z"/><path d="M24 10v33.2"/></svg><div><strong>Articles</strong><span>The get-good reading archive — Pro Tour formats and Limited only. Commander articles live in the MTG Hub, where Commander stays casual.</span></div></button>
+      <button class="nav-card" style="grid-column:span 12;min-height:120px" data-open="development"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M12 6h24v36H12z"/><path d="M18 14h12M18 21h12M18 28h8"/></svg><div><strong>Guides</strong><span>Guide series that grow — the Reality Fracture draft guide series, applied game-state practice, and the blueprints for what gets built next.</span></div></button>
       <a class="nav-card gg12" style="grid-column:span 12;min-height:120px" href="https://dreadpiratewes87.github.io/wesward/mtg-hub/" target="_blank" rel="noopener noreferrer"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M9 11h30v26H9z"/><path d="M15 17h18M15 24h18M15 31h11"/><path d="m34 28 5 5-5 5"/></svg><div><strong>MTG Hub</strong><span>The play hub — commander decks, the Precon Library, life counter, Proxy Wizard, and the flavor, history &amp; Commander reading archive.</span></div></a>
     </div>
   </section>
 
 
   <section class="view" id="learning" aria-labelledby="learning-heading">
-    <header class="viewbar"><button class="back-btn" data-home>← Main</button><h1 id="learning-heading">MTG Learning Hub</h1><span class="stamp" id="lesson-date">Daily drill</span></header>
+    <header class="viewbar"><button class="back-nav-btn" type="button" data-back>← Back</button><button class="back-btn" type="button" data-home>⌂ Return main</button><h1 id="learning-heading">MTG Learning Hub</h1><span class="stamp" id="lesson-date">Daily drill</span></header>
     <div class="section-intro"><div><h2>One decision at a time.</h2><p>Read the board, commit to a line, then compare it with the reasoning.</p></div><button class="btn secondary" id="next-lesson">Another lesson</button></div>
     <div class="lesson-grid">
       <article class="lesson-card"><span class="tag live">TODAY'S PUZZLE</span><h2 id="puzzle-title">Protect the threat or hold up interaction?</h2><div class="board-state" id="puzzle-state"><div class="state-row"><strong>You</strong>40 life. Four untapped mana. One card in hand: a protection spell.</div><div class="state-row"><strong>Your board</strong>Your commander plus a value engine that will draw two cards on your next turn.</div><div class="state-row"><strong>Opponent</strong>Three cards in hand, five untapped mana, and no profitable attack.</div></div><p id="puzzle-question"><strong>Your main phase:</strong> Do you add another threat or pass with protection available?</p><button class="btn accent" id="reveal-answer">Reveal the line</button><div class="answer" id="puzzle-answer"><strong>Pass with protection available.</strong><p>You are already ahead on board and cards. Adding another permanent increases your exposure to a sweeper without materially improving your clock. Protect the engine, make the opponent act first, and spend mana only if they force you to.</p></div></article>
       <article class="lesson-card"><span class="tag">STRATEGY NOTE</span><h2 id="article-title">The question before every spell</h2><div class="article-list" id="article-body"><div class="article-point"><strong>What changes if this resolves?</strong>A spell that does not improve your clock, answer a threat, or increase future options may not be worth the mana now.</div><div class="article-point"><strong>What am I exposing?</strong>Committing another card can turn an opponent's single answer into a two-for-one.</div><div class="article-point"><strong>Who benefits from waiting?</strong>If your board already wins the long game, make the opponent break the tension.</div></div></article>
-      <article class="lesson-card"><span class="tag">DRAFT GUIDE</span><h2>Reality Fracture: Booster Draft Guide</h2><p>Full set primer — all 10 archetypes, mechanics, and a card-by-card draft ranking of all 280 cards, plus top bombs, removal, and draft strategy.</p><button class="btn accent" data-open="fra-draft-guide">Open the guide</button></article>
-      <article class="lesson-card"><span class="tag">SET REVIEW</span><h2>Set Reviews</h2><p>Pick a set to study. Reality Fracture is classified by color and category in three tiers: Direct (does it on its face), Static (value baked into the card, like prepared spells), and Engine (works through empower, surveil, and the counter web). The Star Trek guide is building through spoiler season ahead of its November 13 release.</p><button class="btn accent" data-open="set-reviews">Open set reviews</button></article>
+      
+      
     </div>
   </section>
   <section class="view" id="fra-draft-guide" aria-labelledby="fra-guide-heading">
-<header class="viewbar"><button class="back-btn" data-home>← Main</button><h1 id="fra-guide-heading">Reality Fracture Draft Guide</h1><span class="stamp">FRA · Booster Draft</span></header>
+<header class="viewbar"><button class="back-nav-btn" type="button" data-back>← Back</button><button class="back-btn" type="button" data-home>⌂ Return main</button><h1 id="fra-guide-heading">Reality Fracture Draft Guide</h1><span class="stamp">FRA · Booster Draft</span></header>
 <div class="fra-guide">
 <nav class="fra-toc" aria-label="Guide contents">
 <strong>Contents</strong>
@@ -1712,7 +1718,7 @@
 </section>
 
   <section class="view" id="set-reviews" aria-labelledby="set-reviews-heading">
-    <header class="viewbar"><button class="back-btn" data-home>← Main</button><h1 id="set-reviews-heading">Set Reviews</h1><span class="stamp">Pick a set to study</span></header>
+    <header class="viewbar"><button class="back-nav-btn" type="button" data-back>← Back</button><button class="back-btn" type="button" data-home>⌂ Return main</button><h1 id="set-reviews-heading">Set Reviews</h1><span class="stamp">Pick a set to study</span></header>
     <div class="nav-grid">
       <button class="nav-card gg6" data-open="set-review"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><rect x="8" y="8" width="14" height="14" rx="2"/><rect x="26" y="8" width="14" height="14" rx="2"/><rect x="8" y="26" width="14" height="14" rx="2"/><rect x="26" y="26" width="14" height="14" rx="2"/></svg><div><strong>Reality Fracture</strong><span>The full study tool: every draftable card by color and category, classified Direct / Static / Engine — removal, tricks, counters, draw, ramp, recursion, protection, plus the hidden roles and deck-dependent flags.</span></div></button>
       <button class="nav-card gg6" data-open="trk-guide"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><circle cx="24" cy="24" r="6"/><path d="M24 4v10M24 34v10M4 24h10M34 24h10"/><path d="M10 10l7 7M31 31l7 7M38 10l-7 7M17 31l-7 7"/></svg><div><strong>Star Trek</strong><span>Spoiler-season guide — building now. Mechanics (Assimilate, Dilemma, Federation, Station), the spoiled cards so far, early archetype reads, and the road to prerelease November 6 and release November 13, 2026.</span></div></button>
@@ -1720,7 +1726,7 @@
   </section>
 
   <section class="view" id="set-review" aria-labelledby="set-review-heading">
-    <header class="viewbar"><button class="back-btn" data-open="set-reviews">← Set Reviews</button><h1 id="set-review-heading">Reality Fracture — Set Review</h1><span class="stamp">FRA · Study tool</span></header>
+    <header class="viewbar"><button class="back-nav-btn" type="button" data-back>← Back</button><button class="back-btn" type="button" data-home>⌂ Return main</button><h1 id="set-review-heading">Reality Fracture — Set Review</h1><span class="stamp">FRA · Study tool</span></header>
     <div class="sr-filters">
       <div class="sr-filter-row" id="sr-color-row" role="group" aria-label="Filter by color"><span class="sr-filter-label">Color</span></div>
       <div class="sr-filter-row" id="sr-cat-row" role="group" aria-label="Filter by category"><span class="sr-filter-label">Category</span></div>
@@ -1732,7 +1738,7 @@
   </section>
 
   <section class="view" id="trk-guide" aria-labelledby="trk-guide-heading">
-<header class="viewbar"><button class="back-btn" data-open="set-reviews">← Set Reviews</button><h1 id="trk-guide-heading">Star Trek Draft Guide</h1><span class="stamp">TRK · Spoiler season — building</span></header>
+<header class="viewbar"><button class="back-nav-btn" type="button" data-back>← Back</button><button class="back-btn" type="button" data-home>⌂ Return main</button><h1 id="trk-guide-heading">Star Trek Draft Guide</h1><span class="stamp">TRK · Spoiler season — building</span></header>
 <div class="fra-guide">
 <nav class="fra-toc" aria-label="Guide contents">
 <strong>Contents</strong>
@@ -1869,7 +1875,7 @@
 </section>
 
   <section class="view" id="puzzles" aria-labelledby="puzzles-heading">
-    <header class="viewbar"><button class="back-btn" data-home>← Main</button><h1 id="puzzles-heading">Puzzles</h1><span class="stamp">Three ways to think</span></header>
+    <header class="viewbar"><button class="back-nav-btn" type="button" data-back>← Back</button><button class="back-btn" type="button" data-home>⌂ Return main</button><h1 id="puzzles-heading">Puzzles</h1><span class="stamp">Three ways to think</span></header>
     <div class="hub-page">
       <div class="hub-page-head"><div><h2>Make the call.</h2><p>Read each position, choose your line, then reveal the answer and reasoning.</p></div></div>
       <div class="puzzle-stack">
@@ -1895,12 +1901,12 @@
           <div class="puzzle-answer"><strong>Mulligan.</strong><p>The tapped land pushes the 2-drop to turn three, and half the hand cannot be cast without several perfect draws. A coherent six with three lands and a curve is stronger than seven cards that do not function together.</p></div>
         </article>
       </div>
-      <article class="hub-card" style="margin-top:12px"><h3>Daily game-state drills</h3><p>Keep working through the original rotating collection of beatdown, combat, and sequencing scenarios.</p><div class="hub-card-actions"><button class="btn teal" type="button" data-open="learning">Open the original drills</button></div></article>
+      <article class="hub-card" style="margin-top:12px"><h3>Daily game-state drills</h3><p>The rotating daily drill — a fresh board state with a strategy note — lives in the Learning Hub, back on Home.</p></article>
     </div>
   </section>
 
   <section class="view" id="articles" aria-labelledby="articles-heading">
-    <header class="viewbar"><button class="back-btn" data-home>← Main</button><h1 id="articles-heading">Articles</h1><span class="stamp">Featured Oct 11, 2026</span></header>
+    <header class="viewbar"><button class="back-nav-btn" type="button" data-back>← Back</button><button class="back-btn" type="button" data-home>⌂ Return main</button><h1 id="articles-heading">Articles</h1><span class="stamp">Featured Oct 11, 2026</span></header>
     <div class="hub-page">
       <div class="guide-note"><strong>Scope: Pro Tour formats and Limited.</strong> This archive is for getting good at competitive play. Commander articles are filed in the MTG Hub — the play hub — where Commander stays casual.</div>
       <article class="featured-article">
@@ -1916,7 +1922,7 @@
   </section>
 
   <section class="view" id="article-archive" aria-labelledby="article-archive-heading">
-    <header class="viewbar"><button class="back-btn" data-open="articles">← Articles</button><h1 id="article-archive-heading">Article Archive</h1><span class="stamp">2 featured articles</span></header>
+    <header class="viewbar"><button class="back-nav-btn" type="button" data-back>← Back</button><button class="back-btn" type="button" data-home>⌂ Return main</button><h1 id="article-archive-heading">Article Archive</h1><span class="stamp">2 featured articles</span></header>
     <div class="hub-page">
       <div class="hub-page-head"><div><h2>Every featured read.</h2><p>Pro Tour formats and Limited only — Commander articles are filed in the MTG Hub. Search by title or author, then narrow by topic or the day it was featured.</p></div></div>
       <div class="archive-tools">
@@ -1948,25 +1954,25 @@
   </section>
 
   <section class="view" id="development" aria-labelledby="development-heading">
-    <header class="viewbar"><button class="back-btn" data-home>← Main</button><h1 id="development-heading">Development</h1><span class="stamp">Guide workshop</span></header>
+    <header class="viewbar"><button class="back-nav-btn" type="button" data-back>← Back</button><button class="back-btn" type="button" data-home>⌂ Return main</button><h1 id="development-heading">Guides</h1><span class="stamp">Guide workshop</span></header>
     <div class="hub-page">
       <div class="hub-page-head"><div><h2>Guides that grow.</h2><p>Published series, working structure, and the next areas to build out.</p></div></div>
       <div class="guide-note"><strong>Living documents.</strong> Guide series are periodically reviewed and updated as the hub’s understanding of play and design grows. Every published series shows its last review date.</div>
       <details class="guide-series" open>
         <summary><span class="series-top"><strong>Reality Fracture Booster Draft Guide</strong><span class="tag">Draft</span><span class="tag">Set Mastery</span></span><span class="series-meta">Published · Last reviewed Oct 11, 2026</span></summary>
         <div class="guide-parts">
-          <div class="guide-part"><span>Part 1 · Set overview and mechanics</span><button type="button" data-open="fra-draft-guide" data-jump="fra-overview">Open part</button></div>
-          <div class="guide-part"><span>Part 2 · Ten draft archetypes</span><button type="button" data-open="fra-draft-guide" data-jump="fra-archetypes">Open part</button></div>
-          <div class="guide-part"><span>Part 3 · Card-by-card rankings</span><button type="button" data-open="fra-draft-guide" data-jump="fra-rankings">Open part</button></div>
-          <div class="guide-part"><span>Part 4 · Pick order, bombs, removal, and traps</span><button type="button" data-open="fra-draft-guide" data-jump="fra-strategy">Open part</button></div>
+          <div class="guide-part"><span>Part 1 · Set overview and mechanics</span><span class="tag">In the Draft Guide</span></div>
+          <div class="guide-part"><span>Part 2 · Ten draft archetypes</span><span class="tag">In the Draft Guide</span></div>
+          <div class="guide-part"><span>Part 3 · Card-by-card rankings</span><span class="tag">In the Draft Guide</span></div>
+          <div class="guide-part"><span>Part 4 · Pick order, bombs, removal, and traps</span><span class="tag">In the Draft Guide</span></div>
         </div>
       </details>
       <details class="guide-series">
         <summary><span class="series-top"><strong>Applied Game-State Practice</strong><span class="tag">Fundamentals</span><span class="tag">Strategy</span></span><span class="series-meta">Published · Last reviewed Oct 11, 2026</span></summary>
         <div class="guide-parts">
-          <div class="guide-part"><span>Part 1 · Identifying the beatdown</span><button type="button" data-open="puzzles">Open drills</button></div>
-          <div class="guide-part"><span>Part 2 · Combat math and lethal lines</span><button type="button" data-open="puzzles">Open drills</button></div>
-          <div class="guide-part"><span>Part 3 · Mulligan decisions</span><button type="button" data-open="puzzles">Open drills</button></div>
+          <div class="guide-part"><span>Part 1 · Identifying the beatdown</span><span class="tag">In Puzzles</span></div>
+          <div class="guide-part"><span>Part 2 · Combat math and lethal lines</span><span class="tag">In Puzzles</span></div>
+          <div class="guide-part"><span>Part 3 · Mulligan decisions</span><span class="tag">In Puzzles</span></div>
         </div>
       </details>
       <section style="margin-top:28px" aria-labelledby="blueprints-heading">
@@ -1981,25 +1987,8 @@
     </div>
   </section>
 
-  <section class="view" id="tools" aria-labelledby="tools-heading">
-    <header class="viewbar"><button class="back-btn" data-home>← Main</button><h1 id="tools-heading">Tools</h1><span class="stamp">Learn, drill, measure</span></header>
-    <div class="hub-page">
-      <div class="hub-page-head"><div><h2>Your study toolkit.</h2><p>Everything here exists to make the next draft, the next game, or the next decision better.</p></div></div>
-      <div class="hub-grid">
-        <article class="hub-card tool-card"><h3>Training Tracker</h3><p>Phase dashboard, session log with leak tags, weekly review, and rank goals toward Platinum — synced across your devices.</p><div class="hub-card-actions"><button class="btn teal" type="button" data-open="training-tracker">Open Tracker</button></div></article>
-        <article class="hub-card tool-card"><h3>Set Review: Reality Fracture</h3><p>All 280 cards classified by strategic role in three tiers — Direct, Static, and Engine — with the hidden role-players surfaced (Heartwood tokens as ramp, empower as card advantage) and deck-dependent cards flagged.</p><div class="hub-card-actions"><button class="btn teal" type="button" data-open="set-review">Open Set Review</button></div></article>
-        <article class="hub-card tool-card"><h3>Reality Fracture Draft Quiz</h3><p>Realistic 14-card packs; picks graded against the draft guide with a running score and drafter tier.</p><div class="hub-card-actions"><a class="external" href="https://dreadpiratewes87.github.io/wesward/tools/draft-quiz/" target="_blank" rel="noopener noreferrer">Open tool ↗</a></div></article>
-        <article class="hub-card tool-card"><h3>Reality Fracture Draft Simulator</h3><p>Full 8-seat pod: draft 3 packs against 7 AI drafters, per-pick grades, and an end-of-draft report card.</p><div class="hub-card-actions"><a class="external" href="https://dreadpiratewes87.github.io/wesward/tools/draft-simulator/" target="_blank" rel="noopener noreferrer">Open tool ↗</a></div></article>
-        <article class="hub-card tool-card"><h3>Sim Study</h3><p>Monte Carlo records, mechanism diagnostics, and loss tags from your Oct 15 R/W draft deck study — plus the Forge research program.</p><div class="hub-card-actions"><button class="btn teal" type="button" data-open="sim-study">Open Sim Study</button></div></article>
-        <article class="hub-card tool-card"><h3>Sim Reports</h3><p>The full simulation reports and research notes — headline findings up front, with expandable trees for matchup tables, mechanism evidence, and method notes.</p><div class="hub-card-actions"><button class="btn teal" type="button" data-open="sim-reports">Open Sim Reports</button></div></article>
-        <article class="hub-card tool-card"><h3>FRA Draft Guide</h3><p>The full set primer: mechanics, all 10 archetypes, card-by-card rankings, bombs, removal, and draft strategy.</p><div class="hub-card-actions"><button class="btn teal" type="button" data-open="fra-draft-guide">Open the Guide</button></div></article>
-      </div>
-    </div>
-  </section>
-
-
   <section class="view" id="sim-study" aria-labelledby="sim-study-heading">
-    <header class="viewbar"><button class="back-btn" data-home>← Main</button><h1 id="sim-study-heading">Sim Study</h1><span class="stamp">Monte Carlo · Oct 15, 2026</span></header>
+    <header class="viewbar"><button class="back-nav-btn" type="button" data-back>← Back</button><button class="back-btn" type="button" data-home>⌂ Return main</button><h1 id="sim-study-heading">Sim Study</h1><span class="stamp">Monte Carlo · Oct 15, 2026</span></header>
     <div class="hub-page">
       <div class="hub-page-head"><div><h2>What the games say.</h2><p>Your Oct 15 red-white Reality Fracture draft deck, simulated against top-decile builds of the format's three best archetypes — 10 games per matchup, in both the Living Library build and the Teyo build. At population level (17Lands, ~515K Premier Draft games), Azorius wins 57.2%, Izzet 56.1%, and Gruul 56.0%; Boros sits at 54.1% — so these were uphill fights by design.</p></div></div>
       <table class="sim-table">
@@ -2045,7 +2034,7 @@
 
 
   <section class="view" id="sim-reports" aria-labelledby="sim-reports-heading">
-    <header class="viewbar"><button class="back-btn" data-home>← Main</button><h1 id="sim-reports-heading">Sim Reports</h1><span class="stamp">Simulation research</span></header>
+    <header class="viewbar"><button class="back-nav-btn" type="button" data-back>← Back</button><button class="back-btn" type="button" data-home>⌂ Return main</button><h1 id="sim-reports-heading">Sim Reports</h1><span class="stamp">Simulation research</span></header>
     <div class="hub-page">
       <div class="hub-page-head"><div><h2>Simulation reports &amp; research notes.</h2><p>Every finished study lands here as a full rundown: the headline findings first, so the whole report scans in a minute — then expandable trees under each section when you want the drill-down: matchup tables, mechanism evidence, loss analysis, and method notes.</p></div></div>
 
@@ -2290,7 +2279,7 @@
 
 
   <section class="view" id="training-tracker" aria-labelledby="training-tracker-heading">
-    <header class="viewbar"><button class="back-btn" data-home>← Main</button><h1 id="training-tracker-heading">Training Tracker</h1><span class="stamp">Arena · Limited-first</span></header>
+    <header class="viewbar"><button class="back-nav-btn" type="button" data-back>← Back</button><button class="back-btn" type="button" data-home>⌂ Return main</button><h1 id="training-tracker-heading">Training Tracker</h1><span class="stamp">Arena · Limited-first</span></header>
     <div class="trk-wrap">
       <div class="trk-dash" aria-label="Training dashboard">
         <div class="trk-phase-card">
@@ -2498,27 +2487,32 @@
 <script>
 (function(){"use strict";
   var views=document.querySelectorAll('#mtg-hub-main > .view');
-  var tabs=document.querySelectorAll('.hub-tab');
-  function tabFor(id){
-    if(id==='home')return 'home';
-    if(id==='fra-draft-guide')return 'fra-draft-guide';
-    if(id==='set-review'||id==='set-reviews'||id==='trk-guide')return 'puzzles';
-    if(id==='puzzles'||id==='learning')return 'puzzles';
-    if(id==='articles'||id==='article-archive')return 'articles';
-    if(id==='development')return 'development';
-    if(id==='sim-reports'||id==='sim-study')return 'sim-reports';
-    if(id==='tools'||id==='proxy-wizard'||id==='counter'||id==='training-tracker')return 'tools';
-    if(id==='decks'||id==='commander-lab'||id==='precon-library'||id==='wwe'||id==='playtest'||id==='staples'||id==='rachel'||id==='wes-workshop'||id.indexOf('tribal-')===0||id.indexOf('precon-')===0)return 'decks';
-    return 'home';
-  }
-  function openView(id){
+  /* Levelled navigation: Home is Level 1, its pages are Level 2, and pages inside
+     those are Level 3. Links only step one level down. Back retraces the reader's
+     actual tap path (a stack) — it never lands on a screen they did not pass
+     through. The pinned Return main button is a separate reset straight to Home. */
+  var navStack=['home'];
+  function currentView(){return navStack[navStack.length-1]}
+  function showView(id){
     views.forEach(function(v){v.classList.toggle('active',v.id===id)});
-    var tab=tabFor(id);
-    tabs.forEach(function(b){var on=b.dataset.open===tab;b.classList.toggle('active',on);b.setAttribute('aria-current',on?'page':'false')});
     window.scrollTo(0,0);
   }
+  function openView(id){
+    if(!document.getElementById(id))return;
+    if(id!==currentView()){navStack.push(id)}
+    showView(id);
+  }
+  function goBack(){
+    if(navStack.length>1){navStack.pop()}
+    showView(currentView());
+  }
+  function goHome(){
+    navStack=['home'];
+    showView('home');
+  }
   document.querySelectorAll('[data-open]').forEach(function(b){b.addEventListener('click',function(){openView(b.dataset.open);if(b.dataset.jump){setTimeout(function(){var el=document.getElementById(b.dataset.jump);if(el)el.scrollIntoView({behavior:'smooth',block:'start'})},40)}})});
-  document.querySelectorAll('[data-home]').forEach(function(b){b.addEventListener('click',function(){openView('home')})});
+  document.querySelectorAll('[data-back]').forEach(function(b){b.addEventListener('click',function(){goBack()})});
+  document.querySelectorAll('[data-home]').forEach(function(b){b.addEventListener('click',function(){goHome()})});
   document.querySelectorAll('[data-close-dialog]').forEach(function(b){b.addEventListener('click',function(){document.getElementById(b.dataset.closeDialog).close()})});
 
   function manaValue(cost){
