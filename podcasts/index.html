@@ -29,9 +29,16 @@ main{max-width:640px;margin:0 auto;padding:16px}
 .show-tile .count{font-size:11px;color:var(--accent2);font-weight:700;margin-top:4px;text-transform:uppercase;letter-spacing:.6px}
 .show-tile .chev{flex:0 0 auto;font-size:18px;color:var(--muted);transition:transform .25s;padding:0 4px}
 .show.open .show-tile .chev{transform:rotate(180deg)}
-.ep-list{overflow:hidden;max-height:0;transition:max-height .35s ease}
-.show.open .ep-list{max-height:2000px}
-.ep-list-inner{padding-top:12px}
+.ep-list{display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s ease}
+.show.open .ep-list{grid-template-rows:1fr}
+.ep-list-inner{overflow:hidden;min-height:0;padding-top:12px}
+.year-specials{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease}
+.year.open .year-specials{grid-template-rows:1fr}
+.year-specials-inner{overflow:hidden;min-height:0;margin-left:20px;border-left:2px solid rgba(245,158,11,.35);padding-left:10px}
+.year-specials-inner .ep{margin-bottom:10px}
+.specials-toggle{display:flex;align-items:center;gap:6px;background:none;border:0;color:#f59e0b;font:inherit;font-size:12.5px;font-weight:700;letter-spacing:.3px;cursor:pointer;padding:2px 8px 12px 78px;width:100%;text-align:left}
+.specials-toggle .st-chev{display:inline-block;transition:transform .25s;font-size:11px}
+.year.open .specials-toggle .st-chev{transform:rotate(180deg)}
 .ep{display:flex;gap:14px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:12px;margin-bottom:12px;cursor:pointer;transition:transform .1s;align-items:center}
 .ep:active{transform:scale(.98)}
 .ep-cover{position:relative;flex:0 0 auto}
@@ -87,7 +94,7 @@ var allEps=[];
 function fmt(s){s=Math.floor(s||0);var m=Math.floor(s/60),ss=s%60;return m+':'+(ss<10?'0':'')+ss;}
 function fmtLong(s){s=Math.floor(s||0);var h=Math.floor(s/3600),m=Math.floor(s%3600/60);if(h)return h+'h '+m+'m';return m+' min';}
 
-fetch('episodes.json?v=9',{cache:'no-store'}).then(function(r){return r.json();}).then(function(data){
+fetch('episodes.json?v=10',{cache:'no-store'}).then(function(r){return r.json();}).then(function(data){
   var list=document.getElementById('list');
   var shows=data.shows||{};
   var eps=data.episodes||[];
@@ -99,6 +106,18 @@ fetch('episodes.json?v=9',{cache:'no-store'}).then(function(r){return r.json();}
   var groups={};
   eps.forEach(function(e){(groups[e.show]=groups[e.show]||[]).push(e);});
   Object.keys(groups).forEach(function(k){groups[k].sort(function(a,b){return (b.num||0)-(a.num||0);});});
+  function epHtml(e,s,extraClass){
+    var chip = e.num
+      ? '<div class="ep-num'+(e.kind==='special'?' special':'')+'">'+e.num+'</div>'
+      : '<div class="ep-num special">★</div>';
+    var label = e.num ? '#'+e.num+' '+e.title : (e.kind==='special' ? 'Special · '+e.title : e.title);
+    return '<div class="ep'+(extraClass?' '+extraClass:'')+'" data-slug="'+e.slug+'">'
+      +'<div class="ep-cover"><img src="covers/'+(e.cover||s.cover)+'" alt="" loading="lazy">'+chip+'</div>'
+      +'<div class="ep-info"><h3>'+label+'</h3><p>'+(e.description||'')+'</p>'
+      +'<div class="ep-meta"><span>'+fmtLong(e.duration)+'</span><span>'+(e.date||'')+'</span></div>'
+      +'<span class="playing-badge" hidden>▶ Playing</span><span class="ep-resume" hidden></span><div class="ep-prog" hidden><i></i></div></div>'
+      +'<div class="ep-play">▶</div></div>';
+  }
   var html='';
   Object.keys(shows).forEach(function(key){
     var s=shows[key], ge=groups[key]||[];
@@ -110,18 +129,34 @@ fetch('episodes.json?v=9',{cache:'no-store'}).then(function(r){return r.json();}
       +'<div class="count">'+ge.length+' episode'+(ge.length>1?'s':'')+'</div></div>'
       +'<div class="chev">▾</div></button>'
       +'<div class="ep-list"><div class="ep-list-inner">';
-    ge.forEach(function(e){
-      var chip = e.num
-        ? '<div class="ep-num'+(e.kind==='special'?' special':'')+'">'+e.num+'</div>'
-        : '<div class="ep-num special">★</div>';
-      var label = e.num ? '#'+e.num+' '+e.title : (e.kind==='special' ? 'Special · '+e.title : e.title);
-      html+='<div class="ep" data-slug="'+e.slug+'">'
-        +'<div class="ep-cover"><img src="covers/'+(e.cover||s.cover)+'" alt="" loading="lazy">'+chip+'</div>'
-        +'<div class="ep-info"><h3>'+label+'</h3><p>'+(e.description||'')+'</p>'
-        +'<div class="ep-meta"><span>'+fmtLong(e.duration)+'</span><span>'+e.date+'</span></div>'
-        +'<span class="playing-badge" hidden>▶ Playing</span><span class="ep-resume" hidden></span><div class="ep-prog" hidden><i></i></div></div>'
-        +'<div class="ep-play">▶</div></div>';
-    });
+    if(key==='history'){
+      // Tree: level 1 = main/year episodes only; each year expands to
+      // level 2 = that year's specials (parent year = floor(num/100)).
+      var mains=ge.filter(function(e){return e.kind!=='special';});
+      var specsByYear={};
+      ge.filter(function(e){return e.kind==='special';}).forEach(function(e){
+        var y=Math.floor((e.num||0)/100);
+        (specsByYear[y]=specsByYear[y]||[]).push(e);
+      });
+      var seen={};
+      mains.forEach(function(e){
+        var y=Math.floor((e.num||0)/100);
+        var specs=specsByYear[y]||[];
+        specs.forEach(function(sp){seen[sp.slug]=true;});
+        html+='<div class="year" data-year="'+y+'">'
+          +epHtml(e,s,'year-main')
+          +(specs.length
+            ? '<button class="specials-toggle" aria-expanded="false"><span class="st-chev">▾</span><span>'+specs.length+' special'+(specs.length>1?'s':'')+'</span></button>'
+            : '')
+          +'<div class="year-specials"><div class="year-specials-inner">';
+        specs.forEach(function(sp){html+=epHtml(sp,s);});
+        html+='</div></div></div>';
+      });
+      // Orphan specials (no main episode for their year) stay reachable flat.
+      ge.filter(function(e){return e.kind==='special'&&!seen[e.slug];}).forEach(function(e){html+=epHtml(e,s);});
+    } else {
+      ge.forEach(function(e){html+=epHtml(e,s);});
+    }
     html+='</div></div></div>';
   });
   list.innerHTML=html;
@@ -141,8 +176,29 @@ fetch('episodes.json?v=9',{cache:'no-store'}).then(function(r){return r.json();}
       }
     });
   });
+  function toggleYear(yearEl){
+    if(!yearEl)return;
+    var open=yearEl.classList.toggle('open');
+    var btn=yearEl.querySelector('.specials-toggle');
+    if(btn)btn.setAttribute('aria-expanded',open?'true':'false');
+  }
+  list.querySelectorAll('.specials-toggle').forEach(function(btn){
+    btn.addEventListener('click',function(ev){
+      ev.stopPropagation();
+      toggleYear(btn.closest('.year'));
+    });
+  });
   list.querySelectorAll('.ep').forEach(function(el){
-    el.addEventListener('click',function(){playEp(el.dataset.slug);});
+    el.addEventListener('click',function(ev){
+      if(el.classList.contains('year-main')){
+        // Play button plays the year episode; anywhere else on the row
+        // expands/collapses that year's specials.
+        if(ev.target.closest&&ev.target.closest('.ep-play')){playEp(el.dataset.slug);return;}
+        toggleYear(el.closest('.year'));
+        return;
+      }
+      playEp(el.dataset.slug);
+    });
   });
   paintResume();
 });
