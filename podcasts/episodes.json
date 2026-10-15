@@ -1,6 +1,18 @@
 {
  "episodes": [
   {
+   "cover": "leo-and-virgo-3-the-texting-rules-2026-10-15.jpg",
+   "date": "2026-10-15",
+   "description": "Episode three: Leo and Vera decode Leo-Virgo texting — the Leo triple text versus the Virgo draft folder, a translation guide for capital letters, periods and reply times, plus today's horoscope for both signs.",
+   "duration": 295,
+   "kind": "episode",
+   "num": 3,
+   "show": "leo-and-virgo",
+   "showName": "Leo and Virgo · Leo & Vera",
+   "slug": "leo-and-virgo-3-the-texting-rules-2026-10-15",
+   "title": "The Texting Rules"
+  },
+  {
    "title": "Worlds 1999: Kai Budde and the Twenty-Minute Final",
    "slug": "worlds-1999-kai-budde-and-the-twenty-minute-final",
    "show": "history",
