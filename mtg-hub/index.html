@@ -67,6 +67,14 @@
 @media(max-width:780px){.nav-card.media{min-height:116px}}
 @media(max-width:430px){.nav-card.media{min-height:106px}.media-row{flex-direction:column;align-items:flex-start;gap:2px}.media-row-meta{white-space:normal}}
 </style>
+<style>/* ==== Training Tracker (scoped .trk- / .nav-card.training) ==== */
+.nav-card.training{grid-column:span 12;min-height:124px;background:#1e4034;color:#eef7f1}
+@media(max-width:780px){.nav-card.training{min-height:116px}}
+@media(max-width:430px){.nav-card.training{min-height:106px}}.trk-wrap{max-width:980px;margin:0 auto}.trk-dash{display:grid;gap:10px;margin-bottom:14px}.trk-phase-card{background:#203842;color:#f4fbfb;border:1px solid #3c5965;border-radius:var(--radius-sm);padding:18px 20px;box-shadow:var(--shadow)}.trk-phase-kicker{font-size:12px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#8fd8cf;margin:0 0 6px}.trk-phase-title{font:800 clamp(30px,5vw,44px)/1 "Barlow Condensed",sans-serif;margin:0}.trk-phase-dates{margin:6px 0 0;opacity:.82;font-size:14px;font-weight:600}.trk-phase-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.trk-chip{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:99px;padding:6px 11px;font-size:13px;font-weight:700}.trk-chip strong{color:#8fd8cf;font-weight:800}.trk-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.trk-stat{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);padding:14px 16px;box-shadow:var(--shadow);min-width:0}.trk-stat .trk-stat-label{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 5px}.trk-stat .trk-stat-value{font:800 30px/1 "Barlow Condensed",sans-serif;margin:0}.trk-stat .trk-stat-sub{margin:4px 0 0;color:var(--muted);font-size:13px;font-weight:600}.trk-prog{height:8px;background:var(--paper-2);border-radius:99px;overflow:hidden;margin-top:9px}.trk-prog-fill{height:100%;background:var(--teal);border-radius:99px;transition:width .25s ease}.trk-dash-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.trk-dash-actions .trk-ranks-line{color:var(--muted);font-size:14px;font-weight:600}.trk-sec{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);box-shadow:var(--shadow);margin-bottom:12px}.trk-sec>summary{cursor:pointer;list-style:none;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:10px}.trk-sec>summary::-webkit-details-marker{display:none}.trk-sec>summary:focus-visible{outline:3px solid var(--teal);outline-offset:2px}.trk-sec-title{font:800 26px/1 "Barlow Condensed",sans-serif}.trk-sec-title::before{content:"▸ ";color:var(--teal)}.trk-sec[open ]>summary .trk-sec-title::before{content:"▾ "}.trk-sec-hint{font-size:13px;color:var(--muted);font-weight:700;white-space:nowrap}.trk-sec-body{padding:2px 18px 18px;border-top:1px solid var(--line)}.trk-plan h4{font:800 21px/1.1 "Barlow Condensed",sans-serif;margin:18px 0 6px;color:var(--teal)}.trk-plan h4:first-child{margin-top:8px}.trk-plan p{margin:0 0 8px;line-height:1.55}.trk-plan ul{margin:0 0 8px;padding-left:21px;line-height:1.55}.trk-plan li+li{margin-top:5px}.trk-loop{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:10px 0 4px;font-weight:800}.trk-loop span{background:var(--teal-soft);color:var(--teal);border-radius:99px;padding:6px 12px;font-size:14px}.trk-loop i{font-style:normal;color:var(--muted)}.trk-check-group{margin-top:16px}.trk-check-group h4{font:800 21px/1.1 "Barlow Condensed",sans-serif;margin:0 0 4px;color:var(--teal)}.trk-check{display:flex;gap:11px;align-items:flex-start;padding:10px 2px;border-bottom:1px solid var(--line);cursor:pointer}.trk-check:last-child{border-bottom:0}.trk-check input{width:22px;height:22px;flex:none;accent-color:var(--teal);margin:1px 0 0;cursor:pointer}.trk-check span{line-height:1.4}.trk-check.done span{color:var(--muted);text-decoration:line-through}.trk-form{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}.trk-field{display:grid;gap:5px;font-size:13px;font-weight:700;color:var(--muted)}.trk-field.full{grid-column:1/-1}.trk-field input,.trk-field select,.trk-field textarea{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:10px 11px;border-radius:var(--radius-sm);min-height:44px;font:inherit;font-size:16px}.trk-field textarea{min-height:44px;resize:vertical}.trk-form-actions{grid-column:1/-1;display:flex;gap:10px;align-items:center;flex-wrap:wrap}.trk-form-error{color:var(--red);font-weight:700;font-size:14px;margin:0}.trk-form-saved{color:var(--teal);font-weight:800;font-size:14px;margin:0}.trk-log-list{display:grid;gap:9px;margin-top:6px}.trk-log-item{background:var(--paper-2);border-radius:var(--radius-sm);padding:13px 15px}.trk-log-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}.trk-log-main{font-weight:800;font-size:16px}.trk-log-wl{font:800 20px/1 "Barlow Condensed",sans-serif;white-space:nowrap}.trk-log-meta{color:var(--muted);font-size:13.5px;font-weight:600;margin-top:3px}.trk-pill{display:inline-block;background:var(--teal-soft);color:var(--teal);border-radius:99px;padding:3px 9px;font-size:12px;font-weight:800;margin-left:7px;vertical-align:1px}.trk-log-notes{margin-top:8px;font-size:14.5px;line-height:1.5}.trk-log-notes p{margin:0}.trk-log-notes p+p{margin-top:4px}.trk-log-notes strong{color:var(--teal)}.trk-del{border:0;background:transparent;color:var(--muted);font-weight:700;font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:3px;padding:6px 2px;min-height:36px}.trk-del.armed{color:var(--red);font-weight:800}.trk-empty{padding:22px 14px;text-align:center;border:1px dashed var(--line);border-radius:var(--radius-sm);color:var(--muted);font-size:15px;margin-top:6px}.trk-review-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:6px}.trk-review-grid h4,.trk-ranks h4{font:800 21px/1.1 "Barlow Condensed",sans-serif;margin:0 0 8px;color:var(--teal)}.trk-review-grid p{margin:0 0 7px;line-height:1.5}.trk-type-list{margin:0;padding:0;list-style:none;display:grid;gap:5px}.trk-type-list li{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line);padding:5px 0;font-size:15px}.trk-type-list li:last-child{border-bottom:0}.trk-bar-row{display:grid;grid-template-columns:128px 1fr 30px;gap:10px;align-items:center;padding:5px 0;font-size:14px}.trk-bar-row .trk-bar-label{font-weight:700;overflow-wrap:anywhere}.trk-bar{height:10px;background:var(--paper-2);border-radius:99px;overflow:hidden}.trk-bar-fill{height:100%;background:var(--accent);border-radius:99px}.trk-bar-count{font-weight:800;text-align:right;font-variant-numeric:tabular-nums}.trk-copy-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:16px}.trk-copied{color:var(--teal);font-weight:800;font-size:14px}.trk-ranks-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}.trk-goal-field{grid-column:1/-1}.trk-danger-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:20px;padding-top:16px;border-top:1px solid var(--line)}.trk-danger-row p{margin:0;color:var(--muted);font-size:13.5px}
+@media(max-width:780px){.trk-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.trk-form{grid-template-columns:1fr}.trk-review-grid{grid-template-columns:1fr}.trk-ranks-grid{grid-template-columns:1fr}.trk-bar-row{grid-template-columns:104px 1fr 26px}}
+@media(prefers-reduced-motion:reduce){.trk-prog-fill{transition:none}}
+</style>
+
 <style>/* Proxy Wizard styles (inlined at publish) *//* Proxy Wizard — scoped to #proxy-wizard */
 @font-face{font-family:Beleren;src:url('proxy/fonts/beleren-b.ttf') format('truetype');font-weight:700;font-display:swap}
 @font-face{font-family:BelerenSC;src:url('proxy/fonts/beleren-bsc.ttf') format('truetype');font-weight:700;font-display:swap}
@@ -99,6 +107,7 @@
       <button class="nav-card media" data-open="media"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M24 10c-2.2-1.8-5-2.6-9-2.6v33.2c4 0 6.8.8 9 2.6 2.2-1.8 5-2.6 9-2.6V7.4c-4 0-6.8.8-9 2.6Z"/><path d="M24 10v33.2"/></svg><div><strong>MTG Media</strong><span>Every Magic novel and comic — 99 books, 32 comic runs — plus set lore, starting with Reality Fracture’s ten-episode story.</span></div></button>
       <button class="nav-card proxy" data-open="proxy-wizard"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><rect x="10" y="5" width="28" height="38" rx="3"/><path d="M15 12h18M15 31h18M15 36h12"/><rect x="15" y="16" width="18" height="11" rx="1"/><path d="m27 5 8 8"/></svg><div><strong>Proxy Wizard</strong><span>Template full proxies — your art, selectable frames, sheet-ready.</span></div></button>
       <button class="nav-card learning" data-open="learning"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3"><path d="M8 10h14v28H8zM26 10h14v28H26z"/><path d="M22 14c2-2 2-2 4 0M14 17h3M31 17h3M14 24h3M31 24h3"/></svg><div><strong>Learning Hub</strong><span>A rotating daily game-state puzzle and a focused strategy lesson.</span></div></button>
+      <button class="nav-card training" data-open="training-tracker"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M7 41h34"/><path d="M12 41V27M22 41V19M32 41V13"/><path d="M9 21l11-8 8 5 11-9"/></svg><div><strong>Training Tracker</strong><span>Arena training plan — log sessions, tag your leaks, track ranks toward Platinum.</span></div></button>
       <button class="nav-card counter" data-open="counter"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3"><path d="M24 6v36M6 24h36"/><circle cx="24" cy="24" r="18"/></svg><div><strong>Life Counter</strong><span>2–6 players, commander damage, turn clock, counters, rolls, and undo.</span></div></button>
       
       <button class="nav-card playtest" data-open="playtest"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M14 8h20v32H14z"/><path d="M20 14h8M20 20h8M20 26h5"/><circle cx="24" cy="34" r="3"/></svg><div><strong>Playtest</strong><span>Pilot Wes’s Workshop while Rachel’s Kitchen runs across the table — or swap seats.</span></div></button>
@@ -1588,8 +1597,211 @@ When this creature enters, target creature can't be blocked this turn.</p>
         <article class="hub-card tool-card"><h3>Reality Fracture Draft Simulator</h3><p>Full 8-seat pod: draft 3 packs against 7 AI drafters that pick by grade and commit to colors like real players</p><div class="hub-card-actions"><a class="external" href="https://dreadpiratewes87.github.io/wesward/tools/draft-simulator/" target="_blank" rel="noopener noreferrer">Open tool ↗</a></div></article>
         <article class="hub-card tool-card"><h3>Proxy Wizard</h3><p>Build full proxies with selectable frames, artwork, a live preview, and printable sheets.</p><div class="hub-card-actions"><button class="btn teal" type="button" data-open="proxy-wizard">Open in Hub</button></div></article>
         <article class="hub-card tool-card"><h3>In-Hub Life Counter</h3><p>A fast session counter with 2–6 players, turn clock, poison, commander damage, counters, and undo.</p><div class="hub-card-actions"><button class="btn teal" type="button" data-open="counter">Open in Hub</button></div></article>
+        <article class="hub-card tool-card"><h3>Training Tracker</h3><p>Your Arena training plan in one place: phase dashboard, session log with leak tags, weekly review, and rank goals toward Platinum.</p><div class="hub-card-actions"><button class="btn teal" type="button" data-open="training-tracker">Open Tracker</button></div></article>
         <article class="hub-card tool-card"><h3>Commander Playtest</h3><p>Pilot Wes’s Workshop against Rachel’s Kitchen or swap seats for a solo practice game.</p><div class="hub-card-actions"><button class="btn teal" type="button" data-open="playtest">Open Playtest</button></div></article>
       </div>
+    </div>
+  </section>
+
+  <section class="view" id="training-tracker" aria-labelledby="training-tracker-heading">
+    <header class="viewbar"><button class="back-btn" data-home>← Main</button><h1 id="training-tracker-heading">Training Tracker</h1><span class="stamp">Arena · Limited-first</span></header>
+    <div class="trk-wrap">
+      <div class="trk-dash" aria-label="Training dashboard">
+        <div class="trk-phase-card">
+          <p class="trk-phase-kicker">Current phase</p>
+          <h2 class="trk-phase-title" id="trk-phase-title">Phase 0 — Baseline</h2>
+          <p class="trk-phase-dates" id="trk-phase-dates">Oct 14–18, 2026</p>
+          <div class="trk-phase-meta">
+            <span class="trk-chip">Focus drill: <strong id="trk-focus">Baseline — log what felt unclear</strong></span>
+            <span class="trk-chip">Biggest leak: <strong id="trk-biggest-leak">No data yet</strong></span>
+          </div>
+        </div>
+        <div class="trk-stats">
+          <div class="trk-stat"><p class="trk-stat-label">Sessions this week</p><p class="trk-stat-value" id="trk-week-sessions">0 / 5</p><div class="trk-prog" aria-hidden="true"><div class="trk-prog-fill" id="trk-week-prog" style="width:0%"></div></div><p class="trk-stat-sub">Target: 5 sessions a week</p></div>
+          <div class="trk-stat"><p class="trk-stat-label">Games this week</p><p class="trk-stat-value" id="trk-week-wl">0–0</p><p class="trk-stat-sub" id="trk-week-pct">No games yet this week</p></div>
+          <div class="trk-stat"><p class="trk-stat-label">All-time</p><p class="trk-stat-value" id="trk-all-sessions">0 sessions</p><p class="trk-stat-sub" id="trk-all-wl">0 games · — win rate</p></div>
+          <div class="trk-stat"><p class="trk-stat-label">Overall win rate</p><p class="trk-stat-value" id="trk-all-pct">—</p><p class="trk-stat-sub" id="trk-all-record">0–0 all-time</p></div>
+          <div class="trk-stat"><p class="trk-stat-label">Limited win rate</p><p class="trk-stat-value" id="trk-lim-pct">—</p><p class="trk-stat-sub" id="trk-lim-record">0–0 in drafts &amp; sealed</p></div>
+          <div class="trk-stat"><p class="trk-stat-label">Constructed / Brawl</p><p class="trk-stat-value" id="trk-con-pct">—</p><p class="trk-stat-sub" id="trk-con-record">0–0 in constructed queues</p></div>
+        </div>
+        <div class="trk-dash-actions">
+          <button class="btn accent" type="button" id="trk-open-log">+ Log Session</button>
+          <span class="trk-ranks-line" id="trk-dash-ranks"></span>
+        </div>
+      </div>
+
+      <details class="trk-sec" id="trk-log-sec">
+        <summary><span class="trk-sec-title">Log a Session</span><span class="trk-sec-hint">15 / 60 / 15</span></summary>
+        <div class="trk-sec-body">
+          <form class="trk-form" id="trk-form" novalidate>
+            <label class="trk-field">Date<input type="date" id="trk-f-date" aria-label="Date"></label>
+            <label class="trk-field">Session type
+              <select id="trk-f-type">
+                <option value="">Choose a type…</option>
+                <option>Quick Draft</option>
+                <option>Premier Draft</option>
+                <option>Traditional Draft</option>
+                <option>Pick-Two Draft</option>
+                <option>Sealed</option>
+                <option>Cube</option>
+                <option>Standard Bo1</option>
+                <option>Standard Bo3</option>
+                <option>Brawl</option>
+                <option>Historic</option>
+                <option>Explorer</option>
+                <option>Paper Commander</option>
+                <option>Study / Review</option>
+                <option>Puzzle Drill</option>
+              </select>
+            </label>
+            <label class="trk-field">Set / format detail<input type="text" id="trk-f-format" placeholder="Reality Fracture" autocomplete="off"></label>
+            <label class="trk-field">Deck / colors / archetype<input type="text" id="trk-f-deck" placeholder="BR Sacrifice" autocomplete="off"></label>
+            <label class="trk-field">Games won<input type="number" id="trk-f-wins" aria-label="Games won" min="0" step="1" inputmode="numeric" value="0"></label>
+            <label class="trk-field">Games lost<input type="number" id="trk-f-losses" aria-label="Games lost" min="0" step="1" inputmode="numeric" value="0"></label>
+            <label class="trk-field">Rank after (optional)<input type="text" id="trk-f-rank" placeholder="Gold 2" autocomplete="off"></label>
+            <label class="trk-field">Leak tag
+              <select id="trk-f-leak">
+                <option>None</option>
+                <option>Mulligan</option>
+                <option>Draft picks</option>
+                <option>Deckbuilding / cuts</option>
+                <option>Combat</option>
+                <option>Sequencing</option>
+                <option>Removal timing</option>
+                <option>Open mana read</option>
+                <option>Sideboarding</option>
+                <option>Mana / flood-screw</option>
+                <option>Tilt</option>
+              </select>
+            </label>
+            <label class="trk-field full">What swung the game?<input type="text" id="trk-f-swung" placeholder="The turn or decision the game turned on" autocomplete="off"></label>
+            <label class="trk-field full">What would I do differently?<input type="text" id="trk-f-diff" placeholder="The line you'd take next time" autocomplete="off"></label>
+            <label class="trk-field full">Notes (optional)<textarea id="trk-f-notes" rows="2" placeholder="Anything else worth remembering"></textarea></label>
+            <div class="trk-form-actions">
+              <button class="btn teal" type="submit">Save Session</button>
+              <p class="trk-form-error" id="trk-form-error" role="alert"></p>
+              <p class="trk-form-saved" id="trk-form-saved" role="status"></p>
+            </div>
+          </form>
+        </div>
+      </details>
+
+      <details class="trk-sec" id="trk-plan-sec">
+        <summary><span class="trk-sec-title">The Plan</span><span class="trk-sec-hint">Prep → Play → Review → Drill</span></summary>
+        <div class="trk-sec-body trk-plan">
+          <h4>The loop</h4>
+          <div class="trk-loop"><span>Prep</span><i>→</i><span>Play</span><i>→</i><span>Review</span><i>→</i><span>Drill</span></div>
+          <p>Every session runs the same shape: <strong>15 min prep</strong> (one concept) → <strong>60 min play</strong> → <strong>15 min review log</strong>. Most players only play — the improvement lives in the other three steps. <strong>Stop after 2 straight tilt losses. No exceptions.</strong></p>
+          <p>Split: <strong>70% Limited / 30% Constructed + Brawl</strong>. Limited teaches card evaluation, curve, combat math, and deckbuilding from scratch — and builds the Arena collection. Brawl sharpens Commander instincts; Standard Bo3 is where sideboarding gets learned properly.</p>
+          <h4>Phase 0 — Baseline · Oct 14–18, 2026</h4>
+          <ul>
+            <li>Play <strong>3 Quick Drafts of Reality Fracture</strong> — no studying first, this is your natural game on record.</li>
+            <li>Pick <strong>ONE</strong> Brawl or Standard deck and stick with it for 30 games. No deck-hopping.</li>
+            <li>After each draft, note the record, your two colors and why you landed there, and the one moment you weren't sure what to do.</li>
+            <li>Record your starting Limited and Constructed ranks in Ranks &amp; Goals below.</li>
+          </ul>
+          <h4>Phase 1 — Foundations · Oct 19 – Nov 9, 2026</h4>
+          <ul>
+            <li><strong>Mon — Study (no games):</strong> set review + 17Lands top commons/uncommons, the 10 archetypes and signposts, then 20 picks in the Draft Quiz.</li>
+            <li><strong>Tue — Draft:</strong> one full Premier/Quick Draft. Send the pool for cuts + curve review before playing it.</li>
+            <li><strong>Wed — Constructed:</strong> ladder Bo3 with your one deck, working only the focus drill of the week.</li>
+            <li><strong>Thu — Draft + Puzzles:</strong> one draft plus 3 combat puzzles from the Hub.</li>
+            <li><strong>Fri — Review day (light play):</strong> revisit your 2 worst losses. What turn did it swing? What did open mana represent? Tag the leak.</li>
+            <li><strong>Weekend:</strong> paper Commander counts — practice role assessment (who's the threat, who's the beatdown).</li>
+          </ul>
+          <h4>Weekly focus drills</h4>
+          <ul>
+            <li><strong>Week 1 (Oct 19) — Mulligans:</strong> say out loud why every keep works — lands, a 2 and a 3, a plan.</li>
+            <li><strong>Week 2 (Oct 26) — Combat:</strong> before attacking, name every profitable and unprofitable block they have.</li>
+            <li><strong>Week 3 (Nov 2) — Open mana:</strong> before your main spell, name the removal or trick their colors could be holding.</li>
+            <li><strong>Week 4 (Nov 9) — Sequencing:</strong> play lands and cheap spells in the order that keeps the most options open next turn.</li>
+          </ul>
+          <h4>Phase 2 — Level Up · Nov 10 – Dec 7, 2026</h4>
+          <ul>
+            <li>Move draft to <strong>Traditional Bo3</strong> at least once a week — sideboarding in Limited is where good players pull away.</li>
+            <li>Sideboard maps: write your in/out for each major matchup <em>before</em> you look at a guide, then compare.</li>
+            <li>Targets by Dec 7: <strong>Platinum in Limited, Platinum in Constructed</strong>, draft win rate trending to <strong>53–55%</strong>, one leak category clearly shrinking.</li>
+          </ul>
+          <h4>Phase 3 — Per-set cycle · after Dec 7, 2026</h4>
+          <p>Repeat every new set: Week 1 sealed + set review + Quick Drafts to learn cards cheap, Weeks 2–4 Premier Drafts pushing rank, final week reviewing what the format taught you.</p>
+          <h4>Arena economy rules</h4>
+          <ul>
+            <li>Wins first in training drafts — don't rare-draft. You're buying lessons, not cards.</li>
+            <li>Don't spend wildcards until Phase 2, and only on a deck you'll play 50+ games.</li>
+          </ul>
+
+          <div class="trk-check-group">
+            <h4>Phase 0 — Baseline checklist</h4>
+            <label class="trk-check"><input type="checkbox" data-trk-check="c-qd1" aria-label="Quick Draft 1 done — Reality Fracture"><span>Quick Draft 1 done — Reality Fracture</span></label>
+            <label class="trk-check"><input type="checkbox" data-trk-check="c-qd2" aria-label="Quick Draft 2 done"><span>Quick Draft 2 done</span></label>
+            <label class="trk-check"><input type="checkbox" data-trk-check="c-qd3" aria-label="Quick Draft 3 done"><span>Quick Draft 3 done</span></label>
+            <label class="trk-check"><input type="checkbox" data-trk-check="c-deck" aria-label="Picked my one Brawl / Standard deck for 30 games"><span>Picked my one Brawl / Standard deck for 30 games</span></label>
+            <label class="trk-check"><input type="checkbox" data-trk-check="c-ranks" aria-label="Recorded starting Limited + Constructed ranks"><span>Recorded starting Limited + Constructed ranks</span></label>
+          </div>
+          <div class="trk-check-group">
+            <h4>Phase 1 — Foundations checklist</h4>
+            <label class="trk-check"><input type="checkbox" data-trk-check="c-w1" aria-label="Week 1 focus drill done — Mulligans"><span>Week 1 focus drill done — Mulligans</span></label>
+            <label class="trk-check"><input type="checkbox" data-trk-check="c-w2" aria-label="Week 2 focus drill done — Combat"><span>Week 2 focus drill done — Combat</span></label>
+            <label class="trk-check"><input type="checkbox" data-trk-check="c-w3" aria-label="Week 3 focus drill done — Open mana"><span>Week 3 focus drill done — Open mana</span></label>
+            <label class="trk-check"><input type="checkbox" data-trk-check="c-w4" aria-label="Week 4 focus drill done — Sequencing"><span>Week 4 focus drill done — Sequencing</span></label>
+            <label class="trk-check"><input type="checkbox" data-trk-check="c-pool" aria-label="Sent a draft pool for cuts / curve review before playing it"><span>Sent a draft pool for cuts / curve review before playing it</span></label>
+          </div>
+          <div class="trk-check-group">
+            <h4>Phase 2 — Level Up checklist</h4>
+            <label class="trk-check"><input type="checkbox" data-trk-check="c-trad" aria-label="Played a Traditional (Bo3) draft"><span>Played a Traditional (Bo3) draft</span></label>
+            <label class="trk-check"><input type="checkbox" data-trk-check="c-sbmap" aria-label="Wrote a sideboard map before checking any guide"><span>Wrote a sideboard map before checking any guide</span></label>
+            <label class="trk-check"><input type="checkbox" data-trk-check="c-platl" aria-label="Hit Platinum in Limited"><span>Hit Platinum in Limited</span></label>
+            <label class="trk-check"><input type="checkbox" data-trk-check="c-platc" aria-label="Hit Platinum in Constructed"><span>Hit Platinum in Constructed</span></label>
+          </div>
+        </div>
+      </details>
+
+      <details class="trk-sec" id="trk-sessions-sec">
+        <summary><span class="trk-sec-title">Session Log</span><span class="trk-sec-hint" id="trk-log-count"></span></summary>
+        <div class="trk-sec-body">
+          <div class="trk-log-list" id="trk-log-list"></div>
+          <div class="trk-empty" id="trk-log-empty">No sessions logged yet — your baseline Quick Drafts are step one.</div>
+        </div>
+      </details>
+
+      <details class="trk-sec" id="trk-review-sec">
+        <summary><span class="trk-sec-title">Weekly Review</span><span class="trk-sec-hint">Last 7 days + leaks</span></summary>
+        <div class="trk-sec-body">
+          <div class="trk-review-grid">
+            <div>
+              <h4>Last 7 days</h4>
+              <p id="trk-rev-summary">No sessions in the last 7 days.</p>
+              <h4 style="margin-top:16px">Types played (last 7 days)</h4>
+              <ul class="trk-type-list" id="trk-rev-types"></ul>
+            </div>
+            <div>
+              <h4>Leak tally — all-time</h4>
+              <div id="trk-rev-leaks"></div>
+            </div>
+          </div>
+          <div class="trk-copy-row">
+            <button class="btn teal" type="button" id="trk-copy-review">Copy review for Rowan</button>
+            <span class="trk-copied" id="trk-copied" role="status"></span>
+          </div>
+        </div>
+      </details>
+
+      <details class="trk-sec" id="trk-ranks-sec">
+        <summary><span class="trk-sec-title">Ranks &amp; Goals</span><span class="trk-sec-hint">Saved on this device</span></summary>
+        <div class="trk-sec-body trk-ranks">
+          <div class="trk-ranks-grid">
+            <label class="trk-field">Starting Limited rank<input type="text" id="trk-r-startlim" placeholder="e.g. Silver 3" autocomplete="off"></label>
+            <label class="trk-field">Current Limited rank<input type="text" id="trk-r-curlim" placeholder="e.g. Gold 2" autocomplete="off"></label>
+            <label class="trk-field">Starting Constructed rank<input type="text" id="trk-r-startcon" placeholder="e.g. Bronze 4" autocomplete="off"></label>
+            <label class="trk-field">Current Constructed rank<input type="text" id="trk-r-curcon" placeholder="e.g. Silver 1" autocomplete="off"></label>
+            <label class="trk-field trk-goal-field">Goal<input type="text" id="trk-r-goal" autocomplete="off" aria-label="Goal"></label>
+          </div>
+          <div class="trk-danger-row">
+            <button class="btn danger" type="button" id="trk-clear-all">Clear all tracker data</button>
+            <p>Removes every logged session, checklist tick, and rank on this device. This can't be undone.</p>
+          </div>
+        </div>
+      </details>
     </div>
   </section>
 
@@ -1612,7 +1824,7 @@ When this creature enters, target creature can't be blocked this turn.</p>
     if(id==='puzzles'||id==='learning')return 'puzzles';
     if(id==='articles'||id==='article-archive')return 'articles';
     if(id==='development')return 'development';
-    if(id==='tools'||id==='proxy-wizard'||id==='counter')return 'tools';
+    if(id==='tools'||id==='proxy-wizard'||id==='counter'||id==='training-tracker')return 'tools';
     if(id==='decks'||id==='commander-lab'||id==='precon-library'||id==='playtest'||id==='staples'||id==='rachel'||id==='wes-workshop'||id.indexOf('tribal-')===0||id.indexOf('precon-')===0)return 'decks';
     return 'home';
   }
@@ -3220,5 +3432,224 @@ document.addEventListener('DOMContentLoaded', function(){
 
 })();
 </script>
+<script>
+(function(){
+"use strict";
+var KEY="mtg-training-tracker-v1";
+var DEFAULT_GOAL="Platinum Limited + Platinum Constructed by Dec 7, 2026 — draft win rate 53–55%";
+var LIMITED=["Quick Draft","Premier Draft","Traditional Draft","Sealed","Cube","Pick-Two Draft"];
+var CONSTRUCTED=["Standard Bo1","Standard Bo3","Brawl","Historic","Explorer"];
+function $(id){return document.getElementById(id)}
+function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+function pad(n){return (n<10?"0":"")+n}
+function fmtLocal(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())}
+function parseDay(str){if(!str)return null;var p=str.split("-");if(p.length!==3)return null;var d=new Date(+p[0],(+p[1])-1,+p[2]);return isNaN(d.getTime())?null:d}
+function todayDay(){var n=new Date();return new Date(n.getFullYear(),n.getMonth(),n.getDate())}
+function dayDiff(a,b){return Math.round((a.getTime()-b.getTime())/86400000)}
+function pct(w,l){var g=w+l;if(!g)return "—";return Math.round(100*w/g)+"%"}
+function load(){
+  try{var raw=localStorage.getItem(KEY);if(raw){var d=JSON.parse(raw);if(d&&typeof d==="object"){return {sessions:Array.isArray(d.sessions)?d.sessions:[],checks:(d.checks&&typeof d.checks==="object")?d.checks:{},ranks:(d.ranks&&typeof d.ranks==="object")?d.ranks:{}}}}}catch(e){}
+  return {sessions:[],checks:{},ranks:{}};
+}
+var data=load();
+if(!data.ranks.goal)data.ranks.goal=DEFAULT_GOAL;
+function save(){try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}}
+function phaseFor(d){
+  var t=fmtLocal(d);
+  if(t<="2026-10-18")return {label:"Phase 0 — Baseline",dates:"Oct 14–18, 2026"};
+  if(t<="2026-11-09")return {label:"Phase 1 — Foundations",dates:"Oct 19 – Nov 9, 2026"};
+  if(t<="2026-12-07")return {label:"Phase 2 — Level Up",dates:"Nov 10 – Dec 7, 2026"};
+  return {label:"Phase 3 — Per-set cycle",dates:"After Dec 7, 2026 · repeats each new set"};
+}
+function focusFor(d){
+  var t=fmtLocal(d);
+  if(t<"2026-10-19")return "Baseline — log what felt unclear";
+  if(t<="2026-10-25")return "Mulligans";
+  if(t<="2026-11-01")return "Combat";
+  if(t<="2026-11-08")return "Open mana";
+  if(t<="2026-11-15")return "Sequencing";
+  return "Pick from your biggest leak";
+}
+function leakTally(sessions){
+  var tally={},order=[];
+  sessions.forEach(function(s){var k=s.leak;if(k&&k!=="None"){if(!tally[k]){tally[k]=0;order.push(k)}tally[k]++}});
+  return order.map(function(k){return {leak:k,count:tally[k]}}).sort(function(a,b){return b.count-a.count});
+}
+function sumGames(sessions){
+  var w=0,l=0;sessions.forEach(function(s){w+=+s.wins||0;l+=+s.losses||0});return {w:w,l:l};
+}
+function weekSessions(){
+  var t=todayDay();var dow=(t.getDay()+6)%7;var mon=new Date(t.getFullYear(),t.getMonth(),t.getDate()-dow);var sun=new Date(mon.getFullYear(),mon.getMonth(),mon.getDate()+6);
+  return data.sessions.filter(function(s){var d=parseDay(s.date);return d&&d>=mon&&d<=sun});
+}
+function last7Sessions(){
+  var t=todayDay();
+  return data.sessions.filter(function(s){var d=parseDay(s.date);if(!d)return false;var diff=dayDiff(t,d);return diff>=0&&diff<=6});
+}
+function renderDash(){
+  var now=todayDay();var ph=phaseFor(now);
+  $("trk-phase-title").textContent=ph.label;
+  $("trk-phase-dates").textContent=ph.dates;
+  $("trk-focus").textContent=focusFor(now);
+  var tally=leakTally(data.sessions);
+  $("trk-biggest-leak").textContent=tally.length?tally[0].leak+" ×"+tally[0].count:"No data yet";
+  var wk=weekSessions();var wg=sumGames(wk);
+  $("trk-week-sessions").textContent=wk.length+" / 5";
+  $("trk-week-prog").style.width=Math.min(100,wk.length/5*100)+"%";
+  $("trk-week-wl").textContent=wg.w+"–"+wg.l;
+  $("trk-week-pct").textContent=(wg.w+wg.l)?pct(wg.w,wg.l)+" win rate this week":"No games yet this week";
+  var ag=sumGames(data.sessions);
+  $("trk-all-sessions").textContent=data.sessions.length+(data.sessions.length===1?" session":" sessions");
+  $("trk-all-wl").textContent=(ag.w+ag.l)+" games · "+((ag.w+ag.l)?pct(ag.w,ag.l):"—")+" win rate";
+  $("trk-all-pct").textContent=pct(ag.w,ag.l);
+  $("trk-all-record").textContent=ag.w+"–"+ag.l+" all-time";
+  var lim=sumGames(data.sessions.filter(function(s){return LIMITED.indexOf(s.type)>=0}));
+  var con=sumGames(data.sessions.filter(function(s){return CONSTRUCTED.indexOf(s.type)>=0}));
+  $("trk-lim-pct").textContent=pct(lim.w,lim.l);
+  $("trk-lim-record").textContent=lim.w+"–"+lim.l+" in drafts & sealed";
+  $("trk-con-pct").textContent=pct(con.w,con.l);
+  $("trk-con-record").textContent=con.w+"–"+con.l+" in constructed queues";
+  var r=data.ranks;var parts=[];
+  if(r.curLim)parts.push("Limited: "+r.curLim+(r.startLim?" (started "+r.startLim+")":""));
+  if(r.curCon)parts.push("Constructed: "+r.curCon+(r.startCon?" (started "+r.startCon+")":""));
+  $("trk-dash-ranks").textContent=parts.length?parts.join(" · "):"";
+  $("trk-log-count").textContent=data.sessions.length?data.sessions.length+(data.sessions.length===1?" session":" sessions"):"";
+}
+function prettyDate(str){var d=parseDay(str);if(!d)return str||"";var months=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];return months[d.getMonth()]+" "+d.getDate()+", "+d.getFullYear()}
+function renderLog(){
+  var list=$("trk-log-list");var empty=$("trk-log-empty");
+  var sorted=data.sessions.slice().sort(function(a,b){if(a.date!==b.date)return a.date<b.date?1:-1;return (b.id||0)-(a.id||0)});
+  empty.style.display=sorted.length?"none":"block";
+  var html="";
+  sorted.forEach(function(s){
+    var mainBits=[s.type];if(s.format)mainBits.push(s.format);
+    var meta=[];meta.push(prettyDate(s.date));if(s.deck)meta.push(s.deck);if(s.rank)meta.push("Rank: "+s.rank);
+    var notes="";
+    if(s.swung)notes+="<p><strong>Swung:</strong> "+esc(s.swung)+"</p>";
+    if(s.diff)notes+="<p><strong>Different:</strong> "+esc(s.diff)+"</p>";
+    if(s.notes)notes+="<p>"+esc(s.notes)+"</p>";
+    html+='<div class="trk-log-item"><div class="trk-log-top"><span class="trk-log-main">'+esc(mainBits.join(" · "))+(s.leak&&s.leak!=="None"?'<span class="trk-pill">'+esc(s.leak)+"</span>":"")+'</span><span class="trk-log-wl">'+(+s.wins||0)+"–"+(+s.losses||0)+'</span></div><div class="trk-log-meta">'+esc(meta.join(" · "))+'</div>'+(notes?'<div class="trk-log-notes">'+notes+"</div>":"")+'<button class="trk-del" type="button" data-trk-del="'+s.id+'">Delete</button></div>';
+  });
+  list.innerHTML=html;
+}
+function renderReview(){
+  var s7=last7Sessions();var g7=sumGames(s7);
+  $("trk-rev-summary").innerHTML=s7.length?("<strong>"+s7.length+"</strong> session"+(s7.length===1?"":"s")+" · <strong>"+(g7.w+g7.l)+"</strong> games · <strong>"+g7.w+"–"+g7.l+"</strong> ("+pct(g7.w,g7.l)+")"):"No sessions in the last 7 days.";
+  var types={};var torder=[];
+  s7.forEach(function(s){if(!types[s.type]){types[s.type]=0;torder.push(s.type)}types[s.type]++});
+  torder.sort(function(a,b){return types[b]-types[a]});
+  $("trk-rev-types").innerHTML=torder.length?torder.map(function(t){return "<li><span>"+esc(t)+"</span><strong>"+types[t]+"</strong></li>"}).join(""):'<li><span>Nothing played yet</span><strong>0</strong></li>';
+  var tally=leakTally(data.sessions);
+  if(!tally.length){$("trk-rev-leaks").innerHTML='<p style="margin:0;color:var(--muted)">No leaks tagged yet. Tag one leak per session and the pattern shows up here.</p>'}
+  else{var max=tally[0].count;$("trk-rev-leaks").innerHTML=tally.map(function(x){return '<div class="trk-bar-row"><span class="trk-bar-label">'+esc(x.leak)+'</span><span class="trk-bar"><span class="trk-bar-fill" style="display:block;width:'+Math.round(100*x.count/max)+'%"></span></span><span class="trk-bar-count">'+x.count+"</span></div>"}).join("")}
+}
+function renderAll(){renderDash();renderLog();renderReview()}
+/* Checklist */
+document.querySelectorAll("[data-trk-check]").forEach(function(box){
+  var key=box.getAttribute("data-trk-check");
+  box.checked=!!data.checks[key];
+  box.closest(".trk-check").classList.toggle("done",box.checked);
+  box.addEventListener("change",function(){data.checks[key]=box.checked;box.closest(".trk-check").classList.toggle("done",box.checked);save()});
+});
+/* Ranks & goals */
+var rankFields={startLim:"trk-r-startlim",curLim:"trk-r-curlim",startCon:"trk-r-startcon",curCon:"trk-r-curcon",goal:"trk-r-goal"};
+Object.keys(rankFields).forEach(function(k){
+  var el=$(rankFields[k]);if(!el)return;
+  el.value=data.ranks[k]||"";
+  el.addEventListener("input",function(){data.ranks[k]=el.value;save();renderDash()});
+});
+/* Form */
+$("trk-f-date").value=fmtLocal(new Date());
+$("trk-open-log").addEventListener("click",function(){
+  var sec=$("trk-log-sec");sec.open=true;
+  setTimeout(function(){sec.scrollIntoView({behavior:"smooth",block:"start"});var t=$("trk-f-type");if(t)t.focus({preventScroll:true})},40);
+});
+$("trk-form").addEventListener("submit",function(ev){
+  ev.preventDefault();
+  var err=$("trk-form-error");var saved=$("trk-form-saved");err.textContent="";saved.textContent="";
+  var type=$("trk-f-type").value;
+  var wins=parseInt($("trk-f-wins").value,10);var losses=parseInt($("trk-f-losses").value,10);
+  if(!type){err.textContent="Pick a session type first.";return}
+  if(isNaN(wins)||isNaN(losses)||wins<0||losses<0){err.textContent="Wins and losses need to be numbers, 0 or more.";return}
+  var dateVal=$("trk-f-date").value||fmtLocal(new Date());
+  data.sessions.push({id:Date.now(),date:dateVal,type:type,format:$("trk-f-format").value.trim(),deck:$("trk-f-deck").value.trim(),wins:wins,losses:losses,rank:$("trk-f-rank").value.trim(),leak:$("trk-f-leak").value,swung:$("trk-f-swung").value.trim(),diff:$("trk-f-diff").value.trim(),notes:$("trk-f-notes").value.trim()});
+  save();renderAll();
+  var rankAfter=$("trk-f-rank").value.trim();
+  if(rankAfter&&(LIMITED.indexOf(type)>=0)){data.ranks.curLim=rankAfter;$("trk-r-curlim").value=rankAfter;save();renderDash()}
+  if(rankAfter&&(CONSTRUCTED.indexOf(type)>=0)){data.ranks.curCon=rankAfter;$("trk-r-curcon").value=rankAfter;save();renderDash()}
+  $("trk-form").reset();$("trk-f-date").value=fmtLocal(new Date());$("trk-f-wins").value="0";$("trk-f-losses").value="0";
+  saved.textContent="Saved ✓ — nice work logging it.";
+  setTimeout(function(){saved.textContent=""},3000);
+});
+/* Delete (two-tap confirm, no blocking dialogs) */
+var armedDel=null,armedDelTimer=null;
+$("trk-log-list").addEventListener("click",function(ev){
+  var btn=ev.target.closest("[data-trk-del]");if(!btn)return;
+  var id=btn.getAttribute("data-trk-del");
+  if(armedDel===id){
+    data.sessions=data.sessions.filter(function(s){String(s.id)!==String(id)});
+    armedDel=null;save();renderAll();return;
+  }
+  armedDel=id;btn.classList.add("armed");btn.textContent="Tap again to confirm delete";
+  clearTimeout(armedDelTimer);
+  armedDelTimer=setTimeout(function(){armedDel=null;renderLog()},3200);
+});
+/* Copy review */
+function buildReviewText(){
+  var now=new Date();var ph=phaseFor(todayDay());
+  var ag=sumGames(data.sessions);
+  var lim=sumGames(data.sessions.filter(function(s){return LIMITED.indexOf(s.type)>=0}));
+  var con=sumGames(data.sessions.filter(function(s){return CONSTRUCTED.indexOf(s.type)>=0}));
+  var s7=last7Sessions();var g7=sumGames(s7);
+  var tally=leakTally(data.sessions);
+  var r=data.ranks;
+  var lines=[];
+  lines.push("MTG TRAINING REVIEW — "+prettyDate(fmtLocal(now)));
+  lines.push("Phase: "+ph.label+" ("+ph.dates+")");
+  lines.push("Focus drill this week: "+focusFor(todayDay()));
+  lines.push("Ranks: Limited "+(r.startLim||"—")+" → "+(r.curLim||"—")+" · Constructed "+(r.startCon||"—")+" → "+(r.curCon||"—"));
+  lines.push("Goal: "+(r.goal||DEFAULT_GOAL));
+  lines.push("");
+  lines.push("ALL-TIME: "+data.sessions.length+" sessions · "+(ag.w+ag.l)+" games · "+ag.w+"–"+ag.l+" ("+pct(ag.w,ag.l)+")");
+  lines.push(" Limited: "+(lim.w+lim.l)+" games · "+lim.w+"–"+lim.l+" ("+pct(lim.w,lim.l)+")");
+  lines.push(" Constructed/Brawl: "+(con.w+con.l)+" games · "+con.w+"–"+con.l+" ("+pct(con.w,con.l)+")");
+  lines.push("LAST 7 DAYS: "+s7.length+" sessions · "+(g7.w+g7.l)+" games · "+g7.w+"–"+g7.l+" ("+pct(g7.w,g7.l)+")");
+  lines.push("");
+  lines.push("LEAK TALLY (all-time):");
+  if(tally.length)tally.forEach(function(x){lines.push(" "+x.leak+": "+x.count)});else lines.push(" None tagged yet");
+  lines.push("");
+  lines.push("LAST 5 SESSIONS:");
+  var last5=data.sessions.slice().sort(function(a,b){if(a.date!==b.date)return a.date<b.date?1:-1;return (b.id||0)-(a.id||0)}).slice(0,5);
+  if(!last5.length)lines.push(" None logged yet");
+  last5.forEach(function(s){
+    var bits=[prettyDate(s.date),s.type];if(s.format)bits.push(s.format);if(s.deck)bits.push(s.deck);bits.push((+s.wins||0)+"–"+(+s.losses||0));if(s.leak&&s.leak!=="None")bits.push("Leak: "+s.leak);
+    lines.push("- "+bits.join(" · "));
+    if(s.swung)lines.push("  Swung: "+s.swung);
+    if(s.diff)lines.push("  Different: "+s.diff);
+    if(s.notes)lines.push("  Notes: "+s.notes);
+  });
+  return lines.join("\n");
+}
+$("trk-copy-review").addEventListener("click",function(){
+  var txt=buildReviewText();var done=$("trk-copied");
+  function ok(){done.textContent="Copied ✓ — paste it into chat for review.";setTimeout(function(){done.textContent=""},3500)}
+  function fallback(){var ta=document.createElement("textarea");ta.value=txt;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();try{document.execCommand("copy");ok()}catch(e){done.textContent="Copy didn't work here — your browser blocked it."}document.body.removeChild(ta)}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(ok,fallback)}else fallback();
+});
+/* Clear all (two-tap confirm) */
+var clearArmed=false,clearTimer=null;
+$("trk-clear-all").addEventListener("click",function(){
+  var btn=$("trk-clear-all");
+  if(!clearArmed){clearArmed=true;btn.textContent="Tap again to confirm — erase everything";clearTimeout(clearTimer);clearTimer=setTimeout(function(){clearArmed=false;btn.textContent="Clear all tracker data"},3600);return}
+  clearArmed=false;btn.textContent="Clear all tracker data";
+  data={sessions:[],checks:{},ranks:{goal:DEFAULT_GOAL}};save();
+  document.querySelectorAll("[data-trk-check]").forEach(function(box){box.checked=false;box.closest(".trk-check").classList.remove("done")});
+  Object.keys(rankFields).forEach(function(k){var el=$(rankFields[k]);if(el)el.value=k==="goal"?DEFAULT_GOAL:""});
+  renderAll();
+});
+renderAll();
+})();
+</script>
+
 </body>
 </html>
