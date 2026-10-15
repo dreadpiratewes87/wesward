@@ -87,7 +87,7 @@ var allEps=[];
 function fmt(s){s=Math.floor(s||0);var m=Math.floor(s/60),ss=s%60;return m+':'+(ss<10?'0':'')+ss;}
 function fmtLong(s){s=Math.floor(s||0);var h=Math.floor(s/3600),m=Math.floor(s%3600/60);if(h)return h+'h '+m+'m';return m+' min';}
 
-fetch('episodes.json?v=7',{cache:'no-store'}).then(function(r){return r.json();}).then(function(data){
+fetch('episodes.json?v=8',{cache:'no-store'}).then(function(r){return r.json();}).then(function(data){
   var list=document.getElementById('list');
   var shows=data.shows||{};
   var eps=data.episodes||[];
