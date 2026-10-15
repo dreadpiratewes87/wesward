@@ -788,13 +788,61 @@
   .sim-cols .hub-card h3{margin-top:0}
   .sim-list{margin:0;padding-left:20px;display:grid;gap:8px}
   .sim-list li{line-height:1.5}
-  /* Phone widths: the six section tabs wrap into two rows instead of scrolling sideways */
+  /* Phone widths: the section tabs wrap into two rows instead of scrolling sideways */
   @media(max-width:700px){
     .hub-tabs{flex-wrap:wrap;overflow-x:visible}
-    .hub-tab{flex:1 1 30%;text-align:center;padding-inline:6px}
+    .hub-tab{flex:1 1 22%;text-align:center;padding-inline:6px}
     #mtg-hub-main>.view>.viewbar{top:100px}
     .fra-sec{scroll-margin-top:158px}
   }
+</style>
+
+<style>
+  /* ==== Sim Reports (scoped .rep- / .nav-card.gg-reports) ==== */
+  .nav-card.gg-reports{background:#3d2f10;color:#fdf3dd;border-radius:var(--radius-sm)}
+  .rep-index{display:grid;gap:10px;margin-bottom:8px}
+  .rep-index-row{display:flex;justify-content:space-between;align-items:center;gap:14px;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);box-shadow:var(--shadow);padding:15px 18px;text-decoration:none}
+  .rep-index-row:hover{border-color:var(--teal)}
+  .rep-index-row:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+  .rep-index-row strong{font:800 24px/1.05 "Barlow Condensed",sans-serif;display:block}
+  .rep-index-row span{display:block;color:var(--muted);font-size:14px;font-weight:600;margin-top:3px;line-height:1.4}
+  .rep-status{flex:none;font-size:12px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:5px 10px;border-radius:99px;background:var(--teal-soft);color:var(--teal)}
+  .rep-status.wip{background:color-mix(in srgb,var(--gold) 24%,transparent);color:var(--gold)}
+  .rep-report{margin-top:36px;scroll-margin-top:120px}
+  .rep-report-head{border-bottom:3px solid var(--line);padding-bottom:12px;margin-bottom:14px}
+  .rep-report-head h3{font:800 clamp(30px,4.5vw,44px)/1 "Barlow Condensed",sans-serif;margin:0}
+  .rep-meta{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
+  .rep-findings{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);box-shadow:var(--shadow);padding:16px 18px}
+  .rep-findings h4{font:800 22px/1 "Barlow Condensed",sans-serif;margin:0 0 9px;color:var(--teal)}
+  .rep-findings ul{margin:0;padding-left:20px;display:grid;gap:7px}
+  .rep-findings li{line-height:1.5}
+  .rep-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:12px}
+  .rep-stat{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);padding:13px 15px;box-shadow:var(--shadow);min-width:0}
+  .rep-stat strong{font:800 29px/1 "Barlow Condensed",sans-serif;display:block}
+  .rep-stat span{color:var(--muted);font-size:13px;font-weight:700}
+  .rep-tree{display:grid;gap:10px;margin-top:12px}
+  details.rep-node{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);box-shadow:var(--shadow)}
+  details.rep-node>summary{cursor:pointer;list-style:none;padding:15px 18px;display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+  details.rep-node>summary::-webkit-details-marker{display:none}
+  details.rep-node>summary:focus-visible,details.rep-sub>summary:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+  .rep-node-title{font:800 25px/1.05 "Barlow Condensed",sans-serif}
+  .rep-node-title::before{content:"▸ ";color:var(--teal)}
+  details.rep-node[open ]>summary .rep-node-title::before{content:"▾ "}
+  .rep-node-hint{color:var(--muted);font-size:13px;font-weight:700;text-align:right}
+  .rep-node-body{padding:2px 18px 18px;border-top:1px solid var(--line)}
+  .rep-node-body p{line-height:1.55;margin:10px 0 0;max-width:78ch}
+  .rep-node-body .sim-list{margin-top:10px}
+  .rep-node-body .sim-table{margin-top:12px;box-shadow:none}
+  details.rep-sub{background:var(--paper-2);border:1px solid var(--line);border-radius:var(--radius-sm);margin-top:12px}
+  details.rep-sub>summary{cursor:pointer;list-style:none;padding:12px 14px;font-weight:800;font-size:15.5px}
+  details.rep-sub>summary::-webkit-details-marker{display:none}
+  details.rep-sub>summary::before{content:"▸ ";color:var(--teal)}
+  details.rep-sub[open ]>summary::before{content:"▾ "}
+  .rep-sub-body{padding:0 14px 14px}
+  .rep-sub-body p{margin:0;line-height:1.55}
+  .rep-sub-body .sim-list{margin-top:2px}
+  @media(max-width:760px){.rep-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media(max-width:560px){details.rep-node>summary{flex-direction:column;gap:3px}.rep-node-hint{text-align:left}.rep-index-row{align-items:flex-start}}
 </style>
 
 </head>
@@ -807,6 +855,7 @@
     <button class="hub-tab" type="button" data-open="articles">Articles</button>
     <button class="hub-tab" type="button" data-open="development">Guides</button>
     <button class="hub-tab" type="button" data-open="tools">Tools</button>
+    <button class="hub-tab" type="button" data-open="sim-reports">Sim Reports</button>
   </nav>
 
   <section class="view active" id="home" aria-label="Home">
@@ -819,6 +868,7 @@
       <a class="nav-card gg6" href="https://dreadpiratewes87.github.io/wesward/tools/draft-quiz/" target="_blank" rel="noopener noreferrer"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M14 10h20v22H14z"/><path d="M19 17h10M19 23h10M19 29h6"/><path d="M18 38l6-4 6 4"/></svg><div><strong>Draft Quiz</strong><span>Realistic 14-card Reality Fracture packs — every pick graded against the draft guide, with a running score and drafter tier.</span></div></a>
       <a class="nav-card gg6" href="https://dreadpiratewes87.github.io/wesward/tools/draft-simulator/" target="_blank" rel="noopener noreferrer"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><circle cx="24" cy="24" r="5"/><circle cx="10" cy="12" r="3"/><circle cx="38" cy="12" r="3"/><circle cx="10" cy="36" r="3"/><circle cx="38" cy="36" r="3"/></svg><div><strong>Draft Simulator</strong><span>A full pod draft against 7 AI drafters — per-pick A+–F grades with popups and an end-of-draft report card.</span></div></a>
       <button class="nav-card gg7 gg-sim" data-open="sim-study"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M8 40h32"/><path d="M12 40V24l8-6 7 4 9-9"/><circle cx="36" cy="13" r="2.5"/></svg><div><strong>Sim Study</strong><span>Monte Carlo results and the Forge research program — what the games actually say about your decks and the format.</span></div></button>
+      <button class="nav-card gg5 gg-reports" data-open="sim-reports"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M10 6h28v36H10z"/><path d="M17 15h14M17 22h14M17 29h9"/><path d="m30 33 3 3 5-6"/></svg><div><strong>Sim Reports</strong><span>Full simulation reports and research notes — scan the findings, then drill into the expandable trees for the evidence.</span></div></button>
       <button class="nav-card gg5" data-open="articles"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M24 10c-2.2-1.8-5-2.6-9-2.6v33.2c4 0 6.8.8 9 2.6 2.2-1.8 5-2.6 9-2.6V7.4c-4 0-6.8.8-9 2.6Z"/><path d="M24 10v33.2"/></svg><div><strong>Articles</strong><span>The get-good reading archive — draft, strategy, and competitive play only. Flavor and history live in the MTG Hub.</span></div></button>
       <a class="nav-card gg12" style="grid-column:span 12;min-height:120px" href="https://dreadpiratewes87.github.io/wesward/mtg-hub/" target="_blank" rel="noopener noreferrer"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M9 11h30v26H9z"/><path d="M15 17h18M15 24h18M15 31h11"/><path d="m34 28 5 5-5 5"/></svg><div><strong>MTG Hub</strong><span>The play hub — commander decks, the Precon Library, life counter, Proxy Wizard, and the flavor &amp; history reading archive.</span></div></a>
     </div>
@@ -1803,6 +1853,7 @@
         <article class="hub-card tool-card"><h3>Reality Fracture Draft Quiz</h3><p>Realistic 14-card packs; picks graded against the draft guide with a running score and drafter tier.</p><div class="hub-card-actions"><a class="external" href="https://dreadpiratewes87.github.io/wesward/tools/draft-quiz/" target="_blank" rel="noopener noreferrer">Open tool ↗</a></div></article>
         <article class="hub-card tool-card"><h3>Reality Fracture Draft Simulator</h3><p>Full 8-seat pod: draft 3 packs against 7 AI drafters, per-pick grades, and an end-of-draft report card.</p><div class="hub-card-actions"><a class="external" href="https://dreadpiratewes87.github.io/wesward/tools/draft-simulator/" target="_blank" rel="noopener noreferrer">Open tool ↗</a></div></article>
         <article class="hub-card tool-card"><h3>Sim Study</h3><p>Monte Carlo records, mechanism diagnostics, and loss tags from your Oct 15 R/W draft deck study — plus the Forge research program.</p><div class="hub-card-actions"><button class="btn teal" type="button" data-open="sim-study">Open Sim Study</button></div></article>
+        <article class="hub-card tool-card"><h3>Sim Reports</h3><p>The full simulation reports and research notes — headline findings up front, with expandable trees for matchup tables, mechanism evidence, and method notes.</p><div class="hub-card-actions"><button class="btn teal" type="button" data-open="sim-reports">Open Sim Reports</button></div></article>
         <article class="hub-card tool-card"><h3>FRA Draft Guide</h3><p>The full set primer: mechanics, all 10 archetypes, card-by-card rankings, bombs, removal, and draft strategy.</p><div class="hub-card-actions"><button class="btn teal" type="button" data-open="fra-draft-guide">Open the Guide</button></div></article>
       </div>
     </div>
@@ -1845,6 +1896,256 @@
       <article class="hub-card" style="margin-top:12px">
         <h3>The research program</h3>
         <p>The simplified Monte Carlo above was the scout; the real lab is <strong>Forge 2.0.15</strong>, an Arena-faithful engine installed locally. Phase 1 is done: Forge already ships Reality Fracture fully scripted — empower and prepared spells are native engine features — and all 17 uniques in your deck resolve correctly in live AI-vs-AI games. Phase 2 (a full 280-card script audit, then large tournaments) is under way. The standing sample bar for any verdict is <strong>200+ games per pairing</strong>, aimed at mechanic interactions, hidden archetypes, card re-evaluation against guide grades, and play patterns — with the lessons taught back here.</p>
+      </article>
+      <article class="hub-card" style="margin-top:12px">
+        <h3>Read the full reports</h3>
+        <p>The complete rundowns — headline findings, matchup tables, mechanism evidence, and method notes, organized as expandable trees you can drill into section by section — live in Sim Reports.</p>
+        <div class="hub-card-actions"><button class="btn teal" type="button" data-open="sim-reports">Open Sim Reports</button></div>
+      </article>
+    </div>
+  </section>
+
+
+  <section class="view" id="sim-reports" aria-labelledby="sim-reports-heading">
+    <header class="viewbar"><button class="back-btn" data-home>← Main</button><h1 id="sim-reports-heading">Sim Reports</h1><span class="stamp">Simulation research</span></header>
+    <div class="hub-page">
+      <div class="hub-page-head"><div><h2>Simulation reports &amp; research notes.</h2><p>Every finished study lands here as a full rundown: the headline findings first, so the whole report scans in a minute — then expandable trees under each section when you want the drill-down: matchup tables, mechanism evidence, loss analysis, and method notes.</p></div></div>
+
+      <div class="rep-index" aria-label="Reports on file">
+        <a class="rep-index-row" href="#rep-monte-carlo"><div><strong>Monte Carlo Study — Your Oct 15 R/W Draft Deck</strong><span>Library vs Teyo across 60 games against the format's three best archetypes.</span></div><span class="rep-status">Complete</span></a>
+        <a class="rep-index-row" href="#rep-forge-phase-2"><div><strong>Forge Phase 2 — Tournament &amp; Mechanism Study</strong><span>Full-rules tournament across a 14-deck field, with a verbose mechanism substudy alongside.</span></div><span class="rep-status wip">In progress</span></a>
+      </div>
+
+      <article class="rep-report" id="rep-monte-carlo">
+        <div class="rep-report-head">
+          <h3>Monte Carlo Study — Your Oct 15 R/W Draft Deck</h3>
+          <div class="rep-meta"><span class="rep-status">Complete</span><span class="tag">Oct 15, 2026</span><span class="tag">60 games · 30 per build</span><span class="tag">Simplified Monte Carlo engine</span></div>
+        </div>
+        <div class="rep-findings">
+          <h4>The rundown</h4>
+          <ul>
+            <li><strong>Library stays in.</strong> The Living Library build went 17–13 (57%); the Teyo build went 16–14 (53%) — and the mechanism data explains the gap, not just the record.</li>
+            <li><strong>Teyo recorded zero saves in 30 games.</strong> His protection mode never once had the mana and the moment line up.</li>
+            <li><strong>The card-draw gap is the deck's real problem:</strong> ~0.43 extra cards per game for you vs ~2.3 per game for opponents.</li>
+            <li><strong>Biggest loss tag: “run over fast”</strong> — the deck's losses are about early pressure more than late-game value.</li>
+          </ul>
+        </div>
+        <div class="rep-stats">
+          <div class="rep-stat"><strong>60</strong><span>games simulated</span></div>
+          <div class="rep-stat"><strong>2</strong><span>builds tested head-to-head</span></div>
+          <div class="rep-stat"><strong>3</strong><span>top archetypes faced</span></div>
+          <div class="rep-stat"><strong>~8</strong><span>rounds per game, average</span></div>
+        </div>
+        <div class="rep-tree">
+          <details class="rep-node">
+            <summary><span class="rep-node-title">Matchup Results</span><span class="rep-node-hint">17–13 Library · 16–14 Teyo</span></summary>
+            <div class="rep-node-body">
+              <p>Ten games per matchup, per build, against top-decile builds of the format's three best archetypes. At population level (17Lands, ~515K Premier Draft games), Azorius wins 57.2%, Izzet 56.1%, and Gruul 56.0%, while Boros sits at 54.1% — so these were uphill fights by design.</p>
+              <table class="sim-table">
+                <thead><tr><th>Matchup</th><th>Library build</th><th>Teyo build</th></tr></thead>
+                <tbody>
+                  <tr><td>vs Azorius (WU) Empower Control</td><td>5–5</td><td>5–5</td></tr>
+                  <tr><td>vs Izzet (UR) Prowess Tempo</td><td>7–3</td><td>7–3</td></tr>
+                  <tr><td>vs Gruul (RG) Stompy Aggro</td><td>5–5</td><td>4–6</td></tr>
+                  <tr class="total"><td>Total — 30 games each</td><td>17–13 (57%)</td><td>16–14 (53%)</td></tr>
+                </tbody>
+              </table>
+              <details class="rep-sub">
+                <summary>Per-matchup notes</summary>
+                <div class="rep-sub-body">
+                  <ul class="sim-list">
+                    <li><strong>Azorius (5–5 / 5–5):</strong> Dead even in both builds. The empower-control deck is the format's population leader, so parity here is a respectable result — the matchup turns on card quantity, which is where the draw gap (below) bites hardest.</li>
+                    <li><strong>Izzet (7–3 / 7–3):</strong> The best matchup for both builds. The R/W deck races the prowess tempo plan effectively and its removal lines up well.</li>
+                    <li><strong>Gruul (5–5 / 4–6):</strong> The one matchup where the builds separate. The Teyo build dropped a game the Library build didn't — consistent with the loss tags, where the Teyo build was run over more often.</li>
+                  </ul>
+                </div>
+              </details>
+            </div>
+          </details>
+          <details class="rep-node">
+            <summary><span class="rep-node-title">Deck Verdict — Library vs Teyo</span><span class="rep-node-hint">Library stays in</span></summary>
+            <div class="rep-node-body">
+              <ul class="sim-list">
+                <li><strong>Library stays in.</strong> It out-recorded the Teyo build overall and in the Gruul matchup, and unlike Teyo it at least carries a late-game button (below).</li>
+                <li><strong>Teyo's realized value was tiny:</strong> across 30 games his appearances amounted to late flash-ins as a 1/1 with a counter — a mediocre creature, not the protection piece he was slotted as.</li>
+              </ul>
+              <details class="rep-sub">
+                <summary>Why Teyo recorded zero saves</summary>
+                <div class="rep-sub-body">
+                  <ul class="sim-list">
+                    <li>Opponent removal was aimed at your creatures <strong>20 times</strong> across the 30 games — the opportunities existed.</li>
+                    <li>Teyo was actually in hand for only about <strong>4</strong> of those moments.</li>
+                    <li>In <strong>none</strong> of them was {1}{W} actually open: the deck taps out curving out, and its white spells spend the white mana his flash-protection mode needs.</li>
+                    <li>The lesson generalizes: a reactive card in a deck that never holds mana up is a card that never fires. The slot has to match how the deck actually plays its turns.</li>
+                  </ul>
+                </div>
+              </details>
+            </div>
+          </details>
+          <details class="rep-node">
+            <summary><span class="rep-node-title">Card &amp; Mechanism Evidence</span><span class="rep-node-hint">What actually did the work</span></summary>
+            <div class="rep-node-body">
+              <ul class="sim-list">
+                <li><strong>Vicious Verse is a real engine</strong> — Voxmancer's prepared spell was cast ~20 times per 30 games, a recurring ping that keeps coming back. One card, repeatedly producing spells: prepared is static card advantage in practice.</li>
+                <li><strong>Living Library's {6} tuck fired only twice</strong> in its 30 games — it's insurance, not a plan. The card earns its slot on its body and flexibility, not on the activated ability.</li>
+                <li><strong>Empower pressure is real but not dominant:</strong> opponents held a planeswalker for roughly one turn per game on average.</li>
+              </ul>
+              <details class="rep-sub">
+                <summary>The card-draw gap, in detail</summary>
+                <div class="rep-sub-body">
+                  <ul class="sim-list">
+                    <li>Your deck drew <strong>~0.43 extra cards per game</strong> — and all of it came from Blazing Crescendo's impulse draw.</li>
+                    <li>Opponents drew <strong>~2.3 extra cards per game</strong> from draw spells and planeswalker value.</li>
+                    <li>That's roughly a two-card-per-game deficit against decks built on the format's advantage engines — the single clearest structural weakness the study found, and the thing to draft around next time: empower sources and prepared spells are advantage too, even though they never say “draw a card.”</li>
+                  </ul>
+                </div>
+              </details>
+            </div>
+          </details>
+          <details class="rep-node">
+            <summary><span class="rep-node-title">Loss Analysis</span><span class="rep-node-hint">“Run over fast” leads both builds</span></summary>
+            <div class="rep-node-body">
+              <ul class="sim-list">
+                <li><strong>Run over fast:</strong> 5 of the Library build's 13 losses, 8 of the Teyo build's 14 — the dominant tag in both, and worse in the build with the reactive card that never fired.</li>
+                <li><strong>Flood:</strong> 4 losses in each build — a real but secondary factor, roughly what you'd expect from variance across 30 games.</li>
+                <li><strong>Outvalued on cards:</strong> the remainder — the slow losses, where the draw gap compounds turn over turn.</li>
+              </ul>
+              <details class="rep-sub">
+                <summary>What the loss tags mean for the next draft</summary>
+                <div class="rep-sub-body">
+                  <p>Two of the three loss causes are draft-addressable: cheap early interaction and real advantage sources (empower, prepared) attack both “run over fast” and “outvalued.” Flood is mostly variance — noted, not chased. The Teyo experiment adds a deckbuilding rule: don't slot reactive protection into a curve-out deck and expect saves.</p>
+                </div>
+              </details>
+            </div>
+          </details>
+          <details class="rep-node">
+            <summary><span class="rep-node-title">Method &amp; Caveats</span><span class="rep-node-hint">Small sample — mechanisms over records</span></summary>
+            <div class="rep-node-body">
+              <ul class="sim-list">
+                <li>Simplified Monte Carlo engine; 10 games per matchup per build, 60 games total. Average game length ~8 rounds, no ties.</li>
+                <li>At this sample size the exact records are soft — a game or two flips any single matchup line. <strong>Treat the mechanisms as the findings, not the exact records:</strong> cast counts, save opportunities, and draw totals are far more stable than a 17–13.</li>
+                <li>That caveat is exactly why the Forge program exists: the standing bar for any verdict there is <strong>200+ games per pairing</strong> at full rules fidelity (see the Phase 2 report below).</li>
+              </ul>
+            </div>
+          </details>
+        </div>
+      </article>
+
+      <article class="rep-report" id="rep-forge-phase-2">
+        <div class="rep-report-head">
+          <h3>Forge Phase 2 — Tournament &amp; Mechanism Study</h3>
+          <div class="rep-meta"><span class="rep-status wip">In progress</span><span class="tag">Forge 2.0.15 · full rules</span><span class="tag">Batches running</span><span class="tag">Target: 200+ games per pairing</span></div>
+        </div>
+        <div class="rep-findings">
+          <h4>Where it stands</h4>
+          <ul>
+            <li><strong>Card audit is clean:</strong> all 280 Reality Fracture cards matched against Forge's scripts — zero missing, 255 clean, 25 flagged for a human look (most harmless).</li>
+            <li><strong>The tournament field is built:</strong> 14 decks — all ten color pairs plus four specials, including both of your configurations — and smoke tests across the field all passed.</li>
+            <li><strong>600 games logged so far</strong> at about 10.5 games a minute; the verbose substudy running alongside captures mechanism-level detail, not just wins and losses.</li>
+            <li><strong>The verdict is still out:</strong> whether the Monte Carlo study's Library-over-Teyo call holds at full real-rules fidelity is the question Phase 2 exists to answer.</li>
+          </ul>
+        </div>
+        <div class="rep-stats">
+          <div class="rep-stat"><strong>280</strong><span>cards audited · 0 missing</span></div>
+          <div class="rep-stat"><strong>14</strong><span>decks in the tournament field</span></div>
+          <div class="rep-stat"><strong>600</strong><span>games logged so far</span></div>
+          <div class="rep-stat"><strong>200+</strong><span>target games per pairing</span></div>
+        </div>
+        <div class="rep-tree">
+          <details class="rep-node">
+            <summary><span class="rep-node-title">Card Audit</span><span class="rep-node-hint">280 matched · 255 clean · 25 flagged</span></summary>
+            <div class="rep-node-body">
+              <ul class="sim-list">
+                <li>Every one of the set's <strong>280 cards</strong> was checked against Forge's card scripts: <strong>280 matched, zero missing</strong> — the full set is playable at real-rules fidelity.</li>
+                <li><strong>255 scripts are clean.</strong> The remaining <strong>25 are flagged for a human look</strong> before their results are fully trusted.</li>
+              </ul>
+              <details class="rep-sub">
+                <summary>The flagged 25 — what's actually in there</summary>
+                <div class="rep-sub-body">
+                  <ul class="sim-list">
+                    <li>Most flags are harmless artifacts of how the audit reads scripts — lands reading as “no cost” is the typical case, not a real defect.</li>
+                    <li>A couple are genuine oracle-text mismatches worth a manual review — <strong>Fateshaper Aspirant</strong> is one of them.</li>
+                    <li>Until the review clears, results involving flagged cards carry a small asterisk; nothing in the field depends on a flagged card heavily enough to stall the batches.</li>
+                  </ul>
+                </div>
+              </details>
+            </div>
+          </details>
+          <details class="rep-node">
+            <summary><span class="rep-node-title">Tournament Field</span><span class="rep-node-hint">14 decks · smoke tests passed</span></summary>
+            <div class="rep-node-body">
+              <p>The field is built to answer two questions at once: how the ten color pairs stack up against each other, and where your two configurations sit inside that field.</p>
+              <details class="rep-sub">
+                <summary>The 14 decks</summary>
+                <div class="rep-sub-body">
+                  <ul class="sim-list">
+                    <li><strong>All ten color pairs</strong>, built to the format's best current understanding of each archetype.</li>
+                    <li><strong>Boros-best</strong> — the strongest stock version of your colors, as the control for your draft deck.</li>
+                    <li><strong>Empower-max</strong> — pushes the Jace-token engine as far as it goes.</li>
+                    <li><strong>Counterweb</strong> — built around the set's +1/+1 counter interactions.</li>
+                    <li><strong>Your Library build</strong> and <strong>your Teyo build</strong> — the two configurations from the Monte Carlo study, carried in unchanged.</li>
+                  </ul>
+                </div>
+              </details>
+            </div>
+          </details>
+          <details class="rep-node">
+            <summary><span class="rep-node-title">Progress So Far</span><span class="rep-node-hint">600 games · ~10.5 per minute</span></summary>
+            <div class="rep-node-body">
+              <ul class="sim-list">
+                <li><strong>600 games logged</strong>, running at roughly <strong>10.5 games a minute</strong>.</li>
+                <li>The most recent batches written are <strong>your Library build against Azorius, Izzet, and Gruul</strong> — your matrix is being chewed through first.</li>
+                <li>A <strong>verbose substudy</strong> runs alongside the main batches, logging the mechanism layer — empower triggers, prepared-spell casts, counter movement — so the final report can explain results, not just rank them.</li>
+              </ul>
+              <details class="rep-sub">
+                <summary>What remains</summary>
+                <div class="rep-sub-body">
+                  <ul class="sim-list">
+                    <li>The rest of the pairing matrix, up to the <strong>200+ games-per-pairing</strong> bar.</li>
+                    <li>The <strong>archetype round-robin</strong> across the full field.</li>
+                    <li>Then the analysis pass: rankings with confidence intervals, hidden-archetype flags, and card re-evaluation against the draft guide's grades.</li>
+                  </ul>
+                </div>
+              </details>
+            </div>
+          </details>
+          <details class="rep-node">
+            <summary><span class="rep-node-title">What Phase 2 Will Answer</span><span class="rep-node-hint">The Library question, at full fidelity</span></summary>
+            <div class="rep-node-body">
+              <ul class="sim-list">
+                <li><strong>Does Library over Teyo hold?</strong> The quick study said Library 17–13, Teyo 16–14, Teyo zero saves. Phase 2 re-tests that at 200+ games per pairing with every rule real.</li>
+                <li><strong>Archetype rankings with confidence intervals</strong> — not just who won, but how sure the data lets us be.</li>
+                <li><strong>Hidden-archetype flags</strong> — shells that outperform their color pair's reputation.</li>
+                <li><strong>Card re-evaluation</strong> — which cards beat or miss their draft-guide grades when the games actually get played.</li>
+              </ul>
+              <details class="rep-sub">
+                <summary>Queued next: the decision-test battery</summary>
+                <div class="rep-sub-body">
+                  <ul class="sim-list">
+                    <li><strong>Paired board states, one variable flipped:</strong> a position where attacking the empowered Jace token is clearly right, beside a near-identical one where it's clearly wrong — same creatures, same life totals, one thing changed. Run both and watch what the pilot does.</li>
+                    <li>Same paired treatment across situation families: spend removal on the Jace token or go face, race an empower threshold or stabilize, when to fire a prepared spell, how to block into the counter web.</li>
+                    <li>Then retune the pilot until it judges the pairs correctly. A deck “losing” in the tournament might be the pilot failing these spots rather than the deck being weak — the battery is how we tell the difference, and it becomes the entrance exam for any future engine pilot.</li>
+                  </ul>
+                </div>
+              </details>
+            </div>
+          </details>
+          <details class="rep-node">
+            <summary><span class="rep-node-title">Method &amp; Caveats</span><span class="rep-node-hint">Read results through the pilot</span></summary>
+            <div class="rep-node-body">
+              <ul class="sim-list">
+                <li><strong>Forge 2.0.15</strong>, an Arena-faithful rules engine: empower and prepared spells are native engine features, and Phase 1 verified all 17 uniques in your deck resolve correctly in live AI-vs-AI games.</li>
+                <li>The standing sample bar for any verdict is <strong>200+ games per pairing</strong> — the Monte Carlo study's 10-per-matchup numbers are explicitly not the standard here.</li>
+              </ul>
+              <details class="rep-sub">
+                <summary>The pilot caveat</summary>
+                <div class="rep-sub-body">
+                  <p>Forge's AI has <strong>no dedicated decision logic for empower</strong> — it resolves the set's signature mechanic on generic heuristics. Every Phase 2 result is therefore “deck plus this pilot,” and empower-heavy decks may be underrated until the decision-test battery (above) measures exactly where the pilot misjudges. Final rankings will be reported with that caveat attached, not buried.</p>
+                </div>
+              </details>
+            </div>
+          </details>
+        </div>
       </article>
     </div>
   </section>
@@ -2066,6 +2367,7 @@
     if(id==='puzzles'||id==='learning')return 'puzzles';
     if(id==='articles'||id==='article-archive')return 'articles';
     if(id==='development')return 'development';
+    if(id==='sim-reports'||id==='sim-study')return 'sim-reports';
     if(id==='tools'||id==='proxy-wizard'||id==='counter'||id==='training-tracker')return 'tools';
     if(id==='decks'||id==='commander-lab'||id==='precon-library'||id==='wwe'||id==='playtest'||id==='staples'||id==='rachel'||id==='wes-workshop'||id.indexOf('tribal-')===0||id.indexOf('precon-')===0)return 'decks';
     return 'home';
