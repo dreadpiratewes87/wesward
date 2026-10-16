@@ -1,6 +1,18 @@
 {
  "episodes": [
   {
+   "cover": "draft-three-at-cardtropolis-the-expert-tune-up-2026-10-16.jpg",
+   "date": "2026-10-16",
+   "description": "Milo and Jax run the pre-draft war room for Wes's third Reality Fracture draft, tonight at Cardtropolis in Silverdale: the blue seat map from Seventeen Lands, all four of the set's counterspells by name, the card truths that move picks, an autopsy of the one-and-two draft from October fifteenth, and a seven-point checklist for the table.",
+   "duration": 861,
+   "kind": "episode",
+   "num": 5,
+   "show": "draft-show",
+   "showName": "Draft Show · Milo & Jax",
+   "slug": "draft-three-at-cardtropolis-the-expert-tune-up-2026-10-16",
+   "title": "Draft Three at Cardtropolis: The Expert Tune-Up"
+  },
+  {
    "cover": "leo-and-virgo-4-who-plans-the-date-2026-10-16.jpg",
    "date": "2026-10-16",
    "description": "Episode four: Leo and Vera settle who plans the date — Leo's grand night out versus Vera's itinerary with parking and a backup plan, the one-booked-anchor compromise, plus today's horoscope for both signs.",
@@ -25,124 +37,124 @@
    "title": "The Texting Rules"
   },
   {
-   "title": "Worlds 1999: Kai Budde and the Twenty-Minute Final",
-   "slug": "worlds-1999-kai-budde-and-the-twenty-minute-final",
-   "show": "history",
-   "showName": "History of Magic · Walter & Maya",
+   "cover": "covers/worlds-1999-kai-budde-and-the-twenty-minute-final.jpg",
+   "date": "Oct 15, 2026",
+   "description": "Yokohama, August 1999: the Cologne friends' payoff. Nineteen-year-old Kai Budde storms the Top 8 with a mono-red artifact machine, sweeps the shortest final ever played, and closes the decade as World Champion and Player of the Year.",
+   "duration": 427,
    "kind": "special",
    "num": 705,
-   "date": "Oct 15, 2026",
-   "duration": 427,
-   "description": "Yokohama, August 1999: the Cologne friends' payoff. Nineteen-year-old Kai Budde storms the Top 8 with a mono-red artifact machine, sweeps the shortest final ever played, and closes the decade as World Champion and Player of the Year.",
-   "cover": "covers/worlds-1999-kai-budde-and-the-twenty-minute-final.jpg"
-  },
-  {
-   "title": "Mercadian Masques: The Power-Down",
-   "slug": "mercadian-masques-the-power-down",
    "show": "history",
    "showName": "History of Magic · Walter & Maya",
+   "slug": "worlds-1999-kai-budde-and-the-twenty-minute-final",
+   "title": "Worlds 1999: Kai Budde and the Twenty-Minute Final"
+  },
+  {
+   "cover": "covers/mercadian-masques-the-power-down.jpg",
+   "date": "Oct 15, 2026",
+   "description": "After Combo Winter, R&D built a set that could not break anything: rebel chains, Cateran mercenaries, spellshapers and a tax-collecting port — while the Weatherlight crashed onto a city of masks where everything is for sale.",
+   "duration": 433,
    "kind": "special",
    "num": 704,
-   "date": "Oct 15, 2026",
-   "duration": 433,
-   "description": "After Combo Winter, R&D built a set that could not break anything: rebel chains, Cateran mercenaries, spellshapers and a tax-collecting port — while the Weatherlight crashed onto a city of masks where everything is for sale.",
-   "cover": "covers/mercadian-masques-the-power-down.jpg"
-  },
-  {
-   "title": "Sixth Edition: The Rules Rebuild",
-   "slug": "sixth-edition-the-rules-rebuild",
    "show": "history",
    "showName": "History of Magic · Walter & Maya",
+   "slug": "mercadian-masques-the-power-down",
+   "title": "Mercadian Masques: The Power-Down"
+  },
+  {
+   "cover": "covers/sixth-edition-the-rules-rebuild.jpg",
+   "date": "Oct 15, 2026",
+   "description": "April 1999: Magic tore its rulebook down to the studs — the stack replaced the batch, interrupts died, combat damage went on the stack, and Summon became Creature. The biggest rules change in the game's history, up close.",
+   "duration": 433,
    "kind": "special",
    "num": 703,
-   "date": "Oct 15, 2026",
-   "duration": 433,
-   "description": "April 1999: Magic tore its rulebook down to the studs — the stack replaced the batch, interrupts died, combat damage went on the stack, and Summon became Creature. The biggest rules change in the game's history, up close.",
-   "cover": "covers/sixth-edition-the-rules-rebuild.jpg"
-  },
-  {
-   "title": "Combo Winter: The Emergency Ban",
-   "slug": "combo-winter-the-emergency-ban",
    "show": "history",
    "showName": "History of Magic · Walter & Maya",
+   "slug": "sixth-edition-the-rules-rebuild",
+   "title": "Sixth Edition: The Rules Rebuild"
+  },
+  {
+   "cover": "covers/combo-winter-the-emergency-ban.jpg",
+   "date": "Oct 15, 2026",
+   "description": "The autopsy of a broken season: how Memory Jar and Megrim forced the first emergency ban in Magic history, and how the DCI spent 1999 banning its way back to sanity, card by card.",
+   "duration": 445,
    "kind": "special",
    "num": 702,
-   "date": "Oct 15, 2026",
-   "duration": 445,
-   "description": "The autopsy of a broken season: how Memory Jar and Megrim forced the first emergency ban in Magic history, and how the DCI spent 1999 banning its way back to sanity, card by card.",
-   "cover": "covers/combo-winter-the-emergency-ban.jpg"
-  },
-  {
-   "title": "1999: The Year the Bill Came Due",
-   "slug": "1999-the-year-the-bill-came-due",
    "show": "history",
    "showName": "History of Magic · Walter & Maya",
+   "slug": "combo-winter-the-emergency-ban",
+   "title": "Combo Winter: The Emergency Ban"
+  },
+  {
+   "cover": "covers/1999-the-year-the-bill-came-due.jpg",
+   "date": "Oct 15, 2026",
+   "description": "Year seven: Combo Winter deepens as Memory Jar forces the first emergency ban in the game's history, Sixth Edition rebuilds the rules around the stack, Urza's Destiny finishes the block, Hasbro buys Wizards, the Weatherlight crashes on Mercadia — and Kai Budde takes Worlds in Yokohama.",
+   "duration": 812,
    "kind": "episode",
    "num": 701,
-   "date": "Oct 15, 2026",
-   "duration": 812,
-   "description": "Year seven: Combo Winter deepens as Memory Jar forces the first emergency ban in the game's history, Sixth Edition rebuilds the rules around the stack, Urza's Destiny finishes the block, Hasbro buys Wizards, the Weatherlight crashes on Mercadia — and Kai Budde takes Worlds in Yokohama.",
-   "cover": "covers/1999-the-year-the-bill-came-due.jpg"
-  },
-  {
-   "title": "Urza's Saga: The Power Set",
-   "slug": "urzas-saga-the-power-set",
    "show": "history",
    "showName": "History of Magic · Walter & Maya",
+   "slug": "1999-the-year-the-bill-came-due",
+   "title": "1999: The Year the Bill Came Due"
+  },
+  {
+   "cover": "covers/urzas-saga-the-power-set.jpg",
+   "date": "Oct 15, 2026",
+   "description": "The enchantment block that Urza hijacked: Tolarian Academy, the free spells, Yawgmoth's Will and Morphling — how the most powerful set ever printed launched Combo Winter and the December bans.",
+   "duration": 500,
    "kind": "special",
    "num": 605,
-   "date": "Oct 15, 2026",
-   "duration": 500,
-   "description": "The enchantment block that Urza hijacked: Tolarian Academy, the free spells, Yawgmoth's Will and Morphling — how the most powerful set ever printed launched Combo Winter and the December bans.",
-   "cover": "covers/urzas-saga-the-power-set.jpg"
-  },
-  {
-   "title": "Unglued: Autopsy of a Joke",
-   "slug": "unglued-autopsy-of-a-joke",
    "show": "history",
    "showName": "History of Magic · Walter & Maya",
+   "slug": "urzas-saga-the-power-set",
+   "title": "Urza's Saga: The Power Set"
+  },
+  {
+   "cover": "covers/unglued-autopsy-of-a-joke.jpg",
+   "date": "Oct 15, 2026",
+   "description": "The silver-bordered joke set of August 1998: B.F.M., Blacker Lotus, Ashnod's Coupon and denimwalk — plus the serious legacy smuggled inside: the first tokens in booster packs and Christopher Rush's full-art basic lands.",
+   "duration": 493,
    "kind": "special",
    "num": 604,
-   "date": "Oct 15, 2026",
-   "duration": 493,
-   "description": "The silver-bordered joke set of August 1998: B.F.M., Blacker Lotus, Ashnod's Coupon and denimwalk — plus the serious legacy smuggled inside: the first tokens in booster packs and Christopher Rush's full-art basic lands.",
-   "cover": "covers/unglued-autopsy-of-a-joke.jpg"
-  },
-  {
-   "title": "Worlds 1998: Selden and the Schoolboy Champion",
-   "slug": "worlds-1998-selden-and-the-schoolboy-champion",
    "show": "history",
    "showName": "History of Magic · Walter & Maya",
+   "slug": "unglued-autopsy-of-a-joke",
+   "title": "Unglued: Autopsy of a Joke"
+  },
+  {
+   "cover": "covers/worlds-1998-selden-and-the-schoolboy-champion.jpg",
+   "date": "Oct 15, 2026",
+   "description": "Seattle, August 1998: a star-packed Top 8, Ben Rubin's second final of the year, and seventeen-year-old Brian Selden winning the World Championship in his Pro Tour debut with Cali Nightmare.",
+   "duration": 453,
    "kind": "special",
    "num": 603,
-   "date": "Oct 15, 2026",
-   "duration": 453,
-   "description": "Seattle, August 1998: a star-packed Top 8, Ben Rubin's second final of the year, and seventeen-year-old Brian Selden winning the World Championship in his Pro Tour debut with Cali Nightmare.",
-   "cover": "covers/worlds-1998-selden-and-the-schoolboy-champion.jpg"
-  },
-  {
-   "title": "Stronghold and Exodus: The Rescue and the Escape",
-   "slug": "stronghold-and-exodus-the-rescue-and-the-escape",
    "show": "history",
    "showName": "History of Magic · Walter & Maya",
+   "slug": "worlds-1998-selden-and-the-schoolboy-champion",
+   "title": "Worlds 1998: Selden and the Schoolboy Champion"
+  },
+  {
+   "cover": "covers/stronghold-and-exodus-the-rescue-and-the-escape.jpg",
+   "date": "Oct 15, 2026",
+   "description": "The Rath cycle's final two sets: Gerrard learns Volrath is his blood brother, the crew storms the Stronghold and escapes through Ertai's portal, Mirri falls, and Exodus quietly reinvents how every card shows its rarity.",
+   "duration": 446,
    "kind": "special",
    "num": 602,
-   "date": "Oct 15, 2026",
-   "duration": 446,
-   "description": "The Rath cycle's final two sets: Gerrard learns Volrath is his blood brother, the crew storms the Stronghold and escapes through Ertai's portal, Mirri falls, and Exodus quietly reinvents how every card shows its rarity.",
-   "cover": "covers/stronghold-and-exodus-the-rescue-and-the-escape.jpg"
-  },
-  {
-   "title": "1998: The Year Urza Came Back",
-   "slug": "1998-the-year-urza-came-back",
    "show": "history",
    "showName": "History of Magic · Walter & Maya",
+   "slug": "stronghold-and-exodus-the-rescue-and-the-escape",
+   "title": "Stronghold and Exodus: The Rescue and the Escape"
+  },
+  {
+   "cover": "covers/1998-the-year-urza-came-back.jpg",
+   "date": "Oct 15, 2026",
+   "description": "Year six: the Weatherlight crew storms Volrath's Stronghold and escapes Rath at a terrible price, Jon Finkel wins his first Pro Tour, seventeen-year-old Brian Selden takes Worlds in Seattle, Unglued prints the game's first full-art lands, and Urza returns with a school, a golem, and the most broken set ever made.",
+   "duration": 870,
    "kind": "episode",
    "num": 601,
-   "date": "Oct 15, 2026",
-   "duration": 870,
-   "description": "Year six: the Weatherlight crew storms Volrath's Stronghold and escapes Rath at a terrible price, Jon Finkel wins his first Pro Tour, seventeen-year-old Brian Selden takes Worlds in Seattle, Unglued prints the game's first full-art lands, and Urza returns with a school, a golem, and the most broken set ever made.",
-   "cover": "covers/1998-the-year-urza-came-back.jpg"
+   "show": "history",
+   "showName": "History of Magic · Walter & Maya",
+   "slug": "1998-the-year-urza-came-back",
+   "title": "1998: The Year Urza Came Back"
   },
   {
    "cover": "deck-tech-rachel-ward-louisiana-swamp-witch-2026-10-12.jpg",
