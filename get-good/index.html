@@ -2928,17 +2928,24 @@ function renderGrid(list){
       if(state.tier!=="ALL"&&state.tier!==pair[0])return;
       var entries=[];
       list.forEach(function(c){
-        rolesFor(c,state.cat).forEach(function(r){
-          if(r.t!==pair[0])return;
-          if(state.arch&&!r.a)return;
-          entries.push({c:c,role:r});
-        });
+        var rs=rolesFor(c,state.cat);
+        if(state.arch)rs=rs.filter(function(r){return r.a});
+        if(!rs.length)return;
+        var role=null;
+        if(state.tier==="ALL"){
+          if(rs[0].t!==pair[0])return;
+          role=rs[0];
+        }else{
+          for(var i=0;i<rs.length;i++){if(rs[i].t===pair[0]){role=rs[i];break}}
+          if(!role)return;
+        }
+        entries.push({c:c,role:role});
       });
       if(!entries.length)return;
       entries.sort(function(x,y){return sortCards(x.c,y.c)});
       var start=currentEntries.length;
       entries.forEach(function(e){currentEntries.push(e)});
-      html+="<div class=\"sr-tier-section\"><div class=\"sr-tier-head\"><h4><span class=\"sr-tier-chip t-"+pair[0]+"\">"+pair[1]+"</span> "+plural(entries.length,"role")+"</h4><p>"+esc(TIER_BLURB[pair[0]])+"</p></div>"
+      html+="<div class=\"sr-tier-section\"><div class=\"sr-tier-head\"><h4><span class=\"sr-tier-chip t-"+pair[0]+"\">"+pair[1]+"</span> "+plural(entries.length,"card")+"</h4><p>"+esc(TIER_BLURB[pair[0]])+"</p></div>"
         +"<div class=\"sr-grid\">"+entries.map(function(e,i){return tileHTML(e,start+i)}).join("")+"</div></div>";
     });
     gridEl.innerHTML=html||"<div class=\"empty\">No cards in this slice.</div>";
@@ -3194,17 +3201,24 @@ function renderGrid(list){
       if(state.tier!=="ALL"&&state.tier!==pair[0])return;
       var entries=[];
       list.forEach(function(c){
-        rolesFor(c,state.cat).forEach(function(r){
-          if(r.t!==pair[0])return;
-          if(state.arch&&!r.a)return;
-          entries.push({c:c,role:r});
-        });
+        var rs=rolesFor(c,state.cat);
+        if(state.arch)rs=rs.filter(function(r){return r.a});
+        if(!rs.length)return;
+        var role=null;
+        if(state.tier==="ALL"){
+          if(rs[0].t!==pair[0])return;
+          role=rs[0];
+        }else{
+          for(var i=0;i<rs.length;i++){if(rs[i].t===pair[0]){role=rs[i];break}}
+          if(!role)return;
+        }
+        entries.push({c:c,role:role});
       });
       if(!entries.length)return;
       entries.sort(function(x,y){return sortCards(x.c,y.c)});
       var start=currentEntries.length;
       entries.forEach(function(e){currentEntries.push(e)});
-      html+="<div class=\"sr-tier-section\"><div class=\"sr-tier-head\"><h4><span class=\"sr-tier-chip t-"+pair[0]+"\">"+pair[1]+"</span> "+plural(entries.length,"role")+"</h4><p>"+esc(TIER_BLURB[pair[0]])+"</p></div>"
+      html+="<div class=\"sr-tier-section\"><div class=\"sr-tier-head\"><h4><span class=\"sr-tier-chip t-"+pair[0]+"\">"+pair[1]+"</span> "+plural(entries.length,"card")+"</h4><p>"+esc(TIER_BLURB[pair[0]])+"</p></div>"
         +"<div class=\"sr-grid\">"+entries.map(function(e,i){return tileHTML(e,start+i)}).join("")+"</div></div>";
     });
     gridEl.innerHTML=html||"<div class=\"empty\">No cards in this slice.</div>";
