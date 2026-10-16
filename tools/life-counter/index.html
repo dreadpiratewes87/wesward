@@ -197,6 +197,14 @@
 .resume-btn strong{font-size:14px;}
 .resume-btn span{font-size:12px;color:#9a9aa5;}
 .resume-btn:active{background:#2c2c36;}
+.save-list{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
+.save-entry{display:flex;gap:8px;align-items:stretch;}
+.save-recall{flex:1;background:#1c1c24;border:1px solid #2c2c36;border-radius:10px;padding:10px 12px;text-align:left;color:#f2f2f5;cursor:pointer;display:flex;flex-direction:column;gap:2px;min-width:0;}
+.save-recall strong{font-size:14px;}
+.save-recall span{font-size:12px;color:#9a9aa5;}
+.save-recall:active{background:#2c2c36;}
+.save-del{background:#1c1c24;border:1px solid #2c2c36;border-radius:10px;color:#ff8a80;padding:0 14px;cursor:pointer;font-size:15px;}
+.save-del:active{background:#2c2c36;}
 </style>
 </head>
 <body class="tabletop">
@@ -219,6 +227,9 @@
     </button>
     <button class="tool" id="stats" aria-label="View player records and stats">
       <svg viewBox="0 0 24 24"><path d="M8 21h8M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0V4Z"/><path d="M7 6H4.5A2.5 2.5 0 0 0 7 11M17 6h2.5A2.5 2.5 0 0 1 17 11"/></svg>
+    </button>
+    <button class="tool" id="savegame" aria-label="Save this game">
+      <svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>
     </button>
     <button class="tool" id="reset" aria-label="Start a new game">
       <svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>
@@ -416,6 +427,7 @@
       document.getElementById('reset').addEventListener('click',function(){ openSetup(); });
       document.getElementById('endgame').addEventListener('click',function(){ openEndGame(); });
       document.getElementById('stats').addEventListener('click',function(){ openStats(); });
+      document.getElementById('savegame').addEventListener('click',function(){ openSaveGame(); });
       document.getElementById('nextTurn').addEventListener('click',function(){
         remember(); turn=(turn+1)%players.length; if(turn===0) round++; addEvent('Turn → '+players[turn].name+' · round '+round); buzz(); render();
       });
@@ -465,6 +477,10 @@
           // listen for active (resumable) games
           lcFbDb.ref('lifecounter/active').on('value',function(snap){
             try{ localStorage.setItem('lc-active-cloud', JSON.stringify(snap.val()||{})); }catch(e){}
+          });
+          // listen for manually saved games (named snapshots)
+          lcFbDb.ref('lifecounter/saves').on('value',function(snap){
+            try{ lcSetSaves(snap.val()||{}); }catch(e){}
           });
         }catch(e){}
       }
@@ -533,6 +549,78 @@
           // store for click handler
           window._resumeGames=games;
         }catch(e){}
+      }
+      /* ---- manual saved games: named snapshots (Firebase lifecounter/saves + localStorage mirror) ---- */
+      function loadSavesLocal(){ try{ var v=JSON.parse(localStorage.getItem('lc-saves')||'{}'); return (v&&typeof v==='object')?v:{}; }catch(e){ return {}; } }
+      var lcSaves = loadSavesLocal();
+      function storeSavesLocal(){ try{ localStorage.setItem('lc-saves', JSON.stringify(lcSaves)); }catch(e){} }
+      function lcSetSaves(map){ lcSaves=(map&&typeof map==='object')?map:{}; storeSavesLocal(); renderSavesIfOpen(); }
+      function saveSnapshot(){
+        return JSON.parse(JSON.stringify({players:players, events:events, turn:turn, round:round, startLife:START_LIFE, mana:playerMana}));
+      }
+      function defaultSaveName(){
+        var d=new Date();
+        var when=d.toLocaleDateString(undefined,{month:'short',day:'numeric'})+' · '+d.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'});
+        return when+' · '+players.map(function(p){return p.name;}).join(', ');
+      }
+      function openSaveGame(){
+        var summary=players.map(function(p){return p.name+' '+p.life;}).join(' · ');
+        openSheet('<div class="sheet-head"><h2 id="sheetTitle" style="margin:0;flex:1;font-size:24px;">Save game</h2><button class="close" data-close aria-label="Close">×</button></div>'+
+          '<h2 class="section-title">Name this save</h2>'+
+          '<input id="savename" class="player-name-input" maxlength="60" value="'+esc(defaultSaveName())+'" aria-label="Save name">'+
+          '<p class="danger-note">'+esc(summary)+' · Round '+round+'</p>'+
+          '<div class="confirm"><div class="confirm-actions" style="grid-template-columns:1fr;"><button class="reset-yes" data-save-confirm style="background:#23617a;">Save game</button></div></div>');
+        setTimeout(function(){ var i=document.getElementById('savename'); if(i){ i.focus(); i.select(); } },120);
+      }
+      function doSaveGame(){
+        var input=document.getElementById('savename');
+        var name=(input&&input.value.trim())||defaultSaveName();
+        var id='save-'+Date.now()+'-'+Math.random().toString(36).slice(2,7);
+        var snap=saveSnapshot();
+        var rec={name:name, saved_at:new Date().toISOString(), players:snap.players, events:snap.events, turn:snap.turn, round:snap.round, startLife:snap.startLife, mana:snap.mana};
+        lcSaves[id]=rec; storeSavesLocal();
+        if(lcFbDb&&lcFbReady){ try{ lcFbDb.ref('lifecounter/saves/'+id).set(rec); }catch(e){} }
+        addEvent('Game saved · '+name);
+        closeSheet(); buzz(); render();
+      }
+      function recallSave(id){
+        var rec=lcSaves[id];
+        if(!rec||!rec.players||!rec.players.length) return;
+        if(history.length>0 && !window.confirm('Load "'+(rec.name||'Saved game')+'"? Your current game will be replaced.')) return;
+        try{
+          players=JSON.parse(JSON.stringify(rec.players));
+          turn=rec.turn||0; round=rec.round||1; START_LIFE=rec.startLife||40;
+          if(rec.mana&&rec.mana.length){ playerMana=JSON.parse(JSON.stringify(rec.mana)); try{ localStorage.setItem('lc-mana', JSON.stringify(playerMana)); }catch(e){} }
+          history=[]; undoBtn.disabled=true;
+          events=(rec.events&&rec.events.length)?rec.events.slice():['Recalled save · '+(rec.name||'Saved game')];
+          addEvent('Recalled save · '+(rec.name||'Saved game'));
+          shade.classList.remove('open'); shade.setAttribute('aria-hidden','true');
+          buzz(); render();
+        }catch(e){}
+      }
+      function deleteSave(id){
+        var rec=lcSaves[id];
+        if(!rec) return;
+        if(!window.confirm('Delete saved game "'+(rec.name||'Saved game')+'"?')) return;
+        delete lcSaves[id]; storeSavesLocal();
+        if(lcFbDb&&lcFbReady){ try{ lcFbDb.ref('lifecounter/saves/'+id).remove(); }catch(e){} }
+        openStats();
+      }
+      function savesListHtml(){
+        var ids=Object.keys(lcSaves).sort(function(a,b){ var x=lcSaves[a].saved_at||'', y=lcSaves[b].saved_at||''; return x<y?1:(x>y?-1:0); });
+        if(!ids.length) return '<p class="danger-note">No saved games yet. Tap the save button during a game to snapshot it here.</p>';
+        var h='<div class="save-list">';
+        ids.forEach(function(id){
+          var r=lcSaves[id];
+          if(!r||!r.players) return;
+          var when=''; try{ when=new Date(r.saved_at).toLocaleString(); }catch(e){}
+          var summary=r.players.map(function(p){return p.name+' '+p.life;}).join(' · ');
+          h+='<div class="save-entry"><button class="save-recall" data-recall="'+id+'"><strong>'+esc(r.name||'Saved game')+'</strong><span>'+esc(summary)+'</span><span>'+esc(when)+' · Round '+(r.round||1)+' · tap to load</span></button><button class="save-del" data-del-save="'+id+'" aria-label="Delete saved game ' + esc(r.name||'Saved game') + '">🗑</button></div>';
+        });
+        return h+'</div>';
+      }
+      function renderSavesIfOpen(){
+        try{ if(shade.classList.contains('open') && sheet.querySelector('[data-saves-list]')) openStats(); }catch(e){}
       }
       function openSheet(html){
         active=null;
@@ -614,16 +702,22 @@
           '<h2 class="section-title">Standings</h2><table class="stats-table"><thead><tr><th>Player</th><th class="num">Played</th><th class="num">Wins</th><th class="num">Win %</th></tr></thead><tbody>'+body+'</tbody></table>'+
           '<h2 class="section-title">Head-to-head</h2><table class="stats-table"><thead><tr><th>Matchup</th><th class="num">W–L</th><th class="num">Games</th></tr></thead><tbody>'+h2h+'</tbody></table>'+
           (recent?'<h2 class="section-title">Recent games</h2><table class="stats-table"><thead><tr><th>Date</th><th>Players</th><th>Winner</th></tr></thead><tbody>'+recent+'</tbody></table>':'')+
+          '<h2 class="section-title">Saved games</h2><div data-saves-list>'+savesListHtml()+'</div>'+
           (games.length?'<button class="linklike" data-clear-history>Clear history</button>':'')+
           '<p class="sync-note">'+(function(){try{var s=localStorage.getItem('lc-synced-at');return s?'Synced across devices · '+s.slice(5,10).replace('-','/'):'Sync pending…';}catch(e){return '';}})()+'</p>');
       }
       sheet.addEventListener('click',function(e){
+        var rb=e.target.closest('[data-resume]');
+        if(rb){ var g=(window._resumeGames||[])[parseInt(rb.getAttribute('data-resume'),10)]; if(g) resumeGame(g.snap); return; }
+        var rc=e.target.closest('[data-recall]');
+        if(rc){ recallSave(rc.getAttribute('data-recall')); return; }
+        var dl=e.target.closest('[data-del-save]');
+        if(dl){ deleteSave(dl.getAttribute('data-del-save')); return; }
+        if(e.target.closest('[data-save-confirm]')){ doSaveGame(); return; }
         var t=e.target.closest('[data-setup],[data-winner],[data-setup-start],[data-setup-open],[data-clear-history]');
         if(!t) return;
         if(t.hasAttribute('data-setup-start')){ startGame(); return; }
         if(t.hasAttribute('data-setup-open')){ openSetup(); setTimeout(populateResumeList,50); return; }
-        var rb=e.target.closest('[data-resume]');
-        if(rb){ var g=(window._resumeGames||[])[parseInt(rb.getAttribute('data-resume'),10)]; if(g) resumeGame(g.snap); return; }
         if(t.hasAttribute('data-clear-history')){ if(window.confirm('Clear all recorded games? This clears history on all your devices.')){ var now=new Date().toISOString(); try{ localStorage.setItem('lc-cleared-at',now); }catch(e){} storeGames([]); queueSync({type:'clear_all',game_id:'',date:now,players:'',winner:'',life:''}); openStats(); } return; }
         if(t.hasAttribute('data-winner')){ finishGame(+t.getAttribute('data-winner')); return; }
         var kind=t.getAttribute('data-setup'), v=+t.getAttribute('data-v');
@@ -638,8 +732,19 @@
         if(sb) sb.textContent=inp.value.trim()||('Player '+(i+1));
       });
 
+      /* Fresh-open default: a brand-new open starts as a 2-player game,
+         Rachel vs Wesley. This only shapes the fresh start — resuming an
+         active game or recalling a saved game replaces it wholesale. */
+      try{
+        players = makePlayers(2, ['Rachel','Wesley'], START_LIFE);
+        turn = 0; round = 1; history = []; events = ['Game ready · 40 life'];
+      }catch(e){}
       render();
       openSetup();
+      try{
+        setupState.n = 2; setupState.names = ['Rachel','Wesley']; setupState.starter = 0; setupState.life = START_LIFE;
+        renderSetup(); setTimeout(populateResumeList,50);
+      }catch(e){}
       pullSync(); flushSync();
       document.addEventListener('visibilitychange',function(){ if(!document.hidden) pullSync(); });
     })();
