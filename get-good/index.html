@@ -788,6 +788,25 @@
   .sim-cols .hub-card h3{margin-top:0}
   .sim-list{margin:0;padding-left:20px;display:grid;gap:8px}
   .sim-list li{line-height:1.5}
+  /* Sim Study — studies index cards */
+  .study-list{display:grid;gap:16px}
+  .study-card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);box-shadow:var(--shadow);padding:clamp(18px,3vw,26px)}
+  .study-head{display:flex;align-items:baseline;justify-content:space-between;gap:14px;border-bottom:3px solid var(--line);padding-bottom:11px;margin-bottom:13px}
+  .study-head h3{font:800 clamp(27px,4vw,36px)/1.02 "Barlow Condensed",sans-serif;margin:0}
+  .study-head .stamp{font-weight:700}
+  .study-verdict{font-size:17px;line-height:1.55;margin:0;max-width:80ch}
+  .rep-stats.study-stats{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .study-card .rep-stat{box-shadow:none}
+  .study-card h4{font:800 23px/1 "Barlow Condensed",sans-serif;color:var(--teal);margin:22px 0 9px}
+  .study-card p{line-height:1.55}
+  .study-card p.body{margin:0 0 10px;max-width:80ch}
+  .study-card .sim-table{box-shadow:none}
+  .study-card .sim-cols{margin-top:0}
+  .study-caveats{margin-top:20px;background:color-mix(in srgb,var(--gold) 13%,var(--paper));border:1px solid color-mix(in srgb,var(--gold) 45%,var(--line));border-radius:var(--radius-sm);padding:14px 16px}
+  .study-caveats .cav-label{display:block;font-size:13px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+  .study-caveats p{margin:0;max-width:80ch}
+  .study-caveats p+p{margin-top:8px}
+  @media(max-width:560px){.rep-stats.study-stats{grid-template-columns:1fr}.study-head{flex-direction:column;gap:4px}}
   /* Phone widths: the section tabs wrap into two rows instead of scrolling sideways */
   @media(max-width:700px){
     .hub-tabs{flex-wrap:wrap;overflow-x:visible}
@@ -2002,9 +2021,75 @@
   </section>
 
   <section class="view" id="sim-study" aria-labelledby="sim-study-heading">
-    <header class="viewbar"><button class="back-nav-btn" type="button" data-back>← Back</button><button class="back-btn" type="button" data-home>⌂ Return main</button><h1 id="sim-study-heading">Sim Study</h1><span class="stamp">Monte Carlo · Oct 15, 2026</span></header>
+    <header class="viewbar"><button class="back-nav-btn" type="button" data-back>← Back</button><button class="back-btn" type="button" data-home>⌂ Return main</button><h1 id="sim-study-heading">Sim Study</h1><span class="stamp">Studies · newest first</span></header>
     <div class="hub-page">
-      <div class="hub-page-head"><div><h2>What the games say.</h2><p>Your Oct 15 red-white Reality Fracture draft deck, simulated against top-decile builds of the format's three best archetypes — 10 games per matchup, in both the Living Library build and the Teyo build. At population level (17Lands, ~515K Premier Draft games), Azorius wins 57.2%, Izzet 56.1%, and Gruul 56.0%; Boros sits at 54.1% — so these were uphill fights by design.</p></div></div>
+      <div class="hub-page-head"><div><h2>What the games say.</h2><p>One summary per project or task: the question, the method, the numbers, the lesson.</p></div></div>
+      <div class="study-list">
+        <article class="study-card" id="study-draft-3">
+          <div class="study-head"><h3>Draft 3 — Paper Night at Cardtropolis + the Sim Lab</h3><span class="stamp">Oct 16–17, 2026</span></div>
+          <p class="study-verdict"><strong>2–1 in paper against real draft pools; 43.6% in the lab against the format's best trophy decks.</strong> A genuinely competitive deck — it beats the tempo, Gruul, and Dimir trophies — but it needs the play, and its sim percentages are likely understated: the pilot caveat below cuts hardest on exactly this kind of deck.</p>
+          <div class="rep-stats study-stats">
+            <div class="rep-stat"><strong>2–1</strong><span>Paper record · games 5–3</span></div>
+            <div class="rep-stat"><strong>218–282</strong><span>Sims vs trophy decks · 43.6% · 500 games</span></div>
+            <div class="rep-stat"><strong>50% / 37%</strong><span>On the play / on the draw</span></div>
+          </div>
+          <h4>The night (paper)</h4>
+          <p class="body">Wes's third Reality Fracture draft — FNM at Cardtropolis TCG, Silverdale — played exactly as built: a Jeskai deck, white-blue splashing red (6 Plains, 6 Island, 2 Mountains plus duals), with Tomik, Chandra's Emberling, and Infinite Coursework in the final 40.</p>
+          <table class="sim-table">
+            <thead><tr><th>Opponent</th><th>Match</th><th>Games</th></tr></thead>
+            <tbody>
+              <tr><td>Dan</td><td>2–1</td><td>Win – loss – win</td></tr>
+              <tr><td>Trevor</td><td>2–0</td><td>Win – win</td></tr>
+              <tr><td>Holly</td><td>1–2</td><td>Loss – win – loss</td></tr>
+            </tbody>
+          </table>
+          <ul class="sim-list" style="margin-top:12px">
+            <li><strong>Hasty early, sharp late.</strong> He played hastily in the first two matches and missed obvious plays, then slowed down and sequenced properly by the third.</li>
+            <li><strong>Set Review paid off against Holly.</strong> Knowing Blazing Crescendo was red's only pump trick let him take near-lethal damage and swing back for his one game off her.</li>
+            <li><strong>Game 3 vs Holly:</strong> lost with Sphinx of False Conclusions stranded in hand — eight lands, but only one blue source.</li>
+            <li><strong>Against Trevor,</strong> an inexperienced opponent left his Jace token alone all game, and Wes surveilled off it repeatedly.</li>
+            <li><strong>The format lesson:</strong> Trevor's mid-game turn spent entirely on a vanilla Wrecking Gecko — answered next turn by Infinite Coursework. In a set full of enters-the-battlefield effects, a do-nothing body is a wasted turn.</li>
+          </ul>
+          <h4>The sims</h4>
+          <p class="body">The morning after, the same 40 cards were run in FRAE (Rowan's engine; heuristic pilot in both seats, 50 games per matchup, alternating play/draw) against 10 real trophy decks pulled from 17Lands — the best 7-x list for each top color identity in Reality Fracture Premier Draft. Scores are Wes's deck first:</p>
+          <table class="sim-table">
+            <thead><tr><th>Trophy deck</th><th>Record</th><th>Win %</th></tr></thead>
+            <tbody>
+              <tr><td>UR — tempo</td><td>38–12</td><td>76%</td></tr>
+              <tr><td>RG — Gruul</td><td>31–19</td><td>62%</td></tr>
+              <tr><td>UB — Dimir</td><td>26–24</td><td>52%</td></tr>
+              <tr><td>UBG</td><td>23–27</td><td>46%</td></tr>
+              <tr><td>WUB</td><td>22–28</td><td>44%</td></tr>
+              <tr><td>WUb</td><td>19–31</td><td>38%</td></tr>
+              <tr><td>BG</td><td>18–32</td><td>36%</td></tr>
+              <tr><td>WU</td><td>17–33</td><td>34%</td></tr>
+              <tr><td>BR</td><td>15–35</td><td>30%</td></tr>
+              <tr><td>WG — go-wide Selesnya</td><td>9–41</td><td>18%</td></tr>
+              <tr class="total"><td>Total — 500 games</td><td>218–282</td><td>43.6%</td></tr>
+            </tbody>
+          </table>
+          <ul class="sim-list" style="margin-top:12px">
+            <li><strong>Genuinely competitive with real top-end draft pools</strong> — it beats the tempo, Gruul, and Dimir trophies — but it is a below-.500 deck against trophy-caliber opposition under this pilot.</li>
+            <li><strong>Worst matchup: go-wide Selesnya (18%).</strong> And the WU trophy is a better version of its own plan.</li>
+            <li><strong>The deck needs the play.</strong> The play/draw split persists against real decks: 50% on the play, 37% on the draw.</li>
+            <li><strong>The harsher stress test:</strong> against synthetic archetype best-builds (best possible lists with duplicated bombs) it scored 119–381 (23.8%) — those games drag to 16–17 turns and the deck loses the long game. That opponent set was superseded by the trophy decks, which answer the question actually asked.</li>
+            <li><strong>Calibration benchmark:</strong> the same engine rates Wes's Oct 15 deck at 46% against the Azorius best-build, where Draft 3 scored 10% — the instrument ranks Draft 3 well below the Oct 15 deck. Direction is informative; absolute percentages are not store predictions.</li>
+          </ul>
+          <div class="study-caveats">
+            <span class="cav-label">Caveats — load-bearing</span>
+            <p>The FRAE pilot failed its Gate 2 head-to-head (0.475 against the Forge AI): it extracts fewer wins from the same lists, worst in sequencing-heavy shells — and Draft 3 is the most sequencing-dependent deck yet simmed, so its percentages are likely understated more than a simple deck's. Equal-pilot deck-vs-deck differences are the trustworthy output, not absolute win rates. Trophy decks are the top of the format, not a typical FNM pod — the paper result (2–1) came against real draft pools.</p>
+            <p><strong>Engine note:</strong> this study caught and fixed two engine crashes (a prepared-spell cast crash and a damage-effect argument bug); the K1 decision battery re-verified 6/6 families after each fix.</p>
+          </div>
+        </article>
+        <article class="study-card" id="study-monte-carlo">
+          <div class="study-head"><h3>Monte Carlo</h3><span class="stamp">Oct 15, 2026</span></div>
+          <p class="study-verdict">Your Oct 15 red-white Reality Fracture draft deck, simulated against top-decile builds of the format's three best archetypes — 10 games per matchup, in both the Living Library build and the Teyo build. <strong>The Library build out-records the Teyo build</strong> — and the mechanism data below explains why.</p>
+          <div class="rep-stats study-stats">
+            <div class="rep-stat"><strong>17–13 · 57%</strong><span>Living Library build · 30 games</span></div>
+            <div class="rep-stat"><strong>16–14 · 53%</strong><span>Teyo build · 30 games</span></div>
+            <div class="rep-stat"><strong>0</strong><span>Teyo saves in 30 games</span></div>
+          </div>
+          <p class="body" style="margin-top:14px">At population level (17Lands, ~515K Premier Draft games), Azorius wins 57.2%, Izzet 56.1%, and Gruul 56.0%; Boros sits at 54.1% — so these were uphill fights by design.</p>
       <table class="sim-table">
         <thead><tr><th>Matchup</th><th>Library build</th><th>Teyo build</th></tr></thead>
         <tbody>
@@ -2015,16 +2100,16 @@
         </tbody>
       </table>
       <div class="sim-cols">
-        <article class="hub-card">
-          <h3>The verdicts</h3>
+        <div>
+          <h4>The verdicts</h4>
           <ul class="sim-list">
             <li><strong>Library stays in.</strong> The Library build out-recorded the Teyo build, and the mechanism explains why (below).</li>
             <li><strong>Teyo recorded zero saves in 30 games.</strong> Removal was aimed at your creatures 20 times; Teyo was in hand for about 4 of those, and in none of them was {1}{W} actually open — the deck taps out curving out, and its white spells spend the white mana. His realized value was late flash-ins as a 1/1 with a counter.</li>
             <li><strong>The card-draw gap is real.</strong> Your deck drew ~0.43 extra cards per game (all from Blazing Crescendo impulse); opponents drew ~2.3 extra per game from draw spells and planeswalker value.</li>
           </ul>
-        </article>
-        <article class="hub-card">
-          <h3>Mechanism diagnostics</h3>
+        </div>
+        <div>
+          <h4>Mechanism diagnostics</h4>
           <ul class="sim-list">
             <li><strong>Vicious Verse is a real engine</strong> — the prepared spell was cast ~20 times per 30 games, a recurring ping that keeps coming back.</li>
             <li><strong>Living Library's {6} tuck fired only twice</strong> in its 30 games — it's insurance, not a plan.</li>
@@ -2032,13 +2117,17 @@
             <li><strong>Biggest loss tag: “run over fast”</strong> — 5 of the Library build's 13 losses, 8 of the Teyo build's 14. Then flood (4 each) and being outvalued on cards.</li>
             <li>Average game length ~8 rounds. No ties. Small sample — treat the mechanisms as the findings, not the exact records.</li>
           </ul>
+        </div>
+      </div>
+        <h4>The research program</h4>
+        <p class="body">The simplified Monte Carlo above was the scout. The lab engine is now <strong>FRAE</strong>, Rowan's homegrown Reality Fracture engine (Forge was retired as a pilot after its AI's biases distorted results; it remains only as a rules oracle). FRAE passed its rules-accuracy and speed gates, but its pilot lost the Gate 2 head-to-head (0.475), so every sim verdict on this page carries the pilot caveat: trust deck-vs-deck differences, not absolute win rates. The standing sample bar for any verdict is <strong>200+ games per pairing</strong>, aimed at mechanic interactions, hidden archetypes, card re-evaluation against guide grades, and play patterns — with the lessons taught back here.</p>
+        <div class="study-caveats">
+          <span class="cav-label">Caveats</span>
+          <p>Small sample — 10 games per matchup per build, 60 games total, on a simplified Monte Carlo engine. Treat the mechanisms as the findings, not the exact records.</p>
+        </div>
         </article>
       </div>
-      <article class="hub-card" style="margin-top:12px">
-        <h3>The research program</h3>
-        <p>The simplified Monte Carlo above was the scout; the real lab is <strong>Forge 2.0.15</strong>, an Arena-faithful engine installed locally. Phase 1 is done: Forge already ships Reality Fracture fully scripted — empower and prepared spells are native engine features — and all 17 uniques in your deck resolve correctly in live AI-vs-AI games. Phase 2 (a full 280-card script audit, then large tournaments) is under way. The standing sample bar for any verdict is <strong>200+ games per pairing</strong>, aimed at mechanic interactions, hidden archetypes, card re-evaluation against guide grades, and play patterns — with the lessons taught back here.</p>
-      </article>
-      <article class="hub-card" style="margin-top:12px">
+      <article class="hub-card" style="margin-top:16px">
         <h3>Read the full reports</h3>
         <p>The complete rundowns — headline findings, matchup tables, mechanism evidence, and method notes, organized as expandable trees you can drill into section by section — live in Sim Reports.</p>
         <div class="hub-card-actions"><button class="btn teal" type="button" data-open="sim-reports">Open Sim Reports</button></div>
