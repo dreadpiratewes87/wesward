@@ -1014,6 +1014,124 @@
   .splash h1{animation-delay:.05s}.splash p{animation-delay:.1s}.splash-enter{animation-delay:.15s}
   @media(prefers-reduced-motion:reduce){.splash-badge,.splash h1,.splash p,.splash-enter{animation:none}}
 </style>
+<style>
+  /* ==== Electric 3D neon templating — the splash look applied hub-wide ====
+     Palette: deep plum field #20000D → #19010A · neon droplet pink core #BD1260
+     with bright electric-pink highlights · pale teal-green #A8EAD3 reserved for
+     special accents (quick-bar current section, small highlights).
+     Visual only: tokens + surfaces + glows; no layout, content, or behavior changes. */
+  :root{
+    color-scheme:dark;
+    --bg:#19010A;
+    --paper:#2B0A1E;
+    --paper-2:#3B1129;
+    --ink:#FFF3F9;
+    --muted:#DCA9C2;
+    --line:#72264A;
+    --accent:#D81B74;
+    --accent-ink:#fff;
+    --teal:#A8EAD3;
+    --teal-soft:rgba(168,234,211,.14);
+    --gold:#EBCB6B;
+    --red:#FF7A70;
+    --green:#5ED598;
+    --neon-core:#BD1260;
+    --neon-hi:#FF6FAE;
+    --neon-soft:rgba(255,111,174,.5);
+    --glass:linear-gradient(165deg,#3A0F2B 0%,#2B0A1E 55%,#20060F 100%);
+    --shadow:inset 0 1px 0 rgba(255,255,255,.09),0 14px 34px rgba(0,0,0,.5),0 0 20px rgba(189,18,96,.14);
+  }
+  @media(prefers-color-scheme:dark){:root{--bg:#19010A;--paper:#2B0A1E;--paper-2:#3B1129;--ink:#FFF3F9;--muted:#DCA9C2;--line:#72264A;--accent:#D81B74;--teal:#A8EAD3;--gold:#EBCB6B;--red:#FF7A70;--green:#5ED598}}
+  html{background:#19010A}
+  body{background:#19010A}
+  /* The splash's dark radial plum glow field, fixed behind every page */
+  body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(120% 90% at 50% 32%,#20000D 0%,#1C000B 55%,#19010A 100%)}
+  ::selection{background:var(--neon-core);color:#fff}
+  /* Headings take a soft electric-pink neon glow */
+  h1,h2,h3{text-shadow:0 0 16px rgba(255,111,174,.32),0 0 3px rgba(255,111,174,.22)}
+  /* ---- Quick-access bar: dark neon chrome, current section glows teal ---- */
+  .hub-tabs{background:linear-gradient(180deg,rgba(59,17,41,.94),rgba(25,1,10,.96));border-bottom:1px solid rgba(255,111,174,.38);box-shadow:0 12px 30px rgba(0,0,0,.5),0 0 20px rgba(189,18,96,.2);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+  .hub-tab{color:#EFC3D8}
+  .hub-tab:hover{color:#fff;background:rgba(255,111,174,.13)}
+  .hub-tab.active{background:rgba(168,234,211,.16);color:#A8EAD3;box-shadow:inset 0 0 0 1px rgba(168,234,211,.6),0 0 15px rgba(168,234,211,.35);text-shadow:0 0 9px rgba(168,234,211,.65)}
+  /* ---- Page bars, back/return chrome ---- */
+  .viewbar{background:linear-gradient(180deg,rgba(43,10,30,.97),rgba(25,1,10,.98));border-bottom:1px solid rgba(255,111,174,.3);box-shadow:0 10px 26px rgba(0,0,0,.42),0 0 16px rgba(189,18,96,.12)}
+  .back-nav-btn{background:linear-gradient(180deg,#43102C,#2A071A);border-color:rgba(255,111,174,.45);color:#FFE9F4;box-shadow:inset 0 1px 0 rgba(255,255,255,.13),0 0 10px rgba(189,18,96,.16)}
+  .back-nav-btn:hover{border-color:var(--neon-hi)}
+  .back-btn{background:linear-gradient(180deg,#43102C,#24040F);color:#FFE9F4;border:1px solid rgba(255,111,174,.55);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 12px 30px rgba(0,0,0,.55),0 0 18px rgba(189,18,96,.4)}
+  /* ---- Buttons: neon chrome, same shapes/positions ---- */
+  .btn{background:linear-gradient(180deg,#43102C,#2A071A);color:#FFE9F4;border:1px solid rgba(255,111,174,.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 6px 18px rgba(0,0,0,.42),0 0 12px rgba(189,18,96,.2)}
+  .btn.secondary{background:var(--paper-2);color:var(--ink);border-color:var(--line)}
+  .btn.accent{background:linear-gradient(180deg,#E84393,#BD1260);color:#fff;border-color:rgba(255,255,255,.28);box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 8px 22px rgba(0,0,0,.45),0 0 20px rgba(230,60,140,.5)}
+  .btn.teal{background:var(--teal);color:#07231A;border-color:rgba(255,255,255,.25)}
+  .btn.danger{background:#B3271E;color:#fff;border-color:rgba(255,255,255,.2)}
+  /* ---- Home nav cards: one glassy 3D-raised neon surface family ---- */
+  .nav-card,.nav-card.projects,.nav-card.counter,.nav-card.todo,.nav-card.recipes,.nav-card.sketch,.nav-card.learning,.nav-card.harvest,.nav-card.rachel,.nav-card.letters,.nav-card.lab,.nav-card.wwe,.nav-card.playtest,.nav-card.staples,.nav-card.media,.nav-card.training,.nav-card.gg-tracker,.nav-card.gg-sim,.nav-card.gg-reports{background:var(--glass);color:var(--ink);border:1px solid rgba(255,111,174,.3)}
+  .nav-card:hover{border-color:rgba(255,111,174,.65);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 16px 36px rgba(0,0,0,.55),0 0 26px rgba(230,60,140,.32)}
+  .nav-card .icon{color:#FF8FBF;filter:drop-shadow(0 0 6px rgba(255,111,174,.5))}
+  .nav-card .arrow{color:#FF8FBF;text-shadow:0 0 9px rgba(255,111,174,.6)}
+  /* ---- Featured article + tracker phase hero: plum glass ---- */
+  .featured-article{background:var(--glass);border-color:rgba(255,111,174,.38);color:var(--ink)}
+  .featured-article .feature-label{color:#A8EAD3}
+  .featured-article .byline{color:var(--muted)}
+  .featured-article .tag{background:rgba(168,234,211,.15);color:#A8EAD3}
+  .featured-article .external{color:#A8EAD3}
+  .trk-phase-card{background:var(--glass);border-color:rgba(255,111,174,.38);color:var(--ink)}
+  .trk-phase-kicker{color:#A8EAD3}
+  .trk-chip strong{color:#A8EAD3}
+  /* ---- Set Review chrome (all three view modes ride the tokens) ---- */
+  .sr-pill.active{background:linear-gradient(180deg,#E84393,#BD1260);color:#fff;border-color:rgba(255,255,255,.3);box-shadow:0 0 14px rgba(230,60,140,.45)}
+  .srv[data-srv-view="desk"] .sr-pill.active .srv-pcount{color:rgba(255,255,255,.88)}
+  .srv-cat-host .sr-pill.active .srv-cat-desc{color:rgba(255,255,255,.88)}
+  .srv-filters-btn{background:linear-gradient(180deg,#E84393,#BD1260);color:#fff;box-shadow:0 0 14px rgba(230,60,140,.4)}
+  .srv-badge{background:var(--gold);color:#241A02}
+  .srv-step-num{background:linear-gradient(180deg,#E84393,#BD1260);color:#fff;box-shadow:0 0 10px rgba(230,60,140,.45)}
+  .srv-step.done .srv-step-num{background:var(--teal);color:#07231A}
+  .srv-opt[aria-checked="true"]{background:rgba(168,234,211,.13)}
+  button.srv-chip{background:rgba(168,234,211,.15)}
+  /* ---- Draft guides (FRA + Star Trek share .fra-guide) on the plum field ---- */
+  .fra-guide{color:#F7E4EF}
+  .fra-guide h2{color:#fff;border-bottom-color:rgba(255,111,174,.45)}
+  .fra-guide h3{color:#FFD9EA}
+  .fra-toc{background:rgba(43,10,30,.92);border-color:var(--line);box-shadow:var(--shadow)}
+  .fra-toc strong{color:var(--muted)}
+  .fra-toc a{color:#A8EAD3}
+  .fra-facts div,.fra-detail,.rank-group{background:var(--glass);border-color:var(--line);box-shadow:var(--shadow)}
+  .fra-facts strong{color:#A8EAD3}
+  .fra-facts span{color:var(--muted)}
+  .fra-detail summary:hover,.rank-group summary:hover{background:rgba(255,111,174,.09)}
+  .fra-detail summary::after,.rank-group summary::after{color:#FF8FBF}
+  .rank-group summary{color:#fff}
+  .rank-group .count{color:var(--muted)}
+  .rank-table th{background:#2B0A1E;color:#F0C6DB}
+  .rank-table td{border-top-color:var(--line)}
+  .rank-table .cn{color:#fff}
+  .rank-table .cc{color:#DCA9C2}
+  .rank-table .cc .printed-cost{color:#DCA9C2}
+  .rank-table .ct,.rank-table .cr{color:#DCA9C2}
+  .rank-table .cnote{color:#EFD2E1}
+  .rank-table tr.card-row:hover td{background:rgba(255,111,174,.08)}
+  .rank-table tr.oracle-row td{background:#1E0512}
+  .oracle-box{border-left-color:rgba(255,111,174,.55)}
+  .oracle-tag{color:#A8EAD3}
+  .oracle-body{color:#DCB9CC}
+  .oracle-body .oracle-face{color:#FFF3F9}
+  .oracle-body .oracle-split{color:#C08CA7}
+  .bomb-row{background:var(--glass);border-color:var(--line);box-shadow:var(--shadow)}
+  .bomb-rank{background:#A8EAD3;color:#07231A;box-shadow:0 0 12px rgba(168,234,211,.4)}
+  .bomb-row strong{color:#fff}
+  .bomb-meta{color:var(--muted)}
+  .bomb-row p{color:#EFD2E1}
+  .fra-sources a{color:#A8EAD3}
+  .fra-disc,.fra-guide .stamp-note{color:var(--muted)}
+  @media(max-width:700px){
+    .rank-table tr.card-row{background:var(--glass);border-color:var(--line)}
+    .rank-table tr.card-row .cg{background:#1E0512}
+    .rank-table tr.card-row .cc .cmc-label{color:#C08CA7}
+    .rank-table tr.card-row .cr::before{color:#C08CA7}
+    .rank-table tr.oracle-row{background:#1E0512;border-color:var(--line)}
+  }
+</style>
 <link rel="apple-touch-icon" href="apple-touch-icon.png?v=2" />
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=2" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
