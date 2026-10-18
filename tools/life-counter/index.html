@@ -45,7 +45,24 @@
         linear-gradient(165deg, var(--neon-sheen) 0%, transparent 45%),
         radial-gradient(130% 100% at 50% 0%, var(--neon-wash), transparent 60%); }
     /* neon colors set dynamically via JS per playerMana */
-    .player-inner { width:100%; height:100%; padding:max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom)); display:grid; grid-template-rows:auto 1fr auto; }
+    .player-inner { width:100%; height:100%; padding:max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom)); display:grid; grid-template-rows:auto 1fr auto auto; transition:transform .25s ease; }
+    /* per-tile rotate: flips this tile relative to the board's current orientation */
+    .player.flipped .player-inner { transform:rotate(180deg); }
+    .tabletop .player.flipped:nth-child(-n+2) .player-inner { transform:none; }
+    .tabletop .board.stack2 .player.flipped:nth-child(1) .player-inner { transform:rotate(180deg); }
+    .tabletop .board.stack2 .player.flipped:nth-child(2) .player-inner { transform:none; }
+    .tile-flip { border:1px solid var(--line); background:rgba(0,0,0,.16); width:34px; height:30px; border-radius:9px; display:grid; place-items:center; color:inherit; padding:0; touch-action:manipulation; }
+    .tile-flip svg { width:15px; height:15px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    .tile-flip[aria-pressed="true"] { background:rgba(255,255,255,.22); }
+    /* per-tile timer, bottom of each tile */
+    .tile-timer { margin-top:5px; border:0; background:rgba(0,0,0,.13); border-radius:9px; min-height:24px; padding:2px 8px; display:flex; align-items:center; justify-content:center; gap:6px; font-family:"IBM Plex Mono", monospace; font-size:12px; color:inherit; width:100%; touch-action:manipulation; }
+    .tile-timer svg { width:11px; height:11px; fill:currentColor; flex:none; opacity:.85; }
+    .tile-timer .timer-dot { width:7px; height:7px; border-radius:50%; background:currentColor; opacity:.35; flex:none; }
+    .tile-timer .ic-pause { display:none; }
+    .tile-timer.running { background:rgba(0,0,0,.30); }
+    .tile-timer.running .ic-pause { display:block; }
+    .tile-timer.running .ic-play { display:none; }
+    .tile-timer.running .timer-dot { opacity:1; background:#30d158; box-shadow:0 0 6px #30d158; }
     .tabletop .player:nth-child(-n+2) .player-inner { transform:rotate(180deg); }
     /* 2-player portrait: stack full-width, player 1 near (bottom), player 2 far (top) */
     .board.stack2 .player:nth-child(1) { grid-row:2; }
@@ -141,7 +158,7 @@
     @media (min-width:768px) and (min-height:650px) {
       .board { inset:12px 12px 132px; gap:8px; background:transparent; }
       .player { border-radius:18px; box-shadow:0 3px 16px rgba(0,0,0,.22); }
-      .player-inner { padding:14px 16px; grid-template-rows:auto minmax(95px,.82fr) auto; }
+      .player-inner { padding:14px 16px; grid-template-rows:auto minmax(95px,.82fr) auto auto; }
       .name { font-size:23px; }
       .details { width:38px; height:34px; }
       .life-row { grid-template-columns:minmax(68px,.55fr) minmax(110px,1.25fr) minmax(68px,.55fr); }
@@ -187,7 +204,7 @@
       .life { font-size:clamp(50px,15vh,82px); } .life-btn { min-height:40px; font-size:40px; }
       .toolbar { flex-direction:column; } .tool { width:34px; height:30px; }
     }
-    @media (prefers-reduced-motion:reduce) { .shade, .sheet { transition:none; } }
+    @media (prefers-reduced-motion:reduce) { .shade, .sheet, .player-inner { transition:none; } }
   </style>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
@@ -205,7 +222,6 @@
 .save-recall:active{background:#2c2c36;}
 .save-del{flex:none;width:52px;background:rgba(255,80,70,.10);border:1px solid rgba(255,138,128,.45);border-radius:10px;color:#ff8a80;padding:0;cursor:pointer;font-size:20px;display:grid;place-items:center;}
 .save-del:active{background:#2c2c36;}
-#savegame{background:rgba(35,97,122,.55);}
 .save-note{width:100%;min-height:64px;resize:vertical;border:1px solid #2c2c36;border-radius:10px;background:#1c1c24;color:#f2f2f5;padding:9px 11px;font-size:16px;font-family:inherit;}
 .save-note-text{color:#c9d4ee !important;font-style:italic;}
 </style>
@@ -232,7 +248,7 @@
       <svg viewBox="0 0 24 24"><path d="M8 21h8M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0V4Z"/><path d="M7 6H4.5A2.5 2.5 0 0 0 7 11M17 6h2.5A2.5 2.5 0 0 1 17 11"/></svg>
     </button>
     <button class="tool" id="savegame" aria-label="Save this game" title="Save this game">
-      <span aria-hidden="true" style="font-size:19px;line-height:1;">💾</span>
+      <svg viewBox="0 0 24 24"><path d="M5 3h11l5 5v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"/><path d="M8 3v5h7V3"/><path d="M8 21v-7h8v7"/></svg>
     </button>
     <button class="tool" id="reset" aria-label="Start a new game">
       <svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>
@@ -259,7 +275,7 @@
     (function(){
       'use strict';
       var START_LIFE = 40;
-      function makePlayers(n,names,life){ var arr=[]; for(var i=0;i<n;i++){ arr.push({ name:(names&&names[i])||('Player '+(i+1)), life:life, poison:0, commander:Array(Math.max(0,n-1)).fill(0) }); } return arr; }
+      function makePlayers(n,names,life){ var arr=[]; for(var i=0;i<n;i++){ arr.push({ name:(names&&names[i])||('Player '+(i+1)), life:life, poison:0, commander:Array(Math.max(0,n-1)).fill(0), flip:false, t:{e:0,r:false,s:0} }); } return arr; }
       var players = makePlayers(4,null,START_LIFE);
 
       /* ---- mana symbols (WUBRG) ---- */
@@ -302,13 +318,15 @@
           var commanderMatrix=others.map(function(opp,slot){ return '<div class="cmd-source"><span class="cmd-label">'+esc(players[opp].name)+'</span><div class="stat-controls"><button class="mini-btn" data-action="counter" data-type="commander" data-slot="'+slot+'" data-delta="-1" data-i="'+i+'" aria-label="Subtract commander damage from '+esc(players[opp].name)+'">−</button><output class="mini-value">'+p.commander[slot]+'</output><button class="mini-btn" data-action="counter" data-type="commander" data-slot="'+slot+'" data-delta="1" data-i="'+i+'" aria-label="Add commander damage from '+esc(players[opp].name)+'">+</button></div></div>'; }).join('');
           var mc=MANA_NEON[playerMana[i]||'R']||MANA_NEON.R;
           var neonStyle='--neon:'+mc.neon+';--neon-dim:'+mc.dim+';--neon-border:'+mc.border+';--neon-wash:'+mc.wash+';--neon-sheen:'+mc.sheen+';';
-          return '<section class="player '+(i===turn?'active-turn ':'')+((p.life<=0 || p.poison>=10 || totalCmd>=21)?'dead':'')+'" data-i="'+i+'" style="'+neonStyle+'" aria-label="'+esc(p.name)+', '+p.life+' life">'+
+          var tm=timerOf(p);
+          return '<section class="player '+(i===turn?'active-turn ':'')+(p.flip?'flipped ':'')+((p.life<=0 || p.poison>=10 || totalCmd>=21)?'dead':'')+'" data-i="'+i+'" style="'+neonStyle+'" aria-label="'+esc(p.name)+', '+p.life+' life">'+
             '<div class="mana-bg">'+(MANA_SVG[playerMana[i]||'R']||'')+'</div>'+
             '<div class="player-inner">'+
-              '<header class="player-head"><button class="name" data-action="details" data-i="'+i+'">'+esc(p.name)+'</button><div class="player-actions"><button class="mana-pick-btn" data-action="mana" data-i="'+i+'" aria-label="Choose color for '+esc(p.name)+'">'+(MANA_SVG[playerMana[i]||'R']||'')+'</button><button class="player-hurry" data-action="hurry" data-i="'+i+'" aria-label="Say hurry up, '+esc(p.name)+'"></button><button class="details" data-action="details" data-i="'+i+'" aria-label="Edit '+esc(p.name)+' and damage counters">•••</button></div></header>'+ 
+              '<header class="player-head"><button class="name" data-action="details" data-i="'+i+'">'+esc(p.name)+'</button><div class="player-actions"><button class="mana-pick-btn" data-action="mana" data-i="'+i+'" aria-label="Choose color for '+esc(p.name)+'">'+(MANA_SVG[playerMana[i]||'R']||'')+'</button><button class="player-hurry" data-action="hurry" data-i="'+i+'" aria-label="Say hurry up, '+esc(p.name)+'"></button><button class="tile-flip" data-action="flip" data-i="'+i+'" aria-pressed="'+(p.flip?'true':'false')+'" aria-label="Rotate '+esc(p.name)+' tile"><svg viewBox="0 0 24 24"><path d="M20 7v5h-5"/><path d="M4 17v-5h5"/><path d="M6.1 8a7 7 0 0 1 11.3-2.1L20 8M4 16l2.6 2.1A7 7 0 0 0 17.9 16"/></svg></button><button class="details" data-action="details" data-i="'+i+'" aria-label="Edit '+esc(p.name)+' and damage counters">•••</button></div></header>'+
               '<div class="life-row"><button class="life-btn" data-action="life" data-delta="-1" data-i="'+i+'" aria-label="Subtract 1 life from '+esc(p.name)+'">−</button><output class="life" aria-live="polite">'+p.life+'</output><button class="life-btn" data-action="life" data-delta="1" data-i="'+i+'" aria-label="Add 1 life to '+esc(p.name)+'">+</button></div>'+
               '<footer class="status"><button class="jump" data-action="life" data-delta="-5" data-i="'+i+'" aria-label="Subtract 5 life">−5</button><button class="trackers" data-action="details" data-i="'+i+'" aria-label="Poison '+p.poison+', highest commander damage '+totalCmd+'"><span>'+poisonIcon+p.poison+'</span><span>'+cmdIcon+p.commander.join('·')+'</span></button><button class="jump" data-action="life" data-delta="5" data-i="'+i+'" aria-label="Add 5 life">+5</button></footer>'+
               '<div class="tablet-stats"><div class="stat-block"><span class="stat-title">Poison</span><div class="stat-controls"><button class="mini-btn" data-action="counter" data-type="poison" data-slot="0" data-delta="-1" data-i="'+i+'" aria-label="Subtract poison counter">−</button><output class="mini-value">'+p.poison+'</output><button class="mini-btn" data-action="counter" data-type="poison" data-slot="0" data-delta="1" data-i="'+i+'" aria-label="Add poison counter">+</button></div></div><div class="stat-block"><span class="stat-title">Commander damage</span><div class="cmd-grid">'+commanderMatrix+'</div></div></div>'+
+              '<button class="tile-timer'+(tm.r?' running':'')+'" data-action="timer" data-i="'+i+'" aria-pressed="'+(tm.r?'true':'false')+'" aria-label="Timer for '+esc(p.name)+'. Tap to '+(tm.r?'stop':'start')+'; long-press to reset."><span class="timer-dot"></span><svg class="ic-play" viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z"/></svg><svg class="ic-pause" viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg><span class="timer-text">'+fmtTime(timerSecs(p))+'</span></button>'+
             '</div></section>';
         }).join('');
         renderHud();
@@ -365,7 +383,22 @@
         if(b.dataset.action==='details') openDetails(i);
         if(b.dataset.action==='hurry') speakHurry(i,b);
         if(b.dataset.action==='mana') openManaPicker(i);
+        if(b.dataset.action==='flip'){ players[i].flip=!players[i].flip; buzz(); render(); try{ saveActiveGame(); }catch(e){} }
+        if(b.dataset.action==='timer'){ if(timerHeld){ timerHeld=false; return; } toggleTimer(i); }
       });
+
+      /* ---- per-tile timers ---- */
+      function timerOf(p){ if(!p.t) p.t={e:0,r:false,s:0}; return p.t; }
+      function timerSecs(p){ var t=timerOf(p); return t.e + (t.r ? (Date.now()-t.s)/1000 : 0); }
+      function fmtTime(sec){ sec=Math.floor(sec); var h=Math.floor(sec/3600), m=Math.floor((sec%3600)/60), s=sec%60; function two(n){ return (n<10?'0':'')+n; } return h>0 ? h+':'+two(m)+':'+two(s) : two(m)+':'+two(s); }
+      function tickTimers(){ board.querySelectorAll('.tile-timer').forEach(function(el){ var i=+el.dataset.i; if(players[i]){ var tx=el.querySelector('.timer-text'); if(tx) tx.textContent=fmtTime(timerSecs(players[i])); } }); }
+      setInterval(tickTimers, 500);
+      function toggleTimer(i){ var t=timerOf(players[i]); if(t.r){ t.e += (Date.now()-t.s)/1000; t.r=false; t.s=0; } else { t.s=Date.now(); t.r=true; } buzz(); render(); try{ saveActiveGame(); }catch(e){} }
+      function resetTimer(i){ var t=timerOf(players[i]); t.e=0; t.r=false; t.s=0; buzz(); render(); try{ saveActiveGame(); }catch(e){} }
+      var timerHoldT=null, timerHeld=false;
+      board.addEventListener('pointerdown',function(e){ var b=e.target.closest('[data-action="timer"]'); if(!b) return; timerHeld=false; var i=+b.dataset.i; timerHoldT=setTimeout(function(){ timerHeld=true; resetTimer(i); },650); });
+      board.addEventListener('pointerup',function(){ clearTimeout(timerHoldT); });
+      board.addEventListener('pointercancel',function(){ clearTimeout(timerHoldT); });
 
 
       function openManaPicker(i){
@@ -529,7 +562,7 @@
       }
       function resumeGame(snap){
         try{
-          players=snap.players; turn=snap.turn||0; round=snap.round||1; START_LIFE=snap.startLife||40;
+          players=snap.players; players.forEach(function(p){ var t=timerOf(p); if(t.r){ t.r=false; t.s=0; } }); turn=snap.turn||0; round=snap.round||1; START_LIFE=snap.startLife||40;
           history=[]; events=['Resumed game · '+players.map(function(p){return p.name;}).join(', ')];
           undoBtn.disabled=true;
           shade.classList.remove('open'); shade.setAttribute('aria-hidden','true');
@@ -598,6 +631,7 @@
         if(history.length>0 && !window.confirm('Load "'+(rec.name||'Saved game')+'"? Your current game will be replaced.')) return;
         try{
           players=JSON.parse(JSON.stringify(rec.players));
+          players.forEach(function(p){ var t=timerOf(p); if(t.r){ t.r=false; t.s=0; } });
           turn=rec.turn||0; round=rec.round||1; START_LIFE=rec.startLife||40;
           if(rec.mana&&rec.mana.length){ playerMana=JSON.parse(JSON.stringify(rec.mana)); try{ localStorage.setItem('lc-mana', JSON.stringify(playerMana)); }catch(e){} }
           history=[]; undoBtn.disabled=true;
@@ -625,7 +659,7 @@
       }
       function savesListHtml(){
         var ids=Object.keys(lcSaves).sort(function(a,b){ var x=lcSaves[a].saved_at||'', y=lcSaves[b].saved_at||''; return x<y?1:(x>y?-1:0); });
-        if(!ids.length) return '<p class="danger-note">No saved games yet. Tap the 💾 button next to the trophy during a game to snapshot it here.</p>';
+        if(!ids.length) return '<p class="danger-note">No saved games yet. Tap the save button next to the trophy during a game to snapshot it here.</p>';
         var h='<div class="save-list">';
         ids.forEach(function(id){
           var r=lcSaves[id];
