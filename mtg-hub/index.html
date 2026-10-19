@@ -107,7 +107,14 @@
 }/* Dialogs */dialog{background:linear-gradient(180deg,#0D2650,#081A36);color:var(--ink);border:1px solid rgba(110,168,240,.4);box-shadow:0 28px 90px rgba(0,2,10,.7),0 0 34px rgba(19,93,189,.25)}dialog::backdrop{background:rgba(1,6,16,.78)}.cmd-row button{background:#12315F;color:var(--ink)}/* Inverted strips become glass */.game-strip{background:linear-gradient(180deg,#12315F,#081A36);color:var(--ink);border:1px solid rgba(110,168,240,.35);box-shadow:var(--shadow)}.smell-plan{background:linear-gradient(180deg,#12315F,#081A36);color:var(--ink)}.recipe-hero{background:linear-gradient(150deg,#1B4B8F,#0A1D3A);color:#fff;box-shadow:var(--shadow)}.shop-total{background:linear-gradient(150deg,#1B4B8F,#0F3268);color:#fff}/* Legacy life-counter pieces (token surfaces get the glass too) */.player-card{background:linear-gradient(180deg,#0D2650,#081A36)}.player-card.eliminated::after{background:rgba(1,6,16,.85)}.life-quick button,.mini-counter button{background:#12315F;color:var(--ink)}.mini-counter{background:#0A1D3A}/* Form fields sit deeper than the panels they live on */select,input[type="text"],input[type="date"]{background:#061630;border-color:rgba(110,168,240,.35);color:var(--ink)}/* Tags */.tag{background:#12315F;color:#DCEBFF}.tag.live{background:#0D2B52;color:#7FB2F0}/* Gold fills keep dark text so they stay readable */.working-label{background:linear-gradient(180deg,#EFCE6B,#D4AF37);color:#241B03}.monarch-active{background:linear-gradient(180deg,#EFCE6B,#D4AF37)!important;color:#241B03!important}.initiative-active{background:linear-gradient(180deg,#3F8CE8,#135DBD)!important;color:#fff!important}/* Staple tab underline glows in hub blue */.staple-tab::after{background:linear-gradient(90deg,#3F8CE8,#7FB2F0);box-shadow:0 0 10px rgba(63,140,232,.7)}/* Letters: attachment tables go dark glass; Wes blue rim,Rachel gold rim */.attachment-table{background:#0A1D3A;border-color:rgba(110,168,240,.3)}.budget-table th,.budget-table td{border-color:rgba(110,168,240,.25);color:var(--ink)}.budget-table th{background:#12315F}.budget-table td{background:#081A36}.budget-notes{color:var(--muted)}.msg.rachel .attachment-table{background:#0A1D3A;border-color:rgba(212,175,55,.4)}.msg.wes .attachment-table{background:#0A1D3A;border-color:rgba(110,168,240,.45)}.msg.rachel{border-left-color:var(--gold)}/* Lock gate: same front-door field as the splash */.lock-overlay{background:radial-gradient(130% 105% at 50% 32%,#030F20 0%,#020D1D 58%,#010A1A 100%);color:var(--ink)}.lock-panel{background:linear-gradient(180deg,#0D2650,#081A36);border-color:rgba(110,168,240,.4);box-shadow:0 24px 70px rgba(0,2,10,.65),0 0 30px rgba(19,93,189,.25)}.lock-panel p,.lock-label{color:#ABC6EA}.lock-control{color:#ABC6EA}.lock-control:hover{color:#fff}.lock-input{background:#061630;border-color:rgba(110,168,240,.4);color:var(--ink)}.lock-submit{background:linear-gradient(180deg,#3F8CE8,#135DBD);color:#fff;box-shadow:0 0 16px rgba(46,124,214,.4)}.lock-error{color:#FF8A7E!important}/* Playtest accents */#playtest .pt-btn{background:linear-gradient(180deg,#3F8CE8,#135DBD);color:#fff;box-shadow:0 0 14px rgba(46,124,214,.3)}#playtest .pt-btn.secondary{background:linear-gradient(180deg,#14335F,#0A1D3A);color:var(--ink);border-color:rgba(110,168,240,.35);box-shadow:none}#playtest .pt-phase.current{background:linear-gradient(180deg,#3F8CE8,#135DBD);color:#fff;box-shadow:0 0 12px rgba(46,124,214,.5)}#playtest .pt-card.playable{box-shadow:0 0 0 2px var(--green),0 0 14px rgba(91,213,152,.35)}/* Proxy Wizard chrome */#proxy-wizard{--pw-panel:#0A1D3A;--pw-panel-2:#10294E;--pw-line:#24508C;--pw-muted:#ABC6EA;--pw-green:#5BD598;--pw-amber:#E9C766}.pw-canvas-wrap{background:#050F22;border-color:rgba(110,168,240,.4);box-shadow:0 18px 50px rgba(0,2,10,.55),0 0 24px rgba(19,93,189,.18)}.pw-frame-btn.active{background:linear-gradient(180deg,#3F8CE8,#135DBD);border-color:rgba(168,208,255,.6);color:#fff}.pw-comparison img,.pw-queue-card img{background:#050F22}.pw-note[data-kind=ok]{color:#5BD598}.pw-note[data-kind=error]{color:#FF8A7E}.topbar{background:rgba(2,11,24,.92);border-bottom-color:#24508C}/* Draft rankings: phone cards join the navy field */
 @media(max-width:700px){.rank-table tr.card-row{background:#0A1D3A;border-color:rgba(110,168,240,.3)}.rank-table tr.card-row .ct{color:#8FB3E8}.rank-table tr.card-row .cnote{color:#C9D9F2}.rank-table tr.oracle-row{background:#061630;border-color:rgba(110,168,240,.3)}
 }/* Life Counter (its stylesheet loads later in the body,so these are
-   scoped under #counter to win): navy field,glass tiles,blue chrome */#counter.view.active{background:#010A1A}#counter .lc-app{--lc-bg:#010A1A;--lc-panel:#081A36;--lc-panel2:#0E2A57;--lc-ink:#F2F7FF;--lc-muted:#ABC6EA;--lc-line:#24508C;background:radial-gradient(120% 90% at 50% 0%,#0B2C5C 0%,#010A1A 74%)}#counter .lc-title{text-shadow:0 0 14px rgba(63,140,232,.45)}#counter .lc-back,#counter .lc-gear,#counter .lc-bbtn,#counter .lc-timer,#counter .lc-dlife-btn,#counter .lc-big-btn,#counter .lc-dclose,#counter .lc-stepper button{background:linear-gradient(180deg,#14335F,#0A1D3A);border-color:rgba(127,178,240,.35);box-shadow:0 5px 14px rgba(0,2,10,.5),inset 0 1px 0 rgba(168,208,255,.28)}#counter .lc-tap{background:linear-gradient(180deg,#1B4B8F,#0F3268);box-shadow:0 6px 14px rgba(0,2,10,.5),inset 0 1px 0 rgba(168,208,255,.3)}#counter .lc-player{border-color:rgba(110,168,240,.28);box-shadow:0 12px 30px rgba(0,2,10,.55),inset 0 1px 0 rgba(168,208,255,.14),0 0 22px rgba(19,93,189,.12)}#counter .lc-player.is-active{box-shadow:0 12px 30px rgba(0,2,10,.55),0 0 0 2px var(--player),0 0 22px var(--player),inset 0 1px 0 rgba(168,208,255,.14)}#counter .lc-life{text-shadow:0 0 24px rgba(63,140,232,.35),0 6px 26px rgba(0,0,0,.55)}#counter .lc-sheet{background:#081A36;border-color:rgba(110,168,240,.35)}#counter .lc-set-field select{background:#061630;border-color:#24508C}#counter .lc-toggle{background:#10294E}#counter .lc-toggle.on{background:#D4AF37;color:#241B03;box-shadow:0 0 14px rgba(212,175,55,.5)}#counter .lc-big-btn.lc-primary{background:linear-gradient(180deg,#3F8CE8,#135DBD);border-color:transparent;color:#fff;box-shadow:0 0 16px rgba(46,124,214,.35)}#counter .lc-log li{background:rgba(46,124,214,.08);border-color:rgba(110,168,240,.18)}#counter .lc-rot{background:rgba(6,20,44,.78);border-color:rgba(127,178,240,.4)}#counter .lc-out{background:rgba(1,6,16,.82)}#counter .lc-scrim{background:rgba(1,6,16,.66)}
+   scoped under #counter to win): navy field,glass tiles,blue chrome */#counter.view.active{background:#010A1A}#counter .lc-app{--lc-bg:#010A1A;--lc-panel:#081A36;--lc-panel2:#0E2A57;--lc-ink:#F2F7FF;--lc-muted:#ABC6EA;--lc-line:#24508C;background:radial-gradient(120% 90% at 50% 0%,#0B2C5C 0%,#010A1A 74%)}#counter .lc-title{text-shadow:0 0 14px rgba(63,140,232,.45)}#counter .lc-back,#counter .lc-gear,#counter .lc-bbtn,#counter .lc-timer,#counter .lc-dlife-btn,#counter .lc-big-btn,#counter .lc-dclose,#counter .lc-stepper button{background:linear-gradient(180deg,#14335F,#0A1D3A);border-color:rgba(127,178,240,.35);box-shadow:0 5px 14px rgba(0,2,10,.5),inset 0 1px 0 rgba(168,208,255,.28)}#counter .lc-tap{background:linear-gradient(180deg,#1B4B8F,#0F3268);box-shadow:0 6px 14px rgba(0,2,10,.5),inset 0 1px 0 rgba(168,208,255,.3)}#counter .lc-player{border-color:rgba(110,168,240,.28);box-shadow:0 12px 30px rgba(0,2,10,.55),inset 0 1px 0 rgba(168,208,255,.14),0 0 22px rgba(19,93,189,.12)}#counter .lc-player.is-active{box-shadow:0 12px 30px rgba(0,2,10,.55),0 0 0 2px var(--player),0 0 22px var(--player),inset 0 1px 0 rgba(168,208,255,.14)}#counter .lc-life{text-shadow:0 0 24px rgba(63,140,232,.35),0 6px 26px rgba(0,0,0,.55)}#counter .lc-sheet{background:#081A36;border-color:rgba(110,168,240,.35)}#counter .lc-set-field select{background:#061630;border-color:#24508C}#counter .lc-toggle{background:#10294E}#counter .lc-toggle.on{background:#D4AF37;color:#241B03;box-shadow:0 0 14px rgba(212,175,55,.5)}#counter .lc-big-btn.lc-primary{background:linear-gradient(180deg,#3F8CE8,#135DBD);border-color:transparent;color:#fff;box-shadow:0 0 16px rgba(46,124,214,.35)}#counter .lc-log li{background:rgba(46,124,214,.08);border-color:rgba(110,168,240,.18)}#counter .lc-rot{background:rgba(6,20,44,.78);border-color:rgba(127,178,240,.4)}#counter .lc-out{background:rgba(1,6,16,.82)}#counter .lc-scrim{background:rgba(1,6,16,.66)}/* Formats section: neon chrome in the hub templating; three switchable
+   views (The Shelf / Spotlight / Head-to-Head) behind one Change view pill */.nav-card.formats{grid-column:span 12;min-height:124px;background:linear-gradient(160deg,#122C55 0%,#0A1D3A 58%,#061630 100%);color:var(--ink);border:1px solid rgba(110,168,240,.38);box-shadow:0 16px 32px rgba(0,2,10,.55),0 4px 12px rgba(0,2,10,.4),inset 0 1px 0 rgba(163,206,255,.22),inset 0 0 26px rgba(19,93,189,.10),0 0 22px rgba(19,93,189,.15)}.fmt-intro{color:var(--muted);max-width:64ch;margin:0}.fmt-pillrow{display:flex;justify-content:center;margin:16px 0 24px}.fmt-pillwrap{position:relative}.fmt-viewpill{border:1px solid rgba(127,178,240,.55);background:linear-gradient(180deg,#1B4B8F,#0F3268);color:#F2F7FF;border-radius:99px;padding:9px 18px;min-height:44px;font-weight:800;font-size:15px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;box-shadow:inset 0 1px 0 rgba(168,208,255,.4),0 6px 16px rgba(0,2,10,.5),0 0 14px rgba(19,93,189,.28)}.fmt-viewpill:hover{border-color:rgba(168,208,255,.85)}.fmt-viewpill:focus-visible,.fmt-opt:focus-visible,.fmt-fcard-btn:focus-visible,.fmt-spot-btn:focus-visible,.fmt-pk:focus-visible{outline:3px solid var(--teal);outline-offset:2px}.fmt-viewpill .fmt-sep{color:var(--muted);font-weight:600}.fmt-viewpill .fmt-action{color:#7FB2F0}.fmt-caret{color:#7FB2F0;font-weight:800}.fmt-menu{position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);width:min(92vw,360px);background:linear-gradient(180deg,#0D2650,#081A36);border:1px solid rgba(110,168,240,.4);border-radius:var(--radius-md);box-shadow:0 18px 50px rgba(0,0,0,.5),0 0 24px rgba(19,93,189,.25);padding:8px;display:grid;gap:4px;z-index:60}.fmt-menu[hidden]{display:none}.fmt-opt{border:1px solid transparent;background:transparent;color:var(--ink);border-radius:var(--radius-sm);padding:10px 12px;text-align:left;cursor:pointer;display:grid;gap:2px;min-height:44px;width:100%}.fmt-opt:hover{background:rgba(46,124,214,.16)}.fmt-opt[aria-checked="true"]{border-color:rgba(212,175,55,.55);background:rgba(212,175,55,.10)}.fmt-opt-name{font-weight:800;font-size:15.5px;display:flex;gap:8px;align-items:center}.fmt-opt-cur{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--gold)}.fmt-opt-desc{font-size:13.5px;color:var(--muted);line-height:1.4}.fmt-design[hidden]{display:none}
+@media(prefers-reduced-motion:no-preference){.fmt-design:not([hidden]){animation:fmt-rise .28s ease}@keyframes fmt-rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}}.fmt-diamond{display:inline-block;width:.62em;height:.62em;background:var(--fc,var(--accent));transform:rotate(45deg);box-shadow:0 0 10px var(--fc,var(--accent));flex:none}/* Formats — View A: The Shelf */.fmt-shelf{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media(max-width:760px){.fmt-shelf{grid-template-columns:1fr}}.fmt-card{background:linear-gradient(180deg,rgba(127,178,240,.07),rgba(127,178,240,0) 46%),var(--paper);border:1px solid rgba(110,168,240,.30);border-top:5px solid var(--fc,var(--accent));border-radius:var(--radius-md);box-shadow:var(--shadow);overflow:hidden}.fmt-card-head{padding:20px 20px 0}.fmt-card-top{display:flex;align-items:center;gap:10px}.fmt-card h3{font:800 28px/1 "Barlow Condensed",sans-serif;margin:0}.fmt-fam{margin-left:auto;font-size:.7rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);text-align:right}.fmt-card .fmt-blurb{margin:10px 0 0;color:var(--muted)}.fmt-chips{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 16px;padding:0;list-style:none}.fmt-chips li{border:1px solid rgba(110,168,240,.3);background:var(--paper-2);border-radius:999px;padding:4px 10px;font-size:.8rem;font-weight:600}.fmt-card-more{display:none;padding:2px 20px 6px}.fmt-card.open .fmt-card-more{display:block}.fmt-specs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}.fmt-spec{background:var(--paper-2);border:1px solid rgba(110,168,240,.25);border-radius:10px;padding:9px 11px}.fmt-spec b{display:block;font-size:.66rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}.fmt-spec span{font-weight:700;font-size:.92rem}.fmt-hook{border-top:1px dashed var(--line);padding:12px 0 6px;font-size:.92rem;margin:0}.fmt-hook b{color:var(--gold)}.fmt-fcard-btn{appearance:none;width:100%;border:0;border-top:1px solid var(--line);background:var(--paper-2);padding:13px;font-weight:800;cursor:pointer;color:#7FB2F0;letter-spacing:.02em}.fmt-fcard-btn:hover{background:var(--teal-soft)}/* Formats — View B: Spotlight */.fmt-spot-layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:16px;align-items:start}
+@media(max-width:760px){.fmt-spot-layout{grid-template-columns:1fr}}.fmt-spot-index{display:flex;flex-direction:column;gap:8px}
+@media(max-width:760px){.fmt-spot-index{flex-direction:row;flex-wrap:wrap}}.fmt-spot-btn{appearance:none;display:flex;align-items:center;gap:10px;text-align:left;border:1px solid rgba(110,168,240,.3);background:var(--paper);border-radius:12px;padding:13px 14px;font-weight:700;cursor:pointer;box-shadow:var(--shadow);color:var(--ink)}.fmt-spot-btn small{display:block;font-weight:600;color:var(--muted);font-size:.76rem}.fmt-spot-btn[aria-selected="true"]{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 18px rgba(212,175,55,.3)}.fmt-spot-panel{background:linear-gradient(180deg,rgba(127,178,240,.07),rgba(127,178,240,0) 46%),var(--paper);border:1px solid rgba(110,168,240,.35);border-top:6px solid var(--fc,var(--accent));border-radius:var(--radius-md);box-shadow:var(--shadow);padding:clamp(22px,4vw,36px)}.fmt-spot-panel h3{font:800 clamp(34px,5vw,52px)/1 "Barlow Condensed",sans-serif;margin:0;text-shadow:0 0 16px rgba(63,140,232,.38),0 0 44px rgba(19,93,189,.20)}.fmt-spot-fam{font-size:.74rem;font-weight:800;letter-spacing:.11em;text-transform:uppercase;color:var(--gold);margin:0 0 8px}.fmt-spot-panel .fmt-lede{font-size:1.05rem;color:var(--muted);margin:12px 0 0;max-width:56ch}.fmt-spot-specs{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:22px 0 4px}
+@media(max-width:700px){.fmt-spot-specs{grid-template-columns:1fr 1fr}}.fmt-spot-points{margin:18px 0 0;padding:0;list-style:none;display:grid;gap:9px}.fmt-spot-points li{display:flex;gap:10px;align-items:flex-start}.fmt-spot-points li::before{content:"";width:8px;height:8px;margin-top:8px;transform:rotate(45deg);background:var(--gold);flex:none}.fmt-spot-hook{margin-top:20px;background:var(--paper-2);border:1px solid rgba(110,168,240,.25);border-radius:12px;padding:14px 16px}.fmt-spot-hook b{color:var(--gold)}/* Formats — View C: Head-to-Head (thirteen columns ride a sideways track) */.fmt-picker{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:16px}.fmt-picker .fmt-pk-label{font-weight:800;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-right:2px}.fmt-pk{appearance:none;border:1px solid rgba(110,168,240,.35);background:var(--paper);border-radius:999px;padding:9px 14px;font-weight:700;cursor:pointer;color:var(--ink);min-height:44px}.fmt-pk[aria-pressed="true"]{background:linear-gradient(180deg,#3F8CE8,#135DBD);border-color:rgba(168,208,255,.6);color:#fff;box-shadow:0 0 14px rgba(19,93,189,.45)}.fmt-compare{display:flex;gap:12px;overflow-x:auto;padding:4px 2px 14px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}.fmt-col{flex:0 0 212px;scroll-snap-align:start;background:linear-gradient(180deg,rgba(127,178,240,.07),rgba(127,178,240,0) 46%),var(--paper);border:1px solid rgba(110,168,240,.30);border-top:5px solid var(--fc,var(--accent));border-radius:var(--radius-md);box-shadow:var(--shadow);padding:18px 16px;transition:opacity .2s ease,box-shadow .2s ease}.fmt-col h3{font:800 24px/1 "Barlow Condensed",sans-serif;margin:0;display:flex;align-items:center;gap:9px}.fmt-col dl{margin:14px 0 0;display:grid;gap:11px}.fmt-col dt{font-size:.64rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}.fmt-col dd{margin:1px 0 0;font-weight:700;font-size:.9rem;line-height:1.35}.fmt-col .fmt-pick-line{margin:14px 0 0;border-top:1px dashed var(--line);padding-top:11px;font-size:.86rem;color:var(--muted)}.fmt-compare.has-pick .fmt-col{opacity:.42}.fmt-compare.has-pick .fmt-col.pick{opacity:1;box-shadow:0 0 0 2px var(--gold),0 0 22px rgba(212,175,55,.4)}.fmt-pick-badge{display:none;margin-top:12px;background:linear-gradient(180deg,#EFCE6B,#D4AF37);color:#241B03;font-weight:800;font-size:.78rem;border-radius:999px;padding:5px 11px;width:fit-content}.fmt-col.pick .fmt-pick-badge{display:block}
+@media(prefers-reduced-motion:reduce){.fmt-col{transition:none}}
 </style>
 
 <style>/* Proxy Wizard styles (inlined at publish) *//* Proxy Wizard — scoped to #proxy-wizard */
@@ -149,7 +156,7 @@
     <button class="quick-tab" type="button" data-open="articles">Articles</button>
     <button class="quick-tab" type="button" data-open="staples">Staples</button>
     <button class="quick-tab" type="button" data-open="counter">Life Counter</button>
-    <button class="quick-tab" type="button" data-open="proxy-wizard">Proxy Wizard</button>
+    <button class="quick-tab" type="button" data-open="formats">Formats</button>
   </nav>
   <section class="view active" id="home" aria-label="Home">
     <div class="nav-grid">
@@ -158,6 +165,7 @@
       <button class="nav-card media" data-open="media"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M24 10c-2.2-1.8-5-2.6-9-2.6v33.2c4 0 6.8.8 9 2.6 2.2-1.8 5-2.6 9-2.6V7.4c-4 0-6.8.8-9 2.6Z"/><path d="M24 10v33.2"/></svg><div><strong>MTG Media</strong><span>Every Magic novel and comic — 99 books, 32 comic runs — plus set lore, starting with Reality Fracture’s ten-episode story.</span></div></button>
       <button class="nav-card proxy" data-open="proxy-wizard"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><rect x="10" y="5" width="28" height="38" rx="3"/><path d="M15 12h18M15 31h18M15 36h12"/><rect x="15" y="16" width="18" height="11" rx="1"/><path d="m27 5 8 8"/></svg><div><strong>Proxy Wizard</strong><span>Template full proxies — your art, selectable frames, sheet-ready.</span></div></button>
       <button class="nav-card counter" data-open="counter"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3"><path d="M24 6v36M6 24h36"/><circle cx="24" cy="24" r="18"/></svg><div><strong>Life Counter</strong><span>2–6 players, commander damage, turn clock, counters, rolls, and undo.</span></div></button>
+      <button class="nav-card formats" data-open="formats"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M15 7l6.5 7.5L15 22l-6.5-7.5z"/><path d="M33 7l6.5 7.5L33 22l-6.5-7.5z"/><path d="M15 26l6.5 7.5L15 41l-6.5-7.5z"/><path d="M33 26l6.5 7.5L33 41l-6.5-7.5z"/></svg><div><strong>Formats</strong><span>Every way to play — Commander, Draft, Sealed, Standard, Pauper, and eight more — specs and all, in three switchable views.</span></div></button>
       
       <button class="nav-card playtest" data-open="playtest"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M14 8h20v32H14z"/><path d="M20 14h8M20 20h8M20 26h5"/><circle cx="24" cy="34" r="3"/></svg><div><strong>Playtest</strong><span>Pilot Wes’s Workshop while Rachel’s Kitchen runs across the table — or swap seats.</span></div></button>
     </div>
@@ -295,6 +303,30 @@
     <header class="viewbar"><button class="back-btn" type="button" data-back>← Back</button><h1 id="media-heading">MTG Media</h1><span class="stamp">Books · Comics · Set Lore</span></header>
     <p class="media-intro">The stories behind the cards: every Magic novel and comic book ever published, each with a short summary, plus the official set lore — starting with Reality Fracture, Wizards’ ten-episode story for the set.</p>
     <div id="media-body"></div>
+  </section>
+  <section class="view" id="formats" aria-labelledby="formats-heading">
+    <header class="viewbar"><button class="back-btn" type="button" data-back>← Back</button><h1 id="formats-heading">Formats</h1><span class="stamp">13 formats</span></header>
+    <p class="fmt-intro">Every way to play, in one place — what it is, how many it seats, what you need to sit down. Thirteen formats on the shelf; it can grow from here.</p>
+    <div class="fmt-pillrow" id="fmt-pillrow"></div>
+    <div class="fmt-design" id="fmt-view-shelf">
+      <div class="fmt-shelf" id="fmt-shelf-grid"></div>
+    </div>
+    <div class="fmt-design" id="fmt-view-spot" hidden>
+      <div class="fmt-spot-layout">
+        <div class="fmt-spot-index" id="fmt-spot-index" role="tablist" aria-label="Formats"></div>
+        <article class="fmt-spot-panel" id="fmt-spot-panel"></article>
+      </div>
+    </div>
+    <div class="fmt-design" id="fmt-view-h2h" hidden>
+      <div class="fmt-picker" id="fmt-picker" aria-label="Pick by tonight's situation">
+        <span class="fmt-pk-label">Tonight we have…</span>
+        <button class="fmt-pk" type="button" data-pick="duo" aria-pressed="false">Just two of us</button>
+        <button class="fmt-pk" type="button" data-pick="pod" aria-pressed="false">A full pod</button>
+        <button class="fmt-pk" type="button" data-pick="packs" aria-pressed="false">Fresh packs to crack</button>
+        <button class="fmt-pk" type="button" data-pick="cheap" aria-pressed="false">A tight budget</button>
+      </div>
+      <div class="fmt-compare" id="fmt-compare-grid"></div>
+    </div>
   </section>
   <section class="view" id="precon-zinnia" aria-labelledby="precon-zinnia-heading"><header class="viewbar"><button class="back-btn" type="button" data-back>← Back</button><h1 id="precon-zinnia-heading">Family Matters</h1><span class="stamp">Precon</span></header><div id="precon-zinnia-content"></div></section>
   <section class="view" id="precon-quandrix" aria-labelledby="precon-quandrix-heading"><header class="viewbar"><button class="back-btn" type="button" data-back>← Back</button><h1 id="precon-quandrix-heading">Quantum Quandrix</h1><span class="stamp">Precon</span></header><div id="precon-quandrix-content"></div></section>
@@ -853,6 +885,7 @@ At the beginning of each opponent’s upkeep, Mogis deals 2 damage to that playe
     if(id==='staples')return 'staples';
     if(id==='counter')return 'counter';
     if(id==='proxy-wizard')return 'proxy-wizard';
+    if(id==='formats')return 'formats';
     return null;
   }
   /* Level navigation: every screen sits at one level, forward taps step one
@@ -860,7 +893,7 @@ At the beginning of each opponent’s upkeep, Mogis deals 2 damage to that playe
      pinned Main button is the Level-1 reset, distinct from Back. */
   
   
-  var NAMES={home:'Home',articles:'Articles','article-archive':'Article Archive','commander-lab':'Commander Lab',staples:'Staples',media:'MTG Media','proxy-wizard':'Proxy Wizard',counter:'Life Counter',playtest:'Playtest',rachel:'Rachel’s Kitchen','wes-workshop':'Wes’s Workshop','joshua-war-room':'Joshua’s War Room'};
+  var NAMES={home:'Home',articles:'Articles','article-archive':'Article Archive','commander-lab':'Commander Lab',staples:'Staples',media:'MTG Media','proxy-wizard':'Proxy Wizard',formats:'Formats',counter:'Life Counter',playtest:'Playtest',rachel:'Rachel’s Kitchen','wes-workshop':'Wes’s Workshop','joshua-war-room':'Joshua’s War Room'};
   
   function baseView(s){return s}
   function screenName(s){
@@ -2485,5 +2518,274 @@ document.addEventListener('DOMContentLoaded', function(){
 
 
 
+<script>
+/* Formats view switcher — one layout preference (The Shelf / Spotlight /
+   Head-to-Head) behind a Change view pill, the Set Review pattern. The
+   chosen view is remembered while you move around the hub and back. */
+window.FMTV=(function(){
+"use strict";
+var ORDER=["shelf","spot","h2h"];
+var NAMES={shelf:"The Shelf",spot:"Spotlight",h2h:"Head-to-Head"};
+var DESCS={
+  shelf:"Every format gets a card on one scrollable shelf. Tap to unfold the full specs.",
+  spot:"One format takes the stage at full size; the index on the side swaps what's featured.",
+  h2h:"All thirteen side by side, spec against spec — plus a picker for what to play tonight."
+};
+var cur="shelf";
+var subs=[];
+function notify(){for(var i=0;i<subs.length;i++){try{subs[i](cur)}catch(e){}}}
+function set(v){if(!NAMES[v])return;cur=v;notify()}
+function get(){return cur}
+function subscribe(f){subs.push(f)}
+function mount(host){
+  if(!host)return;
+  var wrap=document.createElement("div");wrap.className="fmt-pillwrap";
+  var btn=document.createElement("button");btn.type="button";btn.className="fmt-viewpill";btn.setAttribute("aria-haspopup","true");btn.setAttribute("aria-expanded","false");
+  var menu=document.createElement("div");menu.className="fmt-menu";menu.hidden=true;menu.setAttribute("role","menu");menu.setAttribute("aria-label","Choose a formats layout");
+  wrap.appendChild(btn);wrap.appendChild(menu);host.appendChild(wrap);
+  function refresh(){
+    btn.innerHTML="<span>"+NAMES[cur]+"</span><span class=\"fmt-sep\">·</span><span class=\"fmt-action\">Change view</span> <span class=\"fmt-caret\" aria-hidden=\"true\">▾</span>";
+    menu.innerHTML=ORDER.map(function(k){
+      return "<button type=\"button\" class=\"fmt-opt\" role=\"menuitemradio\" aria-checked=\""+(k===cur?"true":"false")+"\" data-fmt-opt=\""+k+"\"><span class=\"fmt-opt-name\">"+NAMES[k]+(k===cur?"<span class=\"fmt-opt-cur\">Current</span>":"")+"</span><span class=\"fmt-opt-desc\">"+DESCS[k]+"</span></button>";
+    }).join("");
+  }
+  function close(){menu.hidden=true;btn.setAttribute("aria-expanded","false")}
+  btn.addEventListener("click",function(e){e.stopPropagation();var wasHidden=menu.hidden;close();if(wasHidden){menu.hidden=false;btn.setAttribute("aria-expanded","true")}});
+  menu.addEventListener("click",function(e){var o=e.target.closest("[data-fmt-opt]");if(!o)return;set(o.getAttribute("data-fmt-opt"));close();btn.focus()});
+  document.addEventListener("click",function(e){if(!wrap.contains(e.target))close()});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape")close()});
+  subscribe(refresh);
+  refresh();
+}
+return {get:get,set:set,subscribe:subscribe,mount:mount};
+})();
+</script>
+<script>
+/* Formats — thirteen formats, one data set feeding all three views */
+(function(){
+"use strict";
+var FORMATS=[
+  {
+    id:"commander", name:"Commander", color:"#E9CD7A", fam:"Multiplayer · Constructed",
+    players:"2–6 · best at 4", deck:"100 cards, singleton", life:"40", source:"Your collection",
+    pace:"60–120 min", sideboard:"None",
+    blurb:"One legendary creature leads a 100-card singleton deck — no two cards alike but basic lands. Politics, table talk, and swings nobody saw coming.",
+    points:["Singleton deckbuilding: every card is a one-of, so games rarely repeat","The commander sits outside the deck and can be recast — it defines the whole build","Free-for-all multiplayer: deals, grudges, and kingmaking are part of the game"],
+    hook:"Your 19 decks already live in the Commander Lab — this page points straight back to them.",
+    fits:["pod"]
+  },
+  {
+    id:"draft", name:"Draft", color:"#5EA9F5", fam:"Limited · Pick-and-Pass",
+    players:"8-pod · works 4–8", deck:"40+ built on the spot", life:"20", source:"3 booster packs each",
+    pace:"~30 min draft + rounds", sideboard:"Rest of your pool",
+    blurb:"Sit in a circle, open a pack, take one card, pass the rest. Three packs later you've built a 40-card deck out of thin air — then you play the people you drafted with.",
+    points:["Deckbuilding and play are one continuous skill: signals, colors, curve","Nobody's collection matters — everyone starts from the same packs","Your pool is your sideboard: rebuild between games freely"],
+    hook:"Pairs with the Get Good draft guide and set reviews when a new set lands.",
+    fits:["pod","packs"]
+  },
+  {
+    id:"sealed", name:"Sealed", color:"#5BD598", fam:"Limited · Solo Build",
+    players:"2+ · build solo", deck:"40+ from your pool", life:"20", source:"6 booster packs each",
+    pace:"~30 min build + games", sideboard:"Rest of your pool",
+    blurb:"Crack six packs, keep all of it, build the best 40 from what's in front of you. The prerelease format — no drafting, no passing, just you and the pool.",
+    points:["The gentlest way in: no timer, no signals, build at your own speed","Pool reading is the skill — find the two colors the packs are pushing","Prereleases run Sealed, so it's the format for set-launch weekends"],
+    hook:"Good home for the prerelease kits and any leftover packs in the house.",
+    fits:["duo","packs"]
+  },
+  {
+    id:"standard", name:"Standard", color:"#FF7A6E", fam:"Constructed · Rotating",
+    players:"1v1", deck:"60 + 15-card sideboard", life:"20", source:"Recent sets only",
+    pace:"~30–45 min matches", sideboard:"15 cards",
+    blurb:"Magic's flagship one-on-one format. Sixty-card decks built from the last few years of sets, a 15-card sideboard, and a metagame that resets as sets rotate in and out.",
+    points:["Best-of-three with sideboarding — matches reward a real game plan","Rotation keeps it fresh: last season's king is next season's bulk","The Pro Tour format, so there's always a meta to study"],
+    hook:"Where the Reality Fracture results coverage on the hub comes home to roost.",
+    fits:["duo"]
+  },
+  {
+    id:"pauper", name:"Pauper", color:"#B79CED", fam:"Constructed · Commons Only",
+    players:"1v1", deck:"60 + 15-card sideboard", life:"20", source:"Commons from all of Magic",
+    pace:"~30–45 min matches", sideboard:"15 cards",
+    blurb:"Every card in your deck has to have been printed as a common — that's the whole rule, and it still produces one of the deepest formats in the game. Cheap to build, brutal to master.",
+    points:["Eternal card pool: commons from 30+ years of sets, nothing rotates out","Top decks cost a fraction of any other constructed format","Surprisingly powerful: Lightning Bolt, Brainstorm, and Counterspell are all commons"],
+    hook:"The natural home for the bulk commons box gathering dust in the closet.",
+    fits:["duo","cheap"]
+  },
+  {
+    id:"modern", name:"Modern", color:"#F08A4B", fam:"Constructed · Non-Rotating",
+    players:"1v1", deck:"60 + 15-card sideboard", life:"20", source:"Eighth Edition forward",
+    pace:"~30–45 min matches", sideboard:"15 cards",
+    blurb:"Every set from Eighth Edition (2003) forward is legal, and nothing ever rotates out. The result is a fast, powerful format where decks do their thing by turn three or four — or stop yours from doing it.",
+    points:["Non-rotating: a deck you build today stays legal for years, bans aside","High power, tight interaction — cheap removal and countermagic keep combos honest","A deep, settled metagame that rewards knowing the field cold"],
+    hook:"The format behind the Modern results pieces that roll through the hub's Articles.",
+    fits:["duo"]
+  },
+  {
+    id:"pioneer", name:"Pioneer", color:"#45C2B3", fam:"Constructed · Non-Rotating",
+    players:"1v1", deck:"60 + 15-card sideboard", life:"20", source:"Return to Ravnica forward",
+    pace:"~30–45 min matches", sideboard:"15 cards",
+    blurb:"Non-rotating constructed from Return to Ravnica (2012) forward — Standard's recent past, kept forever. A competitive step below Modern in raw power, which makes for longer, more interactive games.",
+    points:["Fed by Standard: every set joins Pioneer as it rotates out of Standard","Slower and more creature-driven than Modern — combat math matters","A younger format, so the metagame still has room to be broken open"],
+    hook:"The bridge format — your rotated-out Standard decks already live most of the way here.",
+    fits:["duo"]
+  },
+  {
+    id:"legacy", name:"Legacy", color:"#E8DCC0", fam:"Constructed · Eternal",
+    players:"1v1", deck:"60 + 15-card sideboard", life:"20", source:"Nearly all of Magic",
+    pace:"~30–45 min matches", sideboard:"15 cards",
+    blurb:"Almost every card ever printed is legal, held in check by a banned list instead of rotation. Brainstorm, Force of Will, the original dual lands — the most powerful cards in the game, all in one place.",
+    points:["Eternal card pool: 30+ years of Magic, nothing rotates out","Home to the game's strongest spells — and the free countermagic that polices them","Deep and skill-dense: small decisions compound over a long match"],
+    hook:"The eternal endgame for the collection — the oldest cards in the house are legal here.",
+    fits:["duo"]
+  },
+  {
+    id:"brawl", name:"Brawl", color:"#E86AA8", fam:"Singleton · Standard Pool",
+    players:"2 · works multiplayer", deck:"60-card singleton", life:"25 · 30 in multiplayer", source:"Standard's card pool",
+    pace:"~30–60 min", sideboard:"None",
+    blurb:"Commander shrunk to Standard size: one legendary leader heads a 60-card singleton deck built only from current sets. Heads-up at 25 life, multiplayer at 30 — Commander-style play that keeps up with new releases.",
+    points:["Commander-style deckbuilding with a rotating, always-current card pool","Smaller decks and lower life totals make for quicker games than Commander","Planeswalkers can lead here, which full Commander doesn't allow"],
+    hook:"The Commander Lab's little sibling — same singleton brain, Standard-sized shelf.",
+    fits:["duo","pod"]
+  },
+  {
+    id:"cube", name:"Cube", color:"#5ED0D6", fam:"Limited · Curated Draft",
+    players:"8-pod · works with fewer", deck:"40+ built on the spot", life:"20", source:"A curated custom pool",
+    pace:"~30 min draft + rounds", sideboard:"Rest of your pool",
+    blurb:"Draft, but the packs come from a cube: a custom pool of cards a curator picked on purpose — favorite cards, a theme, a power level. Every draft is a designed environment instead of a product.",
+    points:["The curator is the set designer: every card in the pool earned its slot","Replayable forever — shuffle the same cube and draft it again next week","Any shape you want: powered vintage cubes, pauper cubes, set cubes, theme cubes"],
+    hook:"Pairs with the Get Good draft guide — same skills, but the pool is one you designed.",
+    fits:["pod"]
+  },
+  {
+    id:"thg", name:"Two-Headed Giant", color:"#A8D65E", fam:"Mode · Team Play",
+    players:"2 teams of 2", deck:"60 cards — or Commander decks", life:"30 shared per team", source:"Bring your own decks",
+    pace:"~45–60 min", sideboard:"Follows the base format",
+    blurb:"Two heads, one turn: you and your teammate share a 30-life total, take your turns together, and attack and block as a team. It's a game mode you layer onto other formats, not a card pool of its own.",
+    points:["Teammates share what matters: life, the turn, and every decision in between","You can see your teammate's hand and plan together — table talk is in the rules","Layers onto anything: 2HG Sealed at prereleases, 2HG Commander at the kitchen table"],
+    hook:"Made for the four-player nights this house already runs — two couples, two teams.",
+    fits:["pod"]
+  },
+  {
+    id:"planechase", name:"Planechase", color:"#C86AE8", fam:"Mode · Casual Multiplayer",
+    players:"3–5 · usually over Commander", deck:"Your usual deck + planar deck", life:"40", source:"A shared planar deck",
+    pace:"60–120 min", sideboard:"None",
+    blurb:"A shared deck of plane cards sits beside the game. The current plane bends the rules for everyone at the table; roll the planar die to planeswalk somewhere new — or set off the plane's chaos effect instead.",
+    points:["Every plane changes the game: one global rule, different on every world","The planar die keeps turns spicy — planeswalk away, or roll into chaos","Layers over Commander or any multiplayer game; the decks don't change"],
+    hook:"Built for Commander nights in the Lab — same decks, a brand-new battlefield every roll.",
+    fits:["pod"]
+  },
+  {
+    id:"archenemy", name:"Archenemy", color:"#FF4D6D", fam:"Mode · Boss Fight",
+    players:"1 vs a team of 3", deck:"60-card or Commander decks", life:"Archenemy 40 · team 20 each", source:"Decks + a scheme deck",
+    pace:"~45–90 min", sideboard:"None",
+    blurb:"One player is the villain. The archenemy starts at 40 life and flips a scheme card every turn — powerful one-sided effects the whole table has to survive. Three heroes, one boss fight.",
+    points:["The scheme deck is the boss's weapon: a free, nasty effect every single turn","The team shares a turn and a fight, but keeps separate life totals","A natural handicap format: the stronger player or deck takes the villain seat"],
+    hook:"Any of the Lab's decks can wear the villain hat — no new decks required.",
+    fits:["pod"]
+  }
+];
+
+function chips(f){
+  return [f.players, f.deck, f.life + " life"].map(function(t){return "<li>"+t+"</li>"}).join("");
+}
+function specRows(f){
+  return [["Players",f.players],["Deck",f.deck],["Starting life",f.life],["You need",f.source],["Pace",f.pace],["Sideboard",f.sideboard]];
+}
+function specs(f){
+  return specRows(f).map(function(r){return '<div class="fmt-spec"><b>'+r[0]+'</b><span>'+r[1]+'</span></div>'}).join("");
+}
+
+/* ----- View A: The Shelf ----- */
+var shelfGrid=document.getElementById("fmt-shelf-grid");
+if(shelfGrid){
+  shelfGrid.innerHTML=FORMATS.map(function(f){
+    return '<article class="fmt-card" style="--fc:'+f.color+'">'
+      + '<div class="fmt-card-head"><div class="fmt-card-top"><span class="fmt-diamond"></span><h3>'+f.name+'</h3><span class="fmt-fam">'+f.fam+'</span></div>'
+      + '<p class="fmt-blurb">'+f.blurb+'</p><ul class="fmt-chips">'+chips(f)+'</ul></div>'
+      + '<div class="fmt-card-more"><div class="fmt-specs">'+specs(f)+'</div>'
+      + '<p class="fmt-hook"><b>In this hub —</b> '+f.hook+'</p></div>'
+      + '<button class="fmt-fcard-btn" type="button" aria-expanded="false">Full specs ▾</button></article>';
+  }).join("");
+  shelfGrid.querySelectorAll(".fmt-fcard-btn").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var card=btn.closest(".fmt-card"), open=card.classList.toggle("open");
+      btn.setAttribute("aria-expanded", open);
+      btn.textContent=open ? "Hide specs ▴" : "Full specs ▾";
+    });
+  });
+}
+
+/* ----- View B: Spotlight ----- */
+var spotIndex=document.getElementById("fmt-spot-index"), spotPanel=document.getElementById("fmt-spot-panel");
+if(spotIndex&&spotPanel){
+  spotIndex.innerHTML=FORMATS.map(function(f,i){
+    return '<button class="fmt-spot-btn" type="button" role="tab" data-i="'+i+'" aria-selected="'+(i===0)+'" style="--fc:'+f.color+'"><span class="fmt-diamond"></span><span>'+f.name+'<small>'+f.fam+'</small></span></button>';
+  }).join("");
+  function renderSpot(i){
+    var f=FORMATS[i];
+    spotPanel.style.setProperty("--fc", f.color);
+    spotPanel.innerHTML='<p class="fmt-spot-fam">'+f.fam+'</p><h3>'+f.name+'</h3>'
+      + '<p class="fmt-lede">'+f.blurb+'</p>'
+      + '<div class="fmt-spot-specs">'
+      + [["Players",f.players],["Deck",f.deck],["Life",f.life],["Pace",f.pace]].map(function(r){
+          return '<div class="fmt-spec"><b>'+r[0]+'</b><span>'+r[1]+'</span></div>';
+        }).join("")
+      + '</div>'
+      + '<ul class="fmt-spot-points">'+f.points.map(function(p){return "<li>"+p+"</li>"}).join("")+'</ul>'
+      + '<div class="fmt-spot-hook"><b>In this hub —</b> '+f.hook+'</div>';
+    spotIndex.querySelectorAll(".fmt-spot-btn").forEach(function(b,j){ b.setAttribute("aria-selected", j===i); });
+  }
+  spotIndex.querySelectorAll(".fmt-spot-btn").forEach(function(b){
+    b.addEventListener("click", function(){ renderSpot(+b.dataset.i); });
+  });
+  renderSpot(0);
+}
+
+/* ----- View C: Head-to-Head ----- */
+var compareGrid=document.getElementById("fmt-compare-grid");
+if(compareGrid){
+  compareGrid.innerHTML=FORMATS.map(function(f){
+    return '<article class="fmt-col" data-fits="'+f.fits.join(" ")+'" style="--fc:'+f.color+'">'
+      + '<h3><span class="fmt-diamond"></span>'+f.name+'</h3>'
+      + '<dl>'
+      + '<div><dt>Players</dt><dd>'+f.players+'</dd></div>'
+      + '<div><dt>Deck</dt><dd>'+f.deck+'</dd></div>'
+      + '<div><dt>Starting life</dt><dd>'+f.life+'</dd></div>'
+      + '<div><dt>You need</dt><dd>'+f.source+'</dd></div>'
+      + '<div><dt>Pace</dt><dd>'+f.pace+'</dd></div>'
+      + '</dl>'
+      + '<p class="fmt-pick-line">'+f.blurb.split("—")[0].split(".")[0]+'.</p>'
+      + '<span class="fmt-pick-badge">Tonight\u2019s pick</span></article>';
+  }).join("");
+  document.querySelectorAll(".fmt-pk").forEach(function(pk){
+    pk.addEventListener("click", function(){
+      var wasOn=pk.getAttribute("aria-pressed")==="true";
+      document.querySelectorAll(".fmt-pk").forEach(function(p){ p.setAttribute("aria-pressed","false"); });
+      compareGrid.querySelectorAll(".fmt-col").forEach(function(c){ c.classList.remove("pick"); });
+      compareGrid.classList.remove("has-pick");
+      if(!wasOn){
+        pk.setAttribute("aria-pressed","true");
+        compareGrid.classList.add("has-pick");
+        compareGrid.querySelectorAll('.fmt-col[data-fits~="'+pk.dataset.pick+'"]').forEach(function(c){ c.classList.add("pick"); });
+      }
+    });
+  });
+}
+
+/* ----- Change view wiring ----- */
+function applyView(v){
+  var shelf=document.getElementById("fmt-view-shelf");
+  var spot=document.getElementById("fmt-view-spot");
+  var h2h=document.getElementById("fmt-view-h2h");
+  if(shelf)shelf.hidden=v!=="shelf";
+  if(spot)spot.hidden=v!=="spot";
+  if(h2h)h2h.hidden=v!=="h2h";
+}
+if(window.FMTV){
+  window.FMTV.subscribe(applyView);
+  window.FMTV.mount(document.getElementById("fmt-pillrow"));
+  applyView(window.FMTV.get());
+}
+})();
+</script>
 </body>
 </html>
