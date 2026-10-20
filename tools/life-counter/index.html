@@ -93,7 +93,7 @@
     .trackers { min-width:0; border:1px solid rgba(255,255,255,.05); background:rgba(0,0,0,.30); box-shadow:inset 0 1px 5px rgba(0,0,0,.55); border-radius:9px; min-height:32px; padding:2px 5px; display:flex; align-items:center; justify-content:center; gap:7px; font-family:"IBM Plex Mono", monospace; font-size:clamp(10px, 2.8vw, 13px); overflow:hidden; white-space:nowrap; }
     .trackers span { display:inline-flex; align-items:center; gap:3px; }
     .trackers svg { width:12px; height:12px; flex:none; fill:currentColor; opacity:.78; }
-    .toolbar { position:fixed; z-index:10; left:50%; top:50%; transform:translate(-50%,-50%); display:flex; gap:3px; padding:5px; border:1px solid rgba(255,255,255,.18); border-radius:16px; background:linear-gradient(160deg,#1a1d21,#0a0c0e); box-shadow:inset 0 1px 0 var(--chrome-hi), 0 6px 24px rgba(0,0,0,.7), 0 0 24px rgba(10,132,255,.15); }
+    .toolbar { position:fixed; z-index:10; left:50%; top:calc(50% - 9px); transform:translate(-50%,-50%); display:flex; gap:3px; padding:5px; border:1px solid rgba(255,255,255,.18); border-radius:16px; background:linear-gradient(160deg,#1a1d21,#0a0c0e); box-shadow:inset 0 1px 0 var(--chrome-hi), 0 6px 24px rgba(0,0,0,.7), 0 0 24px rgba(10,132,255,.15); }
     .phone-top { position:fixed; z-index:8; top:0; left:0; right:0; padding:calc(6px + env(safe-area-inset-top)) 14px 7px; text-align:center; background:linear-gradient(180deg, rgba(16,20,25,.97), rgba(10,13,16,.94)); border-bottom:1px solid rgba(255,255,255,.09); box-shadow:0 6px 18px rgba(0,0,0,.5); }
     .pt-title { font-size:17px; font-weight:800; letter-spacing:.02em; }
     .pt-turn { margin-top:1px; font:600 13px "IBM Plex Mono",monospace; color:#9aa3ad; font-variant-numeric:tabular-nums; }
@@ -239,7 +239,7 @@
       .tile-timer { min-height:40px; font-size:16px; } .tile-rot { bottom:54px; }
       .name { font-size:14px; } .details { height:26px; } .status { display:none; }
       .life { font-size:clamp(50px,15vh,82px); } .life-btn { min-height:40px; font-size:40px; }
-      .toolbar { flex-direction:column; } .tool { width:34px; height:30px; }
+      .toolbar { flex-direction:column; top:calc(50% - 8px); } .tool { width:34px; height:30px; }
     }
     @media (prefers-reduced-motion:reduce) { .shade, .sheet, .player-inner { transition:none; } }
   </style>
