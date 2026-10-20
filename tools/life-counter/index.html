@@ -45,7 +45,10 @@
         linear-gradient(165deg, var(--neon-sheen) 0%, transparent 45%),
         radial-gradient(130% 100% at 50% 0%, var(--neon-wash), transparent 60%); }
     /* neon colors set dynamically via JS per playerMana */
-    .player-inner { width:100%; height:100%; padding:max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom)); display:grid; grid-template-rows:auto 1fr auto auto; transition:transform .25s ease; }
+    .player-inner { width:100%; height:100%; padding:max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom)); display:grid; grid-template-columns:minmax(50px,.55fr) minmax(0,1fr) minmax(50px,.55fr); column-gap:6px; transition:transform .25s ease; }
+    .tile-center { min-width:0; min-height:0; display:grid; grid-template-rows:auto 1fr auto auto; }
+    .life-zone { min-height:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; }
+    .tap-hint { font-size:11px; font-weight:700; letter-spacing:.04em; color:rgba(255,255,255,.35); }
     /* per-tile rotate: flips this tile relative to the board's current orientation */
     .player.flipped .player-inner { transform:rotate(180deg); }
     .tabletop .player.flipped:nth-child(-n+2) .player-inner { transform:none; }
@@ -76,7 +79,7 @@
     .player-hurry:active { background:#9f211c; transform:translateY(1px); box-shadow:none; }
     .details { border:1px solid rgba(255,255,255,.09); background:linear-gradient(180deg,#24272d,#101315); box-shadow:0 4px 10px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.12); width:34px; height:30px; border-radius:9px; font-family:"IBM Plex Mono", monospace; font-size:14px; line-height:1; overflow:hidden; }
     .life-row { min-height:0; display:grid; grid-template-columns:minmax(44px, .65fr) minmax(68px, 1.2fr) minmax(44px, .65fr); align-items:center; gap:3px; }
-    .life-btn { border:1px solid rgba(255,255,255,.08); background:linear-gradient(180deg,#23262b,#0c0e10); height:auto; margin:10px 0; border-radius:16px; box-shadow:0 6px 14px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.13); min-height:64px; padding:0; font-family:"IBM Plex Mono", monospace; font-size:clamp(35px, 10vw, 62px); font-weight:500; opacity:.86; touch-action:manipulation; }
+    .life-btn { border:1px solid rgba(255,255,255,.08); background:linear-gradient(180deg,#23262b,#0c0e10); height:auto; margin:8px 0; border-radius:16px; box-shadow:0 6px 14px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.13); min-height:64px; padding:0; font-family:"IBM Plex Mono", monospace; font-size:clamp(35px, 10vw, 62px); font-weight:500; opacity:.86; touch-action:manipulation; }
     .life-btn:active { transform:translateY(2px) scale(.97); box-shadow:0 2px 6px rgba(0,0,0,.5), inset 0 2px 8px rgba(0,0,0,.4); }
     .life { font-family:"IBM Plex Mono", monospace; font-size:clamp(64px, 20vw, 122px); font-weight:600; line-height:.8; letter-spacing:-.09em; text-align:center; color:#fff; text-shadow:0 0 12px var(--neon), 0 0 32px var(--neon-dim), 0 2px 4px rgba(0,0,0,.5); font-variant-numeric:tabular-nums; border:0; background:transparent; padding:0; cursor:pointer; transition:transform .12s ease; }
     .life:active { transform:scale(.96); }
@@ -123,12 +126,25 @@
     .player-name-input { min-width:0; flex:1; border:1px solid light-dark(#cbd2ce,#3b4741); border-radius:10px; background:light-dark(#fff,#202824); color:inherit; padding:9px 11px; font-size:21px; font-weight:700; }
     .close { border:0; background:light-dark(#e8ece9,#29332e); color:inherit; width:40px; height:40px; border-radius:50%; font-size:25px; line-height:1; }
     .section-title { margin:19px 0 8px; font-size:14px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:light-dark(#4c5d54,#aab7b0); }
-    .counter-row { display:grid; grid-template-columns:1fr 52px 70px 52px; gap:7px; align-items:center; min-height:52px; }
+    .counter-row { display:grid; grid-template-columns:1fr 44px 56px 44px; gap:7px; align-items:center; min-height:52px; }
     .counter-row + .counter-row { border-top:1px solid light-dark(#d8ddda,#303a35); }
     .counter-label { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:18px; font-weight:600; }
     .counter-value { text-align:center; font-family:"IBM Plex Mono", monospace; font-size:24px; font-weight:600; font-variant-numeric:tabular-nums; }
-    .count-btn { border:1px solid rgba(255,255,255,.09); border-radius:11px; background:linear-gradient(180deg,#333a44,#22282f); box-shadow:0 4px 10px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.12); color:inherit; height:42px; font-family:"IBM Plex Mono",monospace; font-size:25px; }
+    .count-btn { border:1px solid rgba(255,255,255,.09); border-radius:50%; background:linear-gradient(180deg,#333a44,#22282f); box-shadow:0 4px 10px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.12); color:inherit; width:44px; height:44px; justify-self:center; font-family:"IBM Plex Mono",monospace; font-size:22px; touch-action:manipulation; }
+    .count-btn:active { transform:scale(.92); }
     .danger-note { margin:12px 0 0; color:light-dark(#69776f,#93a39a); font-size:14px; line-height:1.35; }
+    .d-dot { width:17px; height:17px; flex:none; border-radius:50%; }
+    .d-life { display:flex; align-items:center; justify-content:center; gap:9px; margin:14px 0 2px; }
+    .d-step { width:56px; height:54px; flex:none; border-radius:16px; border:1px solid rgba(255,255,255,.09); background:linear-gradient(180deg,#333a44,#22282f); box-shadow:0 4px 10px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.12); color:inherit; font-family:"IBM Plex Mono",monospace; font-size:18px; font-weight:700; touch-action:manipulation; }
+    .d-step:active { transform:translateY(1px) scale(.97); }
+    .d-life-num { font-family:"IBM Plex Mono",monospace; font-size:62px; font-weight:600; line-height:1; min-width:100px; text-align:center; font-variant-numeric:tabular-nums; }
+    .d-log { display:grid; gap:6px; }
+    .d-log-row { background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.07); border-radius:10px; padding:8px 13px; font-size:14px; font-weight:600; }
+    .d-log-empty { border:1px solid rgba(255,255,255,.09); border-radius:12px; padding:14px; text-align:center; color:var(--muted); font-weight:600; font-size:15px; }
+    .status-row { display:flex; align-items:center; justify-content:space-between; gap:10px; min-height:52px; }
+    .status-row + .status-row { border-top:1px solid light-dark(#d8ddda,#303a35); }
+    .d-toggle { min-width:66px; padding:9px 15px; border-radius:20px; border:1px solid rgba(255,255,255,.13); background:linear-gradient(180deg,#2b3038,#1a1e24); color:var(--muted); font-weight:800; font-size:13px; cursor:pointer; touch-action:manipulation; }
+    .d-toggle.on { background:linear-gradient(180deg,#f0c05a,#d4a017); border-color:transparent; color:#241b03; box-shadow:0 0 14px rgba(224,173,72,.45); }
     .confirm { padding:12px 4px 4px; }
     .confirm h2 { margin:0 0 7px; font-size:25px; }
     .confirm p { margin:0 0 18px; color:light-dark(#58685f,#acb8b1); font-size:17px; line-height:1.35; }
@@ -159,10 +175,11 @@
     @media (min-width:768px) and (min-height:650px) {
       .board { inset:12px 12px 132px; gap:8px; background:transparent; }
       .player { border-radius:18px; box-shadow:0 3px 16px rgba(0,0,0,.22); }
-      .player-inner { padding:14px 16px; grid-template-rows:auto minmax(95px,.82fr) auto auto; }
+      .player-inner { padding:14px 16px; grid-template-columns:minmax(68px,.55fr) minmax(0,1fr) minmax(68px,.55fr); }
+      .tile-center { grid-template-rows:auto minmax(95px,.82fr) auto auto; }
       .name { font-size:23px; }
       .details { width:38px; height:34px; }
-      .life-row { grid-template-columns:minmax(68px,.55fr) minmax(110px,1.25fr) minmax(68px,.55fr); }
+      .life { font-size:clamp(82px,13vw,128px); }
       .life { font-size:clamp(82px,13vw,128px); }
       .life-btn { font-size:58px; }
       .status { display:none; }
@@ -277,7 +294,7 @@
     (function(){
       'use strict';
       var START_LIFE = 40;
-      function makePlayers(n,names,life){ var arr=[]; for(var i=0;i<n;i++){ arr.push({ name:(names&&names[i])||('Player '+(i+1)), life:life, poison:0, commander:Array(Math.max(0,n-1)).fill(0), flip:false, t:{e:0,r:false,s:0} }); } return arr; }
+      function makePlayers(n,names,life){ var arr=[]; for(var i=0;i<n;i++){ arr.push({ name:(names&&names[i])||('Player '+(i+1)), life:life, poison:0, energy:0, experience:0, cmdtax:0, monarch:false, initiative:false, commander:Array(Math.max(0,n-1)).fill(0), flip:false, t:{e:0,r:false,s:0} }); } return arr; }
       var players = makePlayers(4,null,START_LIFE);
 
       /* ---- mana symbols (WUBRG) ---- */
@@ -307,6 +324,7 @@
       var cmdIcon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 8 4v5c0 5.2-3.4 9.7-8 11-4.6-1.3-8-5.8-8-11V6l8-4Zm0 3.1L7 7.6V11c0 3.6 2.1 6.8 5 7.9 2.9-1.1 5-4.3 5-7.9V7.6l-5-2.5Z"/></svg>';
 
       var _saveT=null;
+      function extras(p){ if(p.energy===undefined)p.energy=0; if(p.experience===undefined)p.experience=0; if(p.cmdtax===undefined)p.cmdtax=0; if(p.monarch===undefined)p.monarch=false; if(p.initiative===undefined)p.initiative=false; }
       function render(){
         var portrait = window.matchMedia('(orientation: portrait)').matches;
         var cols = players.length<=2 ? ((players.length===2 && portrait) ? 1 : players.length) : (players.length<=4 ? 2 : 3);
@@ -315,6 +333,7 @@
         board.style.gridTemplateRows='repeat('+Math.ceil(players.length/cols)+', 1fr)';
         board.setAttribute('aria-label', players.length+' player Magic life counter');
         board.innerHTML = players.map(function(p,i){
+          extras(p);
           var totalCmd = Math.max.apply(null,p.commander);
           var others=otherPlayers(i);
           var commanderMatrix=others.map(function(opp,slot){ return '<div class="cmd-source"><span class="cmd-label">'+esc(players[opp].name)+'</span><div class="stat-controls"><button class="mini-btn" data-action="counter" data-type="commander" data-slot="'+slot+'" data-delta="-1" data-i="'+i+'" aria-label="Subtract commander damage from '+esc(players[opp].name)+'">−</button><output class="mini-value">'+p.commander[slot]+'</output><button class="mini-btn" data-action="counter" data-type="commander" data-slot="'+slot+'" data-delta="1" data-i="'+i+'" aria-label="Add commander damage from '+esc(players[opp].name)+'">+</button></div></div>'; }).join('');
@@ -324,11 +343,15 @@
           return '<section class="player '+(i===turn?'active-turn ':'')+(p.flip?'flipped ':'')+((p.life<=0 || p.poison>=10 || totalCmd>=21)?'dead':'')+'" data-i="'+i+'" style="'+neonStyle+'" aria-label="'+esc(p.name)+', '+p.life+' life">'+
             '<div class="mana-bg">'+(MANA_SVG[playerMana[i]||'R']||'')+'</div>'+
             '<div class="player-inner">'+
+              '<button class="life-btn" data-action="life" data-delta="-1" data-i="'+i+'" aria-label="Subtract 1 life from '+esc(p.name)+'">−</button>'+
+              '<div class="tile-center">'+
               '<header class="player-head"><button class="name" data-action="details" data-i="'+i+'">'+esc(p.name)+'</button><div class="player-actions"><button class="mana-pick-btn" data-action="mana" data-i="'+i+'" aria-label="Choose color for '+esc(p.name)+'">'+(MANA_SVG[playerMana[i]||'R']||'')+'</button><button class="player-hurry" data-action="hurry" data-i="'+i+'" aria-label="Say hurry up, '+esc(p.name)+'"></button><button class="tile-flip" data-action="flip" data-i="'+i+'" aria-pressed="'+(p.flip?'true':'false')+'" aria-label="Rotate '+esc(p.name)+' tile"><svg viewBox="0 0 24 24"><path d="M20 7v5h-5"/><path d="M4 17v-5h5"/><path d="M6.1 8a7 7 0 0 1 11.3-2.1L20 8M4 16l2.6 2.1A7 7 0 0 0 17.9 16"/></svg></button><button class="details" data-action="details" data-i="'+i+'" aria-label="Edit '+esc(p.name)+' and damage counters">•••</button></div></header>'+
-              '<div class="life-row"><button class="life-btn" data-action="life" data-delta="-1" data-i="'+i+'" aria-label="Subtract 1 life from '+esc(p.name)+'">−</button><button class="life" data-action="details" data-i="' + i + '" aria-live="polite" aria-label="Open details for ' + esc(p.name) + '">'+p.life+'</button><button class="life-btn" data-action="life" data-delta="1" data-i="'+i+'" aria-label="Add 1 life to '+esc(p.name)+'">+</button></div>'+
-              '<footer class="status"><button class="jump" data-action="life" data-delta="-5" data-i="'+i+'" aria-label="Subtract 5 life">−5</button><button class="trackers" data-action="details" data-i="'+i+'" aria-label="Poison '+p.poison+', highest commander damage '+totalCmd+'"><span>'+poisonIcon+p.poison+'</span><span>'+cmdIcon+p.commander.join('·')+'</span></button><button class="jump" data-action="life" data-delta="5" data-i="'+i+'" aria-label="Add 5 life">+5</button></footer>'+
+              '<div class="life-zone"><button class="life" data-action="details" data-i="'+i+'" aria-live="polite" aria-label="Open details for '+esc(p.name)+'">'+p.life+'</button><span class="tap-hint">tap for details</span></div>'+
+              '<footer class="status"><button class="jump" data-action="life" data-delta="-5" data-i="'+i+'" aria-label="Subtract 5 life">−5</button><button class="trackers" data-action="details" data-i="'+i+'" aria-label="Poison '+p.poison+', highest commander damage '+totalCmd+'"><span>'+poisonIcon+p.poison+'</span><span>'+cmdIcon+p.commander.join('·')+'</span>'+(p.energy?'<span>⚡'+p.energy+'</span>':'')+(p.experience?'<span>★'+p.experience+'</span>':'')+(p.cmdtax?'<span>🎲'+p.cmdtax+'</span>':'')+(p.monarch?'<span>♛</span>':'')+(p.initiative?'<span>◆</span>':'')+'</button><button class="jump" data-action="life" data-delta="5" data-i="'+i+'" aria-label="Add 5 life">+5</button></footer>'+
               '<div class="tablet-stats"><div class="stat-block"><span class="stat-title">Poison</span><div class="stat-controls"><button class="mini-btn" data-action="counter" data-type="poison" data-slot="0" data-delta="-1" data-i="'+i+'" aria-label="Subtract poison counter">−</button><output class="mini-value">'+p.poison+'</output><button class="mini-btn" data-action="counter" data-type="poison" data-slot="0" data-delta="1" data-i="'+i+'" aria-label="Add poison counter">+</button></div></div><div class="stat-block"><span class="stat-title">Commander damage</span><div class="cmd-grid">'+commanderMatrix+'</div></div></div>'+
               '<button class="tile-timer'+(tm.r?' running':'')+'" data-action="timer" data-i="'+i+'" aria-pressed="'+(tm.r?'true':'false')+'" aria-label="Timer for '+esc(p.name)+'. Tap to '+(tm.r?'stop':'start')+'; long-press to reset."><span class="timer-dot"></span><svg class="ic-play" viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z"/></svg><svg class="ic-pause" viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg><span class="timer-text">'+fmtTime(timerSecs(p))+'</span></button>'+
+              '</div>'+
+              '<button class="life-btn" data-action="life" data-delta="1" data-i="'+i+'" aria-label="Add 1 life to '+esc(p.name)+'">+</button>'+
             '</div></section>';
         }).join('');
         renderHud();
@@ -364,8 +387,8 @@
       function changeLife(i,d){ remember(); players[i].life += d; addEvent(players[i].name+' '+(d>0?'+':'')+d+' life → '+players[i].life); tone('life'); buzz(); render(); }
       function changeCounter(i,type,slot,d){
         remember();
-        if(type==='poison'){ players[i].poison=Math.max(0,players[i].poison+d); addEvent(players[i].name+' poison → '+players[i].poison); }
-        else { players[i].commander[slot]=Math.max(0,players[i].commander[slot]+d); var opp=otherPlayers(i)[slot]; addEvent(players[i].name+' commander from '+players[opp].name+' → '+players[i].commander[slot]); }
+        if(type==='commander'){ players[i].commander[slot]=Math.max(0,players[i].commander[slot]+d); var opp=otherPlayers(i)[slot]; addEvent(players[i].name+' commander from '+players[opp].name+' → '+players[i].commander[slot]); }
+        else { extras(players[i]); players[i][type]=Math.max(0,(players[i][type]||0)+d); var lbl={poison:'poison',energy:'energy',experience:'experience',cmdtax:'commander tax'}[type]||type; addEvent(players[i].name+' '+lbl+' → '+players[i][type]); }
         tone('damage'); buzz(); render();
       }
 
@@ -421,11 +444,22 @@
       // load saved mana choices
       try{ var _sm=JSON.parse(localStorage.getItem('lc-mana')||'null'); if(_sm&&_sm.length) playerMana=_sm; }catch(e){}
       function otherPlayers(i){ var out=[]; for(var x=0;x<players.length;x++){ if(x!==i) out.push(x); } return out; }
-      function openDetails(i){ active=i; var p=players[i], others=otherPlayers(i);
-        sheet.innerHTML='<div class="grab"></div><div class="sheet-head"><label class="sr-only" for="pname">Player name</label><input id="pname" class="player-name-input" maxlength="18" value="'+esc(p.name)+'"><button class="close" data-close aria-label="Close">×</button></div>'+
-          '<h2 class="section-title" id="sheetTitle">Poison counters</h2>'+counterRow('Poison',p.poison,'poison',0)+
-          '<h2 class="section-title">Commander damage received</h2>'+others.map(function(opp,slot){ return counterRow('From '+players[opp].name,p.commander[slot],'commander',slot); }).join('')+
-          '<p class="danger-note">10 poison counters or 21 combat damage from one commander loses the game.</p>';
+      function openDetails(i){ active=i; var p=players[i], others=otherPlayers(i); extras(p);
+        var mc=MANA_NEON[playerMana[i]||'R']||MANA_NEON.R;
+        var hist=events.filter(function(e){ return e.indexOf(p.name+' ')===0 && e.indexOf(' life → ')>-1; }).slice(0,6);
+        sheet.innerHTML='<div class="grab"></div><div class="sheet-head"><span class="d-dot" style="background:'+mc.neon+';box-shadow:0 0 12px '+mc.neon+'"></span><label class="sr-only" for="pname">Player name</label><input id="pname" class="player-name-input" maxlength="18" value="'+esc(p.name)+'"><button class="close" data-close aria-label="Close">×</button></div>'+
+          '<div class="d-life"><button class="d-step" data-dlife="-5" aria-label="Subtract 5 life">−5</button><button class="d-step" data-dlife="-1" aria-label="Subtract 1 life">−1</button><output class="d-life-num">'+p.life+'</output><button class="d-step" data-dlife="1" aria-label="Add 1 life">+1</button><button class="d-step" data-dlife="5" aria-label="Add 5 life">+5</button></div>'+
+          '<h2 class="section-title" id="sheetTitle">Life history</h2><div class="d-log">'+(hist.length?hist.map(function(h){ return '<div class="d-log-row">'+esc(h)+'</div>'; }).join(''):'<div class="d-log-empty">No life changes yet.</div>')+'</div>'+
+          '<h2 class="section-title">Commander damage</h2>'+others.map(function(opp,slot){ return counterRow('From '+players[opp].name,p.commander[slot],'commander',slot); }).join('')+
+          '<h2 class="section-title">Counters</h2>'+
+          counterRow('☠ Poison',p.poison,'poison',0)+
+          counterRow('⚡ Energy',p.energy,'energy',0)+
+          counterRow('★ Experience',p.experience,'experience',0)+
+          counterRow('🎲 Cmd tax',p.cmdtax,'cmdtax',0)+
+          '<h2 class="section-title">Status</h2>'+
+          '<div class="status-row"><span class="counter-label">♛ Monarch</span><button class="d-toggle'+(p.monarch?' on':'')+'" data-status="monarch" aria-pressed="'+(p.monarch?'true':'false')+'">'+(p.monarch?'ON':'OFF')+'</button></div>'+
+          '<div class="status-row"><span class="counter-label">◆ Initiative</span><button class="d-toggle'+(p.initiative?' on':'')+'" data-status="initiative" aria-pressed="'+(p.initiative?'true':'false')+'">'+(p.initiative?'ON':'OFF')+'</button></div>'+
+          '<p class="danger-note">A player is out at 0 life, 10 poison, or 21 commander damage from a single commander.</p>';
         shade.classList.add('open'); shade.setAttribute('aria-hidden','false');
         setTimeout(function(){ document.getElementById('pname').focus(); document.getElementById('pname').select(); },120);
       }
@@ -436,9 +470,14 @@
       }
       shade.addEventListener('click',function(e){ if(e.target===shade || e.target.closest('[data-close]')) closeSheet(); });
       sheet.addEventListener('click',function(e){
-        var b=e.target.closest('[data-count]'); if(!b || active===null) return;
-        var d=+b.dataset.delta, type=b.dataset.count, slot=+b.dataset.slot;
+        if(active===null) return;
         var input=document.getElementById('pname'), name=input?input.value:players[active].name, who=active;
+        var st=e.target.closest('[data-status]');
+        if(st){ var key=st.dataset.status; remember(); players.forEach(function(pl,j){ extras(pl); pl[key]=(j===who)?!pl[key]:false; }); addEvent(players[who].name+(key==='monarch'?(players[who].monarch?' is the monarch':' is no longer the monarch'):(players[who].initiative?' has the initiative':' lost the initiative'))); tone('damage'); buzz(); render(); openDetails(who); var ia=document.getElementById('pname'); if(ia) ia.value=name; return; }
+        var lf=e.target.closest('[data-dlife]');
+        if(lf){ changeLife(who,+lf.dataset.dlife); openDetails(who); var ib=document.getElementById('pname'); if(ib) ib.value=name; return; }
+        var b=e.target.closest('[data-count]'); if(!b) return;
+        var d=+b.dataset.delta, type=b.dataset.count, slot=+b.dataset.slot;
         changeCounter(who,type,slot,d); openDetails(who); document.getElementById('pname').value=name;
       });
       document.addEventListener('keydown',function(e){ if(e.key==='Escape' && shade.classList.contains('open')) closeSheet(); });
