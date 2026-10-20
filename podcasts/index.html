@@ -20,9 +20,9 @@ header h1 span{background:linear-gradient(90deg,var(--accent),var(--accent2));-w
 header p{font-size:13px;color:var(--muted);margin-top:2px}
 main{max-width:640px;margin:0 auto;padding:16px}
 .show{margin-bottom:16px}
-.show-tile{display:flex;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:10px;cursor:pointer;transition:transform .1s;width:100%;text-align:left;color:var(--text);font:inherit}
+.show-tile{display:flex;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:7px 10px;cursor:pointer;transition:transform .1s;width:100%;text-align:left;color:var(--text);font:inherit}
 .show-tile:active{transform:scale(.98)}
-.show-tile img{width:64px;height:64px;border-radius:10px;object-fit:cover;flex:0 0 auto}
+.show-tile img{width:52px;height:52px;border-radius:10px;object-fit:cover;flex:0 0 auto}
 .show-tile .st-info{flex:1;min-width:0}
 .show-tile h2{font-size:18px;font-weight:800}
 .show-tile .hosts{font-size:12.5px;color:var(--muted);margin-top:2px}
@@ -31,7 +31,7 @@ main{max-width:640px;margin:0 auto;padding:16px}
 .show.open .show-tile .chev{transform:rotate(180deg)}
 .ep-list{display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s ease}
 .show.open .ep-list{grid-template-rows:1fr}
-.ep-list-inner{overflow:hidden;min-height:0;padding-top:12px}
+.ep-list-inner{overflow:hidden;min-height:0;padding-top:9px}
 .year-specials{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease}
 .year.open .year-specials{grid-template-rows:1fr}
 .year-specials-inner{overflow:hidden;min-height:0;margin-left:20px;border-left:2px solid rgba(245,158,11,.35);padding-left:10px}
@@ -39,17 +39,29 @@ main{max-width:640px;margin:0 auto;padding:16px}
 .specials-toggle{display:flex;align-items:center;gap:6px;background:none;border:0;color:#f59e0b;font:inherit;font-size:12.5px;font-weight:700;letter-spacing:.3px;cursor:pointer;padding:2px 8px 6px 66px;width:100%;text-align:left}
 .specials-toggle .st-chev{display:inline-block;transition:transform .25s;font-size:11px}
 .year.open .specials-toggle .st-chev{transform:rotate(180deg)}
-.ep{display:flex;gap:14px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:10px;margin-bottom:12px;cursor:pointer;transition:transform .1s;align-items:center}
+.ep{display:flex;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:7px 10px;margin-bottom:9px;cursor:pointer;transition:transform .1s;align-items:center}
 .ep:active{transform:scale(.98)}
 .ep-cover{position:relative;flex:0 0 auto}
-.ep-cover img{width:52px;height:52px;border-radius:10px;object-fit:cover;display:block}
+.ep-cover img{width:44px;height:44px;border-radius:10px;object-fit:cover;display:block}
 .ep-num{position:absolute;left:-6px;bottom:-6px;min-width:24px;height:24px;padding:0 5px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;font-weight:800;font-size:12.5px;color:#fff;border:2px solid var(--bg)}
 .ep-num.special{background:linear-gradient(135deg,#f59e0b,#f97316);font-size:13px}
 .ep-info{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center}
 .ep-info h3{font-size:15px;font-weight:700;line-height:1.3;margin-bottom:4px}
 .ep-info p{font-size:12.5px;color:var(--muted);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .ep-meta{display:flex;gap:8px;margin-top:6px;font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums}
-.ep-play{flex:0 0 auto;width:38px;height:38px;border-radius:50%;border:1px solid var(--border);background:rgba(139,92,246,.14);color:var(--accent2);display:grid;place-items:center;font-size:15px}
+.ep-play{flex:0 0 auto;width:34px;height:34px;border-radius:50%;border:1px solid var(--border);background:rgba(139,92,246,.14);color:var(--accent2);display:grid;place-items:center;font-size:13px}
+.ep-watch{flex:0 0 auto;width:30px;height:30px;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--muted);display:grid;place-items:center;font-size:13px;cursor:pointer;font:inherit}
+.ep-watch.on{background:rgba(34,211,238,.16);color:var(--accent2);border-color:var(--accent2)}
+.ep.is-watched{opacity:.5}
+.ep.special-ep{padding:6px 8px;margin-bottom:8px;border-radius:12px}
+.ep.special-ep .ep-cover img{width:38px;height:38px;border-radius:8px}
+.ep.special-ep .ep-info h3{font-size:13.5px;margin-bottom:2px}
+.ep.special-ep .ep-info p{font-size:11.5px;-webkit-line-clamp:1}
+.ep.special-ep .ep-meta{margin-top:3px;font-size:11px}
+.ep.special-ep .ep-play{width:30px;height:30px;font-size:12px}
+.ep.special-ep .ep-num{min-width:20px;height:20px;font-size:11px;padding:0 4px}
+.watched-bar{text-align:center;padding:6px 16px 0}
+.watched-btn{background:none;border:1px dotted var(--muted);border-radius:999px;color:var(--muted);font:inherit;font-size:12.5px;padding:6px 14px;cursor:pointer}
 .playing-badge{display:inline-block;font-size:10px;font-weight:800;letter-spacing:1px;color:var(--accent2);text-transform:uppercase;margin-top:4px}
 #player{position:fixed;left:0;right:0;bottom:0;z-index:30;background:rgba(16,16,24,.97);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid var(--border);padding:12px 16px calc(env(safe-area-inset-bottom,0px) + 12px);transform:translateY(120%);transition:transform .25s}
 #player.show{transform:translateY(0)}
@@ -74,6 +86,7 @@ main{max-width:640px;margin:0 auto;padding:16px}
 <p>Tap a show to browse its episodes</p>
 </header>
 <main id="list"></main>
+<div class="watched-bar"><button class="watched-btn" id="watchedToggle">Show watched episodes (0)</button></div>
 
 <div id="player">
 <div class="p-top">
@@ -116,7 +129,7 @@ fetch('episodes.json?v=10',{cache:'no-store'}).then(function(r){return r.json();
       +'<div class="ep-info"><h3>'+label+'</h3><p>'+(e.description||'')+'</p>'
       +'<div class="ep-meta"><span>'+fmtLong(e.duration)+'</span><span>'+(e.date||'')+'</span></div>'
       +'<span class="playing-badge" hidden>▶ Playing</span><span class="ep-resume" hidden></span><div class="ep-prog" hidden><i></i></div></div>'
-      +'<div class="ep-play">▶</div></div>';
+      +'<div class="ep-play">▶</div><button class="ep-watch" data-watch="'+e.slug+'" aria-label="Mark as watched" title="Mark watched — hides this episode">✓</button></div>';
   }
   var html='';
   Object.keys(shows).forEach(function(key){
@@ -143,17 +156,17 @@ fetch('episodes.json?v=10',{cache:'no-store'}).then(function(r){return r.json();
         var y=Math.floor((e.num||0)/100);
         var specs=specsByYear[y]||[];
         specs.forEach(function(sp){seen[sp.slug]=true;});
-        html+='<div class="year" data-year="'+y+'">'
+        html+='<div class="year open" data-year="'+y+'">'
           +epHtml(e,s,'year-main')
           +(specs.length
-            ? '<button class="specials-toggle" aria-expanded="false"><span class="st-chev">▾</span><span>'+specs.length+' special'+(specs.length>1?'s':'')+'</span></button>'
+            ? '<button class="specials-toggle" aria-expanded="true"><span class="st-chev">▾</span><span>'+specs.length+' special'+(specs.length>1?'s':'')+'</span></button>'
             : '')
           +'<div class="year-specials"><div class="year-specials-inner">';
-        specs.forEach(function(sp){html+=epHtml(sp,s);});
+        specs.forEach(function(sp){html+=epHtml(sp,s,'special-ep');});
         html+='</div></div></div>';
       });
       // Orphan specials (no main episode for their year) stay reachable flat.
-      ge.filter(function(e){return e.kind==='special'&&!seen[e.slug];}).forEach(function(e){html+=epHtml(e,s);});
+      ge.filter(function(e){return e.kind==='special'&&!seen[e.slug];}).forEach(function(e){html+=epHtml(e,s,'special-ep');});
     } else {
       ge.forEach(function(e){html+=epHtml(e,s);});
     }
@@ -190,6 +203,7 @@ fetch('episodes.json?v=10',{cache:'no-store'}).then(function(r){return r.json();
   });
   list.querySelectorAll('.ep').forEach(function(el){
     el.addEventListener('click',function(ev){
+      if(ev.target.closest&&ev.target.closest('.ep-watch'))return;
       if(el.classList.contains('year-main')){
         // Play button plays the year episode; anywhere else on the row
         // expands/collapses that year's specials.
@@ -200,9 +214,52 @@ fetch('episodes.json?v=10',{cache:'no-store'}).then(function(r){return r.json();
       playEp(el.dataset.slug);
     });
   });
+  list.querySelectorAll('.ep-watch').forEach(function(btn){
+    btn.addEventListener('click',function(ev){ev.stopPropagation();toggleWatched(btn.dataset.watch);});
+  });
   paintResume();
+  applyWatched();
 });
 
+var WATCH_KEY='podcast_watched_v1';
+var showWatched=false;
+function getWatched(){try{return JSON.parse(localStorage.getItem(WATCH_KEY)||'[]');}catch(_){return[];}}
+function setWatched(arr){try{localStorage.setItem(WATCH_KEY,JSON.stringify(arr));}catch(_){}}
+function toggleWatched(slug){
+  var w=getWatched();var i=w.indexOf(slug);
+  if(i>=0)w.splice(i,1);else w.push(slug);
+  setWatched(w);applyWatched();
+}
+function applyWatched(){
+  var w=getWatched();
+  document.querySelectorAll('.ep').forEach(function(el){
+    var on=w.indexOf(el.dataset.slug)>=0;
+    el.classList.toggle('is-watched',on);
+    var btn=el.querySelector('.ep-watch');if(btn)btn.classList.toggle('on',on);
+    el.style.display=(!showWatched&&on)?'none':'';
+  });
+  document.querySelectorAll('.year').forEach(function(y){
+    var eps=y.querySelectorAll('.ep');var all=eps.length>0;
+    eps.forEach(function(el){if(w.indexOf(el.dataset.slug)<0)all=false;});
+    y.style.display=(!showWatched&&all)?'none':'';
+    var specs=y.querySelectorAll('.year-specials .ep');
+    if(specs.length){
+      var allS=true;specs.forEach(function(el){if(w.indexOf(el.dataset.slug)<0)allS=false;});
+      var tg=y.querySelector('.specials-toggle'),sw=y.querySelector('.year-specials');
+      var hideS=!showWatched&&allS;
+      if(tg)tg.style.display=hideS?'none':'';
+      if(sw)sw.style.display=hideS?'none':'';
+    }
+  });
+  document.querySelectorAll('.show').forEach(function(sh){
+    var total=sh.querySelectorAll('.ep').length,left=0;
+    sh.querySelectorAll('.ep').forEach(function(el){if(w.indexOf(el.dataset.slug)<0)left++;});
+    var c=sh.querySelector('.count');
+    if(c)c.textContent=showWatched?(total+' episode'+(total>1?'s':'')):(left+' to listen'+(total-left>0?' · '+(total-left)+' watched':''));
+  });
+  var wt=document.getElementById('watchedToggle');
+  if(wt)wt.textContent=showWatched?'Hide watched episodes':'Show watched episodes ('+w.length+')';
+}
 var POS_KEY='podcast_positions_v1';
 function getPos(){try{return JSON.parse(localStorage.getItem(POS_KEY)||'{}');}catch(_){return{};}}
 function savePos(slug,t,dur){
@@ -273,9 +330,11 @@ audio.addEventListener('pause',function(){
 });
 audio.addEventListener('ended',function(){
   document.getElementById('playBtn').textContent='▶';
+  if(audio.dataset.slug){var w=getWatched();if(w.indexOf(audio.dataset.slug)<0){w.push(audio.dataset.slug);setWatched(w);}applyWatched();}
   if(audio.dataset.slug){var pos=getPos();delete pos[audio.dataset.slug];try{localStorage.setItem(POS_KEY,JSON.stringify(pos));}catch(_){}}
   paintResume();
 });
+document.getElementById('watchedToggle').addEventListener('click',function(){showWatched=!showWatched;applyWatched();});
 document.getElementById('seekbar').addEventListener('input',function(){
   if(audio.duration)audio.currentTime=(this.value/100*audio.duration);
 });
