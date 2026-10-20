@@ -1,6 +1,18 @@
 {
  "episodes": [
   {
+   "cover": "the-interaction-suite-removal-counterspells-and-protection-2026-10-20.jpg",
+   "date": "2026-10-20",
+   "description": "Commander Academy \u2014 Ellis and Theo build a kitchen-table interaction suite: how many answers a deck actually needs, spot removal, board wipes, counterspells, and protection, and the Debtors' Knell test for cutting narrow cards.",
+   "duration": 1666,
+   "kind": "episode",
+   "num": 6,
+   "show": "deck-tech",
+   "showName": "Deck Tech \u00b7 Ellis & Theo",
+   "slug": "the-interaction-suite-removal-counterspells-and-protection-2026-10-20",
+   "title": "Commander Academy #6: The Interaction Suite - Removal, Counterspells, and Protection"
+  },
+  {
    "cover": "leo-and-virgo-8-the-chore-chart-2026-10-20.jpg",
    "date": "2026-10-20",
    "description": "Episode eight: Leo and Vera settle the great chore chart debate \u2014 who does what around the house, Leo's dishwasher art form versus Vera's laminated chart, the loud jobs with an audience and the invisible jobs of noticing, plus today's horoscope for both signs.",
