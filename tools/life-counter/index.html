@@ -41,9 +41,7 @@
       background:linear-gradient(145deg, rgba(255,255,255,.07), transparent 40%, rgba(0,0,0,.35));
       border-radius:14px; pointer-events:none; }
     .player::after { content:""; position:absolute; inset:0; z-index:1; pointer-events:none; border-radius:14px;
-      background:
-        linear-gradient(165deg, var(--neon-sheen) 0%, transparent 45%),
-        radial-gradient(130% 100% at 50% 0%, var(--neon-wash), transparent 60%); }
+      background:none; }
     /* neon colors set dynamically via JS per playerMana */
     .player-inner { width:100%; height:100%; padding:max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom)); display:grid; grid-template-columns:minmax(50px,.55fr) minmax(0,1fr) minmax(50px,.55fr); grid-template-rows:minmax(0,1fr) auto; column-gap:6px; transition:transform .25s ease; }
     .tile-center { grid-row:1; min-width:0; min-height:0; display:grid; grid-template-rows:auto 1fr auto auto; }
@@ -58,6 +56,9 @@
     .tile-flip { border:1px solid rgba(255,255,255,.09); background:linear-gradient(180deg,#24272d,#101315); box-shadow:0 4px 10px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.12); width:34px; height:30px; border-radius:9px; display:grid; place-items:center; color:inherit; padding:0; touch-action:manipulation; }
     .tile-flip svg { width:15px; height:15px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
     .tile-flip[aria-pressed="true"] { background:rgba(255,255,255,.22); }
+    .tile-rot { position:absolute; z-index:4; right:8px; bottom:68px; width:34px; height:34px; border-radius:50%; border:1px solid rgba(255,255,255,.14); background:linear-gradient(180deg,#24272d,#101315); box-shadow:0 4px 10px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.12); display:grid; place-items:center; color:inherit; padding:0; touch-action:manipulation; }
+    .tile-rot svg { width:15px; height:15px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    .tile-rot[aria-pressed="true"] { background:rgba(255,255,255,.22); }
     /* per-tile timer, bottom of each tile */
     .tile-timer { grid-column:1 / -1; grid-row:2; margin-top:6px; border:1px solid rgba(255,255,255,.08); background:linear-gradient(180deg,#22252a,#0e1013); box-shadow:0 4px 10px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.11); border-radius:16px; min-height:52px; padding:6px 12px; display:flex; align-items:center; justify-content:center; gap:8px; font-family:"IBM Plex Mono", monospace; font-size:20px; font-weight:600; color:inherit; width:100%; touch-action:manipulation; }
     .tile-timer svg { width:17px; height:17px; fill:currentColor; flex:none; opacity:.85; }
@@ -73,8 +74,10 @@
     .board.stack2 .player:nth-child(2) { grid-row:1; }
     .tabletop .board.stack2 .player:nth-child(1) .player-inner { transform:none; }
     .tabletop .board.stack2 .player:nth-child(2) .player-inner { transform:rotate(180deg); }
-    .player-head { min-width:0; display:flex; align-items:center; justify-content:space-between; gap:6px; }
-    .name { border:0; background:transparent; padding:5px 4px; min-width:0; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; text-align:left; font-weight:700; letter-spacing:.045em; font-size:clamp(15px, 4vw, 21px); text-shadow:0 1px 2px rgba(0,0,0,.3); }
+    .player-head { min-width:0; display:flex; flex-direction:column; align-items:center; gap:5px; }
+    .name-row { display:flex; align-items:center; gap:6px; min-width:0; max-width:100%; }
+    .turn-dot { width:8px; height:8px; flex:none; border-radius:50%; background:var(--neon); box-shadow:0 0 8px var(--neon); }
+    .name { border:0; background:transparent; padding:5px 4px; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; text-align:center; font-weight:700; letter-spacing:.045em; font-size:clamp(15px, 4vw, 21px); text-shadow:0 1px 2px rgba(0,0,0,.3); }
     .player-actions { display:flex; align-items:center; gap:5px; flex:none; }
     .player-hurry { border:0; border-radius:8px; background:#c92f27; color:#fff; height:30px; width:54px; padding:0 8px; font-size:11px; font-weight:700; letter-spacing:.045em; line-height:1; box-shadow:inset 0 -2px 0 rgba(0,0,0,.24); touch-action:manipulation; }
     .player-hurry:active { background:#9f211c; transform:translateY(1px); box-shadow:none; }
@@ -152,6 +155,10 @@
     .status-row + .status-row { border-top:1px solid light-dark(#d8ddda,#303a35); }
     .d-toggle { min-width:66px; padding:9px 15px; border-radius:20px; border:1px solid rgba(255,255,255,.13); background:linear-gradient(180deg,#2b3038,#1a1e24); color:var(--muted); font-weight:800; font-size:13px; cursor:pointer; touch-action:manipulation; }
     .d-toggle.on { background:linear-gradient(180deg,#f0c05a,#d4a017); border-color:transparent; color:#241b03; box-shadow:0 0 14px rgba(224,173,72,.45); }
+    .mana-row { display:flex; gap:9px; flex-wrap:wrap; }
+    .mana-dot { width:44px; height:44px; border-radius:50%; border:2px solid; background:#14171b; display:grid; place-items:center; cursor:pointer; padding:0; touch-action:manipulation; }
+    .mana-dot svg { width:22px; height:22px; }
+    .mana-dot.cur { outline:2px solid #fff; outline-offset:2px; }
     .confirm { padding:12px 4px 4px; }
     .confirm h2 { margin:0 0 7px; font-size:25px; }
     .confirm p { margin:0 0 18px; color:light-dark(#58685f,#acb8b1); font-size:17px; line-height:1.35; }
@@ -229,7 +236,7 @@
       .board { column-gap:42px; row-gap:2px; top:46px; bottom:62px; }
       .phone-top { padding-top:calc(2px + env(safe-area-inset-top)); padding-bottom:4px; } .pt-title { font-size:14px; } .pt-turn { font-size:11px; }
       .phone-bottom { padding-top:5px; padding-bottom:calc(6px + env(safe-area-inset-bottom)); } .phone-next { min-height:42px; font-size:16px; }
-      .tile-timer { min-height:40px; font-size:16px; }
+      .tile-timer { min-height:40px; font-size:16px; } .tile-rot { bottom:54px; }
       .name { font-size:14px; } .details { height:26px; } .status { display:none; }
       .life { font-size:clamp(50px,15vh,82px); } .life-btn { min-height:40px; font-size:40px; }
       .toolbar { flex-direction:column; } .tool { width:34px; height:30px; }
@@ -354,17 +361,15 @@
           var neonStyle='--neon:'+mc.neon+';--neon-dim:'+mc.dim+';--neon-border:'+mc.border+';--neon-wash:'+mc.wash+';--neon-sheen:'+mc.sheen+';';
           var tm=timerOf(p);
           return '<section class="player '+(i===turn?'active-turn ':'')+(p.flip?'flipped ':'')+((p.life<=0 || p.poison>=10 || totalCmd>=21)?'dead':'')+'" data-i="'+i+'" style="'+neonStyle+'" aria-label="'+esc(p.name)+', '+p.life+' life">'+
-            '<div class="mana-bg">'+(MANA_SVG[playerMana[i]||'R']||'')+'</div>'+
             '<div class="player-inner">'+
               '<button class="life-btn" data-action="life" data-delta="-1" data-i="'+i+'" aria-label="Subtract 1 life from '+esc(p.name)+'">−</button>'+
               '<div class="tile-center">'+
-              '<header class="player-head"><button class="name" data-action="details" data-i="'+i+'">'+esc(p.name)+'</button><div class="player-actions"><button class="mana-pick-btn" data-action="mana" data-i="'+i+'" aria-label="Choose color for '+esc(p.name)+'">'+(MANA_SVG[playerMana[i]||'R']||'')+'</button><button class="player-hurry" data-action="hurry" data-i="'+i+'" aria-label="Say hurry up, '+esc(p.name)+'"></button><button class="tile-flip" data-action="flip" data-i="'+i+'" aria-pressed="'+(p.flip?'true':'false')+'" aria-label="Rotate '+esc(p.name)+' tile"><svg viewBox="0 0 24 24"><path d="M20 7v5h-5"/><path d="M4 17v-5h5"/><path d="M6.1 8a7 7 0 0 1 11.3-2.1L20 8M4 16l2.6 2.1A7 7 0 0 0 17.9 16"/></svg></button><button class="details" data-action="details" data-i="'+i+'" aria-label="Edit '+esc(p.name)+' and damage counters">•••</button></div></header>'+
+              '<header class="player-head"><span class="name-row"><button class="name" data-action="details" data-i="'+i+'">'+esc(p.name)+'</button>'+(i===turn?'<span class="turn-dot" aria-hidden="true"></span>':'')+'</span><button class="player-hurry" data-action="hurry" data-i="'+i+'" aria-label="Say hurry up, '+esc(p.name)+'"></button></header>'+
               '<div class="life-zone"><button class="life" data-action="details" data-i="'+i+'" aria-live="polite" aria-label="Open details for '+esc(p.name)+'">'+p.life+'</button><span class="tap-hint">tap for details</span></div>'+
-              '<footer class="status"><button class="jump" data-action="life" data-delta="-5" data-i="'+i+'" aria-label="Subtract 5 life">−5</button><button class="trackers" data-action="details" data-i="'+i+'" aria-label="Poison '+p.poison+', highest commander damage '+totalCmd+'"><span>'+poisonIcon+p.poison+'</span><span>'+cmdIcon+p.commander.join('·')+'</span>'+(p.energy?'<span>⚡'+p.energy+'</span>':'')+(p.experience?'<span>★'+p.experience+'</span>':'')+(p.cmdtax?'<span>🎲'+p.cmdtax+'</span>':'')+(p.monarch?'<span>♛</span>':'')+(p.initiative?'<span>◆</span>':'')+'</button><button class="jump" data-action="life" data-delta="5" data-i="'+i+'" aria-label="Add 5 life">+5</button></footer>'+
-              '<div class="tablet-stats"><div class="stat-block"><span class="stat-title">Poison</span><div class="stat-controls"><button class="mini-btn" data-action="counter" data-type="poison" data-slot="0" data-delta="-1" data-i="'+i+'" aria-label="Subtract poison counter">−</button><output class="mini-value">'+p.poison+'</output><button class="mini-btn" data-action="counter" data-type="poison" data-slot="0" data-delta="1" data-i="'+i+'" aria-label="Add poison counter">+</button></div></div><div class="stat-block"><span class="stat-title">Commander damage</span><div class="cmd-grid">'+commanderMatrix+'</div></div></div>'+
               
               '</div>'+
               '<button class="life-btn" data-action="life" data-delta="1" data-i="'+i+'" aria-label="Add 1 life to '+esc(p.name)+'">+</button>'+
+              '<button class="tile-rot" data-action="flip" data-i="'+i+'" aria-pressed="'+(p.flip?'true':'false')+'" aria-label="Rotate '+esc(p.name)+' tile"><svg viewBox="0 0 24 24"><path d="M20 7v5h-5"/><path d="M4 17v-5h5"/><path d="M6.1 8a7 7 0 0 1 11.3-2.1L20 8M4 16l2.6 2.1A7 7 0 0 0 17.9 16"/></svg></button>'+
               '<button class="tile-timer'+(tm.r?' running':'')+'" data-action="timer" data-i="'+i+'" aria-pressed="'+(tm.r?'true':'false')+'" aria-label="Timer for '+esc(p.name)+'. Tap to '+(tm.r?'stop':'start')+'; long-press to reset."><span class="timer-dot"></span><svg class="ic-play" viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z"/></svg><svg class="ic-pause" viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg><span class="timer-text">'+fmtTime(timerSecs(p))+'</span></button>'+
             '</div></section>';
         }).join('');
@@ -464,6 +469,7 @@
         var hist=events.filter(function(e){ return e.indexOf(p.name+' ')===0 && e.indexOf(' life → ')>-1; }).slice(0,6);
         sheet.innerHTML='<div class="grab"></div><div class="sheet-head"><span class="d-dot" style="background:'+mc.neon+';box-shadow:0 0 12px '+mc.neon+'"></span><label class="sr-only" for="pname">Player name</label><input id="pname" class="player-name-input" maxlength="18" value="'+esc(p.name)+'"><button class="close" data-close aria-label="Close">×</button></div>'+
           '<div class="d-life"><button class="d-step" data-dlife="-5" aria-label="Subtract 5 life">−5</button><button class="d-step" data-dlife="-1" aria-label="Subtract 1 life">−1</button><output class="d-life-num">'+p.life+'</output><button class="d-step" data-dlife="1" aria-label="Add 1 life">+1</button><button class="d-step" data-dlife="5" aria-label="Add 5 life">+5</button></div>'+
+          '<h2 class="section-title">Tile color</h2><div class="mana-row">'+['W','U','B','R','G'].map(function(k){ var cc=MANA_NEON[k]; var cur=(playerMana[i]||'R')===k; return '<button class="mana-dot'+(cur?' cur':'')+'" data-mana="'+k+'" aria-label="Set tile color to '+k+'" style="border-color:'+cc.border+';box-shadow:0 0 10px '+cc.dim+'">'+(MANA_SVG[k]||k)+'</button>'; }).join('')+'</div>'+
           '<h2 class="section-title" id="sheetTitle">Life history</h2><div class="d-log">'+(hist.length?hist.map(function(h){ return '<div class="d-log-row">'+esc(h)+'</div>'; }).join(''):'<div class="d-log-empty">No life changes yet.</div>')+'</div>'+
           '<h2 class="section-title">Commander damage</h2>'+others.map(function(opp,slot){ return counterRow('From '+players[opp].name,p.commander[slot],'commander',slot); }).join('')+
           '<h2 class="section-title">Counters</h2>'+
@@ -491,6 +497,8 @@
         if(st){ var key=st.dataset.status; remember(); players.forEach(function(pl,j){ extras(pl); pl[key]=(j===who)?!pl[key]:false; }); addEvent(players[who].name+(key==='monarch'?(players[who].monarch?' is the monarch':' is no longer the monarch'):(players[who].initiative?' has the initiative':' lost the initiative'))); tone('damage'); buzz(); render(); openDetails(who); var ia=document.getElementById('pname'); if(ia) ia.value=name; return; }
         var lf=e.target.closest('[data-dlife]');
         if(lf){ changeLife(who,+lf.dataset.dlife); openDetails(who); var ib=document.getElementById('pname'); if(ib) ib.value=name; return; }
+        var md=e.target.closest('[data-mana]');
+        if(md){ playerMana[who]=md.dataset.mana; buzz(); render(); openDetails(who); var ic=document.getElementById('pname'); if(ic) ic.value=name; return; }
         var b=e.target.closest('[data-count]'); if(!b) return;
         var d=+b.dataset.delta, type=b.dataset.count, slot=+b.dataset.slot;
         changeCounter(who,type,slot,d); openDetails(who); document.getElementById('pname').value=name;
