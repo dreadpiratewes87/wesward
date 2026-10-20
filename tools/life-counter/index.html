@@ -28,26 +28,24 @@
     button:focus-visible, input:focus-visible { outline:3px solid var(--focus); outline-offset:-3px; }
     .board { position:fixed; inset:60px 0 78px; display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; column-gap:2px; row-gap:50px; background:#000; }
     .player { position:relative; min-width:0; min-height:0; overflow:hidden; isolation:isolate;
-      background:linear-gradient(160deg,#171a1e 0%,#0a0c0e 55%,#050607 100%);
-      border-radius:14px; margin:5px;
-      /* 3D chrome bevel */
-      box-shadow:inset 0 1px 0 var(--chrome-hi), inset 0 -2px 6px var(--chrome-lo),
-        inset 2px 0 4px rgba(0,0,0,.4), inset -2px 0 4px rgba(0,0,0,.4),
-        0 4px 18px rgba(0,0,0,.6),
-        0 0 18px var(--neon), 0 0 42px var(--neon-dim);
-      border:1px solid var(--neon-border);
+      background:linear-gradient(160deg,#0b0e12,#05070a);
+      border-radius:16px; margin:5px;
+      box-shadow:0 0 14px color-mix(in srgb, var(--neon) 22%, transparent), inset 0 0 18px color-mix(in srgb, var(--neon) 7%, transparent);
+      border:1px solid color-mix(in srgb, var(--neon) 60%, transparent);
     }
     .player::before { content:""; position:absolute; inset:0; z-index:-1;
-      background:linear-gradient(145deg, rgba(255,255,255,.07), transparent 40%, rgba(0,0,0,.35));
-      border-radius:14px; pointer-events:none; }
+      background:none;
+      border-radius:16px; pointer-events:none; }
+    .player.active-turn { border-color:color-mix(in srgb, var(--neon) 88%, transparent);
+      box-shadow:0 0 22px color-mix(in srgb, var(--neon) 45%, transparent), 0 0 6px color-mix(in srgb, var(--neon) 35%, transparent), inset 0 0 22px color-mix(in srgb, var(--neon) 12%, transparent); }
     .player::after { content:""; position:absolute; inset:0; z-index:1; pointer-events:none; border-radius:14px;
       background:none; }
     /* neon colors set dynamically via JS per playerMana */
-    .player-inner { width:100%; height:100%; padding:max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom)); display:grid; grid-template-columns:minmax(50px,.55fr) minmax(0,1fr) minmax(50px,.55fr); grid-template-rows:minmax(0,1fr) auto; column-gap:6px; transition:transform .25s ease; }
+    .player-inner { width:100%; height:100%; padding:7px; display:grid; grid-template-columns:36px minmax(0,1fr) 36px; grid-template-rows:minmax(0,1fr) auto; column-gap:6px; transition:transform .25s ease; }
     .tile-center { grid-row:1; min-width:0; min-height:0; display:grid; grid-template-rows:auto 1fr auto auto; }
-    .life-zone { position:absolute; inset:0; z-index:3; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; pointer-events:none; }
+    .life-zone { position:absolute; inset:0; z-index:3; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; pointer-events:none; }
     .life-zone .life { pointer-events:auto; }
-    .tap-hint { font-size:11px; font-weight:700; letter-spacing:.04em; color:rgba(255,255,255,.35); }
+    .tap-hint { font-size:10.5px; font-weight:500; letter-spacing:.02em; color:#64707c; }
     /* per-tile rotate: flips this tile relative to the board's current orientation */
     .player.flipped .player-inner { transform:rotate(180deg); }
     .tabletop .player.flipped:nth-child(-n+2) .player-inner { transform:none; }
@@ -56,15 +54,15 @@
     .tile-flip { border:1px solid rgba(255,255,255,.09); background:linear-gradient(180deg,#24272d,#101315); box-shadow:0 4px 10px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.12); width:34px; height:30px; border-radius:9px; display:grid; place-items:center; color:inherit; padding:0; touch-action:manipulation; }
     .tile-flip svg { width:15px; height:15px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
     .tile-flip[aria-pressed="true"] { background:rgba(255,255,255,.22); }
-    .tile-rot { position:absolute; z-index:4; right:8px; bottom:68px; width:34px; height:34px; border-radius:50%; border:1px solid rgba(255,255,255,.14); background:linear-gradient(180deg,#24272d,#101315); box-shadow:0 4px 10px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.12); display:grid; place-items:center; color:inherit; padding:0; touch-action:manipulation; }
-    .tile-rot svg { width:15px; height:15px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    .tile-rot { position:absolute; z-index:4; right:9px; bottom:61px; width:28px; height:28px; border-radius:50%; border:1px solid rgba(255,255,255,.14); background:#0d1219; box-shadow:none; display:grid; place-items:center; color:inherit; padding:0; touch-action:manipulation; }
+    .tile-rot svg { width:13px; height:13px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
     .tile-rot[aria-pressed="true"] { background:rgba(255,255,255,.22); }
     /* per-tile timer, bottom of each tile */
-    .tile-timer { grid-column:1 / -1; grid-row:2; margin-top:6px; border:1px solid rgba(255,255,255,.08); background:linear-gradient(180deg,#22252a,#0e1013); box-shadow:0 4px 10px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.11); border-radius:16px; min-height:52px; padding:6px 12px; display:flex; align-items:center; justify-content:center; gap:8px; font-family:"IBM Plex Mono", monospace; font-size:20px; font-weight:600; color:inherit; width:100%; touch-action:manipulation; }
+    .tile-timer { grid-column:1 / -1; grid-row:2; margin-top:7px; border:1px solid rgba(255,255,255,.09); background:rgba(255,255,255,.045); box-shadow:none; border-radius:12px; min-height:48px; height:48px; padding:6px 12px; display:flex; align-items:center; justify-content:center; gap:8px; font-family:ui-monospace, "SF Mono", Menlo, monospace; font-size:19px; font-weight:600; letter-spacing:.04em; color:#c3cedb; width:100%; touch-action:manipulation; }
     .tile-timer svg { width:17px; height:17px; fill:currentColor; flex:none; opacity:.85; }
     .tile-timer .timer-dot { width:9px; height:9px; border-radius:50%; background:currentColor; opacity:.35; flex:none; }
     .tile-timer .ic-pause { display:none; }
-    .tile-timer.running { background:linear-gradient(180deg,#2b3038,#13161b); }
+    .tile-timer.running { background:rgba(255,255,255,.09); }
     .tile-timer.running .ic-pause { display:block; }
     .tile-timer.running .ic-play { display:none; }
     .tile-timer.running .timer-dot { opacity:1; background:#30d158; box-shadow:0 0 6px #30d158; }
@@ -76,16 +74,18 @@
     .tabletop .board.stack2 .player:nth-child(2) .player-inner { transform:rotate(180deg); }
     .player-head { min-width:0; display:flex; flex-direction:column; align-items:center; gap:5px; }
     .name-row { display:flex; align-items:center; gap:6px; min-width:0; max-width:100%; }
-    .turn-dot { width:8px; height:8px; flex:none; border-radius:50%; background:var(--neon); box-shadow:0 0 8px var(--neon); }
-    .name { border:0; background:transparent; padding:5px 4px; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; text-align:center; font-weight:700; letter-spacing:.045em; font-size:clamp(15px, 4vw, 21px); text-shadow:0 1px 2px rgba(0,0,0,.3); }
+    .turn-dot { width:7px; height:7px; flex:none; border-radius:50%; background:var(--neon); box-shadow:0 0 8px var(--neon); }
+    .name { border:0; background:transparent; padding:5px 4px; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; text-align:center; font-weight:600; letter-spacing:.02em; font-size:15px; color:#dfe7ee; }
     .player-actions { display:flex; align-items:center; gap:5px; flex:none; }
     .player-hurry { border:0; border-radius:8px; background:#c92f27; color:#fff; height:30px; width:54px; padding:0 8px; font-size:11px; font-weight:700; letter-spacing:.045em; line-height:1; box-shadow:inset 0 -2px 0 rgba(0,0,0,.24); touch-action:manipulation; }
     .player-hurry:active { background:#9f211c; transform:translateY(1px); box-shadow:none; }
     .details { border:1px solid rgba(255,255,255,.09); background:linear-gradient(180deg,#24272d,#101315); box-shadow:0 4px 10px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.12); width:34px; height:30px; border-radius:9px; font-family:"IBM Plex Mono", monospace; font-size:14px; line-height:1; overflow:hidden; }
     .life-row { min-height:0; display:grid; grid-template-columns:minmax(44px, .65fr) minmax(68px, 1.2fr) minmax(44px, .65fr); align-items:center; gap:3px; }
-    .life-btn { grid-row:1; position:relative; z-index:0; border:1px solid rgba(255,255,255,.08); background:linear-gradient(180deg,#23262b,#0c0e10); height:auto; margin:8px 0; border-radius:16px; box-shadow:0 6px 14px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.13); min-height:64px; padding:0; font-family:"IBM Plex Mono", monospace; font-size:clamp(35px, 10vw, 62px); font-weight:500; opacity:.86; touch-action:manipulation; }
+    .life-btn { grid-row:1; position:relative; z-index:0; border:1px solid rgba(255,255,255,.07); background:linear-gradient(180deg,#141a23,#090d12); height:auto; margin:0; border-radius:11px; box-shadow:inset 0 1px 0 rgba(255,255,255,.05), 0 2px 6px rgba(0,0,0,.4); min-height:0; padding:0; font-family:inherit; font-size:25px; font-weight:300; color:#f2f6fa; touch-action:manipulation; }
     .life-btn:active { transform:translateY(2px) scale(.97); box-shadow:0 2px 6px rgba(0,0,0,.5), inset 0 2px 8px rgba(0,0,0,.4); }
-    .life { font-family:"IBM Plex Mono", monospace; font-size:clamp(64px, 20vw, 122px); font-weight:600; line-height:.8; letter-spacing:-.09em; text-align:center; color:#fff; text-shadow:0 0 12px var(--neon), 0 0 32px var(--neon-dim), 0 2px 4px rgba(0,0,0,.5); font-variant-numeric:tabular-nums; border:0; background:transparent; padding:0; cursor:pointer; transition:transform .12s ease; }
+    .life { font-family:ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size:clamp(54px, 13.5vw, 110px); font-weight:700; line-height:1; letter-spacing:0; text-align:center; color:#fff; text-shadow:0 0 24px color-mix(in srgb, var(--neon) 55%, transparent), 0 0 7px color-mix(in srgb, var(--neon) 50%, transparent); font-variant-numeric:tabular-nums; border:0; background:transparent; padding:0; cursor:pointer; transition:transform .12s ease; }
+    .board.stack2 .life { font-size:clamp(76px, 22vw, 104px); }
+    .board.stack2 .name { font-size:18px; }
     .life:active { transform:scale(.96); }
     .status { display:grid; grid-template-columns:40px 1fr 40px; align-items:center; gap:5px; }
     .jump { border:1px solid rgba(255,255,255,.09); background:linear-gradient(180deg,#23262b,#0e1013); box-shadow:0 4px 10px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.12); min-height:32px; border-radius:10px; font-family:"IBM Plex Mono", monospace; font-size:14px; font-weight:600; touch-action:manipulation; }
@@ -122,6 +122,12 @@
       .player-actions { gap:3px; }
       .player-hurry { padding:0 6px; font-size:10px; width:46px; }
     }
+    #phoneMenu { display:none; margin-left:auto; width:40px; height:40px; flex:none; place-items:center; border:1px solid rgba(255,255,255,.12); border-radius:11px; background:linear-gradient(180deg,#26292e,#121518); color:#f6f8f7; font-size:19px; line-height:1; padding:0; touch-action:manipulation; }
+    .ts-list { margin-top:4px; }
+    .ts-row { display:flex; align-items:center; justify-content:space-between; gap:12px; width:100%; min-height:52px; padding:8px 2px; border:0; border-bottom:1px solid light-dark(#d8ddda,#303a35); background:none; color:inherit; font-size:18px; font-weight:600; text-align:left; cursor:pointer; touch-action:manipulation; }
+    .ts-row:last-child { border-bottom:0; }
+    .ts-row[disabled] { opacity:.35; }
+    .ts-state { font:600 13px "IBM Plex Mono",monospace; color:light-dark(#69776f,#93a39a); flex:none; }
     #sound .mute-slash { display:none; }
     #sound[aria-pressed="true"] .sound-waves { display:none; }
     #sound[aria-pressed="true"] .mute-slash { display:block; }
@@ -189,13 +195,13 @@
     @media (min-width:768px) and (min-height:650px) {
       .board { inset:12px 12px 132px; gap:8px; background:transparent; }
       .player { border-radius:18px; box-shadow:0 3px 16px rgba(0,0,0,.22); }
-      .player-inner { padding:14px 16px; grid-template-columns:minmax(68px,.55fr) minmax(0,1fr) minmax(68px,.55fr); }
+      .player-inner { padding:14px 16px; grid-template-columns:52px minmax(0,1fr) 52px; }
       .tile-center { grid-template-rows:auto minmax(95px,.82fr) auto auto; }
       .name { font-size:23px; }
       .details { width:38px; height:34px; }
       .life { font-size:clamp(82px,13vw,128px); }
       .life { font-size:clamp(82px,13vw,128px); }
-      .life-btn { font-size:58px; }
+      .life-btn { font-size:30px; }
       .status { display:none; }
       .tablet-stats { display:grid; grid-template-columns:minmax(120px,.7fr) minmax(250px,1.8fr); gap:10px; align-items:stretch; }
       .stat-block { border:1px solid rgba(255,255,255,.14); background:rgba(0,0,0,.14); border-radius:12px; padding:8px; min-width:0; }
@@ -241,6 +247,22 @@
       .life { font-size:clamp(50px,15vh,82px); } .life-btn { min-height:40px; font-size:40px; }
       .toolbar { flex-direction:column; top:calc(50% - 8px); } .tool { width:34px; height:30px; }
     }
+    /* Phones (portrait + short landscape): the page is one flex column — top bar, board, bottom bar — so tiles can never slide under a bar or get clipped by safe-area overlap. */
+    @media (max-width:767.98px), (orientation:landscape) and (max-height:559.98px) {
+      body { display:flex; flex-direction:column; height:100dvh; }
+      .phone-top { position:static; flex:none; display:flex; align-items:center; gap:10px; text-align:left; }
+      .pt-turn { margin-top:0; }
+      #phoneMenu { display:grid; }
+      .phone-bottom { position:static; flex:none; }
+      .board { position:relative; inset:auto; top:auto; right:auto; bottom:auto; left:auto; flex:1 1 auto; min-height:0; width:auto; padding:8px; padding-left:max(8px, env(safe-area-inset-left)); padding-right:max(8px, env(safe-area-inset-right)); column-gap:8px !important; row-gap:8px !important; }
+      .player { margin:0; }
+      .toolbar { display:none !important; }
+    }
+    @media (orientation:landscape) and (max-height:559.98px) {
+      .tile-timer { height:40px; min-height:40px; font-size:16px; }
+      .tile-rot { bottom:53px; }
+      .life-btn { font-size:22px; min-height:0; }
+    }
     @media (prefers-reduced-motion:reduce) { .shade, .sheet, .player-inner { transition:none; } }
   </style>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -264,7 +286,7 @@
 </style>
 </head>
 <body class="tabletop">
-  <header class="phone-top"><div class="pt-title">Life Counter</div><div class="pt-turn" id="phoneTurn">Turn 1 · Player 1</div></header>
+  <header class="phone-top"><div class="pt-title">Life Counter</div><div class="pt-turn" id="phoneTurn">Turn 1 · Player 1</div><button id="phoneMenu" aria-label="Game tools">☰</button></header>
   <main class="board" id="board" aria-label="Four player Magic life counter"></main>
   <footer class="phone-bottom"><button class="phone-next" id="phoneNext">Next turn</button></footer>
   <nav class="toolbar" aria-label="Game controls">
@@ -364,7 +386,7 @@
             '<div class="player-inner">'+
               '<button class="life-btn" data-action="life" data-delta="-1" data-i="'+i+'" aria-label="Subtract 1 life from '+esc(p.name)+'">−</button>'+
               '<div class="tile-center">'+
-              '<header class="player-head"><span class="name-row"><button class="name" data-action="details" data-i="'+i+'">'+esc(p.name)+'</button>'+(i===turn?'<span class="turn-dot" aria-hidden="true"></span>':'')+'</span><button class="player-hurry" data-action="hurry" data-i="'+i+'" aria-label="Say hurry up, '+esc(p.name)+'"></button></header>'+
+              '<header class="player-head"><span class="name-row"><button class="name" data-action="details" data-i="'+i+'">'+esc(p.name)+'</button>'+(i===turn?'<span class="turn-dot" aria-hidden="true"></span>':'')+'</span><button class="player-hurry" data-action="hurry" data-i="'+i+'" aria-label="Say hurry up, '+esc(p.name)+'">HURRY</button></header>'+
               '<div class="life-zone"><button class="life" data-action="details" data-i="'+i+'" aria-live="polite" aria-label="Open details for '+esc(p.name)+'">'+p.life+'</button><span class="tap-hint">tap for details</span></div>'+
               
               '</div>'+
@@ -532,6 +554,41 @@
         remember(); turn=(turn+1)%players.length; if(turn===0) round++; addEvent('Turn → '+players[turn].name+' · round '+round); buzz(); render();
       });
       document.getElementById('phoneNext').addEventListener('click',function(){ document.getElementById('nextTurn').click(); });
+
+      /* Phone tools sheet: the middle toolbar is hidden on phones, so its eight
+         buttons live here as labeled rows that proxy-click the real buttons. */
+      function toolState(id){ var b=document.getElementById(id); return b && b.getAttribute('aria-pressed')==='true'; }
+      function openTools(){
+        function row(id,label,state){ return '<button class="ts-row" data-tool="'+id+'"><span>'+label+'</span>'+(state!==null?'<span class="ts-state" data-ts-state="'+id+'">'+state+'</span>':'')+'</button>'; }
+        openSheet('<div class="sheet-head"><h2 id="sheetTitle" style="margin:0;flex:1;font-size:24px;">Game tools</h2><button class="close" data-close aria-label="Close">×</button></div>'+
+          '<div class="ts-list">'+
+          row('undo','Undo last change',null)+
+          row('rotate','Tabletop view',toolState('rotate')?'On':'Off')+
+          row('awake','Keep screen awake',toolState('awake')?'On':'Off')+
+          row('sound','Sound',toolState('sound')?'Muted':'On')+
+          row('endgame','End game & record winner',null)+
+          row('stats','Records & stats',null)+
+          row('savegame','Save game',null)+
+          row('reset','New game',null)+
+          '</div>');
+        var undoRow=sheet.querySelector('[data-tool="undo"]');
+        if(undoRow && undoBtn.disabled) undoRow.disabled=true;
+        sheet.querySelectorAll('[data-tool]').forEach(function(r){
+          r.addEventListener('click',function(){
+            var id=r.getAttribute('data-tool');
+            var btn=document.getElementById(id); if(!btn) return;
+            if(id==='rotate'||id==='awake'||id==='sound'){
+              btn.click();
+              var st=sheet.querySelector('[data-ts-state="'+id+'"]');
+              if(st) st.textContent = id==='sound' ? (toolState('sound')?'Muted':'On') : (toolState(id)?'On':'Off');
+              return;
+            }
+            btn.click();
+            if(id==='undo') closeSheet();
+          });
+        });
+      }
+      document.getElementById('phoneMenu').addEventListener('click',function(){ openTools(); });
 
       document.getElementById('awake').addEventListener('click',async function(){
         var btn=this;
