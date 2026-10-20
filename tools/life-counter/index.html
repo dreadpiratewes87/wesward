@@ -26,7 +26,7 @@
     button, input { font:inherit; }
     button { color:inherit; }
     button:focus-visible, input:focus-visible { outline:3px solid var(--focus); outline-offset:-3px; }
-    .board { position:fixed; inset:0; display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; column-gap:2px; row-gap:50px; background:#000; }
+    .board { position:fixed; inset:60px 0 78px; display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; column-gap:2px; row-gap:50px; background:#000; }
     .player { position:relative; min-width:0; min-height:0; overflow:hidden; isolation:isolate;
       background:linear-gradient(160deg,#171a1e 0%,#0a0c0e 55%,#050607 100%);
       border-radius:14px; margin:5px;
@@ -45,8 +45,8 @@
         linear-gradient(165deg, var(--neon-sheen) 0%, transparent 45%),
         radial-gradient(130% 100% at 50% 0%, var(--neon-wash), transparent 60%); }
     /* neon colors set dynamically via JS per playerMana */
-    .player-inner { width:100%; height:100%; padding:max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom)); display:grid; grid-template-columns:minmax(50px,.55fr) minmax(0,1fr) minmax(50px,.55fr); column-gap:6px; transition:transform .25s ease; }
-    .tile-center { min-width:0; min-height:0; display:grid; grid-template-rows:auto 1fr auto auto; }
+    .player-inner { width:100%; height:100%; padding:max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom)); display:grid; grid-template-columns:minmax(50px,.55fr) minmax(0,1fr) minmax(50px,.55fr); grid-template-rows:minmax(0,1fr) auto; column-gap:6px; transition:transform .25s ease; }
+    .tile-center { grid-row:1; min-width:0; min-height:0; display:grid; grid-template-rows:auto 1fr auto auto; }
     .life-zone { min-height:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; }
     .tap-hint { font-size:11px; font-weight:700; letter-spacing:.04em; color:rgba(255,255,255,.35); }
     /* per-tile rotate: flips this tile relative to the board's current orientation */
@@ -58,9 +58,9 @@
     .tile-flip svg { width:15px; height:15px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
     .tile-flip[aria-pressed="true"] { background:rgba(255,255,255,.22); }
     /* per-tile timer, bottom of each tile */
-    .tile-timer { margin-top:5px; border:1px solid rgba(255,255,255,.08); background:linear-gradient(180deg,#22252a,#0e1013); box-shadow:0 4px 10px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.11); border-radius:10px; min-height:24px; padding:2px 8px; display:flex; align-items:center; justify-content:center; gap:6px; font-family:"IBM Plex Mono", monospace; font-size:12px; color:inherit; width:100%; touch-action:manipulation; }
-    .tile-timer svg { width:11px; height:11px; fill:currentColor; flex:none; opacity:.85; }
-    .tile-timer .timer-dot { width:7px; height:7px; border-radius:50%; background:currentColor; opacity:.35; flex:none; }
+    .tile-timer { grid-column:1 / -1; grid-row:2; margin-top:6px; border:1px solid rgba(255,255,255,.08); background:linear-gradient(180deg,#22252a,#0e1013); box-shadow:0 4px 10px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.11); border-radius:16px; min-height:52px; padding:6px 12px; display:flex; align-items:center; justify-content:center; gap:8px; font-family:"IBM Plex Mono", monospace; font-size:20px; font-weight:600; color:inherit; width:100%; touch-action:manipulation; }
+    .tile-timer svg { width:17px; height:17px; fill:currentColor; flex:none; opacity:.85; }
+    .tile-timer .timer-dot { width:9px; height:9px; border-radius:50%; background:currentColor; opacity:.35; flex:none; }
     .tile-timer .ic-pause { display:none; }
     .tile-timer.running { background:linear-gradient(180deg,#2b3038,#13161b); }
     .tile-timer.running .ic-pause { display:block; }
@@ -79,7 +79,7 @@
     .player-hurry:active { background:#9f211c; transform:translateY(1px); box-shadow:none; }
     .details { border:1px solid rgba(255,255,255,.09); background:linear-gradient(180deg,#24272d,#101315); box-shadow:0 4px 10px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.12); width:34px; height:30px; border-radius:9px; font-family:"IBM Plex Mono", monospace; font-size:14px; line-height:1; overflow:hidden; }
     .life-row { min-height:0; display:grid; grid-template-columns:minmax(44px, .65fr) minmax(68px, 1.2fr) minmax(44px, .65fr); align-items:center; gap:3px; }
-    .life-btn { border:1px solid rgba(255,255,255,.08); background:linear-gradient(180deg,#23262b,#0c0e10); height:auto; margin:8px 0; border-radius:16px; box-shadow:0 6px 14px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.13); min-height:64px; padding:0; font-family:"IBM Plex Mono", monospace; font-size:clamp(35px, 10vw, 62px); font-weight:500; opacity:.86; touch-action:manipulation; }
+    .life-btn { grid-row:1; border:1px solid rgba(255,255,255,.08); background:linear-gradient(180deg,#23262b,#0c0e10); height:auto; margin:8px 0; border-radius:16px; box-shadow:0 6px 14px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.13); min-height:64px; padding:0; font-family:"IBM Plex Mono", monospace; font-size:clamp(35px, 10vw, 62px); font-weight:500; opacity:.86; touch-action:manipulation; }
     .life-btn:active { transform:translateY(2px) scale(.97); box-shadow:0 2px 6px rgba(0,0,0,.5), inset 0 2px 8px rgba(0,0,0,.4); }
     .life { font-family:"IBM Plex Mono", monospace; font-size:clamp(64px, 20vw, 122px); font-weight:600; line-height:.8; letter-spacing:-.09em; text-align:center; color:#fff; text-shadow:0 0 12px var(--neon), 0 0 32px var(--neon-dim), 0 2px 4px rgba(0,0,0,.5); font-variant-numeric:tabular-nums; border:0; background:transparent; padding:0; cursor:pointer; transition:transform .12s ease; }
     .life:active { transform:scale(.96); }
@@ -90,6 +90,12 @@
     .trackers span { display:inline-flex; align-items:center; gap:3px; }
     .trackers svg { width:12px; height:12px; flex:none; fill:currentColor; opacity:.78; }
     .toolbar { position:fixed; z-index:10; left:50%; top:50%; transform:translate(-50%,-50%); display:flex; gap:3px; padding:5px; border:1px solid rgba(255,255,255,.18); border-radius:16px; background:linear-gradient(160deg,#1a1d21,#0a0c0e); box-shadow:inset 0 1px 0 var(--chrome-hi), 0 6px 24px rgba(0,0,0,.7), 0 0 24px rgba(10,132,255,.15); }
+    .phone-top { position:fixed; z-index:8; top:0; left:0; right:0; padding:calc(6px + env(safe-area-inset-top)) 14px 7px; text-align:center; background:linear-gradient(180deg, rgba(16,20,25,.97), rgba(10,13,16,.94)); border-bottom:1px solid rgba(255,255,255,.09); box-shadow:0 6px 18px rgba(0,0,0,.5); }
+    .pt-title { font-size:17px; font-weight:800; letter-spacing:.02em; }
+    .pt-turn { margin-top:1px; font:600 13px "IBM Plex Mono",monospace; color:#9aa3ad; font-variant-numeric:tabular-nums; }
+    .phone-bottom { position:fixed; z-index:8; left:0; right:0; bottom:0; padding:8px 12px calc(10px + env(safe-area-inset-bottom)); background:linear-gradient(0deg, rgba(16,20,25,.97), rgba(10,13,16,.94)); border-top:1px solid rgba(255,255,255,.09); box-shadow:0 -6px 18px rgba(0,0,0,.5); }
+    .phone-next { width:100%; min-height:54px; border:1px solid rgba(255,255,255,.10); border-radius:16px; background:linear-gradient(180deg,#2a2e35,#14171b); box-shadow:0 5px 14px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.13); color:inherit; font-size:19px; font-weight:800; touch-action:manipulation; }
+    .phone-next:active { transform:translateY(1px); }
     .tool { width:42px; height:34px; border:1px solid rgba(255,255,255,.10); border-radius:11px; background:linear-gradient(180deg,#26292e,#121518); color:#f6f8f7; display:grid; place-items:center; box-shadow:0 5px 14px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.13); touch-action:manipulation; }
     .tool:active { transform:translateY(1px); box-shadow:0 2px 6px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.06); }
     /* ---- mana color picker ---- */
@@ -196,6 +202,7 @@
       .cmd-source .mini-btn { height:30px; font-size:16px; }
       .cmd-source .mini-value { font-size:19px; }
       .toolbar { top:auto; bottom:145px; transform:translateX(-50%); }
+      .phone-top, .phone-bottom { display:none; }
       .game-hud { position:fixed; z-index:5; left:12px; right:12px; bottom:max(10px,env(safe-area-inset-bottom)); height:110px; display:grid; grid-template-columns:240px 1fr; gap:12px; color:light-dark(#1b231f,#f2f6f4); }
       .turn-card, .log-card { border:1px solid light-dark(#d1d8d4,#303b36); background:light-dark(#f7f9f8,#18201c); border-radius:16px; padding:12px 14px; overflow:hidden; }
       .hud-label { margin:0 0 4px; font-size:11px; letter-spacing:.09em; font-weight:700; text-transform:uppercase; color:light-dark(#5a6961,#9aaba2); }
@@ -218,7 +225,10 @@
       .tablet-stats { grid-template-columns:112px 1fr; }
     }
     @media (max-height:560px) and (orientation:landscape) {
-      .board { column-gap:42px; row-gap:2px; }
+      .board { column-gap:42px; row-gap:2px; top:46px; bottom:62px; }
+      .phone-top { padding-top:calc(2px + env(safe-area-inset-top)); padding-bottom:4px; } .pt-title { font-size:14px; } .pt-turn { font-size:11px; }
+      .phone-bottom { padding-top:5px; padding-bottom:calc(6px + env(safe-area-inset-bottom)); } .phone-next { min-height:42px; font-size:16px; }
+      .tile-timer { min-height:40px; font-size:16px; }
       .name { font-size:14px; } .details { height:26px; } .status { display:none; }
       .life { font-size:clamp(50px,15vh,82px); } .life-btn { min-height:40px; font-size:40px; }
       .toolbar { flex-direction:column; } .tool { width:34px; height:30px; }
@@ -246,7 +256,9 @@
 </style>
 </head>
 <body class="tabletop">
+  <header class="phone-top"><div class="pt-title">Life Counter</div><div class="pt-turn" id="phoneTurn">Turn 1 · Player 1</div></header>
   <main class="board" id="board" aria-label="Four player Magic life counter"></main>
+  <footer class="phone-bottom"><button class="phone-next" id="phoneNext">Next turn</button></footer>
   <nav class="toolbar" aria-label="Game controls">
     <button class="tool" id="undo" aria-label="Undo last change" disabled>
       <svg viewBox="0 0 24 24"><path d="M9 7 4 12l5 5"/><path d="M5 12h9a6 6 0 0 1 6 6"/></svg>
@@ -349,9 +361,10 @@
               '<div class="life-zone"><button class="life" data-action="details" data-i="'+i+'" aria-live="polite" aria-label="Open details for '+esc(p.name)+'">'+p.life+'</button><span class="tap-hint">tap for details</span></div>'+
               '<footer class="status"><button class="jump" data-action="life" data-delta="-5" data-i="'+i+'" aria-label="Subtract 5 life">−5</button><button class="trackers" data-action="details" data-i="'+i+'" aria-label="Poison '+p.poison+', highest commander damage '+totalCmd+'"><span>'+poisonIcon+p.poison+'</span><span>'+cmdIcon+p.commander.join('·')+'</span>'+(p.energy?'<span>⚡'+p.energy+'</span>':'')+(p.experience?'<span>★'+p.experience+'</span>':'')+(p.cmdtax?'<span>🎲'+p.cmdtax+'</span>':'')+(p.monarch?'<span>♛</span>':'')+(p.initiative?'<span>◆</span>':'')+'</button><button class="jump" data-action="life" data-delta="5" data-i="'+i+'" aria-label="Add 5 life">+5</button></footer>'+
               '<div class="tablet-stats"><div class="stat-block"><span class="stat-title">Poison</span><div class="stat-controls"><button class="mini-btn" data-action="counter" data-type="poison" data-slot="0" data-delta="-1" data-i="'+i+'" aria-label="Subtract poison counter">−</button><output class="mini-value">'+p.poison+'</output><button class="mini-btn" data-action="counter" data-type="poison" data-slot="0" data-delta="1" data-i="'+i+'" aria-label="Add poison counter">+</button></div></div><div class="stat-block"><span class="stat-title">Commander damage</span><div class="cmd-grid">'+commanderMatrix+'</div></div></div>'+
-              '<button class="tile-timer'+(tm.r?' running':'')+'" data-action="timer" data-i="'+i+'" aria-pressed="'+(tm.r?'true':'false')+'" aria-label="Timer for '+esc(p.name)+'. Tap to '+(tm.r?'stop':'start')+'; long-press to reset."><span class="timer-dot"></span><svg class="ic-play" viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z"/></svg><svg class="ic-pause" viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg><span class="timer-text">'+fmtTime(timerSecs(p))+'</span></button>'+
+              
               '</div>'+
               '<button class="life-btn" data-action="life" data-delta="1" data-i="'+i+'" aria-label="Add 1 life to '+esc(p.name)+'">+</button>'+
+              '<button class="tile-timer'+(tm.r?' running':'')+'" data-action="timer" data-i="'+i+'" aria-pressed="'+(tm.r?'true':'false')+'" aria-label="Timer for '+esc(p.name)+'. Tap to '+(tm.r?'stop':'start')+'; long-press to reset."><span class="timer-dot"></span><svg class="ic-play" viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z"/></svg><svg class="ic-pause" viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg><span class="timer-text">'+fmtTime(timerSecs(p))+'</span></button>'+
             '</div></section>';
         }).join('');
         renderHud();
@@ -363,6 +376,7 @@
       function renderHud(){
         var tp=document.getElementById('turnPlayer'), rl=document.getElementById('roundLabel'), list=document.getElementById('eventList');
         if(tp) tp.textContent=players[turn].name;
+        var pt=document.getElementById('phoneTurn'); if(pt) pt.textContent='Turn '+((round-1)*players.length+turn+1)+' · '+players[turn].name;
         if(rl) rl.textContent='Round '+round+' · Turn '+(turn+1)+' of '+players.length;
         if(list) list.innerHTML=events.slice(0,9).map(function(item){return '<li>'+esc(item)+'</li>';}).join('');
       }
@@ -508,6 +522,7 @@
       document.getElementById('nextTurn').addEventListener('click',function(){
         remember(); turn=(turn+1)%players.length; if(turn===0) round++; addEvent('Turn → '+players[turn].name+' · round '+round); buzz(); render();
       });
+      document.getElementById('phoneNext').addEventListener('click',function(){ document.getElementById('nextTurn').click(); });
 
       document.getElementById('awake').addEventListener('click',async function(){
         var btn=this;
