@@ -51,15 +51,15 @@
     .tabletop .player.flipped:nth-child(-n+2) .player-inner { transform:none; }
     .tabletop .board.stack2 .player.flipped:nth-child(1) .player-inner { transform:rotate(180deg); }
     .tabletop .board.stack2 .player.flipped:nth-child(2) .player-inner { transform:none; }
-    .tile-flip { border:1px solid var(--line); background:rgba(0,0,0,.16); width:34px; height:30px; border-radius:9px; display:grid; place-items:center; color:inherit; padding:0; touch-action:manipulation; }
+    .tile-flip { border:1px solid rgba(255,255,255,.09); background:linear-gradient(180deg,#24272d,#101315); box-shadow:0 4px 10px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.12); width:34px; height:30px; border-radius:9px; display:grid; place-items:center; color:inherit; padding:0; touch-action:manipulation; }
     .tile-flip svg { width:15px; height:15px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
     .tile-flip[aria-pressed="true"] { background:rgba(255,255,255,.22); }
     /* per-tile timer, bottom of each tile */
-    .tile-timer { margin-top:5px; border:0; background:rgba(0,0,0,.13); border-radius:9px; min-height:24px; padding:2px 8px; display:flex; align-items:center; justify-content:center; gap:6px; font-family:"IBM Plex Mono", monospace; font-size:12px; color:inherit; width:100%; touch-action:manipulation; }
+    .tile-timer { margin-top:5px; border:1px solid rgba(255,255,255,.08); background:linear-gradient(180deg,#22252a,#0e1013); box-shadow:0 4px 10px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.11); border-radius:10px; min-height:24px; padding:2px 8px; display:flex; align-items:center; justify-content:center; gap:6px; font-family:"IBM Plex Mono", monospace; font-size:12px; color:inherit; width:100%; touch-action:manipulation; }
     .tile-timer svg { width:11px; height:11px; fill:currentColor; flex:none; opacity:.85; }
     .tile-timer .timer-dot { width:7px; height:7px; border-radius:50%; background:currentColor; opacity:.35; flex:none; }
     .tile-timer .ic-pause { display:none; }
-    .tile-timer.running { background:rgba(0,0,0,.30); }
+    .tile-timer.running { background:linear-gradient(180deg,#2b3038,#13161b); }
     .tile-timer.running .ic-pause { display:block; }
     .tile-timer.running .ic-play { display:none; }
     .tile-timer.running .timer-dot { opacity:1; background:#30d158; box-shadow:0 0 6px #30d158; }
@@ -74,20 +74,21 @@
     .player-actions { display:flex; align-items:center; gap:5px; flex:none; }
     .player-hurry { border:0; border-radius:8px; background:#c92f27; color:#fff; height:30px; width:54px; padding:0 8px; font-size:11px; font-weight:700; letter-spacing:.045em; line-height:1; box-shadow:inset 0 -2px 0 rgba(0,0,0,.24); touch-action:manipulation; }
     .player-hurry:active { background:#9f211c; transform:translateY(1px); box-shadow:none; }
-    .details { border:1px solid var(--line); background:rgba(0,0,0,.16); width:34px; height:30px; border-radius:9px; font-family:"IBM Plex Mono", monospace; font-size:14px; line-height:1; overflow:hidden; }
+    .details { border:1px solid rgba(255,255,255,.09); background:linear-gradient(180deg,#24272d,#101315); box-shadow:0 4px 10px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.12); width:34px; height:30px; border-radius:9px; font-family:"IBM Plex Mono", monospace; font-size:14px; line-height:1; overflow:hidden; }
     .life-row { min-height:0; display:grid; grid-template-columns:minmax(44px, .65fr) minmax(68px, 1.2fr) minmax(44px, .65fr); align-items:center; gap:3px; }
-    .life-btn { border:0; background:transparent; height:100%; min-height:64px; padding:0; font-family:"IBM Plex Mono", monospace; font-size:clamp(35px, 10vw, 62px); font-weight:500; opacity:.86; touch-action:manipulation; }
-    .life-btn:active { background:rgba(0,0,0,.12); opacity:1; }
-    .life { font-family:"IBM Plex Mono", monospace; font-size:clamp(64px, 20vw, 122px); font-weight:600; line-height:.8; letter-spacing:-.09em; text-align:center; color:#fff; text-shadow:0 0 12px var(--neon), 0 0 32px var(--neon-dim), 0 2px 4px rgba(0,0,0,.5); font-variant-numeric:tabular-nums; }
+    .life-btn { border:1px solid rgba(255,255,255,.08); background:linear-gradient(180deg,#23262b,#0c0e10); height:auto; margin:10px 0; border-radius:16px; box-shadow:0 6px 14px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.13); min-height:64px; padding:0; font-family:"IBM Plex Mono", monospace; font-size:clamp(35px, 10vw, 62px); font-weight:500; opacity:.86; touch-action:manipulation; }
+    .life-btn:active { transform:translateY(2px) scale(.97); box-shadow:0 2px 6px rgba(0,0,0,.5), inset 0 2px 8px rgba(0,0,0,.4); }
+    .life { font-family:"IBM Plex Mono", monospace; font-size:clamp(64px, 20vw, 122px); font-weight:600; line-height:.8; letter-spacing:-.09em; text-align:center; color:#fff; text-shadow:0 0 12px var(--neon), 0 0 32px var(--neon-dim), 0 2px 4px rgba(0,0,0,.5); font-variant-numeric:tabular-nums; border:0; background:transparent; padding:0; cursor:pointer; transition:transform .12s ease; }
+    .life:active { transform:scale(.96); }
     .status { display:grid; grid-template-columns:40px 1fr 40px; align-items:center; gap:5px; }
-    .jump { border:1px solid var(--line); background:var(--button); min-height:32px; border-radius:9px; font-family:"IBM Plex Mono", monospace; font-size:14px; font-weight:600; touch-action:manipulation; }
-    .jump:active { background:rgba(0,0,0,.35); }
-    .trackers { min-width:0; border:0; background:rgba(0,0,0,.13); border-radius:9px; min-height:32px; padding:2px 5px; display:flex; align-items:center; justify-content:center; gap:7px; font-family:"IBM Plex Mono", monospace; font-size:clamp(10px, 2.8vw, 13px); overflow:hidden; white-space:nowrap; }
+    .jump { border:1px solid rgba(255,255,255,.09); background:linear-gradient(180deg,#23262b,#0e1013); box-shadow:0 4px 10px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.12); min-height:32px; border-radius:10px; font-family:"IBM Plex Mono", monospace; font-size:14px; font-weight:600; touch-action:manipulation; }
+    .jump:active { transform:translateY(1px); box-shadow:0 2px 5px rgba(0,0,0,.45), inset 0 2px 6px rgba(0,0,0,.35); }
+    .trackers { min-width:0; border:1px solid rgba(255,255,255,.05); background:rgba(0,0,0,.30); box-shadow:inset 0 1px 5px rgba(0,0,0,.55); border-radius:9px; min-height:32px; padding:2px 5px; display:flex; align-items:center; justify-content:center; gap:7px; font-family:"IBM Plex Mono", monospace; font-size:clamp(10px, 2.8vw, 13px); overflow:hidden; white-space:nowrap; }
     .trackers span { display:inline-flex; align-items:center; gap:3px; }
     .trackers svg { width:12px; height:12px; flex:none; fill:currentColor; opacity:.78; }
     .toolbar { position:fixed; z-index:10; left:50%; top:50%; transform:translate(-50%,-50%); display:flex; gap:3px; padding:5px; border:1px solid rgba(255,255,255,.18); border-radius:16px; background:linear-gradient(160deg,#1a1d21,#0a0c0e); box-shadow:inset 0 1px 0 var(--chrome-hi), 0 6px 24px rgba(0,0,0,.7), 0 0 24px rgba(10,132,255,.15); }
-    .tool { width:42px; height:34px; border:0; border-radius:10px; background:transparent; color:#f6f8f7; display:grid; place-items:center; touch-action:manipulation; }
-    .tool:active { background:rgba(255,255,255,.12); }
+    .tool { width:42px; height:34px; border:1px solid rgba(255,255,255,.10); border-radius:11px; background:linear-gradient(180deg,#26292e,#121518); color:#f6f8f7; display:grid; place-items:center; box-shadow:0 5px 14px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.13); touch-action:manipulation; }
+    .tool:active { transform:translateY(1px); box-shadow:0 2px 6px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.06); }
     /* ---- mana color picker ---- */
     .mana-pick-btn{border:1px solid var(--line);background:rgba(0,0,0,.2);width:30px;height:30px;border-radius:50%;display:grid;place-items:center;cursor:pointer;flex:none;padding:0}
     .mana-pick-btn svg{width:18px;height:18px}
@@ -126,13 +127,13 @@
     .counter-row + .counter-row { border-top:1px solid light-dark(#d8ddda,#303a35); }
     .counter-label { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:18px; font-weight:600; }
     .counter-value { text-align:center; font-family:"IBM Plex Mono", monospace; font-size:24px; font-weight:600; font-variant-numeric:tabular-nums; }
-    .count-btn { border:0; border-radius:11px; background:light-dark(#e5ebe7,#26312b); color:inherit; height:42px; font-family:"IBM Plex Mono",monospace; font-size:25px; }
+    .count-btn { border:1px solid rgba(255,255,255,.09); border-radius:11px; background:linear-gradient(180deg,#333a44,#22282f); box-shadow:0 4px 10px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.12); color:inherit; height:42px; font-family:"IBM Plex Mono",monospace; font-size:25px; }
     .danger-note { margin:12px 0 0; color:light-dark(#69776f,#93a39a); font-size:14px; line-height:1.35; }
     .confirm { padding:12px 4px 4px; }
     .confirm h2 { margin:0 0 7px; font-size:25px; }
     .confirm p { margin:0 0 18px; color:light-dark(#58685f,#acb8b1); font-size:17px; line-height:1.35; }
     .confirm-actions { display:grid; grid-template-columns:1fr 1fr; gap:9px; }
-    .confirm-actions button { border:0; border-radius:12px; height:48px; background:light-dark(#e5eae7,#2a342f); color:inherit; font-size:18px; font-weight:700; }
+    .confirm-actions button { border:1px solid rgba(255,255,255,.09); border-radius:12px; height:48px; background:linear-gradient(180deg,#333a44,#22282f); box-shadow:0 4px 12px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.12); color:inherit; font-size:18px; font-weight:700; }
     .confirm-actions .reset-yes { background:#b73830; color:#fff; }
     .dead { filter:saturate(.35) brightness(.62); }
     .dead .life { color:#ffddd9; }
@@ -141,7 +142,7 @@
     .seg button[aria-pressed="true"] { background:#23617a; border-color:#23617a; color:#fff; }
     .setup-names { display:grid; gap:7px; margin-top:10px; }
     .winner-list { display:grid; gap:8px; margin-top:6px; }
-    .winner-btn { border:0; border-radius:12px; min-height:54px; background:light-dark(#e5eae7,#2a342f); color:inherit; font-size:20px; font-weight:700; }
+    .winner-btn { border:1px solid rgba(255,255,255,.09); border-radius:12px; min-height:54px; background:linear-gradient(180deg,#333a44,#22282f); box-shadow:0 4px 12px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.12); color:inherit; font-size:20px; font-weight:700; }
     .winner-btn:active { background:#23617a; color:#fff; }
     .stats-table { width:100%; border-collapse:collapse; margin-top:6px; font-size:16px; }
     .stats-table th, .stats-table td { padding:7px 6px; text-align:left; border-bottom:1px solid light-dark(#d8ddda,#303a35); font-variant-numeric:tabular-nums; }
@@ -169,7 +170,7 @@
       .stat-block { border:1px solid rgba(255,255,255,.14); background:rgba(0,0,0,.14); border-radius:12px; padding:8px; min-width:0; }
       .stat-title { display:block; margin:0 0 5px; font-size:12px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:rgba(255,255,255,.72); }
       .stat-controls { display:grid; grid-template-columns:34px 1fr 34px; gap:4px; align-items:center; }
-      .mini-btn { border:0; height:34px; border-radius:8px; background:rgba(0,0,0,.22); color:#fff; font:600 19px/1 "IBM Plex Mono",monospace; }
+      .mini-btn { border:1px solid rgba(255,255,255,.09); height:34px; border-radius:9px; background:linear-gradient(180deg,#26292e,#121518); box-shadow:0 4px 10px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.12); color:#fff; font:600 19px/1 "IBM Plex Mono",monospace; }
       .mini-value { text-align:center; font:600 23px/1 "IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; }
       .cmd-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:5px; }
       .cmd-source { min-width:0; }
@@ -183,11 +184,12 @@
       .hud-label { margin:0 0 4px; font-size:11px; letter-spacing:.09em; font-weight:700; text-transform:uppercase; color:light-dark(#5a6961,#9aaba2); }
       .turn-line { display:flex; align-items:center; justify-content:space-between; gap:10px; }
       .turn-player { min-width:0; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; font-size:24px; font-weight:700; }
-      .turn-next { border:0; border-radius:10px; background:light-dark(#dfe7e2,#2b3831); color:inherit; padding:10px 14px; font-weight:700; }
+      .turn-next { border:1px solid rgba(255,255,255,.10); border-radius:12px; background:linear-gradient(180deg,#2a2e35,#14171b); color:inherit; padding:10px 16px; font-weight:800; box-shadow:0 5px 14px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.13); touch-action:manipulation; }
+      .turn-next:active { transform:translateY(1px); }
       .round { margin-top:3px; font:500 13px "IBM Plex Mono",monospace; color:light-dark(#617067,#95a69d); }
       .event-list { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:3px 14px; margin:0; padding:0; list-style:none; }
       .event-list li { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font:500 12px/1.45 "IBM Plex Mono",monospace; color:light-dark(#3f4d45,#c1cbc5); }
-      .active-turn::after { content:""; position:absolute; inset:0; pointer-events:none; box-shadow:inset 0 0 0 4px rgba(255,255,255,.72); border-radius:inherit; }
+      .active-turn::after { content:""; position:absolute; inset:0; pointer-events:none; box-shadow:inset 0 0 0 3px var(--neon), inset 0 0 22px var(--neon-dim); border-radius:inherit; }
     }
     @media (min-width:1100px) and (min-height:650px) {
       .board { right:312px; bottom:12px; }
@@ -323,7 +325,7 @@
             '<div class="mana-bg">'+(MANA_SVG[playerMana[i]||'R']||'')+'</div>'+
             '<div class="player-inner">'+
               '<header class="player-head"><button class="name" data-action="details" data-i="'+i+'">'+esc(p.name)+'</button><div class="player-actions"><button class="mana-pick-btn" data-action="mana" data-i="'+i+'" aria-label="Choose color for '+esc(p.name)+'">'+(MANA_SVG[playerMana[i]||'R']||'')+'</button><button class="player-hurry" data-action="hurry" data-i="'+i+'" aria-label="Say hurry up, '+esc(p.name)+'"></button><button class="tile-flip" data-action="flip" data-i="'+i+'" aria-pressed="'+(p.flip?'true':'false')+'" aria-label="Rotate '+esc(p.name)+' tile"><svg viewBox="0 0 24 24"><path d="M20 7v5h-5"/><path d="M4 17v-5h5"/><path d="M6.1 8a7 7 0 0 1 11.3-2.1L20 8M4 16l2.6 2.1A7 7 0 0 0 17.9 16"/></svg></button><button class="details" data-action="details" data-i="'+i+'" aria-label="Edit '+esc(p.name)+' and damage counters">•••</button></div></header>'+
-              '<div class="life-row"><button class="life-btn" data-action="life" data-delta="-1" data-i="'+i+'" aria-label="Subtract 1 life from '+esc(p.name)+'">−</button><output class="life" aria-live="polite">'+p.life+'</output><button class="life-btn" data-action="life" data-delta="1" data-i="'+i+'" aria-label="Add 1 life to '+esc(p.name)+'">+</button></div>'+
+              '<div class="life-row"><button class="life-btn" data-action="life" data-delta="-1" data-i="'+i+'" aria-label="Subtract 1 life from '+esc(p.name)+'">−</button><button class="life" data-action="details" data-i="' + i + '" aria-live="polite" aria-label="Open details for ' + esc(p.name) + '">'+p.life+'</button><button class="life-btn" data-action="life" data-delta="1" data-i="'+i+'" aria-label="Add 1 life to '+esc(p.name)+'">+</button></div>'+
               '<footer class="status"><button class="jump" data-action="life" data-delta="-5" data-i="'+i+'" aria-label="Subtract 5 life">−5</button><button class="trackers" data-action="details" data-i="'+i+'" aria-label="Poison '+p.poison+', highest commander damage '+totalCmd+'"><span>'+poisonIcon+p.poison+'</span><span>'+cmdIcon+p.commander.join('·')+'</span></button><button class="jump" data-action="life" data-delta="5" data-i="'+i+'" aria-label="Add 5 life">+5</button></footer>'+
               '<div class="tablet-stats"><div class="stat-block"><span class="stat-title">Poison</span><div class="stat-controls"><button class="mini-btn" data-action="counter" data-type="poison" data-slot="0" data-delta="-1" data-i="'+i+'" aria-label="Subtract poison counter">−</button><output class="mini-value">'+p.poison+'</output><button class="mini-btn" data-action="counter" data-type="poison" data-slot="0" data-delta="1" data-i="'+i+'" aria-label="Add poison counter">+</button></div></div><div class="stat-block"><span class="stat-title">Commander damage</span><div class="cmd-grid">'+commanderMatrix+'</div></div></div>'+
               '<button class="tile-timer'+(tm.r?' running':'')+'" data-action="timer" data-i="'+i+'" aria-pressed="'+(tm.r?'true':'false')+'" aria-label="Timer for '+esc(p.name)+'. Tap to '+(tm.r?'stop':'start')+'; long-press to reset."><span class="timer-dot"></span><svg class="ic-play" viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z"/></svg><svg class="ic-pause" viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg><span class="timer-text">'+fmtTime(timerSecs(p))+'</span></button>'+
