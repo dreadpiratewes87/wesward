@@ -47,7 +47,8 @@
     /* neon colors set dynamically via JS per playerMana */
     .player-inner { width:100%; height:100%; padding:max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom)); display:grid; grid-template-columns:minmax(50px,.55fr) minmax(0,1fr) minmax(50px,.55fr); grid-template-rows:minmax(0,1fr) auto; column-gap:6px; transition:transform .25s ease; }
     .tile-center { grid-row:1; min-width:0; min-height:0; display:grid; grid-template-rows:auto 1fr auto auto; }
-    .life-zone { min-height:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; }
+    .life-zone { position:absolute; inset:0; z-index:3; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; pointer-events:none; }
+    .life-zone .life { pointer-events:auto; }
     .tap-hint { font-size:11px; font-weight:700; letter-spacing:.04em; color:rgba(255,255,255,.35); }
     /* per-tile rotate: flips this tile relative to the board's current orientation */
     .player.flipped .player-inner { transform:rotate(180deg); }
@@ -79,7 +80,7 @@
     .player-hurry:active { background:#9f211c; transform:translateY(1px); box-shadow:none; }
     .details { border:1px solid rgba(255,255,255,.09); background:linear-gradient(180deg,#24272d,#101315); box-shadow:0 4px 10px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.12); width:34px; height:30px; border-radius:9px; font-family:"IBM Plex Mono", monospace; font-size:14px; line-height:1; overflow:hidden; }
     .life-row { min-height:0; display:grid; grid-template-columns:minmax(44px, .65fr) minmax(68px, 1.2fr) minmax(44px, .65fr); align-items:center; gap:3px; }
-    .life-btn { grid-row:1; border:1px solid rgba(255,255,255,.08); background:linear-gradient(180deg,#23262b,#0c0e10); height:auto; margin:8px 0; border-radius:16px; box-shadow:0 6px 14px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.13); min-height:64px; padding:0; font-family:"IBM Plex Mono", monospace; font-size:clamp(35px, 10vw, 62px); font-weight:500; opacity:.86; touch-action:manipulation; }
+    .life-btn { grid-row:1; position:relative; z-index:0; border:1px solid rgba(255,255,255,.08); background:linear-gradient(180deg,#23262b,#0c0e10); height:auto; margin:8px 0; border-radius:16px; box-shadow:0 6px 14px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.13); min-height:64px; padding:0; font-family:"IBM Plex Mono", monospace; font-size:clamp(35px, 10vw, 62px); font-weight:500; opacity:.86; touch-action:manipulation; }
     .life-btn:active { transform:translateY(2px) scale(.97); box-shadow:0 2px 6px rgba(0,0,0,.5), inset 0 2px 8px rgba(0,0,0,.4); }
     .life { font-family:"IBM Plex Mono", monospace; font-size:clamp(64px, 20vw, 122px); font-weight:600; line-height:.8; letter-spacing:-.09em; text-align:center; color:#fff; text-shadow:0 0 12px var(--neon), 0 0 32px var(--neon-dim), 0 2px 4px rgba(0,0,0,.5); font-variant-numeric:tabular-nums; border:0; background:transparent; padding:0; cursor:pointer; transition:transform .12s ease; }
     .life:active { transform:scale(.96); }
