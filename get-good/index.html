@@ -1227,35 +1227,32 @@
 <div class="splash" id="hub-splash" role="region" aria-label="Get Good Hub">
   <div class="splash-badge" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" stroke="url(#splash-chev-grad)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="splash-chev-grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F77FB4"/><stop offset="1" stop-color="#BD1260"/></linearGradient></defs><path d="M10 26 L24 14 L38 26"/><path d="M10 39 L24 27 L38 39"/></svg></div>
   <h1>GET GOOD</h1>
-  <p>Training tracker, draft guide, set reviews &amp; puzzles.</p>
+  <p>Training tracker, draft guide, set reviews &amp; the Standard meta.</p>
   <button class="splash-enter" id="splash-enter" type="button">Enter</button>
 </div>
 <main class="app" id="mtg-hub-main">
   <nav class="hub-tabs" aria-label="Get Good Hub quick access">
     <button class="hub-tab active" type="button" data-home data-tabtarget="home" aria-current="page">⌂ Main</button>
-    <button class="hub-tab" type="button" data-open="training-tracker" data-tabtarget="training-tracker" aria-label="Training Tracker">Tracker</button>
     <button class="hub-tab" type="button" data-open="fra-draft-guide" data-tabtarget="fra-draft-guide">Draft Guide</button>
     <button class="hub-tab" type="button" data-open="set-reviews" data-tabtarget="set-reviews">Set Review</button>
-    <button class="hub-tab" type="button" data-open="puzzles" data-tabtarget="puzzles">Puzzles</button>
     <button class="hub-tab" type="button" data-open="articles" data-tabtarget="articles">Articles</button>
     <button class="hub-tab" type="button" data-open="standard-meta" data-tabtarget="standard-meta">Meta</button>
   </nav>
 
   <section class="view active" id="home" aria-label="Home">
     <div class="nav-grid">
-      <button class="nav-card gg5 gg-tracker" data-open="training-tracker"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M7 41h34"/><path d="M12 41V27M22 41V19M32 41V13"/><path d="M9 21l11-8 8 5 11-9"/></svg><div><strong>Training Tracker</strong><span>Arena training plan — log sessions, tag your leaks, track ranks toward Platinum.</span></div></button>
       <button class="nav-card gg4" data-open="fra-draft-guide"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M10 6h28v36H10z"/><path d="M17 14h14M17 21h14M17 28h14M17 35h8"/></svg><div><strong>FRA Draft Guide</strong><span>Reality Fracture booster draft — all 10 archetypes and a graded ranking of all 280 cards.</span></div></button>
       <button class="nav-card gg4" data-open="set-reviews"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><rect x="8" y="8" width="14" height="14" rx="2"/><rect x="26" y="8" width="14" height="14" rx="2"/><rect x="8" y="26" width="14" height="14" rx="2"/><rect x="26" y="26" width="14" height="14" rx="2"/></svg><div><strong>Set Review</strong><span>Pick a set, then study it. Reality Fracture by color and category in three tiers — and the Star Trek spoiler-season guide, building now ahead of the November 13 release.</span></div></button>
-      <button class="nav-card gg4" data-open="puzzles"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><circle cx="24" cy="24" r="17"/><path d="M24 15v5l4 3"/></svg><div><strong>Puzzles</strong><span>Role assignment, combat math, and mulligan calls — commit to a line, then check the reasoning.</span></div></button>
       <a class="nav-card gg6" href="https://dreadpiratewes87.github.io/wesward/tools/draft-quiz/" target="_blank" rel="noopener noreferrer"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M14 10h20v22H14z"/><path d="M19 17h10M19 23h10M19 29h6"/><path d="M18 38l6-4 6 4"/></svg><div><strong>Draft Quiz</strong><span>Realistic 14-card Reality Fracture packs — every pick graded against the draft guide, with a running score and drafter tier.</span></div></a>
       <a class="nav-card gg6" href="https://dreadpiratewes87.github.io/wesward/tools/draft-simulator/" target="_blank" rel="noopener noreferrer"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><circle cx="24" cy="24" r="5"/><circle cx="10" cy="12" r="3"/><circle cx="38" cy="12" r="3"/><circle cx="10" cy="36" r="3"/><circle cx="38" cy="36" r="3"/></svg><div><strong>Draft Simulator</strong><span>A full pod draft against 7 AI drafters — per-pick A+–F grades with popups and an end-of-draft report card.</span></div></a>
       <button class="nav-card gg7 gg-sim" data-open="sim-study"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M8 40h32"/><path d="M12 40V24l8-6 7 4 9-9"/><circle cx="36" cy="13" r="2.5"/></svg><div><strong>Sim Study</strong><span>Monte Carlo results and the Forge research program — plus the full Sim Reports inside. What the games actually say about your decks and the format.</span></div></button>
       
       <button class="nav-card gg5" data-open="articles"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M24 10c-2.2-1.8-5-2.6-9-2.6v33.2c4 0 6.8.8 9 2.6 2.2-1.8 5-2.6 9-2.6V7.4c-4 0-6.8.8-9 2.6Z"/><path d="M24 10v33.2"/></svg><div><strong>Articles</strong><span>The get-good reading archive — Pro Tour formats and Limited only. Commander articles live in the MTG Hub, where Commander stays casual.</span></div></button>
       <button class="nav-card" style="grid-column:span 12;min-height:120px" data-open="standard-meta"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M8 40h32"/><path d="M13 40V24h6v16M21 40V14h6v26M29 40V20h6v20"/></svg><div><strong>Standard Meta</strong><span>The top 10 Standard decks right now — the ranked field, an example list for each with its sideboard plan, and how to beat it. Snapshot Oct 21, 2026.</span></div></button>
-      <button class="nav-card" style="grid-column:span 12;min-height:120px" data-open="development"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M12 6h24v36H12z"/><path d="M18 14h12M18 21h12M18 28h8"/></svg><div><strong>Guides</strong><span>Guide series that grow — the Reality Fracture draft guide series, applied game-state practice, and the blueprints for what gets built next.</span></div></button>
+      <button class="nav-card" style="grid-column:span 12;min-height:120px" data-open="development"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M12 6h24v36H12z"/><path d="M18 14h12M18 21h12M18 28h8"/></svg><div><strong>Guides</strong><span>Guide series that grow — the Reality Fracture draft guide series and the blueprints for what gets built next.</span></div></button>
       <a class="nav-card gg12" style="grid-column:span 12;min-height:120px" href="https://dreadpiratewes87.github.io/wesward/mtg-hub/" target="_blank" rel="noopener noreferrer"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M9 11h30v26H9z"/><path d="M15 17h18M15 24h18M15 31h11"/><path d="m34 28 5 5-5 5"/></svg><div><strong>MTG Hub</strong><span>The play hub — commander decks, the Precon Library, life counter, Proxy Wizard, and the flavor, history &amp; Commander reading archive.</span></div></a>
     </div>
+    <div style="display:flex;justify-content:center;margin-top:22px"><button class="btn secondary" type="button" data-open="training-tracker" style="min-height:48px;padding:13px 22px;font-size:16px">Training Tracker — log sessions &amp; track ranks ↗</button></div>
   </section>
 
 
@@ -2316,62 +2313,40 @@
 </div>
 </section>
 
-  <section class="view" id="puzzles" aria-labelledby="puzzles-heading">
-    <header class="viewbar"><button class="back-nav-btn" type="button" data-back>← Back</button><button class="back-btn" type="button" data-home>⌂ Return main</button><h1 id="puzzles-heading">Puzzles</h1><span class="stamp">Three ways to think</span></header>
-    <div class="hub-page">
-      <div class="hub-page-head"><div><h2>Make the call.</h2><p>Read each position, choose your line, then reveal the answer and reasoning.</p></div></div>
-      <div class="puzzle-stack">
-        <article class="puzzle-card">
-          <div class="puzzle-card-head"><div><span class="tag live">ROLE ASSIGNMENT</span><h3>Which player is the beatdown?</h3></div></div>
-          <div class="board-state"><div class="state-row"><strong>You</strong>28 life, four medium creatures, no cards in hand.</div><div class="state-row"><strong>Opponent</strong>12 life, two blockers, five cards in hand, and the stronger late game.</div><div class="state-row"><strong>Your draw</strong>A flexible removal spell that can clear one blocker.</div></div>
-          <p><strong>Your decision:</strong> Save removal for a future bomb, or clear a blocker and attack now?</p>
-          <button class="btn accent puzzle-reveal" type="button">Reveal answer</button>
-          <div class="puzzle-answer"><strong>Clear the blocker and press the attack.</strong><p>Your opponent has more cards and inevitability. Saving the removal gives them time to turn those cards into a winning board. Your role is the beatdown, so convert the spell into damage while your battlefield advantage still matters.</p></div>
-        </article>
-        <article class="puzzle-card">
-          <div class="puzzle-card-head"><div><span class="tag">COMBAT MATH</span><h3>Find the winning attack.</h3></div></div>
-          <div class="board-state"><div class="state-row"><strong>You</strong>At 6 life with a 5/5 trampler, two 3/3s, and a 2/2.</div><div class="state-row"><strong>Opponent</strong>At 9 life with a 4/4 and a 2/2 available to block.</div><div class="state-row"><strong>Your hand</strong>A spell that gives one creature +3/+0 after blockers.</div></div>
-          <p><strong>Your decision:</strong> Which creatures attack, and where does the pump go?</p>
-          <button class="btn accent puzzle-reveal" type="button">Reveal answer</button>
-          <div class="puzzle-answer"><strong>Attack with everything. Pump an unblocked attacker.</strong><p>The toughest blocks put the 4/4 on your trampler and the 2/2 on a 3/3. One trample damage, an unblocked 3/3, the 2/2, and the +3/+0 add to exactly 9. Any other blocks let through at least that much.</p></div>
-        </article>
-        <article class="puzzle-card">
-          <div class="puzzle-card-head"><div><span class="tag">MULLIGAN</span><h3>Keep seven or ship it?</h3></div></div>
-          <div class="board-state"><div class="state-row"><strong>Opening hand</strong>Two lands (one enters tapped), a 2-drop, a 3-drop, a 5-drop, and two 6-drops.</div><div class="state-row"><strong>Commander</strong>Costs four mana.</div><div class="state-row"><strong>On the play</strong>No free draw before your second turn.</div></div>
-          <p><strong>Your decision:</strong> Keep or mulligan?</p>
-          <button class="btn accent puzzle-reveal" type="button">Reveal answer</button>
-          <div class="puzzle-answer"><strong>Mulligan.</strong><p>The tapped land pushes the 2-drop to turn three, and half the hand cannot be cast without several perfect draws. A coherent six with three lands and a curve is stronger than seven cards that do not function together.</p></div>
-        </article>
-      </div>
-    </div>
-  </section>
-
   <section class="view" id="articles" aria-labelledby="articles-heading">
-    <header class="viewbar"><button class="back-nav-btn" type="button" data-back>← Back</button><button class="back-btn" type="button" data-home>⌂ Return main</button><h1 id="articles-heading">Articles</h1><span class="stamp">Featured Oct 21, 2026</span></header>
+    <header class="viewbar"><button class="back-nav-btn" type="button" data-back>← Back</button><button class="back-btn" type="button" data-home>⌂ Return main</button><h1 id="articles-heading">Articles</h1><span class="stamp">Featured Oct 22, 2026</span></header>
     <div class="hub-page">
       <div class="guide-note"><strong>Scope: Pro Tour formats and Limited.</strong> This archive is for getting good at competitive play. Commander articles are filed in the MTG Hub — the play hub — where Commander stays casual.</div>
       <article class="featured-article">
-        <div class="feature-label">Today’s featured read · Pro Tour</div>
-        <h2>The Week That Was: Jean-Emmanuel Depraz, Poet of the Pro Tour</h2>
-        <p class="byline">Corbin Hosler · Magic.gg (Wizards of the Coast) · Published Oct 16, 2026</p>
-        <p>First in a three-part Magic.gg series on the elite traits of this year's Pro Tour Hall of Fame inductees, this profile of 2023 World Champion Jean-Emmanuel Depraz unpacks what "technical play" actually means: asking which decision most depends on new information, sequencing to gain that information, and weighing how bad each outcome is, not just how likely it is. Worth Wes's time as a concrete, example-driven lesson in competitive decision-making, built around a Goryo's Vengeance Thoughtseize puzzle, from the player his peers call the best technical player on the planet.</p>
-        <div class="tag-row"><span class="tag">Pro Tour</span><span class="tag">Competitive</span><span class="tag">Technical Play</span><span class="tag">Gameplay Improvement</span><span class="tag">Hall of Fame</span></div>
-        <div class="hub-card-actions"><a class="external" href="https://www.magic.gg/news/the-week-that-was-jean-emmanuel-depraz-poet-of-the-pro-tour" target="_blank" rel="noopener noreferrer">Read the article ↗</a></div>
+        <div class="feature-label">Today’s featured read · Limited</div>
+        <h2>Arena Powered Cube Draft, October 20–November 10</h2>
+        <p class="byline">Zach Barash · Wizards of the Coast (MTG Arena)</p>
+        <p>Wizards' guide to the October 2026 Arena Powered Cube (live Oct 20–Nov 10): take intrinsically powerful cards first, then draft around them to multiply their potency, across six broad archetypes from aggro and ramp to reanimator-style 'cheaty' decks and control. It also covers what's new this iteration — Reality Fracture additions, and Through the Breach, Splinter Twin and Kiki-Jiki arriving on Arena — with the full cube changelog.</p>
+        <div class="tag-row"><span class="tag">Limited</span><span class="tag">Cube Draft</span><span class="tag">MTG Arena</span><span class="tag">Draft Strategy</span></div>
+        <div class="hub-card-actions"><a class="external" href="https://magic.wizards.com/en/news/mtg-arena/arena-powered-cube-draft" target="_blank" rel="noopener noreferrer">Read the article ↗</a></div>
       </article>
       <div class="hub-card-actions" style="margin-top:12px"><button class="btn secondary" type="button" data-open="article-archive">Open article archive</button></div>
     </div>
   </section>
 
   <section class="view" id="article-archive" aria-labelledby="article-archive-heading">
-    <header class="viewbar"><button class="back-nav-btn" type="button" data-back>← Back</button><button class="back-btn" type="button" data-home>⌂ Return main</button><h1 id="article-archive-heading">Article Archive</h1><span class="stamp">8 featured articles</span></header>
+    <header class="viewbar"><button class="back-nav-btn" type="button" data-back>← Back</button><button class="back-btn" type="button" data-home>⌂ Return main</button><h1 id="article-archive-heading">Article Archive</h1><span class="stamp">9 featured articles</span></header>
     <div class="hub-page">
       <div class="hub-page-head"><div><h2>Every featured read.</h2><p>Pro Tour formats and Limited only — Commander articles are filed in the MTG Hub. Search by title or author, then narrow by topic or the day it was featured.</p></div></div>
       <div class="archive-tools">
         <label class="field">Search<input id="article-search" type="text" placeholder="Title, author, or source" /></label>
-        <label class="field">Topic<select id="article-topic"><option value="">All topics</option><option>Draft</option><option>Competitive</option><option>Play Design</option><option>Banned and Restricted</option><option>Standard</option><option>Format Health</option><option>Reality Fracture</option><option>Pauper</option><option>Competitive Constructed</option><option>Metagame</option><option>Power Rankings</option><option>Deckbuilding</option><option>Modern</option><option>Regional Championships</option><option>Pro Tour</option><option>Limited</option><option>Five-Color</option><option>Mana Fixing</option><option>Technical Play</option><option>Gameplay Improvement</option><option>Hall of Fame</option></select></label>
+        <label class="field">Topic<select id="article-topic"><option value="">All topics</option><option>Draft</option><option>Competitive</option><option>Play Design</option><option>Banned and Restricted</option><option>Standard</option><option>Format Health</option><option>Reality Fracture</option><option>Pauper</option><option>Competitive Constructed</option><option>Metagame</option><option>Power Rankings</option><option>Deckbuilding</option><option>Modern</option><option>Regional Championships</option><option>Pro Tour</option><option>Limited</option><option>Five-Color</option><option>Mana Fixing</option><option>Technical Play</option><option>Gameplay Improvement</option><option>Hall of Fame</option><option>Cube Draft</option><option>MTG Arena</option><option>Draft Strategy</option></select></label>
         <label class="field">Featured date<input id="article-date" type="date" /></label>
       </div>
       <div class="archive-list" id="article-archive-list">
+
+        <article class="archive-item" data-title="Arena Powered Cube Draft, October 20–November 10 Zach Barash Wizards of the Coast MTG Arena Limited Cube Draft Draft Strategy" data-topic="Limited,Cube Draft,MTG Arena,Draft Strategy" data-date="2026-10-22">
+          <h3>Arena Powered Cube Draft, October 20–November 10</h3>
+          <div class="archive-meta">Featured Oct 22, 2026 · Zach Barash · Wizards of the Coast (MTG Arena)</div>
+          <p>Wizards' guide to the October 2026 Arena Powered Cube (live Oct 20–Nov 10): take intrinsically powerful cards first, then draft around them to multiply their potency, across six broad archetypes from aggro and ramp to reanimator-style 'cheaty' decks and control. It also covers what's new this iteration — Reality Fracture additions, and Through the Breach, Splinter Twin and Kiki-Jiki arriving on Arena — with the full cube changelog.</p>
+          <div class="tag-row"><span class="tag">Limited</span><span class="tag">Cube Draft</span><span class="tag">MTG Arena</span><span class="tag">Draft Strategy</span></div>
+          <a class="external" href="https://magic.wizards.com/en/news/mtg-arena/arena-powered-cube-draft" target="_blank" rel="noopener noreferrer">Read ↗</a>
+        </article>
 
         <article class="archive-item" data-title="The Week That Was: Jean-Emmanuel Depraz, Poet of the Pro Tour Corbin Hosler Magic.gg Wizards of the Coast Pro Tour Competitive Technical Play Gameplay Improvement Hall of Fame" data-topic="Pro Tour,Competitive,Technical Play,Gameplay Improvement,Hall of Fame" data-date="2026-10-21">
           <h3>The Week That Was: Jean-Emmanuel Depraz, Poet of the Pro Tour</h3>
@@ -2454,14 +2429,6 @@
           <div class="guide-part"><span>Part 2 · Ten draft archetypes</span><span class="tag">In the Draft Guide</span></div>
           <div class="guide-part"><span>Part 3 · Card-by-card rankings</span><span class="tag">In the Draft Guide</span></div>
           <div class="guide-part"><span>Part 4 · Pick order, bombs, removal, and traps</span><span class="tag">In the Draft Guide</span></div>
-        </div>
-      </details>
-      <details class="guide-series">
-        <summary><span class="series-top"><strong>Applied Game-State Practice</strong><span class="tag">Fundamentals</span><span class="tag">Strategy</span></span><span class="series-meta">Published · Last reviewed Oct 11, 2026</span></summary>
-        <div class="guide-parts">
-          <div class="guide-part"><span>Part 1 · Identifying the beatdown</span><span class="tag">In Puzzles</span></div>
-          <div class="guide-part"><span>Part 2 · Combat math and lethal lines</span><span class="tag">In Puzzles</span></div>
-          <div class="guide-part"><span>Part 3 · Mulligan decisions</span><span class="tag">In Puzzles</span></div>
         </div>
       </details>
       <section style="margin-top:28px" aria-labelledby="blueprints-heading">
@@ -2999,7 +2966,7 @@
      through. The pinned Return main button is a separate reset straight to Home. */
   var navStack=['home'];
   function currentView(){return navStack[navStack.length-1]}
-  var tabFor={home:'home','training-tracker':'training-tracker','fra-draft-guide':'fra-draft-guide','set-reviews':'set-reviews','set-review':'set-reviews','trk-guide':'set-reviews',puzzles:'puzzles',articles:'articles','article-archive':'articles','standard-meta':'standard-meta'};
+  var tabFor={home:'home','fra-draft-guide':'fra-draft-guide','set-reviews':'set-reviews','set-review':'set-reviews','trk-guide':'set-reviews',articles:'articles','article-archive':'articles','standard-meta':'standard-meta'};
   function showView(id){
     views.forEach(function(v){v.classList.toggle('active',v.id===id)});
     var want=tabFor[id];
@@ -3056,12 +3023,6 @@
   });
   var rankCostHead=document.querySelector('#fra-rankings .rank-table thead th:nth-child(2)');
   if(rankCostHead)rankCostHead.textContent='CMC / Cost';
-
-  document.querySelectorAll('.puzzle-reveal').forEach(function(button,i){
-    var answer=button.nextElementSibling,id='puzzle-answer-'+i;
-    if(!answer)return;answer.id=id;answer.hidden=true;button.setAttribute('aria-controls',id);button.setAttribute('aria-expanded','false');
-    button.addEventListener('click',function(){var show=answer.hidden;answer.hidden=!show;answer.classList.toggle('open',show);button.setAttribute('aria-expanded',String(show));button.textContent=show?'Hide answer':'Reveal answer'});
-  });
 
   function filterArticles(){
     var q=(document.getElementById('article-search').value||'').trim().toLowerCase();
