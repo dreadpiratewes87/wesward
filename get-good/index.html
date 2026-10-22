@@ -4511,9 +4511,12 @@ function smCopyText(txt){
  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,fallback);}
  else fallback();
 }
+function smArenaLines(txt){
+ return txt.split('\n').map(function(l){return l.replace(/\s+$/,'');}).filter(function(l){return /^\d+\s+\S/.test(l);});
+}
 smRoot.querySelectorAll('[data-sm-copy]').forEach(function(b){b.addEventListener('click',function(){
  var d=null; SM_DECKS.forEach(function(x){if(x.id===b.dataset.smCopy)d=x;}); if(!d)return;
- var txt=d.name+'\n\nMain Deck ('+(d.mainCount||60)+')\n'+d.main+'\n\nSideboard (15)\n'+d.sb;
+ var txt='Deck\n'+smArenaLines(d.main).join('\n')+'\n\nSideboard\n'+smArenaLines(d.sb).join('\n');
  smCopyText(txt);
 })});
 var smDialog=document.getElementById('sm-dialog');
