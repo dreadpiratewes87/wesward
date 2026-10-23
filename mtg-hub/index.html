@@ -121,7 +121,8 @@
 @media(min-width:761px){.fmt-spot-index{position:sticky;top:132px;max-height:calc(100vh - 148px);max-height:calc(100dvh - 148px);overflow-y:auto;overscroll-behavior:contain;padding:4px 8px 4px 4px;scrollbar-width:thin;scrollbar-color:rgba(110,168,240,.45) transparent}.fmt-spot-index::-webkit-scrollbar{width:8px}.fmt-spot-index::-webkit-scrollbar-thumb{background:rgba(110,168,240,.35);border-radius:99px}.fmt-spot-index::-webkit-scrollbar-track{background:transparent}}
 @media(max-width:760px){.fmt-spot-index{flex-direction:row;flex-wrap:wrap}}.fmt-spot-btn{appearance:none;display:flex;align-items:center;gap:10px;text-align:left;border:1px solid rgba(110,168,240,.3);background:var(--paper);border-radius:12px;padding:13px 14px;font-weight:700;cursor:pointer;box-shadow:var(--shadow);color:var(--ink)}.fmt-spot-btn small{display:block;font-weight:600;color:var(--muted);font-size:.76rem}.fmt-spot-btn[aria-selected="true"]{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 18px rgba(212,175,55,.3)}.fmt-spot-panel{background:linear-gradient(180deg,rgba(127,178,240,.07),rgba(127,178,240,0) 46%),var(--paper);border:1px solid rgba(110,168,240,.35);border-top:6px solid var(--fc,var(--accent));border-radius:var(--radius-md);box-shadow:var(--shadow);padding:clamp(22px,4vw,36px)}.fmt-spot-panel h3{font:800 clamp(34px,5vw,52px)/1 "Barlow Condensed",sans-serif;margin:0;text-shadow:0 0 16px rgba(63,140,232,.38),0 0 44px rgba(19,93,189,.20)}.fmt-spot-fam{font-size:.74rem;font-weight:800;letter-spacing:.11em;text-transform:uppercase;color:var(--gold);margin:0 0 8px}.fmt-spot-panel .fmt-lede{font-size:1.05rem;color:var(--muted);margin:12px 0 0;max-width:56ch}.fmt-spot-specs{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:22px 0 4px}
 @media(max-width:700px){.fmt-spot-specs{grid-template-columns:1fr 1fr}}.fmt-spot-points{margin:18px 0 0;padding:0;list-style:none;display:grid;gap:9px}.fmt-spot-points li{display:flex;gap:10px;align-items:flex-start}.fmt-spot-points li::before{content:"";width:8px;height:8px;margin-top:8px;transform:rotate(45deg);background:var(--gold);flex:none}.fmt-spot-hook{margin-top:20px;background:var(--paper-2);border:1px solid rgba(110,168,240,.25);border-radius:12px;padding:14px 16px}.fmt-spot-hook b{color:var(--gold)}/* Formats — View C: Head-to-Head (twenty-seven columns ride a sideways track) */.fmt-picker{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:16px}.fmt-picker .fmt-pk-label{font-weight:800;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-right:2px}.fmt-pk{appearance:none;border:1px solid rgba(110,168,240,.35);background:var(--paper);border-radius:999px;padding:9px 14px;font-weight:700;cursor:pointer;color:var(--ink);min-height:44px}.fmt-pk[aria-pressed="true"]{background:linear-gradient(180deg,#3F8CE8,#135DBD);border-color:rgba(168,208,255,.6);color:#fff;box-shadow:0 0 14px rgba(19,93,189,.45)}.fmt-compare{display:flex;gap:12px;overflow-x:auto;padding:4px 2px 14px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}.fmt-col{flex:0 0 212px;scroll-snap-align:start;background:linear-gradient(180deg,rgba(127,178,240,.07),rgba(127,178,240,0) 46%),var(--paper);border:1px solid rgba(110,168,240,.30);border-top:5px solid var(--fc,var(--accent));border-radius:var(--radius-md);box-shadow:var(--shadow);padding:18px 16px;transition:opacity .2s ease,box-shadow .2s ease}.fmt-col h3{font:800 24px/1 "Barlow Condensed",sans-serif;margin:0;display:flex;align-items:center;gap:9px}.fmt-col dl{margin:14px 0 0;display:grid;gap:11px}.fmt-col dt{font-size:.64rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}.fmt-col dd{margin:1px 0 0;font-weight:700;font-size:.9rem;line-height:1.35}.fmt-col .fmt-pick-line{margin:14px 0 0;border-top:1px dashed var(--line);padding-top:11px;font-size:.86rem;color:var(--muted)}.fmt-compare.has-pick .fmt-col{opacity:.42}.fmt-compare.has-pick .fmt-col.pick{opacity:1;box-shadow:0 0 0 2px var(--gold),0 0 22px rgba(212,175,55,.4)}.fmt-pick-badge{display:none;margin-top:12px;background:linear-gradient(180deg,#EFCE6B,#D4AF37);color:#241B03;font-weight:800;font-size:.78rem;border-radius:999px;padding:5px 11px;width:fit-content}.fmt-col.pick .fmt-pick-badge{display:block}
-@media(prefers-reduced-motion:reduce){.fmt-col{transition:none}}/* Home landing grid: every destination as a compact 3D pill — icon and
+@media(prefers-reduced-motion:reduce){.fmt-col{transition:none}}/* Formats — multi-select filters,clickable tiles,and the format detail page */.fmt-pk-clear{border-color:rgba(212,175,55,.55);color:var(--gold)}.fmt-pk-clear:disabled{opacity:.45;color:var(--muted);border-color:rgba(110,168,240,.35);cursor:default;box-shadow:none}.fmt-pick-status{margin:0 0 12px;color:var(--muted);font-size:.93rem}.fmt-none{border:1px dashed rgba(110,168,240,.45);border-radius:var(--radius-md);padding:18px;color:var(--muted);margin:4px 0 14px}.fmt-col{cursor:pointer}.fmt-col:focus-visible{outline:3px solid var(--teal);outline-offset:2px}.fmt-col-cta{margin:12px 0 0;font-size:.8rem;font-weight:800;color:#7FB2F0}.fmt-card{cursor:pointer}.fmt-card-actions{display:flex;border-top:1px solid var(--line);background:var(--paper-2)}.fmt-card-actions .fmt-fcard-btn{width:auto;flex:1;border-top:0}.fmt-rundown-btn{appearance:none;border:0;border-left:1px solid var(--line);background:transparent;padding:13px 16px;font-weight:800;cursor:pointer;color:var(--gold);letter-spacing:.02em;flex:none}.fmt-rundown-btn:hover{background:rgba(212,175,55,.12)}.fmt-rundown-btn:focus-visible,.fmt-detail-btn:focus-visible,.fmt-pk-clear:focus-visible{outline:3px solid var(--teal);outline-offset:2px}.fmt-detail-btn{margin-top:20px;border:1px solid rgba(212,175,55,.55);background:rgba(212,175,55,.10);color:var(--ink);border-radius:999px;padding:11px 18px;min-height:44px;font-weight:800;cursor:pointer}.fmt-detail-btn:hover{background:rgba(212,175,55,.18)}.fmt-detail-specs{grid-template-columns:repeat(3,1fr)}
+@media(max-width:700px){.fmt-detail-specs{grid-template-columns:1fr 1fr}}.fmt-d-h{font-size:.82rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--gold);margin:26px 0 8px}.fmt-d-p{margin:0;color:var(--muted);max-width:64ch}.fmt-d-steps{margin:0;padding-left:24px;display:grid;gap:7px;max-width:64ch}.fmt-d-steps li{line-height:1.45}.fmt-d-actions{margin:22px 0 0}/* Home landing grid: every destination as a compact 3D pill — icon and
    title only,descriptions dropped — tiled so the whole hub fits one
    screen under the quick bar. Scoped to #home; the Lab's own deck-choice
    grids keep their card layout. */#home .nav-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}#home .nav-card{grid-column:auto;min-height:0;flex-direction:row;align-items:center;justify-content:flex-start;gap:13px;padding:15px 20px;border-radius:999px!important;background:linear-gradient(180deg,#1E56A8 0%,#123B7D 52%,#0A2450 100%);border:1px solid rgba(140,190,255,.55);box-shadow:inset 0 1px 0 rgba(200,228,255,.6),inset 0 -10px 16px rgba(2,8,24,.5),inset 0 8px 14px rgba(127,178,240,.16),0 4px 0 #030D20,0 12px 24px rgba(0,2,10,.55),0 0 18px rgba(19,93,189,.30)}#home .nav-card:hover{border-color:rgba(190,222,255,.9);box-shadow:inset 0 1px 0 rgba(210,235,255,.7),inset 0 -10px 16px rgba(2,8,24,.45),inset 0 8px 14px rgba(127,178,240,.2),0 4px 0 #030D20,0 14px 28px rgba(0,2,10,.6),0 0 26px rgba(46,124,214,.5)}#home .nav-card:active{box-shadow:inset 0 1px 0 rgba(200,228,255,.5),inset 0 -6px 12px rgba(2,8,24,.5),inset 0 8px 14px rgba(127,178,240,.14),0 1px 0 #030D20,0 6px 14px rgba(0,2,10,.5),0 0 16px rgba(19,93,189,.3)}#home .nav-card .arrow{display:none}#home .nav-card>div{min-width:0}#home .nav-card strong{font-size:clamp(20px,2.4vw,26px);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#home .nav-card>div>span{display:none}#home .nav-card .icon{width:32px;height:32px;flex:none}
@@ -380,15 +381,17 @@
       </div>
     </div>
     <div class="fmt-design" id="fmt-view-h2h" hidden>
-      <div class="fmt-picker" id="fmt-picker" aria-label="Pick by tonight's situation">
+      <div class="fmt-picker" id="fmt-picker" aria-label="Filter formats by tonight's situation">
         <span class="fmt-pk-label">Tonight we have…</span>
-        <button class="fmt-pk" type="button" data-pick="duo" aria-pressed="false">Just two of us</button>
-        <button class="fmt-pk" type="button" data-pick="pod" aria-pressed="false">A full pod</button>
-        <button class="fmt-pk" type="button" data-pick="packs" aria-pressed="false">Fresh packs to crack</button>
-        <button class="fmt-pk" type="button" data-pick="cheap" aria-pressed="false">A tight budget</button>
       </div>
+      <p class="fmt-pick-status" id="fmt-pick-status" aria-live="polite"></p>
       <div class="fmt-compare" id="fmt-compare-grid"></div>
+      <p class="fmt-none" id="fmt-none" hidden>No format matches all of those filters together. Loosen one — or hit Clear filters to see all twenty-seven again.</p>
     </div>
+  </section>
+  <section class="view" id="format-detail" aria-labelledby="format-detail-heading">
+    <header class="viewbar"><button class="back-btn" type="button" data-back>← Back</button><h1 id="format-detail-heading">Format</h1><span class="stamp" id="format-detail-stamp"></span></header>
+    <div id="format-detail-body"></div>
   </section>
   <section class="view" id="precon-zinnia" aria-labelledby="precon-zinnia-heading"><header class="viewbar"><button class="back-btn" type="button" data-back>← Back</button><h1 id="precon-zinnia-heading">Family Matters</h1><span class="stamp">Precon</span></header><div id="precon-zinnia-content"></div></section>
   <section class="view" id="precon-quandrix" aria-labelledby="precon-quandrix-heading"><header class="viewbar"><button class="back-btn" type="button" data-back>← Back</button><h1 id="precon-quandrix-heading">Quantum Quandrix</h1><span class="stamp">Precon</span></header><div id="precon-quandrix-content"></div></section>
@@ -1046,7 +1049,7 @@ At the beginning of each opponent’s upkeep, Mogis deals 2 damage to that playe
     if(id==='staples')return 'staples';
     if(id==='counter')return 'counter';
     if(id==='proxy-wizard')return 'proxy-wizard';
-    if(id==='formats')return 'formats';
+    if(id==='formats'||id==='format-detail')return 'formats';
     return null;
   }
   /* Level navigation: every screen sits at one level, forward taps step one
@@ -1104,6 +1107,7 @@ At the beginning of each opponent’s upkeep, Mogis deals 2 damage to that playe
   document.querySelectorAll('[data-open]').forEach(function(b){b.addEventListener('click',function(){openView(b.dataset.open);if(b.dataset.jump){setTimeout(function(){var el=document.getElementById(b.dataset.jump);if(el)el.scrollIntoView({behavior:'smooth',block:'start'})},40)}})});
   document.querySelectorAll('[data-back]').forEach(function(b){b.addEventListener('click',goBack)});
   if(mainBtn)mainBtn.addEventListener('click',goMain);
+  window.HUBNAV={openView:openView,goBack:goBack};
   /* Splash front door: shown when the hub opens, dismissed by its Enter
      button. It lives outside the view system and is never pushed onto
      navStack, so Back from Home and the quick bar's Main button (goMain)
@@ -2971,6 +2975,172 @@ var FORMATS=[
   }
 ];
 
+/* Per-format guide: what you need, step-by-step setup, and the basic rules —
+   the detail page renders one of these for every format on the shelf. */
+var FMT_GUIDE={
+  "commander":{
+    need:"One 100-card Commander deck per player. Dice and a way to track life and commander damage help at a full table.",
+    setup:["Place your commander face-up in the command zone and shuffle the other 99 cards.","Roll for first player. Everyone starts at 40 life and draws 7.","Mulligans use the London rule — draw 7 each time, then put one card on the bottom of your library for each mulligan taken. In multiplayer, your first mulligan is free.","With three or more players, the player who goes first still draws a card on their first turn."],
+    rules:["Every card in the deck must fit your commander’s color identity — every mana symbol on the commander, rules text included, is allowed in; any other color is out.","Cast your commander from the command zone any time you could cast it. When it would die, be exiled, or go to your hand or library, you may return it to the command zone instead.","Each recast costs {2} more than the last — the commander tax.","Track combat damage from each commander separately: 21 or more from a single commander knocks that player out, whatever their life total.","Last player standing wins. You’re out at 0 life, 21 commander damage, 10 poison counters, or when you’d draw from an empty library."]},
+  "draft":{
+    need:"Three booster packs per player, all from the same set, plus a shared stack of basic lands to build with.",
+    setup:["Seat the pod in a circle — eight is classic, four to eight works. Everyone takes three unopened packs.","Open pack one and remove any token or ad cards (and the basic land, in sets that include one).","Draft: pick one card for your pile, pass the rest to your left. Keep picking and passing until the pack is gone.","Open pack two and pass to the right; open pack three and pass left again.","Build a deck of at least 40 cards from your picks, adding any number of basic lands. Everything unpicked goes in your pile as sideboard."],
+    rules:["40 cards minimum, lands included — 17 lands and 23 spells is the standard recipe.","Your whole drafted pool is your sideboard: between games you may swap freely or rebuild the deck entirely.","20 life, best-of-three matches, against a different member of the pod each round.","The games themselves are ordinary Magic — the only special rule is how the decks got built."]},
+  "sealed":{
+    need:"Six booster packs per player and a stack of basic lands.",
+    setup:["Open all six packs. Every card in them is your pool.","Sort by color and find the two colors with the best creatures, removal, and fixing — the rest of the pool is sideboard.","Build a deck of at least 40 cards; 17 lands is the standard start.","Keep the entire pool beside your deck — you’ll rebuild from it between games."],
+    rules:["You build solo, at your own pace: no passing, no signals, no draft clock.","Your entire pool is your sideboard, so between games you can switch colors completely if game one went badly.","20 life, best-of-three matches. This is the prerelease format — built for learning a brand-new set gently."]},
+  "standard":{
+    need:"A 60-card deck built from the currently legal Standard sets, plus a sideboard of up to 15 cards.",
+    setup:["Shuffle up and roll to decide who chooses play or draw.","Draw 7. If the hand doesn’t work, take a London mulligan: draw 7, then put one card on the bottom for each mulligan you’ve taken.","The player on the play skips their first draw step. Sideboards stay untouched until game two."],
+    rules:["60 cards minimum, at most 4 copies of anything except basic lands, 20 life.","Matches are best-of-three. Between games, swap cards between deck and sideboard freely — after boarding, the deck is still 60+ and the sideboard 15 or fewer.","Only the last few years of sets are legal, and sets rotate out once a year — last season’s deck may no longer be legal, so check before you sleeve up.","You lose at 0 life, 10 poison counters, or drawing from an empty library."]},
+  "pauper":{
+    need:"A 60-card deck where every card has been printed at common, plus a 15-card sideboard of commons.",
+    setup:["Shuffle up and roll to decide who chooses play or draw.","Draw 7. If the hand doesn’t work, take a London mulligan: draw 7, then put one card on the bottom for each mulligan you’ve taken.","Sideboards stay untouched until game two; matches are best-of-three."],
+    rules:["The one rule: every card must have a printing at common somewhere in Magic’s history. Any printing of that card is fine to play.","The pool never rotates — commons from 1993 to today are all legal, minus a banned list.","Otherwise it’s classic 60-card Magic: 4-copy limit, 20 life, best-of-three with sideboarding.","Top-tier decks cost a fraction of any other constructed format’s — that’s the whole point."]},
+  "modern":{
+    need:"A 60-card deck and 15-card sideboard, built from Eighth Edition and Mirrodin (2003) forward.",
+    setup:["Shuffle up and roll to decide who chooses play or draw.","Draw 7. If the hand doesn’t work, take a London mulligan: draw 7, then put one card on the bottom for each mulligan you’ve taken.","Sideboards stay untouched until game two; matches are best-of-three."],
+    rules:["Card pool: every regular set from Eighth Edition forward, plus the Modern Horizons sets. Nothing ever rotates out.","A banned list keeps the most broken decks in check; everything else is legal at up to 4 copies.","Expect games to hinge on turns three to five — cheap interaction is king, and every deck is built to do its thing fast or stop yours.","20 life, best-of-three, sideboard as normal."]},
+  "pioneer":{
+    need:"A 60-card deck and 15-card sideboard, built from Return to Ravnica (2012) forward.",
+    setup:["Shuffle up and roll to decide who chooses play or draw.","Draw 7. If the hand doesn’t work, take a London mulligan: draw 7, then put one card on the bottom for each mulligan you’ve taken.","Sideboards stay untouched until game two; matches are best-of-three."],
+    rules:["Card pool: Return to Ravnica forward, non-rotating — every set joins Pioneer as it rotates out of Standard.","No fetchlands: they were excluded from day one, which keeps mana honest and games a step slower than Modern.","A banned list applies; everything else in twelve-plus years of sets is open at 4 copies.","20 life, best-of-three, with power between Standard and Modern — interactive, creature-driven games."]},
+  "legacy":{
+    need:"A 60-card deck and 15-card sideboard drawn from nearly any set ever printed.",
+    setup:["Shuffle up and roll to decide who chooses play or draw.","Draw 7. If the hand doesn’t work, take a London mulligan: draw 7, then put one card on the bottom for each mulligan you’ve taken.","Sideboards stay untouched until game two; matches are best-of-three."],
+    rules:["Almost every card ever printed is legal; a banned list — not rotation — is the only fence.","Unlike Vintage, nothing here is ‘restricted’: a card is legal at 4 copies or banned outright.","This is where Magic’s most powerful spells live — Brainstorm, Force of Will, the original dual lands — and the free countermagic that keeps them honest.","20 life, best-of-three with sideboarding. A warning: the iconic cards are genuinely expensive."]},
+  "brawl":{
+    need:"A 60-card singleton deck led by a legendary creature or a planeswalker, using only Standard-legal cards.",
+    setup:["Place your commander in the command zone and shuffle the other 59.","For a duel, start at 25 life and the first player skips their opening draw. For multiplayer, start at 30 life and the first player does draw.","Draw 7; in multiplayer games the first mulligan is free."],
+    rules:["Commander’s deckbuilding rules with Standard’s card pool: singleton, color identity, command zone, and commander tax all apply.","Planeswalkers may be your commander here — regular Commander doesn’t allow that.","Commander damage is not tracked in Brawl; your life total is the only clock.","The pool rotates with Standard, so Brawl decks refresh as new sets land."]},
+  "cube":{
+    need:"The cube itself, basic lands for deckbuilding, and enough players to draft — eight is classic, fewer works.",
+    setup:["The curator shuffles the cube well and deals each player three face-down ‘packs’ of 15 cards.","Draft exactly like a booster draft: pick one, pass left; pack two passes right; pack three left.","Build 40-card decks from your picks plus basic lands from a land station."],
+    rules:["The games are pure Draft: 20 life, best-of-three, your unplayed picks are your sideboard, rebuild freely between games.","The cube is the format — its power level, colors, and archetypes are whatever the curator designed. Ask what’s in it before you draft.","Keep the cube list between sessions; swapping even a few cards reshapes the next draft."]},
+  "thg":{
+    need:"Four players, each with a deck for whatever base format you’re layering this onto — 60-card decks, Commander decks, or even Sealed pools.",
+    setup:["Pair into two teams; teammates sit side by side. Each team gets one shared life total: 30 for 60-card play. (Layering Commander? Agree on the team total before shuffling — 60 is the common pick.)","Each player shuffles their own deck and draws their own hand of 7. Each player’s first mulligan is free — it’s a multiplayer game.","Pick the starting team; both players on a team take every turn together."],
+    rules:["Teammates share a turn: untap together, each draws from their own deck, and move through every phase as one team.","You share life, poison, and decisions — but not hands, libraries, mana, or permanents. You may always look at your teammate’s hand and talk through plays.","Attack as a team: your creatures attack the defending team, and either defender may block any attacker.","Effects hitting ‘each opponent’ hit both heads of the other team. A team’s poison counters are shared — 15 loses the game.","A team loses when its shared life total reaches 0."]},
+  "planechase":{
+    need:"Your usual decks for the base format (Commander, usually), a planar deck of plane cards, and a planar die — or a normal d6, with 1 as chaos and 6 as planeswalk.",
+    setup:["Assemble the planar deck: 10 or more plane cards. Traditionally each player brings one; a single shared deck works fine at home. Keep phenomenon cards rare — a couple at most.","Shuffle the planar deck, set it beside the game, and reveal the top card — that’s the plane the game starts on.","Shuffle your own decks, set life totals for the base format, and draw opening hands as normal."],
+    rules:["The face-up plane’s ability applies to every player for as long as it stays face up.","On your turn, at sorcery speed, you may roll the planar die. The first roll each turn is free; each extra roll that turn costs {1} more than the one before.","Roll the planeswalk symbol: the current plane goes to the bottom of the planar deck and the next card is revealed as your new location.","Roll the chaos symbol: the current plane’s ‘whenever chaos ensues’ ability triggers.","A phenomenon is a one-time event: do what it says, then planeswalk on to the next card immediately.","Everything else follows the base format — the planes just keep changing the weather."]},
+  "archenemy":{
+    need:"A deck for every player (60-card or Commander), plus a scheme deck of at least 20 scheme cards for the archenemy.",
+    setup:["Choose the archenemy — the strongest player or the strongest deck takes the villain seat. Everyone else forms the hero team.","Life totals: the archenemy starts at 40; heroes start at 20 each (in Commander games, 40 each).","The archenemy shuffles the scheme deck and takes the first turn. Each hero shuffles their own deck and draws their own hand."],
+    rules:["At the start of the archenemy’s first main phase each turn, they set a scheme in motion: turn the top scheme face up and do what it says. Ongoing schemes stay in play until their condition is met.","The heroes take one shared turn together, like Two-Headed Giant — same phases, attacks planned as a team — but each hero keeps their own life total, deck, and board.","The archenemy may attack any heroes and split attacks between them.","The heroes win by reducing the archenemy to 0 life. The archenemy wins when every hero has been eliminated."]},
+  "oathbreaker":{
+    need:"A planeswalker, one instant or sorcery to serve as its Signature Spell, and 58 more singleton cards in the walker’s colors.",
+    setup:["Put your oathbreaker and its Signature Spell in the command zone; shuffle the other 58 cards.","Seat 3–4 players at 20 life each. Draw 7 — the player who goes first draws on turn one, and the first mulligan is free."],
+    rules:["Your Signature Spell may only be cast while your oathbreaker is on the battlefield — protect the planeswalker.","Both command-zone cards follow commander rules: when one would change zones, you may return it to the command zone instead, and each recast of either costs {2} more than the last.","Color identity is set by the oathbreaker; every card in the 58 must fit inside it.","There’s no commander damage in Oathbreaker — 20 life is the only clock. Last player standing wins."]},
+  "pauper-commander":{
+    need:"Any uncommon creature to command, and 99 cards that each have a common printing, all in the commander’s colors.",
+    setup:["Set your uncommon commander in the command zone and shuffle the 99.","Everyone starts at 30 life and draws 7. Multiplayer rules apply: the first player draws on turn one, and the first mulligan is free."],
+    rules:["Your commander is any creature printed at uncommon — it does not need to be legendary.","Every other card must have a common printing somewhere; if a card exists at common, it’s legal, whichever printing you own.","Command zone and commander tax work exactly like Commander.","The knockout number is 16 commander damage from a single commander, not 21.","Two famous exceptions: Rhystic Study and Mystic Remora are banned despite having common printings."]},
+  "tiny-leaders":{
+    need:"A legendary creature with mana value 3 or less, 49 more singleton cards that each cost 3 or less, and a 10-card sideboard (also all mana value 3 or less).",
+    setup:["Place your commander in the command zone, shuffle the 49, and start at 25 life each.","Draw 7. It’s a duel, so mulligans follow the normal London rule with no freebie.","Matches are best-of-three, with the 10-card sideboard swapped in between games."],
+    rules:["Every card in the deck — all 50, commander included — must have mana value 3 or less. No exceptions.","There is no commander damage: 25 life is the only life clock.","Spells with X in the cost are legal — X counts as 0 everywhere except the stack, so you can still pour all your mana into one Fireball-style finisher.","Singleton deckbuilding, color identity, the command zone, and commander tax all follow Commander."]},
+  "horde":{
+    need:"The Horde deck — about 100 cards of token-makers and cheap bodies, built to run itself — plus a normal deck for each survivor.",
+    setup:["Survivors sit together on one side; the Horde deck sits opposite, with one player nominated to flip its cards (the Horde itself makes no choices).","Set the team’s shared life total — 20 per survivor is the standard starting point.","The Horde takes the first three turns by itself to build a board. Then the survivors begin taking their shared turns."],
+    rules:["On the Horde’s turn, flip cards off its library until a non-token card appears. Everything flipped is cast for free, in the order revealed; token cards enter as the creatures they represent.","The Horde attacks with everything it can, every turn, and it never blocks. It has no hand and makes no decisions.","Damage dealt to the Horde doesn’t lower a life total — instead, it mills one card off the Horde’s library into its graveyard for each point of damage.","The survivors win when the Horde’s library is empty and it controls no creatures. The Horde wins when the team’s shared life total hits 0."]},
+  "dandan":{
+    need:"One pre-built shared deck: 80 mono-blue cards built around Dandân — counterspells, bounce, and library tricks — with plenty of Islands. One deck serves both players; nobody brings anything else.",
+    setup:["Put the single deck in the middle of the table. Both players will draw from it, and there is one shared graveyard.","20 life each. Shuffle well, decide who starts, and each player draws 7 from the shared deck."],
+    rules:["The only creature spell in the deck is Dandân itself — every copy anyone fights over comes out of the same library.","The top of the library is public strategy: bounce and put-back effects mean you often know exactly what your opponent is about to draw — and can arrange it.","Because the graveyard is shared too, anything that fishes cards out of it is contested ground.","You lose at 0 life — or when you must draw from the shared library and it’s empty. Emptying the deck on your opponent is a real win condition."]},
+  "battle-box":{
+    need:"One shared stack of spells, built once by its curator like a small cube — no lands in the stack — plus 10 lands per player, kept outside the game.",
+    setup:["Each player assembles their land set outside the game: classically one of each basic land plus five more lands of their choice, ten total.","Shuffle the shared stack and deal each player a hand of 7 from it. 20 life each."],
+    rules:["On your turn you may play one land from your land set — one per turn, every turn, so mana screw and mana flood simply don’t exist.","Every spell comes from the shared stack: your opponent is drawing from exactly the same pile as you.","The curator’s stack sets the power level and the feel of the games; tune it between sessions the way you’d tune a cube.","If the stack runs out mid-game, shuffle the shared graveyard into a new stack and keep playing."]},
+  "judges-tower":{
+    need:"One shared stack of the most complicated, interaction-heavy cards you can dig up. No life counters — there is no life total.",
+    setup:["Agree on the mana rule first: the classic setup is infinite mana of every color for everyone, so cost is never an excuse.","Deal opening hands from the tower — a few cards each is plenty — and pick a first player.","The whole table acts as judges: when someone thinks a rule was broken, they call it, argue it, and the table rules on it."],
+    rules:["The law: if you are able to cast a spell or activate an ability, you must — as soon as you legally can. Holding back is the one thing you’re not allowed to do.","You lose by breaking a rule: a missed mandatory trigger, an illegal play, an activation out of order. Get caught and you’re out.","There are no life totals and no damage race — somebody simply slips first. Then you shuffle up and go again.","Enforcement is the game: watch your opponents’ plays as closely as your own."]},
+  "mental-magic":{
+    need:"Any shared pile of cards with a good spread of mana costs — a box of draft leftovers is perfect. No lands required.",
+    setup:["Shuffle the pile in the middle. Each player draws 7 from it. 20 life each.","Agree on the challenge rule before you start (most tables: recite a card wrong and the spell fizzles) — and agree that phones stay in pockets."],
+    rules:["A card in your hand may be cast as ANY real Magic card with the exact same mana cost — but you must name it and recite what it does, correctly, from memory.","Each card name may be used only once per game, across both players. There is exactly one Brainstorm in the game; spend it well.","Alternatively, play any card face down as a land that taps for any color. That’s your only source of mana, so balance lands and spells.","Knowledge is the entire skill: the stack is shared, so the better encyclopedia wins."]},
+  "type-4":{
+    need:"One shared stack of the biggest, most overcosted spells in the collection — the bombs no other format can cast — and a way to deal or draft them out.",
+    setup:["Build the stack ahead of time from glorious haymakers. Deal hands to each player, or draft the stack like a mini-cube.","20 life each. Nobody needs lands: every player has unlimited mana of every color, all the time."],
+    rules:["You may cast only ONE spell per turn. That single constraint is the whole economy — make the one spell count.","Activated abilities are not spells, so they’re unlimited — remember that when building the stack.","Lands in the stack are unusual; include them only for their other effects, since mana is free.","Games are short, loud slugfests. Play as many as the evening holds."]},
+  "emperor":{
+    need:"Six players, each with a deck for the base format you’re layering this over (Commander is the house favorite), and a table big enough for two facing rows of three.",
+    setup:["Each team chooses its Emperor, who takes the middle seat; the two Generals sit on either side. Teams face each other across the table.","Life totals follow the base format. Each player shuffles their own deck and draws their own hand.","Roll to decide which team takes the first turn."],
+    rules:["Range of influence is 1: you can only attack, target, and affect players within one seat of you. Generals fight the General across from them; the Emperors begin the game out of everyone’s reach.","Deploy: tap a creature you control to hand control of it to the teammate beside you. That’s how armies march toward the front — or fall back to defend the throne.","When a player is eliminated, the seats close up: ranges reach one seat farther, and eventually the enemy Generals can get at the Emperor.","A team loses the moment its Emperor is eliminated — it doesn’t matter how many Generals are still standing."]},
+  "star":{
+    need:"Five players and five decks over any base format — traditionally one mono-color deck per player.",
+    setup:["Seat the table in color-wheel order — White, Blue, Black, Red, Green around the table — so each player sits between their two allied colors.","Life totals and deck construction follow the base format. Everyone shuffles up and draws as normal."],
+    rules:["The two players beside you are your allies: you can’t attack them, and the table usually agrees your spells leave them and their permanents alone.","The two players across from you are your enemies — conveniently, they’re also your enemy colors on the wheel.","You win the moment BOTH of your enemies are eliminated — you don’t have to outlast the whole table, and your allies may still be in the game when you take it.","Each of your allies shares one enemy with you, so races happen: helping an ally finish a shared enemy can end the game in your favor."]},
+  "vanguard":{
+    need:"Decks for the base format you’re layering this over, plus one oversized Vanguard character card per player — originals, or printed stand-ins.",
+    setup:["Each player picks a Vanguard character (deal them at random for chaos) and places it in their command zone. It is never part of your deck.","Before anyone draws, apply your character’s modifiers: its hand-size number adjusts your starting and maximum hand size, and its life number adjusts your starting life total.","Shuffle up and draw your modified opening hand."],
+    rules:["Your Vanguard card stays face-up in the command zone for the whole game, and its ability is always on — think of it as a personal emblem dealt before turn one.","If your character has an activated ability, you may activate it from the command zone whenever its timing allows.","Nothing can remove, bounce, or exile your Vanguard — it’s part of the game’s setup, not a normal permanent.","Everything else follows the base format underneath."]},
+  "winston":{
+    need:"Six booster packs between the two of you (three each) — or roughly 90 cube cards — plus basic lands for deckbuilding.",
+    setup:["Combine all the cards into one face-down main pile. (From packs, set aside basics, tokens, and ads as they turn up.)","Deal three face-down piles of one card each from the main pile. Decide who drafts first; you’ll alternate draft turns."],
+    rules:["On your draft turn, look at pile one. Take the whole pile if you like it; if not, add one card from the main pile to it and look at pile two. Same choice at pile two, then pile three.","If you pass on all three piles, you must take pile three — plus one extra blind card off the top of the main pile.","After a pile is taken, seed a fresh one-card pile in its place. Keep going until the main pile and all three piles are drafted.","Build 40-card decks from your pools, adding basic lands freely. 20 life, normal duel rules, and your whole pool is your sideboard."]},
+  "momir":{
+    need:"A 60-card deck of nothing but basic lands, the Momir Vig, Simic Visionary avatar — and a source of random creatures. This hub’s Momir Basic tool does the randomizing for paper play.",
+    setup:["Build the deck: 60 basic lands, usually a spread of all five types. Every card in hand is both a land drop and fuel for the avatar.","Put the Momir Vig avatar in the command zone, shuffle the 60 lands, and draw 7. Starting life is 24.","Open the Momir Basic tool (in this hub, or the standalone) on a phone at the table — it’s your random-creature generator."],
+    rules:["Once on each of your turns, at sorcery speed, you may pay {X} and discard a card: the avatar creates a token copy of a random creature with mana value exactly X.","The creature is truly random from all of Magic’s history — at high X you might hit a game-winner or flop into something useless. That gamble is the format.","There’s no deckbuilding and no sideboard: your deck is lands, and the discard is the real cost of every creature.","First player to take the other from 24 life to 0 wins."]}
+};
+
+/* Extra filter tags, derived from each format's own metadata: the strict
+   1v1 set and the quick/long split read the players and pace fields; the
+   rest are curated sets keyed by format id. */
+var EXTRA_TAGS={
+  nodeck:["dandan","battle-box","judges-tower","mental-magic","type-4","momir"],
+  team:["thg","emperor","archenemy","horde"],
+  cube:["cube","winston"]
+};
+function paceMax(p){var m=String(p).match(/\d+/g);if(!m)return 0;return Math.max.apply(null,m.map(Number))}
+function tagsFor(f){
+  var t=f.fits.slice();
+  if(f.players==="1v1")t.push("onevone");
+  var pm=paceMax(f.pace);
+  if(pm>0&&pm<=45&&!/draft|build/i.test(f.pace))t.push("quick");
+  if(pm>=90)t.push("long");
+  Object.keys(EXTRA_TAGS).forEach(function(k){ if(EXTRA_TAGS[k].indexOf(f.id)>-1)t.push(k); });
+  return t;
+}
+
+/* ----- Format detail page (opened from a tile in any of the three views) ----- */
+function renderDetail(f){
+  var g=FMT_GUIDE[f.id]||{need:"",setup:[],rules:[]};
+  var head=document.getElementById("format-detail-heading");
+  var stamp=document.getElementById("format-detail-stamp");
+  var body=document.getElementById("format-detail-body");
+  if(head)head.textContent=f.name;
+  if(stamp)stamp.textContent=f.fam;
+  if(!body)return;
+  var link="";
+  if(f.id==="commander")link='<p class="fmt-d-actions"><button class="btn teal" type="button" data-fmt-goto="commander-lab">Open the Commander Lab →</button></p>';
+  if(f.id==="momir")link='<p class="fmt-d-actions"><button class="btn teal" type="button" data-fmt-goto="momir-basic">Open the Momir Basic tool →</button></p>';
+  body.innerHTML='<article class="fmt-spot-panel" style="--fc:'+f.color+'">'
+    + '<p class="fmt-spot-fam">'+f.fam+'</p>'
+    + '<h3><span class="fmt-diamond"></span> '+f.name+'</h3>'
+    + '<p class="fmt-lede">'+f.blurb+'</p>'
+    + '<div class="fmt-spot-specs fmt-detail-specs">'
+    + specRows(f).map(function(r){return '<div class="fmt-spec"><b>'+r[0]+'</b><span>'+r[1]+'</span></div>'}).join("")
+    + '</div>'
+    + '<h4 class="fmt-d-h">What you need</h4><p class="fmt-d-p">'+g.need+'</p>'
+    + '<h4 class="fmt-d-h">Set up</h4><ol class="fmt-d-steps">'+g.setup.map(function(s){return "<li>"+s+"</li>"}).join("")+'</ol>'
+    + '<h4 class="fmt-d-h">How it plays — the basic rules</h4><ul class="fmt-spot-points">'+f.points.concat(g.rules).map(function(p){return "<li>"+p+"</li>"}).join("")+'</ul>'
+    + '<div class="fmt-spot-hook"><b>In this hub —</b> '+f.hook+'</div>'
+    + link
+    + '</article>';
+  var go=body.querySelector("[data-fmt-goto]");
+  if(go)go.addEventListener("click",function(){ if(window.HUBNAV)window.HUBNAV.openView(go.getAttribute("data-fmt-goto")); });
+}
+function openFormat(id){
+  for(var i=0;i<FORMATS.length;i++){
+    if(FORMATS[i].id===id){ renderDetail(FORMATS[i]); if(window.HUBNAV)window.HUBNAV.openView("format-detail"); return; }
+  }
+}
+
 function chips(f){
   return [f.players, f.deck, f.life + " life"].map(function(t){return "<li>"+t+"</li>"}).join("");
 }
@@ -2985,18 +3155,30 @@ function specs(f){
 var shelfGrid=document.getElementById("fmt-shelf-grid");
 if(shelfGrid){
   shelfGrid.innerHTML=FORMATS.map(function(f){
-    return '<article class="fmt-card" style="--fc:'+f.color+'">'
+    return '<article class="fmt-card" data-fid="'+f.id+'" style="--fc:'+f.color+'">'
       + '<div class="fmt-card-head"><div class="fmt-card-top"><span class="fmt-diamond"></span><h3>'+f.name+'</h3><span class="fmt-fam">'+f.fam+'</span></div>'
       + '<p class="fmt-blurb">'+f.blurb+'</p><ul class="fmt-chips">'+chips(f)+'</ul></div>'
       + '<div class="fmt-card-more"><div class="fmt-specs">'+specs(f)+'</div>'
       + '<p class="fmt-hook"><b>In this hub —</b> '+f.hook+'</p></div>'
-      + '<button class="fmt-fcard-btn" type="button" aria-expanded="false">Full specs ▾</button></article>';
+      + '<div class="fmt-card-actions"><button class="fmt-fcard-btn" type="button" aria-expanded="false">Full specs ▾</button>'
+      + '<button class="fmt-rundown-btn" type="button" aria-label="Open the full rundown for '+f.name+'">Rundown →</button></div></article>';
   }).join("");
   shelfGrid.querySelectorAll(".fmt-fcard-btn").forEach(function(btn){
     btn.addEventListener("click", function(){
       var card=btn.closest(".fmt-card"), open=card.classList.toggle("open");
       btn.setAttribute("aria-expanded", open);
       btn.textContent=open ? "Hide specs ▴" : "Full specs ▾";
+    });
+  });
+  shelfGrid.querySelectorAll(".fmt-card").forEach(function(card){
+    card.addEventListener("click", function(e){
+      if(e.target.closest("button"))return;
+      openFormat(card.getAttribute("data-fid"));
+    });
+  });
+  shelfGrid.querySelectorAll(".fmt-rundown-btn").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      openFormat(btn.closest(".fmt-card").getAttribute("data-fid"));
     });
   });
 }
@@ -3018,7 +3200,10 @@ if(spotIndex&&spotPanel){
         }).join("")
       + '</div>'
       + '<ul class="fmt-spot-points">'+f.points.map(function(p){return "<li>"+p+"</li>"}).join("")+'</ul>'
-      + '<div class="fmt-spot-hook"><b>In this hub —</b> '+f.hook+'</div>';
+      + '<div class="fmt-spot-hook"><b>In this hub —</b> '+f.hook+'</div>'
+      + '<button class="fmt-detail-btn" type="button">Full rundown — what you need, setup &amp; rules →</button>';
+    var db=spotPanel.querySelector(".fmt-detail-btn");
+    if(db)db.addEventListener("click", function(){ openFormat(f.id); });
     spotIndex.querySelectorAll(".fmt-spot-btn").forEach(function(b,j){ b.setAttribute("aria-selected", j===i); });
   }
   spotIndex.querySelectorAll(".fmt-spot-btn").forEach(function(b){
@@ -3028,10 +3213,19 @@ if(spotIndex&&spotPanel){
 }
 
 /* ----- View C: Head-to-Head ----- */
+var FILTERS=[
+  ["duo","Just two of us"],["pod","A full pod"],["onevone","True 1v1"],
+  ["packs","Fresh packs to crack"],["cheap","A tight budget"],
+  ["quick","Quick games"],["long","Long games"],
+  ["nodeck","No deckbuilding"],["team","Team games"],["cube","Uses a cube"]
+];
 var compareGrid=document.getElementById("fmt-compare-grid");
+var pickerEl=document.getElementById("fmt-picker");
+var pickStatus=document.getElementById("fmt-pick-status");
+var pickNone=document.getElementById("fmt-none");
 if(compareGrid){
   compareGrid.innerHTML=FORMATS.map(function(f){
-    return '<article class="fmt-col" data-fits="'+f.fits.join(" ")+'" style="--fc:'+f.color+'">'
+    return '<article class="fmt-col" tabindex="0" role="button" aria-label="Open the full rundown for '+f.name+'" data-fid="'+f.id+'" data-fits="'+tagsFor(f).join(" ")+'" style="--fc:'+f.color+'">'
       + '<h3><span class="fmt-diamond"></span>'+f.name+'</h3>'
       + '<dl>'
       + '<div><dt>Players</dt><dd>'+f.players+'</dd></div>'
@@ -3041,21 +3235,54 @@ if(compareGrid){
       + '<div><dt>Pace</dt><dd>'+f.pace+'</dd></div>'
       + '</dl>'
       + '<p class="fmt-pick-line">'+f.blurb.split("—")[0].split(".")[0]+'.</p>'
-      + '<span class="fmt-pick-badge">Tonight\u2019s pick</span></article>';
+      + '<p class="fmt-col-cta">Tap for setup &amp; rules →</p></article>';
   }).join("");
-  document.querySelectorAll(".fmt-pk").forEach(function(pk){
-    pk.addEventListener("click", function(){
-      var wasOn=pk.getAttribute("aria-pressed")==="true";
-      document.querySelectorAll(".fmt-pk").forEach(function(p){ p.setAttribute("aria-pressed","false"); });
-      compareGrid.querySelectorAll(".fmt-col").forEach(function(c){ c.classList.remove("pick"); });
-      compareGrid.classList.remove("has-pick");
-      if(!wasOn){
-        pk.setAttribute("aria-pressed","true");
-        compareGrid.classList.add("has-pick");
-        compareGrid.querySelectorAll('.fmt-col[data-fits~="'+pk.dataset.pick+'"]').forEach(function(c){ c.classList.add("pick"); });
-      }
-    });
+  compareGrid.querySelectorAll(".fmt-col").forEach(function(col){
+    function go(){ openFormat(col.getAttribute("data-fid")); }
+    col.addEventListener("click", go);
+    col.addEventListener("keydown", function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } });
   });
+  /* Multi-select filters: any number of chips can be on at once, and the
+     track shows only the formats that match ALL of the active filters. */
+  var activeFilters={};
+  var clearBtn=null;
+  function applyFilters(){
+    var keys=Object.keys(activeFilters), shown=0;
+    compareGrid.querySelectorAll(".fmt-col").forEach(function(c){
+      var fits=" "+c.getAttribute("data-fits")+" ";
+      var ok=true;
+      for(var i=0;i<keys.length;i++){ if(fits.indexOf(" "+keys[i]+" ")<0){ ok=false; break; } }
+      c.style.display=ok?"":"none";
+      if(ok)shown++;
+    });
+    if(pickNone)pickNone.hidden=shown>0;
+    if(pickStatus)pickStatus.textContent=keys.length
+      ? "Showing "+shown+" of "+FORMATS.length+" formats — the ones that match every selected filter. Tap a tile for its full rundown."
+      : "Showing all "+FORMATS.length+" formats. Tap a tile for its full rundown: what you need, setup, and the basic rules.";
+    if(clearBtn)clearBtn.disabled=keys.length===0;
+  }
+  if(pickerEl){
+    FILTERS.forEach(function(fd){
+      var b=document.createElement("button");
+      b.type="button"; b.className="fmt-pk"; b.setAttribute("aria-pressed","false"); b.setAttribute("data-pick",fd[0]); b.textContent=fd[1];
+      b.addEventListener("click", function(){
+        var on=b.getAttribute("aria-pressed")==="true";
+        b.setAttribute("aria-pressed", String(!on));
+        if(on)delete activeFilters[fd[0]]; else activeFilters[fd[0]]=true;
+        applyFilters();
+      });
+      pickerEl.appendChild(b);
+    });
+    clearBtn=document.createElement("button");
+    clearBtn.type="button"; clearBtn.className="fmt-pk fmt-pk-clear"; clearBtn.textContent="Clear filters"; clearBtn.disabled=true;
+    clearBtn.addEventListener("click", function(){
+      activeFilters={};
+      pickerEl.querySelectorAll(".fmt-pk[data-pick]").forEach(function(p){ p.setAttribute("aria-pressed","false"); });
+      applyFilters();
+    });
+    pickerEl.appendChild(clearBtn);
+  }
+  applyFilters();
 }
 
 /* ----- Change view wiring ----- */
