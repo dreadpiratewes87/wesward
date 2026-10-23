@@ -4,8 +4,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Reality Fracture Draft Simulator</title>
-<link rel="apple-touch-icon" href="apple-touch-icon.png?v=2" />
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=2" />
 <style>
 :root{
   --bg:#0d1117; --panel:#161b22; --panel2:#1c2330; --line:#2a3342;
@@ -33,8 +31,9 @@ body{margin:0;background:var(--bg);color:var(--txt);font-family:-apple-system,Bl
 .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden;cursor:pointer;transition:transform .12s,border-color .12s;position:relative}
 .card:hover{transform:translateY(-2px);border-color:#4a5a75}
 .card img{width:100%;display:block;aspect-ratio:5/7;object-fit:cover;background:var(--panel2)}
-.card .cname{font-weight:600;font-size:.8rem;line-height:1.2;padding:6px 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.rar{position:absolute;top:6px;right:6px;font-size:.68rem;font-weight:700;padding:2px 7px;border-radius:6px;letter-spacing:.04em}
+.card .cname{font-weight:600;font-size:.8rem;line-height:1.2;padding:6px 8px;display:flex;align-items:center;justify-content:space-between;gap:6px}
+.card .cname .n{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.rar{flex:none;font-size:.68rem;font-weight:700;padding:2px 7px;border-radius:6px;letter-spacing:.04em}
 .rar.M{background:#3d1f22;color:var(--r-m);border:1px solid var(--r-m)}
 .rar.R{background:#38300f;color:var(--r-r);border:1px solid var(--r-r)}
 .rar.U{background:#232c3b;color:var(--r-u);border:1px solid var(--r-u)}
@@ -108,43 +107,6 @@ const CARDS = [{"n":"Enlightened Confidant","c":"{1}{W}","t":"Creature 2/1","r":
 <script>
 const GRADE_VAL = {'S':12,'A+':11,'A':10,'A-':9,'B+':8,'B':7,'B-':6,'C+':5,'C':4,'C-':3,'D+':2,'D':1,'F':0};
 const POOL = {M:[],R:[],U:[],C:[]};
-const FRA_PAIRS = [
-  ["Arni, Renowned Champion","Arni, Humble Scribe"],
-  ["Chandra, Torch of Defiance","Chandra, Chill of Compliance"],
-  ["Danitha, Sword of Hope","Danitha, Spear of Agony"],
-  ["Edgar, Ancient Bloodlord","Edgar, Moonlit Sovereign"],
-  ["Fblthp, Impossibly Lost","Fblthp, Knows the Way"],
-  ["Gallia, the Merrymaker","Gallia, Tragic Host"],
-  ["Garruk, Curse Breaker","Garruk, Veiled Butcher"],
-  ["Ghalta the Unstoppable","Ghalta the Immovable"],
-  ["Hapatra, the Desert Fang","Hapatra, the Desert Frost"],
-  ["Jiang Yanggu, Never Alone","Jiang Yanggu, Alone"],
-  ["Karn, Argent Defender","Karn, Gilded Guardian"],
-  ["Liliana the Repentant","Liliana the Faultless"],
-  ["Loot, the Nexus","Loot, the Anomaly"],
-  ["Lyra, Archangel of Dawn","Lyra, Tolarian Archangel"],
-  ["Mabel, Valley Hero","Mabel, Bitter Recluse"],
-  ["Marwyn, the Preserver","Marwyn, the Clearcutter"],
-  ["Pia, Determined Rebuilder","Pia, Aether Ascetic"],
-  ["Proft, Consulting Detective","Proft, Sinister Mastermind"],
-  ["Ruric Thar, Magecrusher","Ruric Thar, Biomagus"],
-  ["Saheeli, Jewel of Avishkar","Saheeli, Consul of Oversight"],
-  ["Samut, Hazoret's Champion","Samut, Tyrant of Naktamun"],
-  ["Tetsuko Umezawa, Fugitive","Tetsuko Umezawa, Pursuer"],
-  ["Teyo, Lightshield Expert","Teyo, Diamondblade Mage"],
-  ["Tomik, Orzhov Lawmage","Tomik, Izzet Sparkmage"],
-  ["Traxos, Scourge Eternal","Traxos, Academy Guardian"],
-  ["Vraska, the Cutting Glare","Vraska, Soul of Stone"],
-  ["Way of the Mentor","Way of the Healer"],
-  ["Way of the Mentor","Way of the Cryomancer"],
-  ["Way of the Mentor","Way of the Deathbringer"],
-  ["Way of the Mentor","Way of the Warlord"],
-  ["Winter, Tormented Loner","Winter, Team Player"],
-  ["Yargle, Glutton of Urborg","Yargle, Goliath of Otaria"],
-  ["Yoshimaru, Beloved Companion","Yoshimaru, Scrappy Stray"],
-  ["Yuriko, Hope from the Shadows","Yuriko, Blade of the Mighty"]
-];
-const FRA_PAIR_NAMES = new Set(); FRA_PAIRS.forEach(p=>{FRA_PAIR_NAMES.add(p[0]);FRA_PAIR_NAMES.add(p[1]);});
 CARDS.forEach(c=>{ if(POOL[c.r]) POOL[c.r].push(c); });
 const COLOR_NAME = {W:'White',U:'Blue',B:'Black',R:'Red',G:'Green'};
 const GROUP_ORDER = ['White','Blue','Black','Red','Green','Multi','Colorless'];
@@ -172,40 +134,25 @@ function colorGroup(c){
   return COLOR_NAME[cols[0]];
 }
 function buildRealPack(){
-  // Reality Fracture pack: 1 rare/mythic, 3 echoed-pair cards (2 paired + 1 single),
-  // 3 uncommons, 7 commons. Pair cards are excluded from general pools to avoid dupes.
+  // A realistic 14-card draft booster: 1 rare/mythic, 3 uncommons, 10 commons.
+  // Common lands are capped at 1 per pack — real collation spreads the land
+  // cycle out, you basically never see 3 nonbasic lands in a paper pack.
   const pack=[]; const used=new Set(); let landTaken=false;
   function isLand(c){ return /Land/.test(c.t||''); }
-  function byName(n){ return CARDS.find(c=>c.n===n); }
-  function take(pool,capLand,excludePairs){
+  function take(pool,capLand){
     let guard=0;
     while(guard++<500){
       const c=pool[Math.floor(Math.random()*pool.length)];
       if(!c || used.has(c.n)) continue;
-      if(excludePairs && FRA_PAIR_NAMES.has(c.n)) continue;
       if(capLand && landTaken && isLand(c)) continue;
       used.add(c.n); pack.push(c);
       if(isLand(c)) landTaken=true;
-      return c;
+      return;
     }
   }
-  // 1. rare/mythic (not from pair sheet)
-  take(Math.random()<1/7.5 && POOL.M.length ? POOL.M : POOL.R, false, true);
-  // 2. echoed pair: pick a random pair, add both
-  const pr = FRA_PAIRS[Math.floor(Math.random()*FRA_PAIRS.length)];
-  const pa = byName(pr[0]), pb = byName(pr[1]);
-  if(pa && !used.has(pa.n)){ used.add(pa.n); pack.push(pa); }
-  if(pb && !used.has(pb.n)){ used.add(pb.n); pack.push(pb); }
-  // 3. one unpaired pair-sheet card
-  let guard=0;
-  while(guard++<200){
-    const pr2 = FRA_PAIRS[Math.floor(Math.random()*FRA_PAIRS.length)];
-    const c = byName(pr2[Math.floor(Math.random()*2)]);
-    if(c && !used.has(c.n)){ used.add(c.n); pack.push(c); break; }
-  }
-  // 4. fill: 3 uncommons, 7 commons (excluding pair cards)
-  for(let i=0;i<3;i++) take(POOL.U.length?POOL.U:POOL.C, false, true);
-  for(let i=0;i<7;i++) take(POOL.C.length?POOL.C:POOL.U, true, true);
+  take(Math.random()<1/7.5 && POOL.M.length ? POOL.M : POOL.R); // mythic ~1 in 7.5 packs
+  for(let i=0;i<3;i++) take(POOL.U.length?POOL.U:POOL.C);
+  for(let i=0;i<10;i++) take(POOL.C.length?POOL.C:POOL.U,true);
   return pack;
 }
 // How an AI drafter thinks: take the best card early, then commit to the two
@@ -261,49 +208,130 @@ function scoreToLetter(s){
   if(s>=0.5) return 'D';
   return 'F';
 }
-// Grade one of Wes's picks: compare against the best card actually in the
-// pack at that moment, weigh color fit vs his committed colors, and flag
-// curve pile-ups.
-function gradeWesPick(card,packBefore,poolBefore,packNo,pickNo){
-  const g=GRADE_VAL[card.g]||0;
-  const best=Math.max.apply(null,packBefore.map(c=>GRADE_VAL[c.g]||0));
-  const diff=best-g;
-  const colors=aiColors(poolBefore);
-  const cols=cardColors(card);
-  const onColor=colors.length===0||cols.length===0||cols.some(x=>colors.indexOf(x)>=0);
-  let score=10-diff*1.5;
-  const notes=[];
-  if(diff===0){ notes.push('Best card in the pack.'); }
-  else{
-    const better=packBefore.filter(c=>c!==card&&(GRADE_VAL[c.g]||0)===best)[0];
-    if(better) notes.push('Better available: '+better.n+' ('+better.g+').');
-  }
-  if(colors.length){
-    const cnames=colors.map(x=>COLOR_NAME[x]).join('/');
-    if(onColor){ score+=1; notes.push('On-color for your '+cnames+'.'); }
-    else{
-      let bo=-1,boc=null;
-      packBefore.forEach(c=>{
-        if(c===card) return;
-        const cc=cardColors(c);
-        if(cc.length===0||cc.some(x=>colors.indexOf(x)>=0)){
-          const gv=GRADE_VAL[c.g]||0;
-          if(gv>bo){ bo=gv; boc=c; }
-        }
-      });
-      if(boc&&bo>=g-1){ score-=2; notes.push('Off-color while '+boc.n+' ('+boc.g+') fit your '+cnames+'.'); }
-      else if(g-bo>=2){ score+=0.5; notes.push('Off-color bomb — taking the power is defensible.'); }
-      else{ score-=1; notes.push('Off-color pick.'); }
+// --- Color commitment and effective value ---------------------------------
+// A card's raw guide grade is NOT its value to this pool. Once your colors
+// start committing, every pip you cannot pay discounts the card, and the
+// discount grows as the draft goes on: a splash you could still pivot into
+// in Pack 1 is a dead card in Pack 3, and a double-pip off-color card is
+// the hardest splash of all. Grades below compare EFFECTIVE values — raw
+// grade minus the commitment-stage pip penalty — never raw grades alone.
+function pipTokens(c){
+  const front=(c.c||'').split('//')[0];
+  const toks=[]; let m; const re=/\{([^}]+)\}/g;
+  while((m=re.exec(front))!==null) toks.push(m[1]);
+  return toks;
+}
+function offPips(c,colors){
+  // colors: committed color letters, e.g. ['R','B']
+  if(!colors.length) return {n:0,cols:[]};
+  let n=0; const cols=[];
+  pipTokens(c).forEach(t=>{
+    if(/^\d+$/.test(t)||t==='X'||t==='C') return;
+    if(t.indexOf('/')>=0){
+      const parts=t.split('/');
+      if(parts.some(p=>/^\d+$/.test(p))) return; // {2/W} style: payable with generic mana
+      if(parts.some(p=>colors.indexOf(p)>=0)) return; // hybrid: one payable side is enough
+      n++; parts.forEach(p=>{ if(cols.indexOf(p)<0) cols.push(p); });
+      return;
     }
+    if(colors.indexOf(t)<0){ n++; if(cols.indexOf(t)<0) cols.push(t); }
+  });
+  return {n:n,cols:cols};
+}
+function commitmentStage(poolBefore){
+  const total=poolBefore.length;
+  if(total<8) return 'early';   // Pack 1, still forming — stay open
+  if(total<28) return 'mid';    // rest of Pack 1 + Pack 2 — committing
+  return 'late';                // Pack 3 — colors are locked
+}
+const STAGE_PIP_PENALTY={early:1,mid:2,late:3};
+function effectiveVal(c,colors,stage){
+  const raw=GRADE_VAL[c.g]||0;
+  if(!colors.length) return {raw:raw,eff:raw,off:{n:0,cols:[]}};
+  const off=offPips(c,colors);
+  return {raw:raw,eff:raw-off.n*STAGE_PIP_PENALTY[stage],off:off};
+}
+function valToLetter(v){
+  const names=Object.keys(GRADE_VAL).sort((a,b)=>GRADE_VAL[b]-GRADE_VAL[a]);
+  for(const nm of names){ if(v>=GRADE_VAL[nm]-0.5) return nm; }
+  return 'F';
+}
+function fitLabel(c,colors){
+  // Self-contained color-fit description FOR THIS CARD ONLY, with its cost,
+  // so a note can never read as if it described a different card.
+  const cost=(c.c||'').split('//')[0].trim();
+  const cnames=colors.map(x=>COLOR_NAME[x]).join('/');
+  if(!cost||cardColors(c).length===0) return 'colorless ('+(cost||'land')+') — castable in any deck';
+  const off=offPips(c,colors);
+  if(off.n===0) return 'castable on your '+cnames+' mana ('+cost+')';
+  return 'off-color for your '+cnames+' ('+cost+' needs '+off.cols.map(x=>COLOR_NAME[x]).join('/')+')';
+}
+function typeCounts(pool){
+  let cre=0,spl=0;
+  pool.forEach(c=>{
+    if(/Creature/.test(c.t||'')) cre++;
+    else if(!/Land/.test(c.t||'')) spl++;
+  });
+  return {cre:cre,spl:spl};
+}
+// Grade one of Wes's picks against the best card for HIS POOL in the pack at
+// that moment (effective value, above), and flag curve pile-ups plus
+// creature/spell balance problems as the end of the draft approaches.
+function gradeWesPick(card,packBefore,poolBefore,packNo,pickNo){
+  const colors=aiColors(poolBefore);
+  const stage=commitmentStage(poolBefore);
+  const cnames=colors.map(x=>COLOR_NAME[x]).join('/');
+  const mine=effectiveVal(card,colors,stage);
+  let bestEff=-1e9,bestCard=null,rawBest=-1,rawCard=null;
+  packBefore.forEach(c=>{
+    const info=effectiveVal(c,colors,stage);
+    if(info.eff>bestEff){ bestEff=info.eff; bestCard=c; }
+    if(info.raw>rawBest){ rawBest=info.raw; rawCard=c; }
+  });
+  const diff=bestEff-mine.eff;
+  const score=10-Math.max(0,diff)*1.5;
+  const notes=[];
+  if(diff<=0){
+    if(rawCard&&rawCard!==card&&rawBest>mine.raw){
+      notes.push('Best pick for your pool. '+rawCard.n+' ('+rawCard.g+') grades higher on raw power, but it is '+fitLabel(rawCard,colors)+' — for this pool it is really about a '+valToLetter(effectiveVal(rawCard,colors,stage).eff)+', so it does not beat your pick.');
+    }else{
+      notes.push('Best card in the pack for your pool.');
+    }
+  }else if(bestCard&&bestCard!==card){
+    notes.push('Better available for your '+(cnames||'pool')+': '+bestCard.n+' ('+bestCard.g+') — '+fitLabel(bestCard,colors)+'.');
+  }
+  if(!colors.length){
+    notes.push('Early pick — no colors committed yet; taking power and staying open.');
+  }else if(mine.off.n===0){
+    // Explain a pick that only LOOKS off-color (hybrid / generic-hybrid pips)
+    const looksOff=cardColors(card).some(x=>colors.indexOf(x)<0);
+    if(looksOff) notes.push('Your pick only looks off-color — it is '+fitLabel(card,colors)+'.');
   }else{
-    notes.push('Early pick — taking power before committing to colors.');
+    if(stage==='late') notes.push('Your pick is '+fitLabel(card,colors)+'. In Pack 3 there is almost no time or fixing left to splash it — this grade counts it as nearly a dead pick.');
+    else if(stage==='mid') notes.push('Your pick is '+fitLabel(card,colors)+'. That splash/pivot cost is counted in this grade.');
+    else notes.push('Your pick is '+fitLabel(card,colors)+', but this early a pivot is still cheap.');
   }
   if(poolBefore.length>=8){
     const c=cmc(card);
     const atCmc=poolBefore.filter(x=>cmc(x)===c).length+1;
     if(atCmc>=7) notes.push('Curve is getting heavy at '+c+' mana ('+atCmc+' cards).');
   }
-  return {letter:scoreToLetter(score),score:score,notes:notes,card:card,packNo:packNo,pickNo:pickNo,diff:diff};
+  // Creature / spell balance — soft heads-up late in Pack 2, a real warning
+  // in Pack 3, when there are few picks left to fix it. A playable deck
+  // wants roughly 15 creatures; lands are excluded from both counts.
+  const after=typeCounts(poolBefore.concat([card]));
+  const totalAfter=poolBefore.length+1;
+  const picksLeft=ROUNDS*PACK_SIZE-totalAfter;
+  if(totalAfter>=28){
+    if(after.cre<=10) notes.push('Creature warning: only '+after.cre+' creatures with '+picksLeft+' picks left — you need creatures with almost every remaining pick to reach a playable ~15.');
+    else if(after.cre<=12&&picksLeft<=10) notes.push('Creature count is light: '+after.cre+' creatures with '+picksLeft+' picks left — prioritize creatures from here.');
+    else if(after.spl>=11&&after.cre<=14) notes.push('Spell-heavy warning: '+after.spl+' spells vs '+after.cre+' creatures with '+picksLeft+' picks left — prioritize creatures from here.');
+    else if(after.cre>=20) notes.push('Creature-heavy: '+after.cre+' creatures and only '+after.spl+' spells — a trick or removal spell is worth more than another body from here.');
+  }else if(totalAfter>=20){
+    if(after.cre<=8) notes.push('Heads up — creature count is low for this late: only '+after.cre+' creatures with '+picksLeft+' picks left. Start prioritizing creatures.');
+    else if(after.spl>=10&&after.cre<=11) notes.push('Heads up — spells are piling up ('+after.spl+' spells vs '+after.cre+' creatures) with '+picksLeft+' picks left. Prioritize creatures from here.');
+  }
+  return {letter:scoreToLetter(score),score:score,notes:notes,card:card,packNo:packNo,pickNo:pickNo,diff:Math.max(0,diff)};
 }
 
 function newDraft(){
@@ -336,9 +364,8 @@ function renderPack(){
   pack.forEach(c=>{
     const d=document.createElement('div');
     d.className='card';
-    d.innerHTML='<span class="rar '+c.r+'">'+c.r+'</span>'
-      +'<img src="'+c.img+'" alt="'+esc(c.n)+'" loading="lazy" onerror="this.outerHTML=\'<div class=&quot;cname&quot; style=&quot;padding:24px 8px;white-space:normal&quot;>'+esc(c.n)+'</div>\'">'
-      +'<div class="cname">'+esc(c.n)+'</div>';
+    d.innerHTML='<img src="'+c.img+'" alt="'+esc(c.n)+'" loading="lazy" onerror="this.outerHTML=\'<div class=&quot;cname&quot; style=&quot;padding:24px 8px;white-space:normal&quot;>'+esc(c.n)+'</div>\'">'
+      +'<div class="cname"><span class="n">'+esc(c.n)+'</span><span class="rar '+c.r+'">'+c.r+'</span></div>';
     d.addEventListener('click',()=>doWesPick(c));
     grid.appendChild(d);
   });
@@ -424,7 +451,7 @@ function endDraft(){
   const overall=scoreToLetter(avg);
   const bestTaken=picks.filter(p=>p.diff===0).length;
   let html='<h2>Draft report — <span style="color:var(--gold)">'+overall+'</span></h2>'
-    +'<p class="suggest">You took the best card available on '+bestTaken+' of '+picks.length+' picks.</p>';
+    +'<p class="suggest">You took the best card for your pool — raw power discounted for the colors and pips you could actually pay at that point — on '+bestTaken+' of '+picks.length+' picks.</p>';
   [1,2,3].forEach(pn=>{
     html+='<h3>Pack '+pn+'</h3>';
     picks.filter(p=>p.packNo===pn).forEach(p=>{
