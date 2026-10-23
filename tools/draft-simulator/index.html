@@ -418,18 +418,139 @@ document.getElementById('gradeNextBtn').addEventListener('click',()=>{
   const f=afterGrade; afterGrade=null;
   if(f) f();
 });
-function poolHTML(pool){
-  const groups={};
-  pool.forEach(c=>{ const g=colorGroup(c); (groups[g]=groups[g]||[]).push(c); });
-  let html='';
-  GROUP_ORDER.forEach(g=>{
-    const arr=(groups[g]||[]).sort((a,b)=>(GRADE_VAL[b.g]||0)-(GRADE_VAL[a.g]||0));
-    if(!arr.length) return;
-    html+='<h3>'+g+' ('+arr.length+')</h3>'+arr.map(c=>
-      '<div class="prow"><span class="pname">'+esc(c.n)+'</span><span class="pgrade">'+esc(c.g)+'</span></div>'
-    ).join('');
+// --- Pool sorting / filtering ----------------------------------------------
+// Sort keys are applied in the order they are tapped (first tap = primary
+// key); color and type filters are multi-select; Clear resets everything
+// back to the whole pool in the default color-grouped view.
+const poolUI={sorts:[],colors:[],types:[]};
+const SORT_KEYS=[['mv','Mana cost'],['color','Color'],['type','Type'],['role','Role'],['grade','Grade']];
+function typeLabel(c){
+  const t=c.t||'';
+  if(/Land/.test(t)) return 'Land';
+  if(/Creature/.test(t)) return 'Creature';
+  if(/Planeswalker/.test(t)) return 'Planeswalker';
+  if(/Instant/.test(t)) return 'Instant';
+  if(/Sorcery/.test(t)) return 'Sorcery';
+  if(/Enchantment/.test(t)) return 'Enchantment';
+  if(/Artifact/.test(t)) return 'Artifact';
+  return 'Other';
+}
+function cardRole(c){
+  const t=c.t||'', note=(c.note||'').toLowerCase();
+  if(/Land/.test(t)) return 'Land / fixing';
+  if(/destroy|damage|fight|exile|tuck|burn|wipe|-1\/-1/.test(note)) return 'Removal';
+  if(/counter target|counterspell|negate/.test(note)) return 'Counterspell';
+  if(/bounce|return target.*hand|tempo/.test(note)) return 'Bounce / tempo';
+  if(/draw|loot|impulse|card advantage/.test(note)) return 'Card draw';
+  if(/ramp|mana rock|adds .*mana/.test(note)) return 'Ramp / fixing';
+  if(/flashback|recursion|reanimate|return.*graveyard to your hand/.test(note)) return 'Recursion';
+  if(/hexproof|indestructible|protection/.test(note)) return 'Protection';
+  if(/pump|anthem|team \+|\+1\/\+1 counter/.test(note)) return 'Pump / anthem';
+  if(/surveil|scry/.test(note)) return 'Selection';
+  if(/Creature/.test(t)) return 'Creature';
+  return 'Spell';
+}
+function sortVal(c,key){
+  if(key==='mv') return cmc(c);
+  if(key==='color') return GROUP_ORDER.indexOf(colorGroup(c));
+  if(key==='type') return typeLabel(c);
+  if(key==='role') return cardRole(c);
+  if(key==='grade') return -(GRADE_VAL[c.g]||0);
+  return 0;
+}
+function poolFiltered(pool){
+  return pool.filter(c=>{
+    if(poolUI.colors.length){
+      // A single-color chip matches any card that CONTAINS that color, so a
+      // Green/White card shows under Green and under White (it is castable
+      // in either deck) — not only under a separate Multicolor bucket.
+      const cols=cardColors(c);
+      const match=poolUI.colors.some(sel=>{
+        if(sel==='Multi') return cols.length>1;
+        if(sel==='Colorless') return cols.length===0;
+        const letter=Object.keys(COLOR_NAME).filter(k=>COLOR_NAME[k]===sel)[0];
+        return cols.indexOf(letter)>=0;
+      });
+      if(!match) return false;
+    }
+    if(poolUI.types.length&&poolUI.types.indexOf(typeLabel(c))<0) return false;
+    return true;
   });
-  return html||'<p class="suggest">No cards yet.</p>';
+}
+function poolSorted(arr){
+  const keys=poolUI.sorts;
+  return arr.slice().sort((a,b)=>{
+    for(const k of keys){
+      const va=sortVal(a,k), vb=sortVal(b,k);
+      if(va<vb) return -1;
+      if(va>vb) return 1;
+    }
+    return a.n.localeCompare(b.n);
+  });
+}
+function poolRowHTML(c){
+  return '<div class="prow"><span class="pname">'+esc(c.n)+' <span style="color:var(--dim);font-size:.8rem">· MV '+cmc(c)+' · '+typeLabel(c)+' · '+cardRole(c)+'</span></span><span class="pgrade">'+esc(c.g)+'</span></div>';
+}
+function poolControlsHTML(pool){
+  const typeSet=[]; pool.forEach(c=>{ const t=typeLabel(c); if(typeSet.indexOf(t)<0) typeSet.push(t); });
+  let h='<div style="display:flex;flex-wrap:wrap;gap:6px;margin:0 0 6px">';
+  h+='<span style="color:var(--dim);font-size:.82rem;align-self:center">Sort by:</span>';
+  SORT_KEYS.forEach(([k,label])=>{
+    const i=poolUI.sorts.indexOf(k);
+    h+='<button style="padding:5px 11px;font-size:.82rem;'+(i>=0?'background:#1f6feb;border-color:#1f6feb':'')+'" onclick="poolUIAct(\'sort\',\''+k+'\')">'+label+(i>=0?' '+(i+1):'')+'</button>';
+  });
+  h+='</div><div style="display:flex;flex-wrap:wrap;gap:6px;margin:0 0 6px">';
+  h+='<span style="color:var(--dim);font-size:.82rem;align-self:center">Colors:</span>';
+  GROUP_ORDER.forEach(g=>{
+    if(!pool.some(c=>colorGroup(c)===g)) return;
+    const on=poolUI.colors.indexOf(g)>=0;
+    h+='<button style="padding:5px 11px;font-size:.82rem;'+(on?'background:#1f6feb;border-color:#1f6feb':'')+'" onclick="poolUIAct(\'color\',\''+g+'\')">'+g+'</button>';
+  });
+  h+='</div><div style="display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px">';
+  h+='<span style="color:var(--dim);font-size:.82rem;align-self:center">Types:</span>';
+  typeSet.forEach(t=>{
+    const on=poolUI.types.indexOf(t)>=0;
+    h+='<button style="padding:5px 11px;font-size:.82rem;'+(on?'background:#1f6feb;border-color:#1f6feb':'')+'" onclick="poolUIAct(\'type\',\''+t+'\')">'+t+'</button>';
+  });
+  const active=poolUI.sorts.length||poolUI.colors.length||poolUI.types.length;
+  h+='<button style="padding:5px 11px;font-size:.82rem;'+(active?'background:#3d1f22;border-color:#e6484d':'opacity:.55')+'" onclick="poolUIAct(\'clear\',\'\')">Clear — show whole pool</button>';
+  h+='</div>';
+  return h;
+}
+function poolListHTML(pool){
+  const arr=poolFiltered(pool);
+  if(poolUI.sorts.length){
+    if(!arr.length) return '<p class="suggest">No cards match those filters.</p>';
+    return '<p class="suggest" style="margin:0 0 6px">Showing '+arr.length+' of '+pool.length+' cards · sorted by '+poolUI.sorts.map(k=>SORT_KEYS.filter(s=>s[0]===k)[0][1]).join(' → ')+'</p>'
+      +poolSorted(arr).map(poolRowHTML).join('');
+  }
+  const groups={};
+  arr.forEach(c=>{ const g=colorGroup(c); (groups[g]=groups[g]||[]).push(c); });
+  let html='';
+  if(poolUI.colors.length||poolUI.types.length) html+='<p class="suggest" style="margin:0 0 6px">Showing '+arr.length+' of '+pool.length+' cards (filtered)</p>';
+  GROUP_ORDER.forEach(g=>{
+    const garr=(groups[g]||[]).sort((a,b)=>(GRADE_VAL[b.g]||0)-(GRADE_VAL[a.g]||0));
+    if(!garr.length) return;
+    html+='<h3>'+g+' ('+garr.length+')</h3>'+garr.map(poolRowHTML).join('');
+  });
+  return html||'<p class="suggest">No cards match those filters.</p>';
+}
+function poolHTML(pool){
+  if(!pool.length) return '<p class="suggest">No cards yet.</p>';
+  return poolControlsHTML(pool)+'<div class="poolList">'+poolListHTML(pool)+'</div>';
+}
+function poolUIAct(kind,val){
+  function toggle(arr,v){ const i=arr.indexOf(v); if(i>=0) arr.splice(i,1); else arr.push(v); }
+  if(kind==='sort') toggle(poolUI.sorts,val);
+  else if(kind==='color') toggle(poolUI.colors,val);
+  else if(kind==='type') toggle(poolUI.types,val);
+  else if(kind==='clear'){ poolUI.sorts=[]; poolUI.colors=[]; poolUI.types=[]; }
+  if(poolOpen) renderPoolView();
+  const r=document.getElementById('results');
+  if(r&&(r.className||'').indexOf('show')>=0){
+    const host=r.querySelector('.poolHost');
+    if(host) host.innerHTML=poolHTML(seats[0].pool);
+  }
 }
 function renderPoolView(){
   document.getElementById('poolview').innerHTML='<h3 style="margin-top:0">My pool</h3>'+poolHTML(seats[0].pool);
@@ -461,7 +582,7 @@ function endDraft(){
   });
   html+='<h2 style="margin-top:22px">Your pool \u2014 '+me.length+' cards</h2>'
     +'<p class="suggest">Suggested colors: <b>'+(myColors.join(' / ')||'—')+'</b> \u00B7 '+playables+' playables (C- or better)</p>'
-    +poolHTML(me)
+    +'<div class="poolHost">'+poolHTML(me)+'</div>'
     +'<h2 style="margin-top:22px">AI seats</h2>'
     +'<table class="stable"><tr><th>Seat</th><th>Colors</th><th>Playables</th></tr>';
   for(let i=1;i<SEATS;i++){
