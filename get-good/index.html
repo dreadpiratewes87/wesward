@@ -2136,7 +2136,7 @@
       </div>
       <div class="srv-path" id="sr-path" hidden>
         <div class="srv-step" id="sr-step-color">
-          <div class="srv-step-head"><span class="srv-step-num">1</span><span>Pick a color</span><span class="srv-step-pick" id="sr-step-color-pick"></span><button type="button" class="srv-change" id="sr-step-color-change" hidden>Change</button></div>
+          <div class="srv-step-head"><span class="srv-step-num">1</span><span>Pick colors</span><span class="srv-step-pick" id="sr-step-color-pick"></span><button type="button" class="srv-change" id="sr-step-color-change" hidden>Change</button></div>
           <div class="srv-step-body" id="sr-path-color"></div>
         </div>
         <div class="srv-step" id="sr-step-cat">
@@ -2267,7 +2267,7 @@
 </div>
 <div class="srv-path" id="trk-path" hidden>
 <div class="srv-step" id="trk-step-color">
-<div class="srv-step-head"><span class="srv-step-num">1</span><span>Pick a color</span><span class="srv-step-pick" id="trk-step-color-pick"></span><button type="button" class="srv-change" id="trk-step-color-change" hidden>Change</button></div>
+<div class="srv-step-head"><span class="srv-step-num">1</span><span>Pick colors</span><span class="srv-step-pick" id="trk-step-color-pick"></span><button type="button" class="srv-change" id="trk-step-color-change" hidden>Change</button></div>
 <div class="srv-step-body" id="trk-path-color"></div>
 </div>
 <div class="srv-step" id="trk-step-cat">
@@ -3435,7 +3435,15 @@ var TIER_BLURB={
   engine:"Plays the role only through one of the set's engines — empower feeding a Jace token, surveil conversion, the counter web, behold discounts. Take the engine away and the role goes with it, which is why these cards are so often deck-dependent."
 };
 var GRADE_RANK={"S":0,"A+":1,"A":2,"A-":3,"B+":4,"B":5,"B-":6,"C+":7,"C":8,"C-":9,"D+":10,"D":11,"F":12};
-var state={color:"ALL",cat:"ALL",tier:"ALL",arch:false};
+var state={colors:[],cat:"ALL",tier:"ALL",arch:false};
+var COLOR_ORDER={};COLORS.forEach(function(p,i){COLOR_ORDER[p[0]]=i});
+function hasColors(){return state.colors.length>0}
+function singleColor(){return state.colors.length===1?state.colors[0]:null}
+function colorIn(c){return !hasColors()||state.colors.indexOf(c.g)>=0}
+function colorNames(){return state.colors.map(function(x){return COLOR_NAME[x]})}
+function colorLabel(){return hasColors()?colorNames().join(" + "):"All colors"}
+function colorSpec(){return !hasColors()?"ALL":(state.colors.length===1?state.colors[0]:state.colors.slice())}
+function toggleColor(v){if(v==="ALL"){state.colors=[];return}var i=state.colors.indexOf(v);if(i>=0)state.colors.splice(i,1);else{state.colors.push(v);state.colors.sort(function(a,b){return COLOR_ORDER[a]-COLOR_ORDER[b]})}}
 var currentEntries=[];
 var colorRow=document.getElementById('sr-color-row');
 var catRow=document.getElementById('sr-cat-row');
@@ -3457,7 +3465,7 @@ function cardColors(c){
   syms.forEach(function(s){s.slice(1,-1).split("/").forEach(function(p){if(WUBRG.indexOf(p)>=0)found[p]=true})});
   return WUBRG.filter(function(x){return found[x]});
 }
-function isSingleColor(){return WUBRG.indexOf(state.color)>=0}
+function refColors(){return state.colors.filter(function(x){return WUBRG.indexOf(x)>=0})}
 function passesSliceFilters(c){
   if(state.cat==="ALL"&&state.tier==="ALL"&&!state.arch)return true;
   var rs=roles(c);
@@ -3467,10 +3475,12 @@ function passesSliceFilters(c){
   return rs.length>0;
 }
 function refCards(){
-  if(!isSingleColor())return [];
+  var sel=refColors();
+  if(!sel.length||state.colors.indexOf("M")>=0)return [];
   return SR.cards.filter(function(c){
     if(c.g!=="M")return false;
-    if(cardColors(c).indexOf(state.color)<0)return false;
+    var cs=cardColors(c);
+    if(!sel.some(function(x){return cs.indexOf(x)>=0}))return false;
     return passesSliceFilters(c);
   }).slice().sort(sortCards);
 }
@@ -3480,7 +3490,7 @@ function refPairLabel(c){
 }
 function sliceCards(){
   return SR.cards.filter(function(c){
-    if(state.color!=="ALL"&&c.g!==state.color)return false;
+    if(!colorIn(c))return false;
     if(state.cat==="ALL"&&state.tier==="ALL"&&!state.arch)return true;
     var rs=roles(c);
     if(state.cat!=="ALL")rs=rs.filter(function(r){return r.k===state.cat});
@@ -3492,20 +3502,20 @@ function sliceCards(){
 function rarityCounts(list){var rc={common:0,uncommon:0,rare:0,mythic:0};list.forEach(function(c){if(Object.prototype.hasOwnProperty.call(rc,c.r))rc[c.r]++});return rc}
 function rarityLine(rc){return plural(rc.common,"common")+" · "+plural(rc.uncommon,"uncommon")+" · "+plural(rc.rare,"rare")+" · "+plural(rc.mythic,"mythic")}
 function instCount(list){return list.filter(function(c){return c.inst}).length}
-function catCards(cat,color){return SR.cards.filter(function(c){return (color==null||color==="ALL"||c.g===color)&&rolesFor(c,cat).length>0})}
+function catCards(cat,color){return SR.cards.filter(function(c){return (color==null||color==="ALL"||(Array.isArray(color)?color.indexOf(c.g)>=0:c.g===color))&&rolesFor(c,cat).length>0})}
 function tierSplit(list,cat){var out={direct:0,static:0,engine:0};list.forEach(function(c){rolesFor(c,cat).forEach(function(r){out[r.t]++})});return out}
 function archCards(list,cat){return list.filter(function(c){return roles(c).some(function(r){return r.a&&(!cat||r.k===cat)})})}
 function renderStrip(list,refs){
   refs=refs||[];
   var rc=rarityCounts(list);
-  var label=(state.color==="ALL"?"All colors":COLOR_NAME[state.color])+" · "+(state.cat==="ALL"?"All categories":CAT_NAME[state.cat])+(state.tier==="ALL"?"":" · "+TIER_NAME[state.tier]+" tier")+(state.arch?" · deck-dependent only":"");
+  var label=colorLabel()+" · "+(state.cat==="ALL"?"All categories":CAT_NAME[state.cat])+(state.tier==="ALL"?"":" · "+TIER_NAME[state.tier]+" tier")+(state.arch?" · deck-dependent only":"");
   var html="<strong>"+plural(list.length,"card")+(refs.length?" <span class=\"sr-hybrid-count\">("+refs.length+" hybrid)</span>":"")+"</strong>"
     +"<span class=\"sr-strip-detail\">"+esc(label)+"</span>"
     +"<span class=\"sr-strip-detail\">"+rarityLine(rc)+"</span>"
     +"<span class=\"sr-strip-detail\"><b>"+instCount(list)+"</b> at instant speed</span>";
   if(refs.length)html+="<span class=\"sr-hybrid-legend\">Numbers in parentheses are hybrid/multicolor cards shown for reference — they are counted under Multicolor, not here.</span>";
   if(state.cat!=="ALL"){
-    var slice=catCards(state.cat,state.color);
+    var slice=catCards(state.cat,colorSpec());
     var ts=tierSplit(slice,state.cat);
     html+="<span class=\"sr-strip-detail\">"+esc(CAT_NAME[state.cat])+" roles here: <b>"+ts.direct+"</b> direct · <b>"+ts.static+"</b> static · <b>"+ts.engine+"</b> engine</span>";
     var ac=archCards(slice,state.cat).length;
@@ -3521,22 +3531,22 @@ function tierLegend(){
 function renderGuide(list,refs){
   refs=refs||[];
   var html="";
-  if(state.color!=="ALL"&&state.cat!=="ALL"){
-    var cn=COLOR_NAME[state.color],ct=CAT_NAME[state.cat];
+  if(hasColors()&&state.cat!=="ALL"){
+    var sc=singleColor();var cn=sc?COLOR_NAME[sc]:colorNames().join(" + "),ct=CAT_NAME[state.cat];
     html="<h3>"+esc(cn)+" — "+esc(ct)+"</h3>";
-    var guide=SR.guides[state.color+"|"+state.cat];
+    var guide=sc?SR.guides[sc+"|"+state.cat]:null;
     if(list.length===0&&refs.length===0){
       html+="<p>No "+esc(cn.toLowerCase())+" "+esc(ct.toLowerCase())+" in this set — that absence is itself the lesson.</p>";
       html+="<p>"+esc(SR.catBlurbs[state.cat])+"</p>";
     }else if(list.length===0){
-      html+="<p>No mono-"+esc(cn.toLowerCase())+" "+esc(ct.toLowerCase())+" of its own in this set — the coverage here is multicolor, shown below as hybrid reference and counted under Multicolor.</p>";
+      html+="<p>"+(sc?("No mono-"+esc(cn.toLowerCase())+" "+esc(ct.toLowerCase())+" of its own in this set"):("No "+esc(ct.toLowerCase())+" in "+esc(cn)+" of its own in this set"))+" — the coverage here is multicolor, shown below as hybrid reference and counted under Multicolor.</p>";
       html+="<p>"+esc(SR.catBlurbs[state.cat])+"</p>";
     }else if(guide){
       html+="<p>"+esc(guide)+"</p>";
     }else{
       html+="<p>"+esc(SR.catBlurbs[state.cat])+"</p>";
     }
-    var slice=catCards(state.cat,state.color);
+    var slice=catCards(state.cat,colorSpec());
     if(slice.length){
       var ts=tierSplit(slice,state.cat);
       html+="<p class=\"sr-counts\"><strong>Roles in this slice:</strong> Direct "+ts.direct+" · Static "+ts.static+" · Engine "+ts.engine+" — across "+plural(slice.length,"card")+", and a card can hold roles in two tiers at once.</p>";
@@ -3560,13 +3570,13 @@ function renderGuide(list,refs){
     var totalRoles=ts2.direct+ts2.static+ts2.engine;
     html+="<p class=\"sr-counts\"><strong>Across the set:</strong> "+parts.join(" · ")+" — "+plural(all.length,"card")+" holding "+plural(totalRoles,"role")+" (Direct "+ts2.direct+" · Static "+ts2.static+" · Engine "+ts2.engine+"), "+instCount(all)+" at instant speed, "+archCards(all,state.cat).length+" deck-dependent.</p>";
     html+=tierLegend();
-  }else if(state.color!=="ALL"){
-    var cn2=COLOR_NAME[state.color];
+  }else if(hasColors()){
+    var cn2=colorNames().join(" + ");
     var creatures=list.filter(function(c){return c.t.indexOf("Creature")>=0}).length;
     var best=null,bestN=-1;
     CATS.forEach(function(pair){var n=list.filter(function(c){return rolesFor(c,pair[0]).length>0}).length;if(n>bestN){bestN=n;best=pair[1]}});
     html="<h3>"+esc(cn2)+"</h3>";
-    html+="<p>"+esc(cn2)+" brings "+plural(list.length,"card")+" to the set, "+creatures+" of them creatures. Its biggest category is <strong>"+esc(best)+"</strong> with "+bestN+".</p>";
+    html+="<p>"+esc(cn2)+(state.colors.length>1?" together bring ":" brings ")+plural(list.length,"card")+" to the set, "+creatures+" of them creatures. "+(state.colors.length>1?"Their":"Its")+" biggest category is <strong>"+esc(best)+"</strong> with "+bestN+".</p>";
     var parts2=CATS.map(function(pair){return pair[1]+" "+list.filter(function(c){return rolesFor(c,pair[0]).length>0}).length});
     html+="<p class=\"sr-counts\"><strong>By category:</strong> "+parts2.join(" · ")+".</p>";
   }else{
@@ -3738,11 +3748,11 @@ var lastList=[],lastRefs=[];
 if(window.SRV)SRV.mount(document.getElementById('sr-pillrow'));
 function place(host,el){if(host&&el&&el.parentNode!==host)host.appendChild(el)}
 function countFor(kind,value){
-  var col=state.color,ct=state.cat,tr=state.tier,ar=state.arch;
-  if(kind==="color")col=value;else if(kind==="cat")ct=value;else if(kind==="tier")tr=value;else if(kind==="arch")ar=true;
+  var cols=state.colors,ct=state.cat,tr=state.tier,ar=state.arch;
+  if(kind==="color")cols=(value==="ALL"?[]:[value]);else if(kind==="cat")ct=value;else if(kind==="tier")tr=value;else if(kind==="arch")ar=true;
   var n=0;
   SR.cards.forEach(function(c){
-    if(col!=="ALL"&&c.g!==col)return;
+    if(cols.length&&cols.indexOf(c.g)<0)return;
     if(ct==="ALL"&&tr==="ALL"&&!ar){n++;return}
     var rs=roles(c);
     if(ct!=="ALL")rs=rs.filter(function(r){return r.k===ct});
@@ -3757,11 +3767,11 @@ function updateCounts(){
 }
 function updateCardsBar(){
   cardsCount.innerHTML="<strong>"+plural(lastList.length,"card")+"</strong>"+(lastRefs.length?" <span class=\"sr-hybrid-count\">("+lastRefs.length+" hybrid)</span>":"");
-  cardsLabel.textContent=(state.color==="ALL"?"All colors":COLOR_NAME[state.color])+" · "+(state.cat==="ALL"?"All categories":CAT_NAME[state.cat])+(state.tier==="ALL"?"":" · "+TIER_NAME[state.tier]+" tier")+(state.arch?" · deck-dependent only":"");
-  drawerBadge.textContent=(state.color!=="ALL"?1:0)+(state.cat!=="ALL"?1:0)+(state.tier!=="ALL"?1:0)+(state.arch?1:0);
+  cardsLabel.textContent=colorLabel()+" · "+(state.cat==="ALL"?"All categories":CAT_NAME[state.cat])+(state.tier==="ALL"?"":" · "+TIER_NAME[state.tier]+" tier")+(state.arch?" · deck-dependent only":"");
+  drawerBadge.textContent=(hasColors()?1:0)+(state.cat!=="ALL"?1:0)+(state.tier!=="ALL"?1:0)+(state.arch?1:0);
   chipsEl.innerHTML="";
   var defs=[];
-  if(state.color!=="ALL")defs.push(["color",COLOR_NAME[state.color]]);
+  state.colors.forEach(function(x){defs.push(["color:"+x,COLOR_NAME[x]])});
   if(state.cat!=="ALL")defs.push(["cat",CAT_NAME[state.cat]]);
   if(state.tier!=="ALL")defs.push(["tier",TIER_NAME[state.tier]+" tier"]);
   if(state.arch)defs.push(["arch","Deck-dependent only"]);
@@ -3772,12 +3782,12 @@ function updateCardsBar(){
 }
 function syncPath(){
   if(!stepColorEl)return;
-  var cChosen=state.color!=="ALL"||pathChosen.color;
+  var cChosen=hasColors()||pathChosen.color;
   var kChosen=state.cat!=="ALL"||pathChosen.cat;
   var cClosed=cChosen&&!pathFold.color,kClosed=kChosen&&!pathFold.cat;
   stepColorEl.classList.toggle("closed",cClosed);stepColorEl.classList.toggle("done",cChosen);
   stepCatEl.classList.toggle("closed",kClosed);stepCatEl.classList.toggle("done",kChosen);
-  stepColorPick.textContent=cChosen?(state.color==="ALL"?"All Colors":COLOR_NAME[state.color]):"";
+  stepColorPick.textContent=cChosen?(hasColors()?colorNames().join(" + "):"All Colors"):"";
   stepCatPick.textContent=kChosen?(state.cat==="ALL"?"All Categories":CAT_NAME[state.cat]):"";
   stepColorChange.hidden=!cClosed;stepCatChange.hidden=!kClosed;
 }
@@ -3808,13 +3818,13 @@ function applyLayout(){
   updateCardsBar();
 }
 if(drawerToggle)drawerToggle.addEventListener("click",function(){drawerOpen=!drawerOpen;drawerEl.hidden=!drawerOpen;drawerToggle.setAttribute("aria-expanded",drawerOpen?"true":"false")});
-if(clearBtn)clearBtn.addEventListener("click",function(){state.color="ALL";state.cat="ALL";state.tier="ALL";state.arch=false;pathChosen.color=false;pathChosen.cat=false;render()});
-if(chipsEl)chipsEl.addEventListener("click",function(e){var b=e.target.closest("[data-srv-chip]");if(!b)return;var k=b.dataset.srvChip;if(k==="color")state.color="ALL";else if(k==="cat")state.cat="ALL";else if(k==="tier")state.tier="ALL";else if(k==="arch")state.arch=false;render()});
+if(clearBtn)clearBtn.addEventListener("click",function(){state.colors=[];state.cat="ALL";state.tier="ALL";state.arch=false;pathChosen.color=false;pathChosen.cat=false;render()});
+if(chipsEl)chipsEl.addEventListener("click",function(e){var b=e.target.closest("[data-srv-chip]");if(!b)return;var k=b.dataset.srvChip;if(k.indexOf("color:")===0){var ci=state.colors.indexOf(k.slice(6));if(ci>=0)state.colors.splice(ci,1)}else if(k==="cat")state.cat="ALL";else if(k==="tier")state.tier="ALL";else if(k==="arch")state.arch=false;render()});
 if(stepColorChange)stepColorChange.addEventListener("click",function(){pathFold.color=true;syncPath()});
 if(stepCatChange)stepCatChange.addEventListener("click",function(){pathFold.cat=true;syncPath()});
 if(window.SRV)SRV.subscribe(function(){applyLayout()});
 function render(){
-  colorRow.querySelectorAll(".sr-pill").forEach(function(b){var on=b.dataset.srColor===state.color;b.classList.toggle("active",on);b.setAttribute("aria-pressed",on?"true":"false")});
+  colorRow.querySelectorAll(".sr-pill").forEach(function(b){var v=b.dataset.srColor;var on=v==="ALL"?!hasColors():state.colors.indexOf(v)>=0;b.classList.toggle("active",on);b.setAttribute("aria-pressed",on?"true":"false")});
   catRow.querySelectorAll(".sr-pill").forEach(function(b){var on=b.dataset.srCat===state.cat;b.classList.toggle("active",on);b.setAttribute("aria-pressed",on?"true":"false")});
   if(tierRow)tierRow.querySelectorAll(".sr-pill").forEach(function(b){
     var on=b.dataset.srArch?(state.arch===true):(b.dataset.srTier===state.tier);
@@ -3851,7 +3861,7 @@ if(tierRow){
   TIERS.forEach(function(pair){addPill(tierRow,"tier",pair[0],pair[1],"sr-tier-dot td-"+pair[0])});
   addPill(tierRow,"arch","ARCH","Deck-dependent only",null);
 }
-colorRow.addEventListener("click",function(e){var b=e.target.closest("[data-sr-color]");if(!b)return;state.color=b.dataset.srColor;pathChosen.color=true;pathFold.color=false;render()});
+colorRow.addEventListener("click",function(e){var b=e.target.closest("[data-sr-color]");if(!b)return;toggleColor(b.dataset.srColor);pathChosen.color=true;pathFold.color=false;render()});
 catRow.addEventListener("click",function(e){var b=e.target.closest("[data-sr-cat]");if(!b)return;state.cat=b.dataset.srCat;pathChosen.cat=true;pathFold.cat=false;render()});
 if(tierRow)tierRow.addEventListener("click",function(e){
   var a=e.target.closest("[data-sr-arch]");if(a){state.arch=!state.arch;render();return}
@@ -3859,7 +3869,7 @@ if(tierRow)tierRow.addEventListener("click",function(e){
 });
 guideEl.addEventListener("click",function(e){
   var tr=e.target.closest("[data-sr-jump]");if(!tr)return;
-  if(tr.dataset.srColor)state.color=tr.dataset.srColor;
+  if(tr.dataset.srColor)state.colors=[tr.dataset.srColor];
   if(tr.dataset.srCat)state.cat=tr.dataset.srCat;
   render();
 });
@@ -3886,7 +3896,15 @@ var TIER_BLURB={
   engine:"Plays the role only through one of the set's engines — station charge on a Spacecraft, face-a-dilemma payoffs, Federation type-counting, beam me up recasts, surveil, explore, the +1/+1 counter web. Take the engine away and the role goes with it, which is why these cards are so often deck-dependent."
 };
 var GRADE_RANK={"S":0,"A+":1,"A":2,"A-":3,"B+":4,"B":5,"B-":6,"C+":7,"C":8,"C-":9,"D+":10,"D":11,"F":12};
-var state={color:"ALL",cat:"ALL",tier:"ALL",arch:false};
+var state={colors:[],cat:"ALL",tier:"ALL",arch:false};
+var COLOR_ORDER={};COLORS.forEach(function(p,i){COLOR_ORDER[p[0]]=i});
+function hasColors(){return state.colors.length>0}
+function singleColor(){return state.colors.length===1?state.colors[0]:null}
+function colorIn(c){return !hasColors()||state.colors.indexOf(c.g)>=0}
+function colorNames(){return state.colors.map(function(x){return COLOR_NAME[x]})}
+function colorLabel(){return hasColors()?colorNames().join(" + "):"All colors"}
+function colorSpec(){return !hasColors()?"ALL":(state.colors.length===1?state.colors[0]:state.colors.slice())}
+function toggleColor(v){if(v==="ALL"){state.colors=[];return}var i=state.colors.indexOf(v);if(i>=0)state.colors.splice(i,1);else{state.colors.push(v);state.colors.sort(function(a,b){return COLOR_ORDER[a]-COLOR_ORDER[b]})}}
 var currentEntries=[];
 var colorRow=document.getElementById('trk-color-row');
 var catRow=document.getElementById('trk-cat-row');
@@ -3908,7 +3926,7 @@ function cardColors(c){
   syms.forEach(function(s){s.slice(1,-1).split("/").forEach(function(p){if(WUBRG.indexOf(p)>=0)found[p]=true})});
   return WUBRG.filter(function(x){return found[x]});
 }
-function isSingleColor(){return WUBRG.indexOf(state.color)>=0}
+function refColors(){return state.colors.filter(function(x){return WUBRG.indexOf(x)>=0})}
 function passesSliceFilters(c){
   if(state.cat==="ALL"&&state.tier==="ALL"&&!state.arch)return true;
   var rs=roles(c);
@@ -3918,10 +3936,12 @@ function passesSliceFilters(c){
   return rs.length>0;
 }
 function refCards(){
-  if(!isSingleColor())return [];
+  var sel=refColors();
+  if(!sel.length||state.colors.indexOf("M")>=0)return [];
   return TRK.cards.filter(function(c){
     if(c.g!=="M")return false;
-    if(cardColors(c).indexOf(state.color)<0)return false;
+    var cs=cardColors(c);
+    if(!sel.some(function(x){return cs.indexOf(x)>=0}))return false;
     return passesSliceFilters(c);
   }).slice().sort(sortCards);
 }
@@ -3931,7 +3951,7 @@ function refPairLabel(c){
 }
 function sliceCards(){
   return TRK.cards.filter(function(c){
-    if(state.color!=="ALL"&&c.g!==state.color)return false;
+    if(!colorIn(c))return false;
     if(state.cat==="ALL"&&state.tier==="ALL"&&!state.arch)return true;
     var rs=roles(c);
     if(state.cat!=="ALL")rs=rs.filter(function(r){return r.k===state.cat});
@@ -3943,20 +3963,20 @@ function sliceCards(){
 function rarityCounts(list){var rc={common:0,uncommon:0,rare:0,mythic:0};list.forEach(function(c){if(Object.prototype.hasOwnProperty.call(rc,c.r))rc[c.r]++});return rc}
 function rarityLine(rc){return plural(rc.common,"common")+" · "+plural(rc.uncommon,"uncommon")+" · "+plural(rc.rare,"rare")+" · "+plural(rc.mythic,"mythic")}
 function instCount(list){return list.filter(function(c){return c.inst}).length}
-function catCards(cat,color){return TRK.cards.filter(function(c){return (color==null||color==="ALL"||c.g===color)&&rolesFor(c,cat).length>0})}
+function catCards(cat,color){return TRK.cards.filter(function(c){return (color==null||color==="ALL"||(Array.isArray(color)?color.indexOf(c.g)>=0:c.g===color))&&rolesFor(c,cat).length>0})}
 function tierSplit(list,cat){var out={direct:0,static:0,engine:0};list.forEach(function(c){rolesFor(c,cat).forEach(function(r){out[r.t]++})});return out}
 function archCards(list,cat){return list.filter(function(c){return roles(c).some(function(r){return r.a&&(!cat||r.k===cat)})})}
 function renderStrip(list,refs){
   refs=refs||[];
   var rc=rarityCounts(list);
-  var label=(state.color==="ALL"?"All colors":COLOR_NAME[state.color])+" · "+(state.cat==="ALL"?"All categories":CAT_NAME[state.cat])+(state.tier==="ALL"?"":" · "+TIER_NAME[state.tier]+" tier")+(state.arch?" · deck-dependent only":"");
+  var label=colorLabel()+" · "+(state.cat==="ALL"?"All categories":CAT_NAME[state.cat])+(state.tier==="ALL"?"":" · "+TIER_NAME[state.tier]+" tier")+(state.arch?" · deck-dependent only":"");
   var html="<strong>"+plural(list.length,"card")+(refs.length?" <span class=\"sr-hybrid-count\">("+refs.length+" hybrid)</span>":"")+"</strong>"
     +"<span class=\"sr-strip-detail\">"+esc(label)+"</span>"
     +"<span class=\"sr-strip-detail\">"+rarityLine(rc)+"</span>"+"<span class=\"sr-strip-detail\">All grades <b>provisional</b> — spoiler-season pool</span>"
     +"<span class=\"sr-strip-detail\"><b>"+instCount(list)+"</b> at instant speed</span>";
   if(refs.length)html+="<span class=\"sr-hybrid-legend\">Numbers in parentheses are hybrid/multicolor cards shown for reference — they are counted under Multicolor, not here.</span>";
   if(state.cat!=="ALL"){
-    var slice=catCards(state.cat,state.color);
+    var slice=catCards(state.cat,colorSpec());
     var ts=tierSplit(slice,state.cat);
     html+="<span class=\"sr-strip-detail\">"+esc(CAT_NAME[state.cat])+" roles here: <b>"+ts.direct+"</b> direct · <b>"+ts.static+"</b> static · <b>"+ts.engine+"</b> engine</span>";
     var ac=archCards(slice,state.cat).length;
@@ -3972,22 +3992,22 @@ function tierLegend(){
 function renderGuide(list,refs){
   refs=refs||[];
   var html="";
-  if(state.color!=="ALL"&&state.cat!=="ALL"){
-    var cn=COLOR_NAME[state.color],ct=CAT_NAME[state.cat];
+  if(hasColors()&&state.cat!=="ALL"){
+    var sc=singleColor();var cn=sc?COLOR_NAME[sc]:colorNames().join(" + "),ct=CAT_NAME[state.cat];
     html="<h3>"+esc(cn)+" — "+esc(ct)+"</h3>";
-    var guide=TRK.guides[state.color+"|"+state.cat];
+    var guide=sc?TRK.guides[sc+"|"+state.cat]:null;
     if(list.length===0&&refs.length===0){
       html+="<p>No "+esc(cn.toLowerCase())+" "+esc(ct.toLowerCase())+" in this set — that absence is itself the lesson.</p>";
       html+="<p>"+esc(TRK.catBlurbs[state.cat])+"</p>";
     }else if(list.length===0){
-      html+="<p>No mono-"+esc(cn.toLowerCase())+" "+esc(ct.toLowerCase())+" of its own spoiled yet — the coverage here is multicolor, shown below as hybrid reference and counted under Multicolor.</p>";
+      html+="<p>"+(sc?("No mono-"+esc(cn.toLowerCase())+" "+esc(ct.toLowerCase())+" of its own spoiled yet"):("No "+esc(ct.toLowerCase())+" in "+esc(cn)+" of its own spoiled yet"))+" — the coverage here is multicolor, shown below as hybrid reference and counted under Multicolor.</p>";
       html+="<p>"+esc(TRK.catBlurbs[state.cat])+"</p>";
     }else if(guide){
       html+="<p>"+esc(guide)+"</p>";
     }else{
       html+="<p>"+esc(TRK.catBlurbs[state.cat])+"</p>";
     }
-    var slice=catCards(state.cat,state.color);
+    var slice=catCards(state.cat,colorSpec());
     if(slice.length){
       var ts=tierSplit(slice,state.cat);
       html+="<p class=\"sr-counts\"><strong>Roles in this slice:</strong> Direct "+ts.direct+" · Static "+ts.static+" · Engine "+ts.engine+" — across "+plural(slice.length,"card")+", and a card can hold roles in two tiers at once.</p>";
@@ -4011,13 +4031,13 @@ function renderGuide(list,refs){
     var totalRoles=ts2.direct+ts2.static+ts2.engine;
     html+="<p class=\"sr-counts\"><strong>Across the set:</strong> "+parts.join(" · ")+" — "+plural(all.length,"card")+" holding "+plural(totalRoles,"role")+" (Direct "+ts2.direct+" · Static "+ts2.static+" · Engine "+ts2.engine+"), "+instCount(all)+" at instant speed, "+archCards(all,state.cat).length+" deck-dependent.</p>";
     html+=tierLegend();
-  }else if(state.color!=="ALL"){
-    var cn2=COLOR_NAME[state.color];
+  }else if(hasColors()){
+    var cn2=colorNames().join(" + ");
     var creatures=list.filter(function(c){return c.t.indexOf("Creature")>=0}).length;
     var best=null,bestN=-1;
     CATS.forEach(function(pair){var n=list.filter(function(c){return rolesFor(c,pair[0]).length>0}).length;if(n>bestN){bestN=n;best=pair[1]}});
     html="<h3>"+esc(cn2)+"</h3>";
-    html+="<p>"+esc(cn2)+" brings "+plural(list.length,"card")+" to the set, "+creatures+" of them creatures. Its biggest category is <strong>"+esc(best)+"</strong> with "+bestN+".</p>";
+    html+="<p>"+esc(cn2)+(state.colors.length>1?" together bring ":" brings ")+plural(list.length,"card")+" to the set, "+creatures+" of them creatures. "+(state.colors.length>1?"Their":"Its")+" biggest category is <strong>"+esc(best)+"</strong> with "+bestN+".</p>";
     var parts2=CATS.map(function(pair){return pair[1]+" "+list.filter(function(c){return rolesFor(c,pair[0]).length>0}).length});
     html+="<p class=\"sr-counts\"><strong>By category:</strong> "+parts2.join(" · ")+".</p>";
   }else{
@@ -4189,11 +4209,11 @@ var lastList=[],lastRefs=[];
 if(window.SRV)SRV.mount(document.getElementById('trk-pillrow'));
 function place(host,el){if(host&&el&&el.parentNode!==host)host.appendChild(el)}
 function countFor(kind,value){
-  var col=state.color,ct=state.cat,tr=state.tier,ar=state.arch;
-  if(kind==="color")col=value;else if(kind==="cat")ct=value;else if(kind==="tier")tr=value;else if(kind==="arch")ar=true;
+  var cols=state.colors,ct=state.cat,tr=state.tier,ar=state.arch;
+  if(kind==="color")cols=(value==="ALL"?[]:[value]);else if(kind==="cat")ct=value;else if(kind==="tier")tr=value;else if(kind==="arch")ar=true;
   var n=0;
   TRK.cards.forEach(function(c){
-    if(col!=="ALL"&&c.g!==col)return;
+    if(cols.length&&cols.indexOf(c.g)<0)return;
     if(ct==="ALL"&&tr==="ALL"&&!ar){n++;return}
     var rs=roles(c);
     if(ct!=="ALL")rs=rs.filter(function(r){return r.k===ct});
@@ -4208,11 +4228,11 @@ function updateCounts(){
 }
 function updateCardsBar(){
   cardsCount.innerHTML="<strong>"+plural(lastList.length,"card")+"</strong>"+(lastRefs.length?" <span class=\"sr-hybrid-count\">("+lastRefs.length+" hybrid)</span>":"");
-  cardsLabel.textContent=(state.color==="ALL"?"All colors":COLOR_NAME[state.color])+" · "+(state.cat==="ALL"?"All categories":CAT_NAME[state.cat])+(state.tier==="ALL"?"":" · "+TIER_NAME[state.tier]+" tier")+(state.arch?" · deck-dependent only":"");
-  drawerBadge.textContent=(state.color!=="ALL"?1:0)+(state.cat!=="ALL"?1:0)+(state.tier!=="ALL"?1:0)+(state.arch?1:0);
+  cardsLabel.textContent=colorLabel()+" · "+(state.cat==="ALL"?"All categories":CAT_NAME[state.cat])+(state.tier==="ALL"?"":" · "+TIER_NAME[state.tier]+" tier")+(state.arch?" · deck-dependent only":"");
+  drawerBadge.textContent=(hasColors()?1:0)+(state.cat!=="ALL"?1:0)+(state.tier!=="ALL"?1:0)+(state.arch?1:0);
   chipsEl.innerHTML="";
   var defs=[];
-  if(state.color!=="ALL")defs.push(["color",COLOR_NAME[state.color]]);
+  state.colors.forEach(function(x){defs.push(["color:"+x,COLOR_NAME[x]])});
   if(state.cat!=="ALL")defs.push(["cat",CAT_NAME[state.cat]]);
   if(state.tier!=="ALL")defs.push(["tier",TIER_NAME[state.tier]+" tier"]);
   if(state.arch)defs.push(["arch","Deck-dependent only"]);
@@ -4223,12 +4243,12 @@ function updateCardsBar(){
 }
 function syncPath(){
   if(!stepColorEl)return;
-  var cChosen=state.color!=="ALL"||pathChosen.color;
+  var cChosen=hasColors()||pathChosen.color;
   var kChosen=state.cat!=="ALL"||pathChosen.cat;
   var cClosed=cChosen&&!pathFold.color,kClosed=kChosen&&!pathFold.cat;
   stepColorEl.classList.toggle("closed",cClosed);stepColorEl.classList.toggle("done",cChosen);
   stepCatEl.classList.toggle("closed",kClosed);stepCatEl.classList.toggle("done",kChosen);
-  stepColorPick.textContent=cChosen?(state.color==="ALL"?"All Colors":COLOR_NAME[state.color]):"";
+  stepColorPick.textContent=cChosen?(hasColors()?colorNames().join(" + "):"All Colors"):"";
   stepCatPick.textContent=kChosen?(state.cat==="ALL"?"All Categories":CAT_NAME[state.cat]):"";
   stepColorChange.hidden=!cClosed;stepCatChange.hidden=!kClosed;
 }
@@ -4259,13 +4279,13 @@ function applyLayout(){
   updateCardsBar();
 }
 if(drawerToggle)drawerToggle.addEventListener("click",function(){drawerOpen=!drawerOpen;drawerEl.hidden=!drawerOpen;drawerToggle.setAttribute("aria-expanded",drawerOpen?"true":"false")});
-if(clearBtn)clearBtn.addEventListener("click",function(){state.color="ALL";state.cat="ALL";state.tier="ALL";state.arch=false;pathChosen.color=false;pathChosen.cat=false;render()});
-if(chipsEl)chipsEl.addEventListener("click",function(e){var b=e.target.closest("[data-srv-chip]");if(!b)return;var k=b.dataset.srvChip;if(k==="color")state.color="ALL";else if(k==="cat")state.cat="ALL";else if(k==="tier")state.tier="ALL";else if(k==="arch")state.arch=false;render()});
+if(clearBtn)clearBtn.addEventListener("click",function(){state.colors=[];state.cat="ALL";state.tier="ALL";state.arch=false;pathChosen.color=false;pathChosen.cat=false;render()});
+if(chipsEl)chipsEl.addEventListener("click",function(e){var b=e.target.closest("[data-srv-chip]");if(!b)return;var k=b.dataset.srvChip;if(k.indexOf("color:")===0){var ci=state.colors.indexOf(k.slice(6));if(ci>=0)state.colors.splice(ci,1)}else if(k==="cat")state.cat="ALL";else if(k==="tier")state.tier="ALL";else if(k==="arch")state.arch=false;render()});
 if(stepColorChange)stepColorChange.addEventListener("click",function(){pathFold.color=true;syncPath()});
 if(stepCatChange)stepCatChange.addEventListener("click",function(){pathFold.cat=true;syncPath()});
 if(window.SRV)SRV.subscribe(function(){applyLayout()});
 function render(){
-  colorRow.querySelectorAll(".sr-pill").forEach(function(b){var on=b.dataset.trkColor===state.color;b.classList.toggle("active",on);b.setAttribute("aria-pressed",on?"true":"false")});
+  colorRow.querySelectorAll(".sr-pill").forEach(function(b){var v=b.dataset.trkColor;var on=v==="ALL"?!hasColors():state.colors.indexOf(v)>=0;b.classList.toggle("active",on);b.setAttribute("aria-pressed",on?"true":"false")});
   catRow.querySelectorAll(".sr-pill").forEach(function(b){var on=b.dataset.trkCat===state.cat;b.classList.toggle("active",on);b.setAttribute("aria-pressed",on?"true":"false")});
   if(tierRow)tierRow.querySelectorAll(".sr-pill").forEach(function(b){
     var on=b.dataset.trkArch?(state.arch===true):(b.dataset.trkTier===state.tier);
@@ -4302,7 +4322,7 @@ if(tierRow){
   TIERS.forEach(function(pair){addPill(tierRow,"tier",pair[0],pair[1],"sr-tier-dot td-"+pair[0])});
   addPill(tierRow,"arch","ARCH","Deck-dependent only",null);
 }
-colorRow.addEventListener("click",function(e){var b=e.target.closest("[data-trk-color]");if(!b)return;state.color=b.dataset.trkColor;pathChosen.color=true;pathFold.color=false;render()});
+colorRow.addEventListener("click",function(e){var b=e.target.closest("[data-trk-color]");if(!b)return;toggleColor(b.dataset.trkColor);pathChosen.color=true;pathFold.color=false;render()});
 catRow.addEventListener("click",function(e){var b=e.target.closest("[data-trk-cat]");if(!b)return;state.cat=b.dataset.trkCat;pathChosen.cat=true;pathFold.cat=false;render()});
 if(tierRow)tierRow.addEventListener("click",function(e){
   var a=e.target.closest("[data-trk-arch]");if(a){state.arch=!state.arch;render();return}
@@ -4310,7 +4330,7 @@ if(tierRow)tierRow.addEventListener("click",function(e){
 });
 guideEl.addEventListener("click",function(e){
   var tr=e.target.closest("[data-trk-jump]");if(!tr)return;
-  if(tr.dataset.trkColor)state.color=tr.dataset.trkColor;
+  if(tr.dataset.trkColor)state.colors=[tr.dataset.trkColor];
   if(tr.dataset.trkCat)state.cat=tr.dataset.trkCat;
   render();
 });
