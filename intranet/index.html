@@ -224,8 +224,52 @@
 .float-back[hidden]{display:none}
 .float-back:active{transform:translateY(1px)}
 </style>
+
+<style>
+/* ============================================================
+   PREMIUM DARK (green) — synced from the hosted intranet restyle
+   approved by Wes 2026-10-24 (preview contract). Visual only.
+   ============================================================ */
+:root{color-scheme:dark;--bg:#17181C;--paper:rgba(255,255,255,.055);--paper-2:rgba(255,255,255,.09);--ink:#F4F4F6;--muted:#A7A7B3;--line:rgba(255,255,255,.12);--accent:#34D399;--accent-ink:#06231A;--accent-soft:rgba(52,211,153,.16);--teal:#34D399;--teal-soft:rgba(52,211,153,.16);--gold:#D3BA85;--red:#F08A80;--green:#7BC98F;--shadow:0 10px 28px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.07);--radius-sm:10px;--radius-md:16px;--radius-lg:20px}
+html{background:#17181C}
+body{background:transparent}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(720px 340px at 85% -60px,rgba(52,211,153,.15),transparent 60%),radial-gradient(560px 300px at -80px 110%,rgba(45,160,140,.10),transparent 60%),#17181C}
+::selection{background:rgba(52,211,153,.38)}
+.app h1,.app h2,.nav-card strong{text-shadow:none}
+.viewbar{background:rgba(23,24,28,.82);border-bottom-color:var(--line);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.btn{background:rgba(255,255,255,.09);color:var(--ink);border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 4px 12px rgba(0,0,0,.25)}
+.btn.secondary{background:rgba(255,255,255,.05);color:var(--ink);border-color:rgba(255,255,255,.12)}
+.btn.accent,.btn.teal{background:var(--accent);color:var(--accent-ink);border-color:transparent}
+.nav-card{background:var(--paper);color:var(--ink);border:1px solid var(--line)}
+.nav-card.projects,.nav-card.harvest,.nav-card.letters,.nav-card.sketch{background:var(--paper);color:var(--ink)}
+.nav-card.polocal,.nav-card.vabenefits{grid-column:span 6;background:rgba(52,211,153,.13);border:1px solid rgba(52,211,153,.45);color:var(--ink)}
+@media(max-width:780px){.nav-card.polocal,.nav-card.vabenefits{grid-column:span 12}}
+.new-pill{display:inline-block;vertical-align:middle;background:#34D399;color:#06231A;font-size:11px;font-weight:800;letter-spacing:.06em;padding:2px 8px;border-radius:999px;margin-left:8px}
+.va-dialog{max-width:min(88vw,380px);background:#1E2026;color:var(--ink);border:1px solid var(--line);border-radius:var(--radius-md);padding:22px}
+.va-dialog::backdrop{background:rgba(0,0,0,.6)}
+.va-dialog h2{margin:0 0 10px;font-size:22px}
+.va-dialog p{margin:0 0 16px;color:var(--muted);line-height:1.5}
+/* Splash front door — one level above Home, outside the nav stack (green droplet edition) */
+.hub-splash{position:fixed;inset:0;z-index:10000;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:calc(28px + env(safe-area-inset-top)) 24px calc(28px + env(safe-area-inset-bottom));background:radial-gradient(130% 105% at 50% 32%,#06301F 0%,#032117 58%,#02120B 100%);color:#fff}
+.hub-splash[hidden]{display:none}
+body.splash-open{overflow:hidden}
+.hub-splash-mark{width:92px;height:92px;display:grid;place-items:center;border:2px solid #C6E2A0;border-radius:24px;background:rgba(52,211,153,.08);box-shadow:0 0 26px rgba(52,211,153,.35),inset 0 0 18px rgba(52,211,153,.20)}
+.hub-splash-mark svg{width:52px;height:52px;display:block;filter:drop-shadow(0 0 9px rgba(52,211,153,.9))}
+.hub-splash-name{font-family:"Cinzel",Georgia,serif;font-weight:700;letter-spacing:.04em;font-size:34px;line-height:1.1;margin:22px 0 0}
+.hub-splash-tag{margin:10px 0 0;font-size:14px;line-height:1.5;color:rgba(255,255,255,.82);max-width:30ch}
+.hub-splash-enter{margin-top:34px;appearance:none;border:0;cursor:pointer;background:#fff;color:#06301F;font:inherit;font-weight:700;font-size:16px;letter-spacing:.03em;padding:13px 44px;min-height:48px;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,.28)}
+.hub-splash-enter:active{transform:translateY(1px)}
+.hub-splash-enter:focus-visible{outline:3px solid #34D399;outline-offset:3px}
+</style>
 </head>
 <body>
+<div class="hub-splash" id="hubSplash">
+  <div class="hub-splash-mark"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 3C24 3 10.5 19 10.5 29a13.5 13.5 0 0 0 27 0C37.5 19 24 3 24 3Z" fill="#34D399"/><path d="M18.2 29.8a6 6 0 0 0 4.3 5.7" fill="none" stroke="#D9FBEA" stroke-width="2.6" stroke-linecap="round" opacity=".85"/></svg></div>
+  <div class="hub-splash-name">Intranet</div>
+  <p class="hub-splash-tag">Everything at home — projects, lists, letters, and the house hubs.</p>
+  <button class="hub-splash-enter" id="hubSplashEnter" type="button">Enter</button>
+</div>
+
 <main class="app" id="intranet-main">
   
   
@@ -240,6 +284,8 @@
       
       
       <a class="nav-card podcasts" href="https://dreadpiratewes87.github.io/wesward/podcasts/" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3"><rect x="18" y="6" width="12" height="20" rx="6"/><path d="M10 20a14 14 0 0 0 28 0"/><path d="M24 26v10"/><path d="M17 40h14"/></svg><div><strong>Podcasts</strong><span>Your personal podcast app — draft talk and deck techs.</span></div></a>
+      <a class="nav-card polocal" href="https://dreadpiratewes87.github.io/wesward/local/" target="_blank" rel="noopener"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3"><path d="M24 44s14-13.4 14-24a14 14 0 1 0-28 0c0 10.6 14 24 14 24z"/><circle cx="24" cy="20" r="5"/></svg><div><strong>PO Local<span class="new-pill">NEW</span></strong><span>Port Orchard guide — your spots, bars, events, and MTG nights around Kitsap.</span></div></a>
+      
       <button class="nav-card links" data-open="links"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 28a8 8 0 0 0 11 0l7-7a8 8 0 1 0-11-11l-3 3"/><path d="M28 20a8 8 0 0 0-11 0l-7 7a8 8 0 1 0 11 11l3-3"/></svg><div><strong>Links</strong><span>Quick jumps — Archidekt, Scryfall, TCGplayer, and more.</span></div></button>
       <button class="nav-card watchlist" data-open="watchlist"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3"><rect x="6" y="10" width="36" height="28" rx="5"/><path d="M20 18l11 6-11 6z" fill="currentColor" stroke="none"/></svg><div><strong>Watchlist</strong><span>Shows and movies to watch.</span></div></button>
       
@@ -1581,5 +1627,16 @@ renderCats();renderGrid();renderIssues();
 <button class="float-back" id="floatBack" type="button" hidden>← Main</button>
 
 <script>(function(){var fb=document.getElementById('floatBack');if(!fb)return;var EXCLUDE=[];function sync(){var a=document.querySelector('.view.active');fb.hidden=!a||a.id==='home'||EXCLUDE.indexOf(a.id)>=0}fb.addEventListener('click',function(){document.querySelectorAll('.view').forEach(function(v){v.classList.toggle('active',v.id==='home')});window.scrollTo(0,0)});var obs=new MutationObserver(sync);document.querySelectorAll('.view').forEach(function(v){obs.observe(v,{attributes:true,attributeFilter:['class']})});sync()})();</script>
+
+<script>
+(function(){
+  var splash=document.getElementById('hubSplash');
+  if(splash){
+    document.body.classList.add('splash-open');
+    var enter=document.getElementById('hubSplashEnter');
+    if(enter){enter.addEventListener('click',function(){splash.hidden=true;document.body.classList.remove('splash-open');});}
+  }
+})();
+</script>
 </body>
 </html>
