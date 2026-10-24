@@ -261,6 +261,31 @@ body.splash-open{overflow:hidden}
 .hub-splash-enter:active{transform:translateY(1px)}
 .hub-splash-enter:focus-visible{outline:3px solid #34D399;outline-offset:3px}
 </style>
+
+<style>
+/* Home buttons as MTG Hub pills (Wes, 2026-10-24): every destination a
+   compact raised glass pill — icon + title only — on a 3-col grid so the
+   whole hub fits one screen. Geometry copied from mtg-hub-2's Home
+   landing grid; violet hover swapped for the intranet's green.
+   Scoped to #home: the Links page keeps its card tiles. */
+#home .nav-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+#home .nav-card{grid-column:auto;min-height:0;flex-direction:row;align-items:center;justify-content:flex-start;gap:13px;padding:15px 20px;border-radius:999px!important;background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.045));border:1px solid rgba(255,255,255,.14);box-shadow:0 10px 24px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.09)}
+#home .nav-card:hover{border-color:rgba(52,211,153,.60);box-shadow:0 12px 28px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.11)}
+#home .nav-card:active{box-shadow:0 4px 12px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.08)}
+#home .nav-card .arrow{display:none}
+#home .nav-card>div{min-width:0}
+#home .nav-card strong{font-size:clamp(20px,2.4vw,26px);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#home .nav-card>div>span{display:none}
+#home .nav-card .icon{width:32px;height:32px;flex:none}
+#home .nav-card.polocal,#home .nav-card.vabenefits{grid-column:auto;background:linear-gradient(180deg,rgba(52,211,153,.20),rgba(52,211,153,.08));border-color:rgba(52,211,153,.45)}
+@media(prefers-reduced-motion:no-preference){#home .nav-card{transition:transform .12s ease,box-shadow .15s ease,border-color .15s ease}#home .nav-card:active{transform:translateY(1px)}}
+@media(max-width:900px){#home .nav-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){#home .nav-grid{grid-template-columns:1fr}}
+/* Small controls ride the same pill language as MTG Hub's buttons */
+.btn{border-radius:999px}
+.back-btn:hover{color:var(--ink)}
+.btn:focus-visible,.back-btn:focus-visible,#home .nav-card:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+</style>
 </head>
 <body>
 <div class="hub-splash" id="hubSplash">
@@ -285,6 +310,8 @@ body.splash-open{overflow:hidden}
       
       <a class="nav-card podcasts" href="https://dreadpiratewes87.github.io/wesward/podcasts/" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3"><rect x="18" y="6" width="12" height="20" rx="6"/><path d="M10 20a14 14 0 0 0 28 0"/><path d="M24 26v10"/><path d="M17 40h14"/></svg><div><strong>Podcasts</strong><span>Your personal podcast app — draft talk and deck techs.</span></div></a>
       <a class="nav-card polocal" href="https://dreadpiratewes87.github.io/wesward/local/" target="_blank" rel="noopener"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3"><path d="M24 44s14-13.4 14-24a14 14 0 1 0-28 0c0 10.6 14 24 14 24z"/><circle cx="24" cy="20" r="5"/></svg><div><strong>PO Local<span class="new-pill">NEW</span></strong><span>Port Orchard guide — your spots, bars, events, and MTG nights around Kitsap.</span></div></a>
+      <button class="nav-card vabenefits" id="vaBenefitsTile" type="button"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3"><path d="M24 5l14 5v12c0 9.6-6.1 16.8-14 21C16.1 38.8 10 31.6 10 22V10z"/><path d="m24 14.5 2.3 4.8 5.2.7-3.8 3.6 1 5.1-4.7-2.6-4.7 2.6 1-5.1-3.8-3.6 5.2-.7z" fill="currentColor" stroke="none"/></svg><div><strong>VA Benefits<span class="new-pill">NEW</span></strong><span>Your Veterans Benefits Hub — official benefits, hidden gems, and My List.</span></div></button>
+      
       
       <button class="nav-card links" data-open="links"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 28a8 8 0 0 0 11 0l7-7a8 8 0 1 0-11-11l-3 3"/><path d="M28 20a8 8 0 0 0-11 0l-7 7a8 8 0 1 0 11 11l3-3"/></svg><div><strong>Links</strong><span>Quick jumps — Archidekt, Scryfall, TCGplayer, and more.</span></div></button>
       <button class="nav-card watchlist" data-open="watchlist"><span class="arrow">↗</span><svg class="icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3"><rect x="6" y="10" width="36" height="28" rx="5"/><path d="M20 18l11 6-11 6z" fill="currentColor" stroke="none"/></svg><div><strong>Watchlist</strong><span>Shows and movies to watch.</span></div></button>
@@ -1635,6 +1662,23 @@ renderCats();renderGrid();renderIssues();
     document.body.classList.add('splash-open');
     var enter=document.getElementById('hubSplashEnter');
     if(enter){enter.addEventListener('click',function(){splash.hidden=true;document.body.classList.remove('splash-open');});}
+  }
+})();
+</script>
+
+<dialog class="va-dialog" id="vaDialog" aria-labelledby="vaDialogTitle">
+  <h2 id="vaDialogTitle">VA Benefits</h2>
+  <p>Veterans Benefits Hub is a separate private app — open it from your Muse Library. Its My List data is saved there, so it can’t live on a public link.</p>
+  <button class="btn accent" id="vaDialogClose" type="button">Close</button>
+</dialog>
+<script>
+(function(){
+  var tile=document.getElementById('vaBenefitsTile');
+  var dlg=document.getElementById('vaDialog');
+  if(tile&&dlg){
+    tile.addEventListener('click',function(){if(dlg.showModal){dlg.showModal();}else{dlg.setAttribute('open','');}});
+    var close=document.getElementById('vaDialogClose');
+    if(close){close.addEventListener('click',function(){if(dlg.close){dlg.close();}else{dlg.removeAttribute('open');}});}
   }
 })();
 </script>
