@@ -1682,5 +1682,70 @@ renderCats();renderGrid();renderIssues();
   }
 })();
 </script>
+<style>
+/* ============================================================
+   POLISH — unified glass system (Wes, 2026-10-25). One surface
+   recipe, one control recipe, quieter type, palette lockdown.
+   Kills the leftover per-era color blocks from older restyles.
+   ============================================================ */
+/* -- Home: MTG Hub pill buttons (icon + title, one-screen grid) -- */
+#home .nav-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+#home .nav-card{grid-column:auto;min-height:0;flex-direction:row;align-items:center;justify-content:flex-start;gap:13px;padding:15px 20px;border-radius:999px!important;background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.045));border:1px solid rgba(255,255,255,.14);box-shadow:0 10px 24px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.09);color:var(--ink)}
+#home .nav-card:hover{border-color:rgba(52,211,153,.60);box-shadow:0 12px 28px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.11)}
+#home .nav-card:active{box-shadow:0 4px 12px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.08)}
+#home .nav-card .arrow{display:none}
+#home .nav-card>div{min-width:0}
+#home .nav-card strong{font-size:clamp(20px,2.4vw,26px);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#home .nav-card>div>span{display:none}
+#home .nav-card .icon{width:32px;height:32px;flex:none}
+#home .nav-card.polocal,#home .nav-card.vabenefits{grid-column:auto;background:linear-gradient(180deg,rgba(52,211,153,.20),rgba(52,211,153,.08));border-color:rgba(52,211,153,.45)}
+@media(prefers-reduced-motion:no-preference){#home .nav-card{transition:transform .12s ease,box-shadow .15s ease,border-color .15s ease}#home .nav-card:active{transform:translateY(1px)}}
+@media(max-width:900px){#home .nav-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){#home .nav-grid{grid-template-columns:1fr}}
+/* -- Palette lockdown: legacy per-tile tints neutralized -- */
+.nav-card.projects,.nav-card.podcasts,.nav-card.links,.nav-card.watchlist,.nav-card.reports,.nav-card.harvest,.nav-card.letters,.nav-card.sketch,.nav-card.todo,.nav-card.recipes{background:var(--paper);color:var(--ink)}
+/* -- One surface recipe: glass, hairline, 16px, lit top edge -- */
+.td-row,.rh-card,.link-card,.project,.sb-card,.sb-meta,.sb-details,.sketch-tools,.todo-sheet-card,.wl-modal,.letter-thread,.harvest-section{background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.12);border-radius:16px;box-shadow:0 10px 24px rgba(0,0,0,.30),inset 0 1px 0 rgba(255,255,255,.07)}
+.links-grid .nav-card,.link-card{border-radius:16px}
+/* -- One control recipe: pill buttons + green primary -- */
+.btn{border-radius:999px;background:rgba(255,255,255,.09);color:var(--ink);border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 4px 12px rgba(0,0,0,.25)}
+.btn.secondary{background:rgba(255,255,255,.05);color:var(--ink);border-color:rgba(255,255,255,.12)}
+.btn.accent,.btn.teal{background:var(--accent);color:var(--accent-ink);border-color:transparent}
+.btn.danger{background:rgba(240,138,128,.14);color:#F08A80;border-color:rgba(240,138,128,.35)}
+.back-btn:hover{color:var(--ink)}
+.btn:focus-visible,.back-btn:focus-visible,#home .nav-card:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.lock-submit{background:var(--accent);color:var(--accent-ink)}
+/* -- Inputs: dark glass everywhere (no white fields) -- */
+input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="range"]),select,textarea,#wl-tag-input,.task-input,.sandbox-gate-input{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:var(--ink);border-radius:12px}
+input::placeholder,textarea::placeholder{color:var(--muted)}
+input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--accent);outline-offset:1px}
+/* -- Chips, tags, segments: one pill recipe -- */
+.tag,.td-area,.td-pri,.wl-m-tags span{border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.10);color:var(--muted)}
+.tag.live,.td-seg .on,.wl-pill-add{background:rgba(52,211,153,.16);color:#34D399;border-color:rgba(52,211,153,.35)}
+/* -- To-do details -- */
+.td-check{border:2px solid rgba(255,255,255,.35);border-radius:50%}
+.td-row.completed .td-check{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.td-del:hover{color:#F08A80}
+.todo-sheet{background:rgba(10,10,12,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+/* -- Watchlist details -- */
+.wl-tile img{border-radius:14px;border:1px solid rgba(255,255,255,.12);box-shadow:0 10px 24px rgba(0,0,0,.30),inset 0 1px 0 rgba(255,255,255,.07)}
+.wl-tile-none{background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.04));color:var(--muted);border:1px solid rgba(255,255,255,.12);border-radius:14px}
+.wl-m-done{background:var(--accent);color:var(--accent-ink)}
+.wl-m-prog{background:rgba(255,255,255,.09);color:var(--ink);border:1px solid rgba(255,255,255,.14)}
+/* -- Sketch: frame polished, paper stays paper -- */
+.sketch-frame{border-radius:16px;border-color:rgba(255,255,255,.12);box-shadow:0 10px 24px rgba(0,0,0,.30)}
+.sketch-tools{border-radius:16px}
+/* -- Tables (letters / budgets): dark glass -- */
+.budget-table th,.attachment-table th{background:rgba(255,255,255,.07);color:var(--ink)}
+.budget-table td,.attachment-table,.attachment-table td,.msg.rachel .attachment-table,.msg.wes .attachment-table{background:rgba(255,255,255,.04);color:var(--ink);border-color:rgba(255,255,255,.10)}
+/* -- Quieter type: headings sit with the pills -- */
+.home-lead h1{font-size:clamp(34px,6vw,54px)}
+.viewbar h1{font-size:clamp(24px,4vw,34px)}
+.viewbar{background:rgba(23,24,28,.82);border-bottom:1px solid rgba(255,255,255,.08);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+hr{border-color:rgba(255,255,255,.08)}
+/* -- Dialogs -- */
+dialog,.va-dialog{background:#1E2026;color:var(--ink);border:1px solid rgba(255,255,255,.12);border-radius:16px}
+dialog::backdrop{background:rgba(0,0,0,.6)}
+</style>
 </body>
 </html>
