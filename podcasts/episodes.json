@@ -128,7 +128,7 @@
    "kind": "episode",
    "num": 5,
    "show": "draft-show",
-   "showName": "Draft Show · Milo & Jax",
+   "showName": "Pack One, Pick One · Milo & Jax",
    "slug": "draft-three-at-cardtropolis-the-expert-tune-up-2026-10-16",
    "title": "Draft Three at Cardtropolis: The Expert Tune-Up"
   },
@@ -486,7 +486,7 @@
    "kind": "episode",
    "num": 1,
    "show": "draft-show",
-   "showName": "Draft Show · Milo & Jax",
+   "showName": "Pack One, Pick One · Milo & Jax",
    "slug": "reality-fracture-draft-deep-dive-2026-10-12",
    "title": "Reality Fracture Draft Deep Dive"
   },
@@ -629,7 +629,7 @@
    "kind": "episode",
    "num": 2,
    "show": "draft-show",
-   "showName": "Draft Show · Milo & Jax",
+   "showName": "Pack One, Pick One · Milo & Jax",
    "slug": "your-draft-graded-a-reality-fracture-walk-through-2026-10-14",
    "title": "Your Draft, Graded: A Reality Fracture Walk-Through"
   },
@@ -641,7 +641,7 @@
    "kind": "episode",
    "num": 3,
    "show": "draft-show",
-   "showName": "Draft Show · Milo & Jax",
+   "showName": "Pack One, Pick One · Milo & Jax",
    "slug": "garruk-first-pick-another-draft-graded-2026-10-14",
    "title": "Garruk First Pick: Another Draft, Graded"
   },
@@ -833,7 +833,7 @@
    "kind": "episode",
    "num": 4,
    "show": "draft-show",
-   "showName": "Draft Show · Milo & Jax",
+   "showName": "Pack One, Pick One · Milo & Jax",
    "slug": "three-emberlings-deep-a-pick-by-pick-draft-graded-2026-10-15",
    "title": "Three Emberlings Deep: A Pick-by-Pick Draft, Graded"
   },
@@ -845,7 +845,7 @@
    "kind": "episode",
    "num": 6,
    "show": "draft-show",
-   "showName": "Draft Show · Milo & Jax",
+   "showName": "Pack One, Pick One · Milo & Jax",
    "slug": "reality-fracture-one-month-in-state-of-the-union-2026-10-23",
    "title": "Reality Fracture, One Month In: State of the Union"
   },
@@ -871,7 +871,7 @@
   "draft-show": {
    "cover": "series-draft-show.jpg",
    "hosts": "Milo & Jax",
-   "name": "Draft Show"
+   "name": "Pack One, Pick One"
   },
   "history": {
    "cover": "series-history.jpg",
