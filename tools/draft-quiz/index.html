@@ -103,12 +103,6 @@ const CARDS = [{"n":"Captain Jean-Luc Picard","c":"{2}{W}","t":"Legendary Creatu
 <script>
 const GRADE_VAL = {'S':12,'A+':11,'A':10,'A-':9,'B+':8,'B':7,'B-':6,'C+':5,'C':4,'C-':3,'D+':2,'D':1,'F':0};
 const POOL = {M:[],R:[],U:[],C:[]};
-const TRK_PAIRS = [
-  ["Seven of Nine, Unassimilated","Seven of Nine"],
-  ["Khan, Vengeful Heart","Khan, Despot by Design"],
-  ["Worf, Intelligence Contractor","Worf, Honor-Bound Warrior"],
-];
-const TRK_PAIR_NAMES = new Set(); TRK_PAIRS.forEach(p=>{TRK_PAIR_NAMES.add(p[0]);TRK_PAIR_NAMES.add(p[1]);});
 CARDS.forEach(c=>{ if(POOL[c.r]) POOL[c.r].push(c); });
 
 let packIdx=0, score=0, currentPack=[], locked=false, modalCard=null;
@@ -123,36 +117,25 @@ function manaHTML(cost){
 function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;');}
 
 function buildRealPack(){
-  // Star Trek pack: 1 rare/mythic, 3 paired-character cards (2 paired + 1 single),
-  // 3 uncommons, 7 commons. Pair cards excluded from general pools to avoid dupes.
+  // A realistic 14-card draft booster: 1 rare/mythic, 3 uncommons, 10 commons.
+  // Common lands are capped at 1 per pack — real collation spreads the land
+  // cycle out, you basically never see 3 nonbasic lands in a paper pack.
   const pack=[]; const used=new Set(); let landTaken=false;
   function isLand(c){ return /Land/.test(c.t||''); }
-  function byName(n){ return CARDS.find(c=>c.n===n); }
-  function take(pool,capLand,excludePairs){
+  function take(pool,capLand){
     let guard=0;
     while(guard++<500){
       const c=pool[Math.floor(Math.random()*pool.length)];
       if(!c || used.has(c.n)) continue;
-      if(excludePairs && TRK_PAIR_NAMES.has(c.n)) continue;
       if(capLand && landTaken && isLand(c)) continue;
       used.add(c.n); pack.push(c);
       if(isLand(c)) landTaken=true;
       return c;
     }
   }
-  take(Math.random()<1/7.5 && POOL.M.length ? POOL.M : POOL.R, false, true);
-  const pr = TRK_PAIRS[Math.floor(Math.random()*TRK_PAIRS.length)];
-  const pa = byName(pr[0]), pb = byName(pr[1]);
-  if(pa && !used.has(pa.n)){ used.add(pa.n); pack.push(pa); }
-  if(pb && !used.has(pb.n)){ used.add(pb.n); pack.push(pb); }
-  let guard=0;
-  while(guard++<200){
-    const pr2 = TRK_PAIRS[Math.floor(Math.random()*TRK_PAIRS.length)];
-    const c = byName(pr2[Math.floor(Math.random()*2)]);
-    if(c && !used.has(c.n)){ used.add(c.n); pack.push(c); break; }
-  }
-  for(let i=0;i<3;i++) take(POOL.U.length?POOL.U:POOL.C, false, true);
-  for(let i=0;i<7;i++) take(POOL.C.length?POOL.C:POOL.U, true, true);
+  take(Math.random()<1/7.5 && POOL.M.length ? POOL.M : POOL.R); // mythic ~1 in 7.5 packs
+  for(let i=0;i<3;i++) take(POOL.U.length?POOL.U:POOL.C);
+  for(let i=0;i<10;i++) take(POOL.C.length?POOL.C:POOL.U, true);
   return pack;
 }
 
