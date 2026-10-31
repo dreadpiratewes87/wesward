@@ -1,6 +1,18 @@
 {
  "episodes": [
   {
+   "cover": "hormuz-tensions-a-record-crypto-heist-and-africas-first-olympics-2026-10-31.jpg",
+   "date": "2026-10-31",
+   "description": "The World Briefing launches with Hollis: Iran's supreme leader warns of a response without geographic limits while diplomats work to reopen the Strait of Hormuz; the U.S. approves a 2.1 billion dollar Patriot missile sale to Ukraine; hackers steal 6.3 billion dollars from Binance in the largest crypto theft on record; Congo's Ebola deaths pass five thousand; the midterms enter their final weekend; Wall Street posts its worst day since June; and Senegal opens the Dakar 2026 Youth Olympics, Africa's first Olympic event.",
+   "duration": 302,
+   "kind": "episode",
+   "num": 1,
+   "show": "world-briefing",
+   "showName": "The World Briefing · Hollis",
+   "slug": "hormuz-tensions-a-record-crypto-heist-and-africas-first-olympics-2026-10-31",
+   "title": "Hormuz Tensions, a Record Crypto Heist, and Africa's First Olympics"
+  },
+  {
    "cover": "leo-and-virgo-20-the-grocery-run-together-2026-10-31.jpg",
    "date": "2026-10-31",
    "description": "Episode twenty: Leo and Vera settle the grocery run together — Vera's twenty-two-item list in store order, Leo's marked-down brisket wild card that turns into a Sunday smoker supper, chips hidden under the bread, one long checkout conversation with Denise, and the settled rule that the list is law with one wild card each, plus today's horoscope for both signs.",
@@ -978,6 +990,11 @@
    "cover": "series-leo-and-virgo.jpg",
    "hosts": "Leo & Vera",
    "name": "Leo and Virgo"
+  },
+  "world-briefing": {
+   "cover": "series-world-briefing.jpg",
+   "hosts": "Hollis",
+   "name": "The World Briefing"
   }
  }
 }
