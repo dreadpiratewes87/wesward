@@ -1,6 +1,66 @@
 {
   "episodes": [
     {
+      "cover": "betrayers-of-kamigawa-ninjas-and-the-jitte.jpg",
+      "date": "Nov 6, 2026",
+      "description": "History of Magic special, follow-on to the 2005 episode: Betrayers of Kamigawa — ninjutsu sneaks its first creature onto the battlefield, and Umezawa's Jitte, a two-mana equipment so strong it warped every format it touched, becomes a legend of its own.",
+      "duration": 367,
+      "kind": "special",
+      "num": 1305,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "betrayers-of-kamigawa-ninjas-and-the-jitte",
+      "title": "Betrayers of Kamigawa: Ninjas and the Jitte"
+    },
+    {
+      "cover": "worlds-2005-japans-sweep-and-the-first-hall-of-fame.jpg",
+      "date": "Nov 6, 2026",
+      "description": "History of Magic special, follow-on to the 2005 episode: Worlds 2005 in Yokohama — Katsuhiro Mori and Ghazi-Glare, Japan's team title on home soil, Kenji Tsumura's Player of the Year, and the first Hall of Fame class: Finkel, Kastle, Hovi, Comer, and Råde.",
+      "duration": 386,
+      "kind": "special",
+      "num": 1304,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "worlds-2005-japans-sweep-and-the-first-hall-of-fame",
+      "title": "Worlds 2005: Japan's Sweep and the First Hall of Fame"
+    },
+    {
+      "cover": "the-affinity-bans-eight-cards-in-one-day.jpg",
+      "date": "Nov 6, 2026",
+      "description": "History of Magic special, follow-on to the 2005 episode: March 2005 — Wizards bans eight cards from Standard in a single announcement, all six artifact lands plus Arcbound Ravager and Disciple of the Vault, and closes the book on the most lopsided era in the game's history.",
+      "duration": 362,
+      "kind": "special",
+      "num": 1303,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "the-affinity-bans-eight-cards-in-one-day",
+      "title": "The Affinity Bans: Eight Cards in One Day"
+    },
+    {
+      "cover": "ravnica-ten-guilds-one-city.jpg",
+      "date": "Nov 6, 2026",
+      "description": "History of Magic special, follow-on to the 2005 episode: Ravnica in full — a city the size of a world, four guilds in the first set and ten across the block, hybrid mana's debut, dredge, the shocklands, and Dark Confidant, Bob Maher's Invitational card at last.",
+      "duration": 413,
+      "kind": "special",
+      "num": 1302,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "ravnica-ten-guilds-one-city",
+      "title": "Ravnica: Ten Guilds, One City"
+    },
+    {
+      "cover": "2005-the-year-magic-found-its-guilds.jpg",
+      "date": "Nov 6, 2026",
+      "description": "Year thirteen: the ban hammer ends the Affinity era — eight cards in one day, six of them artifact lands. Kamigawa closes with ninjas and the Jitte. Ninth Edition is the last white-bordered set. And Ravnica rebuilds the game around guilds, hybrid mana, and shocklands on the way to a Japanese sweep at Worlds in Yokohama.",
+      "duration": 1327,
+      "kind": "episode",
+      "num": 1301,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "2005-the-year-magic-found-its-guilds",
+      "title": "2005: The Year Magic Found Its Guilds"
+    },
+    {
       "cover": "unhinged-the-joke-set-returns.jpg",
       "date": "Nov 6, 2026",
       "description": "History of Magic special, follow-on to the 2004 episode: Unhinged — the silver-border sequel six years in the making, with fractions, gotcha, a card you tear up, and a foil-only secret hiding in the basic lands.",
