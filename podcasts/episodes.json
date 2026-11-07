@@ -1,6 +1,66 @@
 {
   "episodes": [
     {
+      "cover": "unhinged-the-joke-set-returns.jpg",
+      "date": "Nov 6, 2026",
+      "description": "History of Magic special, follow-on to the 2004 episode: Unhinged — the silver-border sequel six years in the making, with fractions, gotcha, a card you tear up, and a foil-only secret hiding in the basic lands.",
+      "duration": 424,
+      "kind": "special",
+      "num": 1205,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "unhinged-the-joke-set-returns",
+      "title": "Unhinged: The Joke Set Returns"
+    },
+    {
+      "cover": "worlds-2004-the-fifteen-year-old-champion.jpg",
+      "date": "Nov 6, 2026",
+      "description": "History of Magic special, follow-on to the 2004 episode: Worlds 2004 at Fort Mason — fifteen-year-old Julien Nuijten beats Affinity in the final with green-white Astral Slide, sets a prize record, and headlines the first Worlds top eight with no American in it.",
+      "duration": 428,
+      "kind": "special",
+      "num": 1204,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "worlds-2004-the-fifteen-year-old-champion",
+      "title": "Worlds 2004: The Fifteen-Year-Old Champion"
+    },
+    {
+      "cover": "champions-of-kamigawa-the-legend-rule.jpg",
+      "date": "Nov 6, 2026",
+      "description": "History of Magic special, follow-on to the 2004 episode: Champions of Kamigawa and the great rules gamble — the legend rule rewritten so rival legends destroy each other, flip cards, splice, and a block built on eighty legendary creatures.",
+      "duration": 484,
+      "kind": "special",
+      "num": 1203,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "champions-of-kamigawa-the-legend-rule",
+      "title": "Champions of Kamigawa: The Legend Rule"
+    },
+    {
+      "cover": "darksteel-and-skullclamp-the-one-toughness-that-broke-standard.jpg",
+      "date": "Nov 6, 2026",
+      "description": "History of Magic special, follow-on to the 2004 episode: Darksteel in full — indestructible and modular debut, and the story of Skullclamp, a one-mana equipment that drew two cards per corpse until the first Standard ban in five years stopped it.",
+      "duration": 466,
+      "kind": "special",
+      "num": 1202,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "darksteel-and-skullclamp-the-one-toughness-that-broke-standard",
+      "title": "Darksteel and Skullclamp: The One Toughness That Broke Standard"
+    },
+    {
+      "cover": "2004-the-year-affinity-ate-magic.jpg",
+      "date": "Nov 6, 2026",
+      "description": "Year twelve: Darksteel arms Affinity with Skullclamp, the Ravager, and the Vial; Champions of Kamigawa rewrites the legend rule and bets a block on legendaries; Unhinged brings back the joke sets; Gabriel Nassif takes Player of the Year without winning a Pro Tour; and a fifteen-year-old wins Worlds in San Francisco.",
+      "duration": 1402,
+      "kind": "episode",
+      "num": 1201,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "2004-the-year-affinity-ate-magic",
+      "title": "2004: The Year Affinity Ate Magic"
+    },
+    {
       "cover": "worlds-2003-the-wake-mirror-in-berlin.jpg",
       "date": "Nov 6, 2026",
       "description": "History of Magic special, follow-on to the 2003 episode: Worlds 2003 in Berlin — Daniel Zink and Jin Okamoto both sleeving up Mirari's Wake for the final, and the United States taking the team title.",
