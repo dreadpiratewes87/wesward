@@ -1,6 +1,66 @@
 {
   "episodes": [
     {
+      "cover": "worlds-2008-memphis-and-the-faeries-final.jpg",
+      "date": "Nov 7, 2026",
+      "description": "History of Magic special, follow-on to the 2008 episode: Worlds 2008 in Memphis — Antti Malin's Faeries beat Jamie Parke's five-colour control, five of the top eight wear wings, and Shuhei Nakamura makes it four straight Japanese Players of the Year.",
+      "duration": 517,
+      "kind": "special",
+      "num": 1605,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "worlds-2008-memphis-and-the-faeries-final",
+      "title": "Worlds 2008: Memphis and the Faeries Final"
+    },
+    {
+      "cover": "berlin-lsv-and-the-elfball.jpg",
+      "date": "Nov 7, 2026",
+      "description": "History of Magic special, follow-on to the 2008 episode: Pro Tour Berlin — Luis Scott-Vargas sneaks into Sunday as the eighth seed, storms back from zero-two down in the quarterfinal, and wins an Extended top eight where six of eight decks are Elfball. (No, the famous undefeated run was a different city.)",
+      "duration": 420,
+      "kind": "special",
+      "num": 1604,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "berlin-lsv-and-the-elfball",
+      "title": "Berlin: LSV and the Elfball"
+    },
+    {
+      "cover": "faeries-bitterblossoms-year.jpg",
+      "date": "Nov 7, 2026",
+      "description": "History of Magic special, follow-on to the 2008 episode: the Faeries era — Bitterblossom, Mistbind Clique, and Cryptic Command turn a Morningtide tribal enchantment into the deck that defined a year of Standard and put five copies into the Worlds top eight.",
+      "duration": 496,
+      "kind": "special",
+      "num": 1603,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "faeries-bitterblossoms-year",
+      "title": "Faeries: Bitterblossom's Year"
+    },
+    {
+      "cover": "shards-of-alara-the-mythic-rare.jpg",
+      "date": "Nov 7, 2026",
+      "description": "History of Magic special, follow-on to the 2008 episode: Shards of Alara and the birth of the mythic rare — the June 2008 announcement, one in eight packs, smaller sets, and four planeswalkers (the fifth shard's dragon waits for Conflux).",
+      "duration": 563,
+      "kind": "special",
+      "num": 1602,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "shards-of-alara-the-mythic-rare",
+      "title": "Shards of Alara: The Mythic Rare"
+    },
+    {
+      "cover": "2008-the-year-magic-went-mythic.jpg",
+      "date": "Nov 7, 2026",
+      "description": "Year sixteen: Morningtide hands Standard to the Faeries, Shadowmoor and Eventide go all-in on hybrid mana, Jon Finkel wins a Pro Tour as a Hall of Famer, Magic Online is rebuilt, and Shards of Alara splits the world into five shards and invents a whole new rarity — mythic.",
+      "duration": 1349,
+      "kind": "episode",
+      "num": 1601,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "2008-the-year-magic-went-mythic",
+      "title": "2008: The Year Magic Went Mythic"
+    },
+    {
       "cover": "planar-chaos-the-alternate-reality.jpg",
       "date": "Nov 7, 2026",
       "description": "History of Magic special, follow-on to the 2007 episode: Planar Chaos — forty-five colour-shifted timeshifted cards from alternate realities: a black Wrath of God called Damnation, a red Akroma, a green Harmonize, and the colour pie tried on inside-out.",
