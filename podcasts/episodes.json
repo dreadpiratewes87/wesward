@@ -1,6 +1,66 @@
 {
   "episodes": [
     {
+      "cover": "worlds-2003-the-wake-mirror-in-berlin.jpg",
+      "date": "Nov 6, 2026",
+      "description": "History of Magic special, follow-on to the 2003 episode: Worlds 2003 in Berlin — Daniel Zink and Jin Okamoto both sleeving up Mirari's Wake for the final, and the United States taking the team title.",
+      "duration": 405,
+      "kind": "special",
+      "num": 1105,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "worlds-2003-the-wake-mirror-in-berlin",
+      "title": "Worlds 2003: The Wake Mirror in Berlin"
+    },
+    {
+      "cover": "scourge-and-storm-the-mechanic-that-broke-counting.jpg",
+      "date": "Nov 6, 2026",
+      "description": "History of Magic special, follow-on to the 2003 episode: Scourge closes the Onslaught block and debuts storm — the mechanic Mark Rosewater would call the most broken ever designed — plus the first You Make the Card winner, Forgotten Ancient.",
+      "duration": 389,
+      "kind": "special",
+      "num": 1104,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "scourge-and-storm-the-mechanic-that-broke-counting",
+      "title": "Scourge and Storm: The Mechanic That Broke Counting"
+    },
+    {
+      "cover": "the-new-card-frame-magic-gets-a-new-face.jpg",
+      "date": "Nov 6, 2026",
+      "description": "History of Magic special, follow-on to the 2003 episode: Eighth Edition and the most visible change in Magic's history — the 2003 card frame redesign, what changed, why players fought about it, and why it stuck.",
+      "duration": 377,
+      "kind": "special",
+      "num": 1103,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "the-new-card-frame-magic-gets-a-new-face",
+      "title": "The New Card Frame: Magic Gets a New Face"
+    },
+    {
+      "cover": "mirrodin-the-world-made-of-metal.jpg",
+      "date": "Nov 6, 2026",
+      "description": "History of Magic special, follow-on to the 2003 episode: Mirrodin in full — the artifact world, equipment's debut, affinity and imprint, the artifact lands, and the block that quietly loaded the gun Affinity would fire.",
+      "duration": 391,
+      "kind": "special",
+      "num": 1102,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "mirrodin-the-world-made-of-metal",
+      "title": "Mirrodin: The World Made of Metal"
+    },
+    {
+      "cover": "2003-the-year-magic-turned-to-metal.jpg",
+      "date": "Nov 6, 2026",
+      "description": "Year eleven: Legions fields an all-creature set, Scourge unleashes storm, Eighth Edition gives the game a brand-new face for its tenth anniversary, and Mirrodin rebuilds the world out of metal — equipment, affinity, and all. Kai Budde wins his seventh Pro Tour, and Daniel Zink takes Worlds in a Berlin Wake mirror.",
+      "duration": 1342,
+      "kind": "episode",
+      "num": 1101,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "2003-the-year-magic-turned-to-metal",
+      "title": "2003: The Year Magic Turned to Metal"
+    },
+    {
       "cover": "leo-and-virgo-26-keys-on-the-hook-2026-11-06.jpg",
       "date": "2026-11-06",
       "description": "Episode twenty-six: Leo and Vera settle keys on the hook — Leo's driveway sword speech handing the truck keys to their oldest and the dented tailgate from backing into their own mailbox, Vera's three short rules (text when you get there, gas back to where you found it, keys on the hook every time), trust given in steps, honesty about a scare on the road earning more room instead of trouble, the younger one watching as a preview of her own turn, and saying the trust out loud, plus today's horoscope for both signs.",
