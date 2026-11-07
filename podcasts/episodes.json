@@ -1,6 +1,66 @@
 {
   "episodes": [
     {
+      "cover": "dissension-ten-guilds-complete.jpg",
+      "date": "Nov 7, 2026",
+      "description": "History of Magic special, follow-on to the 2006 episode: Dissension completes Ravnica — Azorius, Rakdos, and Simic take the stage, the guild split cards arrive, graft and hellbent and forecast debut, and Terry Soh's Invitational card Rakdos Augermage finally prints.",
+      "duration": 490,
+      "kind": "special",
+      "num": 1405,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "dissension-ten-guilds-complete",
+      "title": "Dissension: Ten Guilds, Complete"
+    },
+    {
+      "cover": "coldsnap-the-lost-set-that-never-was.jpg",
+      "date": "Nov 7, 2026",
+      "description": "History of Magic special, follow-on to the 2006 episode: Coldsnap — the third Ice Age set designed in about six weeks and released ten years after Alliances, retroactively replacing Homelands in the block, with snow mana, ripple, and recover.",
+      "duration": 547,
+      "kind": "special",
+      "num": 1404,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "coldsnap-the-lost-set-that-never-was",
+      "title": "Coldsnap: The Lost Set That Never Was"
+    },
+    {
+      "cover": "worlds-2006-dragonstorm-in-paris.jpg",
+      "date": "Nov 7, 2026",
+      "description": "History of Magic special, follow-on to the 2006 episode: Worlds 2006 at the Carrousel du Louvre — Makihito Mihara, the only Dragonstorm player in the Standard rounds, beats Ryo Ogura in an all-Japanese final, while Wafo-Tapa's Dralnu du Louvre becomes the deck the event is named for.",
+      "duration": 483,
+      "kind": "special",
+      "num": 1403,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "worlds-2006-dragonstorm-in-paris",
+      "title": "Worlds 2006: Dragonstorm in Paris"
+    },
+    {
+      "cover": "time-spiral-the-past-in-every-pack.jpg",
+      "date": "Nov 7, 2026",
+      "description": "History of Magic special, follow-on to the 2006 episode: Time Spiral in full — the first bonus sheet, one hundred twenty-one timeshifted reprints in old frames and purple symbols, suspend and split second, and a block built entirely out of the game's memory of itself.",
+      "duration": 445,
+      "kind": "special",
+      "num": 1402,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "time-spiral-the-past-in-every-pack",
+      "title": "Time Spiral: The Past in Every Pack"
+    },
+    {
+      "cover": "2006-the-year-magic-turned-back-the-clock.jpg",
+      "date": "Nov 7, 2026",
+      "description": "Year fourteen: Ravnica's last four guilds arrive in Guildpact and Dissension, a spoiler lawsuit opens the year, Coldsnap completes the Ice Age block a decade late, and Time Spiral turns the game's own past into a set — then Makihito Mihara storms Paris with the only Dragonstorm deck in the room.",
+      "duration": 1495,
+      "kind": "episode",
+      "num": 1401,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "2006-the-year-magic-turned-back-the-clock",
+      "title": "2006: The Year Magic Turned Back the Clock"
+    },
+    {
       "cover": "betrayers-of-kamigawa-ninjas-and-the-jitte.jpg",
       "date": "Nov 6, 2026",
       "description": "History of Magic special, follow-on to the 2005 episode: Betrayers of Kamigawa — ninjutsu sneaks its first creature onto the battlefield, and Umezawa's Jitte, a two-mana equipment so strong it warped every format it touched, becomes a legend of its own.",
