@@ -1,6 +1,66 @@
 {
   "episodes": [
     {
+      "cover": "planar-chaos-the-alternate-reality.jpg",
+      "date": "Nov 7, 2026",
+      "description": "History of Magic special, follow-on to the 2007 episode: Planar Chaos — forty-five colour-shifted timeshifted cards from alternate realities: a black Wrath of God called Damnation, a red Akroma, a green Harmonize, and the colour pie tried on inside-out.",
+      "duration": 420,
+      "kind": "special",
+      "num": 1505,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "planar-chaos-the-alternate-reality",
+      "title": "Planar Chaos: The Alternate Reality"
+    },
+    {
+      "cover": "worlds-2007-doran-in-new-york.jpg",
+      "date": "Nov 7, 2026",
+      "description": "History of Magic special, follow-on to the 2007 episode: Worlds 2007 at the Javits Center — Uri Peleg, the first Israeli ever to reach a Pro Tour top eight, wins the whole thing with a green-black-white Doran deck carrying both Garruk and Liliana past Patrick Chapin.",
+      "duration": 463,
+      "kind": "special",
+      "num": 1504,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "worlds-2007-doran-in-new-york",
+      "title": "Worlds 2007: Doran in New York"
+    },
+    {
+      "cover": "future-sight-the-future-leaked-early.jpg",
+      "date": "Nov 7, 2026",
+      "description": "History of Magic special, follow-on to the 2007 episode: Future Sight — eighty-one futureshifted cards previewing mechanics that did not exist, and Tarmogoyf, the two-mana lhurgoyf that became contemporary shorthand for a fifty-dollar bill.",
+      "duration": 425,
+      "kind": "special",
+      "num": 1503,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "future-sight-the-future-leaked-early",
+      "title": "Future Sight: The Future Leaked Early"
+    },
+    {
+      "cover": "lorwyn-the-planeswalkers-arrive.jpg",
+      "date": "Nov 7, 2026",
+      "description": "History of Magic special, follow-on to the 2007 episode: Lorwyn in full — how loyalty works, why the five were delayed out of Future Sight, the eight tribes underneath them, Thoughtseize, and why five rare cards in a set with no humans rewired the whole game.",
+      "duration": 418,
+      "kind": "special",
+      "num": 1502,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "lorwyn-the-planeswalkers-arrive",
+      "title": "Lorwyn: The Planeswalkers Arrive"
+    },
+    {
+      "cover": "2007-the-year-the-planeswalkers-arrived.jpg",
+      "date": "Nov 7, 2026",
+      "description": "Year fifteen: Planar Chaos bends the colour pie, Future Sight leaks mechanics from Magic's future — and one two-mana creature whose type line names a card type that does not exist yet — Tenth Edition turns the core set black-bordered, and Lorwyn changes the game forever with five planeswalkers.",
+      "duration": 1551,
+      "kind": "episode",
+      "num": 1501,
+      "show": "history",
+      "showName": "History of Magic · Walter & Maya",
+      "slug": "2007-the-year-the-planeswalkers-arrived",
+      "title": "2007: The Year the Planeswalkers Arrived"
+    },
+    {
       "cover": "dissension-ten-guilds-complete.jpg",
       "date": "Nov 7, 2026",
       "description": "History of Magic special, follow-on to the 2006 episode: Dissension completes Ravnica — Azorius, Rakdos, and Simic take the stage, the guild split cards arrive, graft and hellbent and forecast debut, and Terry Soh's Invitational card Rakdos Augermage finally prints.",
