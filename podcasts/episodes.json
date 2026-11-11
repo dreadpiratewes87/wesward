@@ -1,6 +1,18 @@
 {
   "episodes": [
     {
+      "cover": "leo-and-virgo-31-say-it-plain-2026-11-11.jpg",
+      "date": "2026-11-11",
+      "description": "Episode thirty-one: Leo and Vera settle saying it plain — Vera's \"that back door sure does stick\" said three mornings as a request with the please left off, Leo's four compliments about her mama's meatloaf meaning he wanted her to make it, Vera's list that cannot check off a fond memory, and the settled rule to say the verb, put a name on it, and answer plain back, plus today's horoscope for both signs.",
+      "duration": 261,
+      "kind": "episode",
+      "num": 31,
+      "show": "leo-and-virgo",
+      "showName": "Leo and Virgo · Leo & Vera",
+      "slug": "leo-and-virgo-31-say-it-plain-2026-11-11",
+      "title": "Say It Plain"
+    },
+    {
       "cover": "precon-upgrade-lab-2-quantum-quandrix-upgrading-adrix-and-nev-twincasters-2026-11-10.jpg",
       "date": "2026-11-10",
       "description": "Precon Upgrade Lab #2 - Ellis and Theo open the Quantum Quandrix precon (Adrix and Nev, Twincasters): where the token-and-counter math breaks, trap doublers vs real ones, the first ten cuts, and rebuilds at $25, $50, and $100 that stack Simic token doublers into exponents.",
