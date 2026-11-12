@@ -1,6 +1,18 @@
 {
  "episodes": [
   {
+   "show": "draft-show",
+   "showName": "Pack One, Pick One · Milo & Jax",
+   "kind": "episode",
+   "num": 9,
+   "date": "2026-11-12",
+   "title": "Warp Speed: Star Trek Prerelease and Your First Drafts",
+   "slug": "warp-speed-star-trek-prerelease-and-your-first-drafts-2026-11-12",
+   "duration": 868,
+   "cover": "warp-speed-star-trek-prerelease-and-your-first-drafts-2026-11-12.jpg",
+   "description": "Milo and Jax pivot from prerelease sealed to Star Trek's first draft pods: what sealed taught that carries (no permission worth fearing, conditional removal, maindeck artifact answers), what inverts (fixing is now a pick, uncommon removal gets cut, the black-red sacrifice trap needs General Chang in hand), the draft lanes (Borg's deep commons, Dilemma's common payoffs, Strange New Worlds' ceiling), and a release-weekend P1P1 cheat sheet."
+  },
+  {
    "show": "world-briefing",
    "showName": "The World Briefing · Hollis & Tessa",
    "kind": "episode",
