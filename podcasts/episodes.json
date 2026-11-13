@@ -1,6 +1,18 @@
 {
  "episodes": [
   {
+   "show": "leo-and-virgo",
+   "showName": "Leo and Virgo · Leo & Vera",
+   "kind": "episode",
+   "num": 33,
+   "date": "2026-11-13",
+   "title": "The Porch at the End of the Day",
+   "slug": "leo-and-virgo-33-the-porch-at-the-end-of-the-day-2026-11-13",
+   "duration": 282,
+   "cover": "leo-and-virgo-33-the-porch-at-the-end-of-the-day-2026-11-13.jpg",
+   "description": "Episode thirty-three: Leo and Vera settle the porch at the end of the day — Leo in from the yard reaching for the oil can for a squeaking gate hinge and Vera telling him it will still squeak tomorrow, Leo feeling like sitting still ought to present something while Vera's head runs tomorrow's list, laundry soap written on Leo's hand in pen so she can set it down, the no-speakers compromise and one hummed chorus, and the settled rule that the day ends on the porch when the weather allows it, plus today's horoscope for both signs."
+  },
+  {
    "show": "draft-show",
    "showName": "Pack One, Pick One · Milo & Jax",
    "kind": "episode",
