@@ -1,6 +1,18 @@
 {
   "episodes": [
     {
+      "show": "leo-and-virgo",
+      "showName": "Leo and Virgo · Leo & Vera",
+      "kind": "episode",
+      "num": 38,
+      "date": "2026-11-18",
+      "title": "The Honey-Do List",
+      "slug": "leo-and-virgo-38-the-honey-do-list-2026-11-18",
+      "duration": 287,
+      "cover": "leo-and-virgo-38-the-honey-do-list-2026-11-18.jpg",
+      "description": "Episode thirty-eight: Leo and Vera settle the honey-do list — Vera's three jobs in pen on the fridge underlined twice, Leo ranking by what can be pointed at while Vera ranks by what the water will do, the P.S. that was a fourth job wearing a hat, and the settled rule that Vera picks the three, Leo picks the order, and done means done crossed off in marker, plus today's horoscope for both signs."
+    },
+    {
       "show": "world-briefing",
       "showName": "The World Briefing · Hollis & Tessa",
       "kind": "episode",
