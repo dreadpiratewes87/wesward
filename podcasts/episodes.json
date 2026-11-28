@@ -1,6 +1,18 @@
 {
   "episodes": [
     {
+      "show": "leo-and-virgo",
+      "showName": "Leo and Virgo · Leo & Vera",
+      "kind": "episode",
+      "num": 48,
+      "date": "2026-11-28",
+      "title": "After Everybody Goes Home",
+      "slug": "leo-and-virgo-48-after-everybody-goes-home-2026-11-28",
+      "duration": 300,
+      "cover": "leo-and-virgo-48-after-everybody-goes-home-2026-11-28.jpg",
+      "description": "Episode forty-eight: Leo and Vera settle after everybody goes home — Leo holding a folding chair hoping it folds itself, his instinct to sit in the recliner while Vera cannot rest in a house that still looks partied-in, her quiet as information, and the settled rule of the first hour together with Leo on heavy and outside work, Vera on the inside reset, then both sitting down at the same time for porch pie in the earned quiet, plus today's horoscope for both signs."
+    },
+    {
       "show": "world-briefing",
       "showName": "The World Briefing · Hollis & Tessa",
       "kind": "episode",
